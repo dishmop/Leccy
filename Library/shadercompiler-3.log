@@ -1,0 +1,1292 @@
+Base path: /Applications/Unity/Unity.app/Contents
+Pipe name: \\.\pipe\UnityShaderCompiler-3--1593437784
+Cmd: getPlatforms
+Cmd: preprocess
+  insize=938 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (34): function "vert" has no return statement
+  api=0 type=0 insize=986 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=952 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1000 outsize=335 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1000 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1032 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1080 outsize=335 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1080 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1033 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1081 outsize=335 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1081 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1044 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1092 outsize=358 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1092 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1051 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1099 outsize=514 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1099 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1092 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1140 outsize=335 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1140 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1091 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (37): syntax error, unexpected '/' at token "/" type name expected at token "/" declaration of "normalDirection" conflicts with previous declaration at (36) declaration of "normalDirection" conflicts with previous declaration at (36)
+  api=0 type=0 insize=1139 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1092 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1140 outsize=514 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1140 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1092 outsize=249 ok=1
+Cmd: preprocess
+  insize=1092 outsize=249 ok=1
+Cmd: preprocess
+  insize=1062 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (39): declaration of "o" conflicts with previous declaration at (35) syntax error, unexpected '.', expecting ',' or ';' at token "." type name expected at token "."
+  api=0 type=0 insize=1110 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1064 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1112 outsize=537 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1112 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1065 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1113 outsize=514 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1113 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1258 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (42): undefined variable "lightDireciton" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1306 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1238 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1286 outsize=597 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1286 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1237 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1285 outsize=597 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1285 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1236 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1284 outsize=629 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1284 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1234 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (19): declaration of "_WorldSpaceLightPos0" conflicts with previous declaration at /UnityShaderVariables.cginc(53)
+  api=0 type=0 insize=1282 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1236 outsize=249 ok=1
+Cmd: preprocess
+  insize=1243 outsize=248 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1291 outsize=350 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1291 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1236 outsize=249 ok=1
+Cmd: preprocess
+  insize=1234 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1282 outsize=537 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1282 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1236 outsize=249 ok=1
+Cmd: preprocess
+  insize=1243 outsize=248 ok=1
+Cmd: preprocess
+  insize=1232 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1280 outsize=325 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1280 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1233 outsize=247 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1281 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1281 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1243 outsize=248 ok=1
+Cmd: preprocess
+  insize=1236 outsize=249 ok=1
+Cmd: preprocess
+  insize=1280 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): syntax error, unexpected integer constant at token "<int-const>" type name expected at token "<int-const>"
+  api=0 type=0 insize=1328 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1314 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): syntax error, unexpected integer constant at token "<int-const>" type name expected at token "<int-const>"
+  error: 2 plat 0 at (48): invalid type in type constructor
+  api=0 type=0 insize=1362 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1322 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): syntax error, unexpected floating point constant at token "<undefined>" type name expected at token "<undefined>"
+  error: 2 plat 0 at (48): invalid type in type constructor
+  api=0 type=0 insize=1370 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1326 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): syntax error, unexpected floating point constant at token "<undefined>" type name expected at token "<undefined>"
+  error: 2 plat 0 at (48): expression left of ."xyz" is not a struct or array
+  api=0 type=0 insize=1374 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1335 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (39): undefined variable "_Light2World"
+  error: 2 plat 0 at (43): undefined variable "_WorldSpaceLightDirection0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (45): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float3)"
+  api=0 type=0 insize=1383 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1338 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (39): undefined variable "_Light2World"
+  error: 2 plat 0 at (43): undefined variable "_WorldSpaceLightDirection0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (45): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float3)"
+  api=0 type=0 insize=1386 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1336 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (39): undefined variable "_Light2World0"
+  error: 2 plat 0 at (43): undefined variable "_WorldSpaceLightDirection0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (45): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float3)"
+  api=0 type=0 insize=1384 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1392 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (42): undefined variable "lightDir"
+  error: 2 plat 0 at (45): undefined variable "_WorldSpaceLightDirection0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (47): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float3)"
+  error: 2 plat 0 at (50): undefined variable "lightDir"
+  api=0 type=0 insize=1440 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1392 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (45): undefined variable "_WorldSpaceLightDirection0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (47): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float3)"
+  error: 2 plat 0 at (50): undefined variable "lightDir"
+  api=0 type=0 insize=1440 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1399 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (47): undefined variable "normalDirection" unable to find compatible overloaded function "dot(error, float4)"
+  error: 2 plat 0 at (50): undefined variable "lightDir"
+  api=0 type=0 insize=1447 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1392 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (47): implicit cast from "float4" to "float3"
+  error: 2 plat 0 at (50): undefined variable "lightDir"
+  api=0 type=0 insize=1440 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1392 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1440 outsize=435 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1440 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1394 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1442 outsize=346 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1442 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1409 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1457 outsize=458 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1457 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1411 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1459 outsize=346 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1459 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1422 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1470 outsize=432 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1470 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1421 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (50): cast not allowed
+  api=0 type=0 insize=1469 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1422 outsize=249 ok=1
+Cmd: preprocess
+  insize=1438 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1486 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1486 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1439 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): swizzle mask element not present in operand "xyz"
+  api=0 type=0 insize=1487 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1436 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1484 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1484 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1420 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1468 outsize=432 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1468 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1532 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (54): too much data in type constructor
+  api=0 type=0 insize=1580 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1534 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (54): too much data in type constructor
+  api=0 type=0 insize=1582 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1534 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): undefined variable "NORMAL_TO_WORLD"
+  error: 2 plat 0 at (39): undefined variable "_WorldSpaceLIghtPos0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1582 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1537 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): ambiguous overloaded function reference "mul(float4x4, float3)"
+  error: 2 plat 0 at (39): undefined variable "_WorldSpaceLIghtPos0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1585 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1550 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (39): undefined variable "_WorldSpaceLIghtPos0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1598 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1550 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1598 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1552 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1600 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1600 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1568 outsize=248 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1616 outsize=350 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1616 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1599 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (12): syntax error, unexpected string literal at token "<string-const>" type name expected at token "<string-const>"
+  error: 1 plat 0 at (12): unrecognized profile specifier "include"
+  error: 2 plat 0 at (18): syntax error, unexpected identifier at token "float4" type name expected at token "float4" declaration of "float4" conflicts with previous declaration at (15)
+  error: 2 plat 0 at (25): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (25): unrecognized profile specifier "vertex" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (30): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (30): unrecognized profile specifier "pos" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (31): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (31): unrecognized profile specifier "col" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (40): syntax error, unexpected '=' at token "=" type name expected at token "=" syntax error, unexpected ',' at token "," type name expected at token "," float4: function type parameters not allowed; syntax error, unexpected '.' at token "." type name expected at token "."
+  error: 1 plat 0 at (40): unrecognized profile specifier "normal" unrecognized profile specifier "float4" unrecognized profile specifier "_Object2World" unrecognized profile specifier "v"
+  error: 2 plat 0 at (41): syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (56): syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (57): expression left of ."vertex" is not a struct or array; syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (63): frag: function type parameters not allowed; function type not allowed for parameter "frag" syntax error, unexpected '{', expecting ',' or ')' at token "{" type name expected at token "{"
+  api=0 type=0 insize=1647 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1595 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (12): syntax error, unexpected string literal at token "<string-const>" type name expected at token "<string-const>"
+  error: 1 plat 0 at (12): unrecognized profile specifier "include"
+  error: 2 plat 0 at (18): syntax error, unexpected identifier at token "float4" type name expected at token "float4" declaration of "float4" conflicts with previous declaration at (15)
+  error: 2 plat 0 at (25): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (25): unrecognized profile specifier "vert" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (30): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (30): unrecognized profile specifier "pos" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (31): syntax error, unexpected ':' at token ":" type name expected at token ":"
+  error: 1 plat 0 at (31): unrecognized profile specifier "col" unrecognized profile specifier "float4"
+  error: 2 plat 0 at (40): syntax error, unexpected '=' at token "=" type name expected at token "=" syntax error, unexpected ',' at token "," type name expected at token "," float4: function type parameters not allowed; syntax error, unexpected '.' at token "." type name expected at token "."
+  error: 1 plat 0 at (40): unrecognized profile specifier "normal" unrecognized profile specifier "float4" unrecognized profile specifier "_Object2World" unrecognized profile specifier "v"
+  error: 2 plat 0 at (41): syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (56): syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (57): expression left of ."vert" is not a struct or array; syntax error, unexpected ';', expecting ',' or ')' at token ";" type name expected at token ";"
+  error: 2 plat 0 at (63): frag: function type parameters not allowed; function type not allowed for parameter "frag" syntax error, unexpected '{', expecting ',' or ')' at token "{" type name expected at token "{"
+  api=0 type=0 insize=1643 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1600 outsize=248 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1648 outsize=350 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1648 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1711 outsize=360 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1648 outsize=350 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1648 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1742 outsize=360 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1679 outsize=714 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1679 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1739 outsize=360 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1676 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1676 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1640 outsize=359 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1577 outsize=537 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1577 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1639 outsize=359 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1576 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1576 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1535 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (54): too much data in type constructor
+  api=0 type=0 insize=1583 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1551 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (54): too much data in type constructor
+  api=0 type=0 insize=1599 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1551 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (38): implicit cast from "float4" to "float3"
+  error: 2 plat 0 at (39): undefined variable "_WorldSpaceLIghtPos0" unable to find compatible overloaded function "normalize(error)"
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1599 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1553 outsize=248 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (38): implicit cast from "float4" to "float3"
+  error: 2 plat 0 at (51): undefined variable "lightPos" unable to find compatible overloaded function "normalize(error)" unable to find compatible overloaded function "dot(float3, error)"
+  api=0 type=0 insize=1601 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1555 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1603 outsize=469 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1603 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1560 outsize=249 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (38): implicit cast from "float4" to "float3"
+  error: 2 plat 0 at (40): undefined variable "_WorldSpaceLIghtPos0" unable to find compatible overloaded function "normalize(error)"
+  api=0 type=0 insize=1608 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1560 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1608 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1608 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1545 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1593 outsize=403 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1593 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1554 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1602 outsize=550 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1602 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=1586 outsize=249 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1634 outsize=613 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1634 outsize=84 kw= ok=1
+Cmd: preprocess
+  insize=430 outsize=1176 ok=1
+Cmd: preprocess
+  insize=429 outsize=1175 ok=1
+Cmd: preprocess
+  insize=704 outsize=235 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=766 outsize=281 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=766 outsize=101 kw= ok=1
+Cmd: preprocess
+  insize=701 outsize=232 ok=1
+Cmd: preprocess
+  insize=707 outsize=238 ok=1
+Cmd: preprocess
+  insize=781 outsize=282 ok=1
+Cmd: preprocess
+  insize=706 outsize=237 ok=1
+Cmd: preprocess
+  insize=780 outsize=281 ok=1
+Cmd: preprocess
+  insize=751 outsize=251 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=796 outsize=281 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=796 outsize=101 kw= ok=1
+Cmd: preprocess
+  insize=894 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): undefined variable "TRANSFORM_TEX" undefined variable "_MainTex"
+  api=0 type=0 insize=898 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=896 outsize=292 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): syntax error, unexpected '[' at token "[" type name expected at token "["
+  api=0 type=0 insize=900 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=918 outsize=292 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (34): undefined variable "TRANSFORM_TEX"
+  api=0 type=0 insize=922 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=953 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (36): undefined variable "_MainTex_ST" undefined variable "_MainTex_ST"
+  api=0 type=0 insize=957 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=975 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): expression left of ."textcoord" is not a struct or array
+  api=0 type=0 insize=979 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=974 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (38): undefined variable "_MainTex_ST" undefined variable "_MainTex_ST"
+  api=0 type=0 insize=978 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=871 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): undefined variable "_MainTex_ST" undefined variable "_MainTex_ST"
+  api=0 type=0 insize=875 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=872 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): undefined variable "_MainTex_ST" undefined variable "_MainTex_ST"
+  api=0 type=0 insize=876 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=873 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): undefined variable "_MainTe2x_ST" undefined variable "_MainTe2x_ST"
+  api=0 type=0 insize=877 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=872 outsize=293 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (33): undefined variable "_MainTex_ST" undefined variable "_MainTex_ST"
+  api=0 type=0 insize=876 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=927 outsize=342 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=882 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=882 outsize=160 kw= ok=1
+Cmd: preprocess
+  insize=991 outsize=344 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=944 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=944 outsize=160 kw= ok=1
+Cmd: preprocess
+  insize=1052 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=958 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (40): undefined variable "_Color1" undefined variable "_Color2"
+  api=0 type=1 insize=958 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1079 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=985 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=985 outsize=131 kw= ok=1
+Cmd: preprocess
+  insize=1080 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=986 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (34): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (40): array index out of bounds; cannot index a non-array value
+  api=0 type=1 insize=986 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1078 outsize=391 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (34): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (40): invalid character 'u' in swizzle "u" invalid character 'v' in swizzle "v"
+  api=0 type=0 insize=984 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1078 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=984 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=984 outsize=210 kw= ok=1
+Cmd: preprocess
+  insize=1182 outsize=391 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (21): declaration of "_Time" conflicts with previous declaration at /UnityShaderVariables.cginc(16)
+  error: 1 plat 0 at (35): implicit cast from "float4" to "float2"
+  api=0 type=0 insize=1088 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1158 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1064 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1064 outsize=338 kw= ok=1
+Cmd: preprocess
+  insize=1168 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1074 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1074 outsize=360 kw= ok=1
+Cmd: preprocess
+  insize=1191 outsize=390 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1097 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1097 outsize=444 kw= ok=1
+Cmd: preprocess
+  insize=1191 outsize=390 ok=1
+Cmd: preprocess
+  insize=782 outsize=216 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=863 outsize=536 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=863 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=769 outsize=204 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=862 outsize=538 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=862 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=773 outsize=204 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=866 outsize=603 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=866 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=773 outsize=204 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=866 outsize=610 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=866 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=773 outsize=204 ok=1
+Cmd: preprocess
+  insize=773 outsize=204 ok=1
+Cmd: preprocess
+  insize=764 outsize=203 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=857 outsize=593 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=857 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=762 outsize=204 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=855 outsize=573 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=855 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=762 outsize=204 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=855 outsize=591 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=855 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=764 outsize=203 ok=1
+Cmd: preprocess
+  insize=817 outsize=241 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (27): syntax error, unexpected identifier, expecting ',' or ';' at token "_StaticSpeed" type name expected at token "_StaticSpeed"
+  api=0 type=0 insize=873 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=818 outsize=242 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (27): syntax error, unexpected identifier, expecting ',' or ';' at token "_StaticSpeed" type name expected at token "_StaticSpeed"
+  api=0 type=0 insize=873 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=819 outsize=242 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=874 outsize=593 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=874 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=825 outsize=248 ok=1
+Cmd: preprocess
+  insize=834 outsize=248 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=883 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=883 outsize=2467 kw= ok=1
+Cmd: preprocess
+  insize=875 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=881 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=881 outsize=2475 kw= ok=1
+Cmd: preprocess
+  insize=890 outsize=290 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (29): syntax error, unexpected ';', expecting identifier or reserved word "operator" or template identifier or type identifier at token ";" type name expected at token ";"
+  api=0 type=0 insize=896 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=894 outsize=289 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=900 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=900 outsize=2473 kw= ok=1
+Cmd: preprocess
+  insize=948 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=954 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (51): undefined variable "ns2"
+  api=0 type=1 insize=954 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=969 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=975 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (52): undefined variable "ns2"
+  api=0 type=1 insize=975 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=971 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=977 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=977 outsize=4719 kw= ok=1
+Cmd: preprocess
+  insize=970 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=976 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=976 outsize=4709 kw= ok=1
+Cmd: preprocess
+  insize=970 outsize=291 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=976 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=976 outsize=2473 kw= ok=1
+Cmd: preprocess
+  insize=970 outsize=291 ok=1
+Cmd: preprocess
+  insize=1261 outsize=338 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (31): syntax error, unexpected identifier, expecting ',' or ';' at token "_DetailScale" type name expected at token "_DetailScale"
+  api=0 type=0 insize=1222 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1262 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1223 outsize=780 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1223 outsize=4712 kw= ok=1
+Cmd: preprocess
+  insize=1248 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1209 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1209 outsize=4712 kw= ok=1
+Cmd: preprocess
+  insize=1242 outsize=332 ok=1
+Cmd: preprocess
+  insize=1313 outsize=332 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1280 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1280 outsize=4746 kw= ok=1
+Cmd: preprocess
+  insize=1352 outsize=371 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1280 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1280 outsize=4746 kw= ok=1
+Cmd: preprocess
+  insize=1359 outsize=374 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1284 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (62): undefined variable "col" undefined variable "col" undefined variable "ns2"
+  error: 2 plat 0 at (64): undefined variable "ns2"
+  api=0 type=1 insize=1284 outsize=0 kw= ok=0
+Cmd: compileSnippet
+  error: 2 plat 0 at (62): undefined variable "col" undefined variable "col" undefined variable "ns2"
+  error: 2 plat 0 at (64): undefined variable "ns2"
+  api=0 type=1 insize=1284 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1361 outsize=374 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1286 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (64): undefined variable "ns2"
+  api=0 type=1 insize=1286 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1359 outsize=374 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1284 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1284 outsize=4712 kw= ok=1
+Cmd: preprocess
+  insize=1458 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1336 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1336 outsize=4737 kw= ok=1
+Cmd: preprocess
+  insize=1414 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1292 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1292 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1451 outsize=421 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (44): expression left of ."objPos" is not a struct or array
+  api=0 type=0 insize=1329 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1451 outsize=421 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (46): undefined variable "objPos" unable to find compatible overloaded function "mul(float4x4, error)"
+  api=0 type=0 insize=1329 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1453 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1331 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1331 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1476 outsize=421 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (48): syntax error, unexpected '.' at token "." type name expected at token "."
+  api=0 type=0 insize=1354 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1475 outsize=421 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (48): syntax error, unexpected '.' at token "." type name expected at token "."
+  api=0 type=0 insize=1353 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1476 outsize=419 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1354 outsize=620 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1354 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1474 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1352 outsize=618 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1352 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1474 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1352 outsize=600 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1352 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1453 outsize=421 ok=1
+Cmd: preprocess
+  insize=1443 outsize=421 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1321 outsize=705 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1321 outsize=4737 kw= ok=1
+Cmd: preprocess
+  insize=1453 outsize=421 ok=1
+Cmd: preprocess
+  insize=1456 outsize=434 ok=1
+Cmd: preprocess
+  insize=1468 outsize=436 ok=1
+Cmd: preprocess
+  insize=1446 outsize=436 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1309 outsize=605 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1309 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1466 outsize=436 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (47): expression left of ."uv" is not a struct or array
+  api=0 type=0 insize=1329 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1472 outsize=436 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1335 outsize=333 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1335 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1478 outsize=436 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1341 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1341 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1477 outsize=436 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1340 outsize=331 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1340 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1477 outsize=435 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1340 outsize=331 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1340 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1480 outsize=436 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1343 outsize=361 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1343 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1569 outsize=438 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (35): syntax error, unexpected ';', expecting identifier or reserved word "operator" or template identifier or type identifier at token ";" type name expected at token ";"
+  error: 1 plat 0 at (47): implicit cast from "float4" to "float3"
+  api=0 type=0 insize=1430 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1567 outsize=437 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1428 outsize=450 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1428 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1604 outsize=438 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1465 outsize=517 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1465 outsize=2513 kw= ok=1
+Cmd: preprocess
+  insize=1742 outsize=438 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (46): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (73): syntax error, unexpected reserved word "float", expecting ',' or ';' at token "float" type name expected at token "float" expression left of ."noisePos" is not a struct or array
+  api=0 type=0 insize=1603 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1743 outsize=438 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (46): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (69): syntax error, unexpected '=' at token "=" type name expected at token "="
+  error: 2 plat 0 at (73): cast not allowed
+  api=0 type=0 insize=1604 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1741 outsize=438 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (46): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (69): incompatible types in initialization; invalid initialization
+  error: 2 plat 0 at (73): syntax error, unexpected reserved word "float", expecting ',' or ';' at token "float" type name expected at token "float"
+  api=0 type=0 insize=1602 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1759 outsize=438 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1620 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1620 outsize=2608 kw= ok=1
+Cmd: preprocess
+  insize=2665 outsize=473 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (49): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (79): swizzle mask element not present in operand "xy"
+  error: 2 plat 0 at (80): assignment to non-lvalue; syntax error, unexpected identifier, expecting ',' or ';' at token "upperNoisePos" type name expected at token "upperNoisePos" declaration of "upperNoisePos" conflicts with previous declaration at (75)
+  error: 2 plat 0 at (81): syntax error, unexpected identifier, expecting ',' or ';' at token "lowerNoisePos" type name expected at token "lowerNoisePos" declaration of "lowerNoisePos" conflicts with previous declaration at (74)
+  error: 2 plat 0 at (82): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (87): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (88): swizzle mask element not present in operand "z"
+  error: 2 plat 0 at (89): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (90): swizzle mask element not present in operand "z"
+  api=0 type=0 insize=2493 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2667 outsize=473 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (49): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (79): swizzle mask element not present in operand "xy" assignment to non-lvalue
+  error: 2 plat 0 at (80): swizzle mask element not present in operand "xy" assignment to non-lvalue
+  error: 2 plat 0 at (81): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (82): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (87): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (88): swizzle mask element not present in operand "z"
+  error: 2 plat 0 at (89): swizzle mask element not present in operand "y"
+  error: 2 plat 0 at (90): swizzle mask element not present in operand "z"
+  api=0 type=0 insize=2495 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2667 outsize=473 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2495 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2495 outsize=2768 kw= ok=1
+Cmd: preprocess
+  insize=2677 outsize=473 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2505 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2505 outsize=5030 kw= ok=1
+Cmd: preprocess
+  insize=2673 outsize=473 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2501 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2501 outsize=5058 kw= ok=1
+Cmd: preprocess
+  insize=2673 outsize=473 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2501 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2501 outsize=5059 kw= ok=1
+Cmd: preprocess
+  insize=2384 outsize=473 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2212 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2212 outsize=5024 kw= ok=1
+Cmd: preprocess
+  insize=2388 outsize=477 ok=1
+Cmd: preprocess
+  insize=2389 outsize=478 ok=1
+Cmd: preprocess
+  insize=2406 outsize=478 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2229 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2229 outsize=5060 kw= ok=1
+Cmd: preprocess
+  insize=2401 outsize=478 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2224 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2224 outsize=5035 kw= ok=1
+Cmd: preprocess
+  insize=2435 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2225 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2225 outsize=5061 kw= ok=1
+Cmd: preprocess
+  insize=2431 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2221 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2221 outsize=5016 kw= ok=1
+Cmd: preprocess
+  insize=2435 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2225 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2225 outsize=5058 kw= ok=1
+Cmd: preprocess
+  insize=2436 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2226 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2226 outsize=5109 kw= ok=1
+Cmd: preprocess
+  insize=2468 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2258 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2258 outsize=5110 kw= ok=1
+Cmd: preprocess
+  insize=2568 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2358 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (50): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (84): undefined variable "nupperNoisePos"
+  api=0 type=1 insize=2358 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2572 outsize=510 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2362 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2362 outsize=5110 kw= ok=1
+Cmd: preprocess
+  insize=2570 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2360 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2360 outsize=5110 kw= ok=1
+Cmd: preprocess
+  insize=2579 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2369 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2369 outsize=5147 kw= ok=1
+Cmd: preprocess
+  insize=2579 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2369 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2369 outsize=5147 kw= ok=1
+Cmd: preprocess
+  error: 2 plat 12 at (-1): No ENDCG tag found after CGPROGRAM tag
+  insize=2625 outsize=2622 ok=0
+Cmd: preprocess
+  error: 2 plat 12 at (-1): No ENDCG tag found after CGPROGRAM tag
+  insize=2624 outsize=2621 ok=0
+Cmd: preprocess
+  insize=2624 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2414 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2414 outsize=5144 kw= ok=1
+Cmd: preprocess
+  insize=2635 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2425 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (50): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (84): undefined variable "nupperNoisePos" undefined variable "nupperNoisePos" unable to find compatible overloaded function "pow(error, float)"
+  api=0 type=1 insize=2425 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2633 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2423 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2423 outsize=5166 kw= ok=1
+Cmd: preprocess
+  insize=2633 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2423 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2423 outsize=5169 kw= ok=1
+Cmd: preprocess
+  insize=2633 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2423 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2423 outsize=5169 kw= ok=1
+Cmd: preprocess
+  insize=2637 outsize=510 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2427 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2427 outsize=5110 kw= ok=1
+Cmd: preprocess
+  insize=2116 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1906 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1906 outsize=5107 kw= ok=1
+Cmd: preprocess
+  insize=2180 outsize=511 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (50): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (71): syntax error, unexpected identifier, expecting ',' or ';' at token "noisePos" type name expected at token "noisePos" declaration of "noisePos" conflicts with previous declaration at (59) declaration of "y" conflicts with previous declaration at (71)
+  api=0 type=0 insize=1970 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2265 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2055 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2055 outsize=5254 kw= ok=1
+Cmd: preprocess
+  insize=2267 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2057 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2057 outsize=5242 kw= ok=1
+Cmd: preprocess
+  insize=2317 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2107 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2107 outsize=5286 kw= ok=1
+Cmd: preprocess
+  insize=2317 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2107 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2107 outsize=5270 kw= ok=1
+Cmd: preprocess
+  insize=2319 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2109 outsize=332 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2109 outsize=5240 kw= ok=1
+Cmd: preprocess
+  insize=2317 outsize=511 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (50): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (76): swizzle mask element not present in operand "w"
+  api=0 type=0 insize=2107 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2317 outsize=511 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (76): swizzle mask element not present in operand "w"
+  api=0 type=0 insize=2107 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2317 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2107 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2107 outsize=7848 kw= ok=1
+Cmd: preprocess
+  insize=2342 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2132 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2132 outsize=7890 kw= ok=1
+Cmd: preprocess
+  insize=2342 outsize=511 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2132 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2132 outsize=7878 kw= ok=1
+Cmd: preprocess
+  insize=1806 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1596 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1596 outsize=5080 kw= ok=1
+Cmd: preprocess
+  insize=1831 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1621 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1621 outsize=5080 kw= ok=1
+Cmd: preprocess
+  insize=1831 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1621 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1621 outsize=5102 kw= ok=1
+Cmd: preprocess
+  insize=1841 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1631 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1631 outsize=5088 kw= ok=1
+Cmd: preprocess
+  insize=1849 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1639 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1639 outsize=5110 kw= ok=1
+Cmd: preprocess
+  insize=1857 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1647 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1647 outsize=5130 kw= ok=1
+Cmd: preprocess
+  insize=1783 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1573 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1573 outsize=5032 kw= ok=1
+Cmd: preprocess
+  insize=1809 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1599 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1599 outsize=5060 kw= ok=1
+Cmd: preprocess
+  insize=1867 outsize=508 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1657 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1657 outsize=5128 kw= ok=1
+Cmd: preprocess
+  insize=1861 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1651 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1651 outsize=5156 kw= ok=1
+Cmd: preprocess
+  insize=1863 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1653 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1653 outsize=5098 kw= ok=1
+Cmd: preprocess
+  insize=1861 outsize=509 ok=1
+Cmd: preprocess
+  insize=1857 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1647 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1647 outsize=5227 kw= ok=1
+Cmd: preprocess
+  insize=1843 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1633 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1633 outsize=5067 kw= ok=1
+Cmd: preprocess
+  insize=1843 outsize=509 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1633 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1633 outsize=5071 kw= ok=1
+Cmd: compileSnippet
+  api=5 type=0 insize=1633 outsize=7298 kw= ok=1
+Cmd: compileSnippet
+  api=5 type=1 insize=1633 outsize=6 kw= ok=1
+Cmd: preprocess
+  insize=2080 outsize=608 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1772 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (90): undefined variable "BkColor1" unable to find compatible overloaded function "lerp(float4, error, float)"
+  error: 2 plat 0 at (91): undefined variable "colrans" unable to find compatible overloaded function "lerp(float4, float4, error)"
+  api=0 type=1 insize=1772 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2081 outsize=608 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1773 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (91): undefined variable "colrans" unable to find compatible overloaded function "lerp(float4, float4, error)"
+  api=0 type=1 insize=1773 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=2082 outsize=608 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1774 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1774 outsize=5274 kw= ok=1

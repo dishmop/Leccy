@@ -1,0 +1,4 @@
+Base path: /Applications/Unity/Unity.app/Contents
+Pipe name: \\.\pipe\UnityShaderCompiler-2--1593437784
+Cmd: getPlatforms
+Cmd: compileSnippet
