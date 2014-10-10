@@ -19,29 +19,52 @@ public class Simluator : MonoBehaviour {
 	GameObject[,]		debugTextBoxes;
 	GameObject[,]       debugCurrentTextBoxesRight;
 	GameObject[,]       debugCurrentTextBoxesUp;
+	GameObject[,]		debugVoltageTextBoxes;
 	
 	Circuit						circuit;
 	int							width;
 	int							height;
 	
 	
-	SimData[,,]					simData;
+	BranchData[,,]					branchData;
+	NodeData[,]						nodeData;
 	
 	// List lof loops (the first loop is always the outer one which we can ignore
 	// The remainder will form an indepednent set of loops
 	List<List<BranchAddress>>	loops;	
+	int							numValidLoops;
 	int							numGroups;
 	float[]						loopCurrents;
 	
 	// GUI layout
 	GUITextDisplay				guiTextDisplay;
 	
-	class SimData{
-		
+	// Used for calculating currents. There are two of these for each connection between noses
+	// Each object stores info about the current LEAVING the node (so there is always an equivilent
+	// (opposite) branch which is the one entering the node
+	class BranchData{
+		// Current calculations
 		public bool traversed;
 		public int loopId;
+		public bool isOuterLoop;
+		public bool isSpoke;
 		public int groupId;
+		public float totalCurrent;
+		
+		// Voltage calculations
+		public bool initialVolt;
+		public float totalVoltage;
 	}	
+	
+	// Used for calulating voltages. There is one of these for each node
+	class NodeData{
+		// Have we set a voltage which is compatible with the currents?
+		public bool initialVolt;
+		// Have we been through and adjusted it so the voltage is 0 at the lowest point
+		public bool balancedVolt;
+		// The voltage at this node
+		public float voltage;
+	}		
 	
 	// Corresponds to the branch exiting that node in that dir
 	struct BranchAddress{
@@ -65,14 +88,19 @@ public class Simluator : MonoBehaviour {
 		
 		DebugCreateLoopCurrentVis();
 		DebugCreateCurrentVis();
+		DebugCreateVoltageVis ();
 		ClearSimulation ();
 
 		// Sert up the text gui
 		guiTextDisplay = new GUITextDisplay(10f, 70f, 500f, 20f);
 	}
 	
-	SimData GetBranchData(BranchAddress address){
-		return simData[address.x, address.y, address.dir];
+	BranchData GetBranchData(BranchAddress address){
+		return branchData[address.x, address.y, address.dir];
+	}
+	
+	NodeData GetNodeData(GridPoint point){
+		return nodeData[point.x, point.y];
 	}
 	
 	// Return the address of the branch travelling in the oposite direction
@@ -114,7 +142,7 @@ public class Simluator : MonoBehaviour {
 	}
 	
 	void AddLoopElement(BranchAddress addr, int loopId, int groupId){
-		SimData data = GetBranchData (addr);
+		BranchData data = GetBranchData (addr);
 		data.traversed = true;
 		data.loopId = loopId;
 		data.groupId = groupId;
@@ -159,7 +187,7 @@ public class Simluator : MonoBehaviour {
 								// Yes! we have found one
 								
 								
-								// Create the outer (zeroID) loop
+								// Create the outer loop
 								int loopId = CreateLoop();								
 								FollowLoopLeft(thisAddress, loopId, groupId);
 								
@@ -193,7 +221,7 @@ public class Simluator : MonoBehaviour {
 	}
 	
 	// ALl loops that simply tracing the outline of a disjoint circuit 
-	// are not needed and so are makred with the loopId 0
+	// are not needed for current calulations so are iflagged ot be ignored
 	void FlagOuterLoops(){
 		int lastGroupId = -1;
 		for (int i = 0; i < loops.Count; ++i)
@@ -202,7 +230,7 @@ public class Simluator : MonoBehaviour {
 			if (groupId != lastGroupId){
 				lastGroupId = groupId;
 				for (int j = 0; j < loops[i].Count; ++j){
-					GetBranchData(loops[i][j]).loopId = -1;
+					GetBranchData(loops[i][j]).isOuterLoop = true;
 				}
 			}
 		}
@@ -231,8 +259,9 @@ public class Simluator : MonoBehaviour {
 				}
 				while (haveDeadEnd){
 					// First null them in the simdData array
-					GetBranchData (loops[i][thisIndex]).loopId = -2;
-					GetBranchData (loops[i][nextIndex]).loopId = -2;
+					GetBranchData (loops[i][thisIndex]).isSpoke = true;
+					GetBranchData (loops[i][nextIndex]).isSpoke = true;
+
 					// Remove this dead end
 					if (thisIndex < nextIndex){
 						loops[i].RemoveAt (nextIndex);
@@ -279,43 +308,54 @@ public class Simluator : MonoBehaviour {
 		double[,] X = MathUtils.Matrix.SolveLinear(A, B);
 		*/
 		
-		// Go through the loops and remove any which are outer loops or of zero length o
+		int numInvalidLoops = 0;
+		// Go through the loops and remove any which are outer loops or of zero length or an invlaid loop
+		// e.g. an outer loop and place them at the end
 		for (int i = loops.Count-1; i >=0 ; --i){
-			if (loops[i].Count == 0 || GetBranchData(loops[i][0]).loopId < 0) loops.RemoveAt (i);
+			if (loops[i].Count == 0 || GetBranchData(loops[i][0]).isOuterLoop){
+				int newIndex = CreateLoop ();
+				loops[newIndex] = loops[i];
+				loops.RemoveAt (i);
+				++numInvalidLoops;
+			}
+			
 
 		}
 		
-		// Now renumber our loops
+		numValidLoops = loops.Count - numInvalidLoops;
+
+		// Now renumber our loops (up to the valid ones  the invalid ones should retain an ID of -1 or whatever)
 		for (int i = 0; i < loops.Count; ++i){
 			for (int j= 0; j < loops[i].Count; ++j){
 				GetBranchData(loops[i][j]).loopId = i;
 			}
 		}
+		
 
 		// Create arrays need to solve equation coeffs
-		double [,] R = new double[loops.Count, loops.Count];
-		double [,] V = new double[loops.Count, 1];
+		double [,] R = new double[numValidLoops, numValidLoops];
+		double [,] V = new double[numValidLoops, 1];
 		
 		// For through each loop in tune (for each row in the matrices)
-		for (int i = 0; i < loops.Count; ++i){
+		for (int i = 0; i < numValidLoops; ++i){
 			// For each connection in the loop, check the resistance and any voltage drop
 			// We do this by considering the properties of the node we are leaving
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
 				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
-				SimData thisData = GetBranchData (thisAddress);
+				BranchData thisData = GetBranchData (thisAddress);
 
 								// Our data loopID shoudl be the same as i
 				if (thisData.loopId != i) Debug.LogError ("LoopId/i missmatch!@");
 				
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
-				SimData oppData	= GetBranchData (oppAddress);
+				BranchData oppData	= GetBranchData (oppAddress);
 					
 				
 				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
-				if (oppData.loopId >= 0) R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+				if (!oppData.isOuterLoop) R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
 				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
 			}
 		}  
@@ -324,17 +364,17 @@ public class Simluator : MonoBehaviour {
 		double[,] I = new double[0,0];
 		
 		// for some reason the solver doens't work with one equation
-		if (loops.Count == 1){
+		if (numValidLoops == 1){
 			I = new double[1,1];
 			I[0,0] = (V[0,0] / R[0,0]);
 		}
-		else if (loops.Count > 0){
-			if (MathUtils.Matrix.Rank(R) == loops.Count){
+		else if (numValidLoops> 0){
+			if (MathUtils.Matrix.Rank(R) == numValidLoops){
 				I = MathUtils.Matrix.SolveLinear(R, V);
 			}
 			else{
-				I = new double[loops.Count,1];
-				for (int i = 0; i < loops.Count; ++i){
+				I = new double[numValidLoops,1];
+				for (int i = 0; i < numValidLoops; ++i){
 					I[i,0] = float.NaN;
 				}
 			}
@@ -342,9 +382,135 @@ public class Simluator : MonoBehaviour {
 		
 		loopCurrents = new float[loops.Count];
 		if (I.GetLength(0) != 0){
-			for (int i = 0; i < loops.Count; ++i){
+			for (int i = 0; i < numValidLoops; ++i){
 				loopCurrents[i] = (float)I[i,0];
 			}
+			// For the invalid loops, just set the current to zero
+			for (int i = numValidLoops; i < loops.Count; ++i){
+				loopCurrents[i] = 0f;
+			}
+			
+		}
+		
+	}
+	
+	
+	// Assuming we have the currents sorted, this find the voltages at each node
+	void SolveForVoltages(){
+		if (loops.Count == 0) return;
+		
+		// We always need to seed a group  with a known voltge (as we don't have a "ground")
+		// Just do this with the first node thast we have
+		int loopId = 0;
+		int groupStartId = GetBranchData(loops[loopId][0]).groupId;
+		
+		SetInitVoltage(loops[loopId][0], 0f);
+
+		float minGroupVoltage = 0f;
+
+		// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
+		// traversing
+		while (loopId < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
+			BranchData startData = GetBranchData(loops[loopId][0]);
+			if (startData.initialVolt == false){
+				Debug.LogError ("No initial voltage");
+			}
+			
+			// Get data from the initial node in the group
+			float currentVoltage = startData.totalVoltage;
+			
+			for (int i = 1; i < loops[loopId].Count; ++i){
+				BranchAddress thisAddr = loops[loopId][i];
+				CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+				BranchData thisData = GetBranchData(thisAddr);
+			
+				currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+				
+				SetInitVoltage(thisAddr, currentVoltage);
+
+				if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+			}
+			++loopId;
+			
+		}
+		
+	}
+	
+	// This is pretty hacky - we shouldn't have to check if this is a wire or not
+	void SetInitVoltage(BranchAddress addr, float currentVoltage){
+		CircuitElement element = circuit.GetElement(new GridPoint(addr.x, addr.y));
+		
+		// Check if this is a wire (because then the voltage is the same accross all its connections)
+		if (GameObject.ReferenceEquals(element.GetType (), typeof(CircuitElementWire))){
+			SetInitWireVoltage(addr, element, currentVoltage);
+		}
+		else{
+			SetInitNonWireVoltage(addr, currentVoltage);
+		}
+		
+	}
+	
+	void SetInitWireVoltage(BranchAddress addr, CircuitElement element, float currentVoltage){
+		// Do all the branches coming from this node
+		for (int i = 0; i < 4; ++i){
+			if (element.isConnected[i]){
+				BranchAddress setAddr = new BranchAddress(addr.x, addr.y, i);
+				BranchAddress setOppAddr = GetOppositeAddress(setAddr);
+				GetBranchData(setAddr).initialVolt = true;
+				GetBranchData(setAddr).totalVoltage = currentVoltage;
+				GetBranchData(setOppAddr).initialVolt = true;
+				GetBranchData(setOppAddr).totalVoltage = currentVoltage;
+			}
+			
+		}
+	}
+	
+	void SetInitNonWireVoltage(BranchAddress addr, float currentVoltage){
+		BranchAddress oppAddr = GetOppositeAddress(addr);
+
+		GetBranchData(addr).initialVolt = true;
+		GetBranchData(addr).totalVoltage = currentVoltage;
+		GetBranchData(oppAddr).initialVolt = true;
+		GetBranchData(oppAddr).totalVoltage = currentVoltage;
+	}	
+	
+	
+	// Assuming we have the currents sorted, this find the voltages at each node
+	void SolveForVoltages_Old(){
+		if (loops.Count == 0) return;
+	
+		// We always need to seed a group  with a known voltge (as we don't have a "ground")
+		// Just do this with the first node thast we have
+		int loopId = 0;
+		GridPoint startPoint = new GridPoint(loops[loopId][0].x, loops[loopId][0].y);
+		NodeData startData = GetNodeData (startPoint);
+		startData.voltage = 0f;
+		startData.initialVolt = true;
+		float minGroupVoltage = 0f;
+		int group = GetBranchData(loops[loopId][0]).groupId;
+		while (loopId < numValidLoops && GetBranchData(loops[loopId][0]).groupId == group){
+			// By construction, our loops always start off on a node of the previous loop (I think?)
+			startPoint = new GridPoint(loops[loopId][0].x, loops[loopId][0].y);
+			startData = GetNodeData (startPoint);
+			
+			if (startData.initialVolt == false) Debug.LogError ("No initial voltage");
+			
+			// Get data from the initial node in the group
+			float currentVoltage = startData.voltage;
+			
+			for (int i = 1; i < loops[loopId].Count; ++i){
+				GridPoint thisPoint = new GridPoint(loops[loopId][i].x, loops[loopId][i].y);
+				CircuitElement thisElement = circuit.GetElement(thisPoint);
+				int dir = loops[loopId][i].dir;
+				float thisCurrent = GetBranchData(loops[loopId][i]).totalCurrent;
+				currentVoltage = (thisElement.GetVoltageDrop(dir) - thisCurrent * thisElement.GetResistance(dir));
+				NodeData data = GetNodeData (thisPoint);
+				data.initialVolt = true;
+				data.voltage = currentVoltage;
+				if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+			}
+			++loopId;
+		
 		}
 		
 	}
@@ -355,30 +521,37 @@ public class Simluator : MonoBehaviour {
 		// Flag the ones going round the outside of disjoint circuits as 0 (so we can ignore them)
 		FlagOuterLoops();
 		// Go through each loop and remove any elements which are from a "Spoke" - i.e., not a loop
-		TrimSpokes();
+		//TrimSpokes();
 		// Set up equations and solve them
 		SolveForCurrents();
+		CalcTotalCurrents();
+		// Use the currents we have found to calculate the voltages
+		SolveForVoltages();
 		
+
 	}
 	
 	void ClearSimulation(){
 		loops = new List<List<BranchAddress>>();
-		simData = new SimData[width, height, 4];
+		branchData = new BranchData[width, height, 4];
+		nodeData = new NodeData[width, height];
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				for (int i = 0; i < 4; ++i){
-					simData[x,y,i] = new SimData();
+					branchData[x,y,i] = new BranchData();
 				}
+				nodeData[x, y] = new NodeData();
 			}
 		}
 		loopCurrents = new float[0];
 		ClearLoopCurrentVis();		
 		ClearCurrentVis();
+		ClearVoltageVis();
 	}
 	
 	// Not really unique, but does an OK job
 	Color GetUniqueColor(int index){
-		// don't want to use black
+		// don't want to use black for valid loops
 		index++;
 		int red = (index * 184) % 256;
 		int green = (index * 123) % 256;
@@ -417,8 +590,9 @@ public class Simluator : MonoBehaviour {
 					BranchAddress thisAddress = new BranchAddress(x, y, i);
 					BranchAddress nextAddress = GetOppositeAddress(thisAddress);
 					
-					SimData data = GetBranchData (thisAddress);
-					if (data.traversed && data.loopId >= 0){
+					BranchData data = GetBranchData (thisAddress);
+					// ALweaus remder the loops
+					if (data.traversed){
 						Vector3 from = new Vector3(x, y, 0f) + offsets[i];
 						Vector3 to = new Vector3(nextAddress.x, nextAddress.y, 0f) + offsets[i];
 						Vector3 avPos = (from + to) * 0.5f;
@@ -455,9 +629,9 @@ public class Simluator : MonoBehaviour {
 					BranchAddress thisAddress = new BranchAddress(x, y, i);
 					BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 					
-					SimData thisData = GetBranchData (thisAddress);
+					BranchData thisData = GetBranchData (thisAddress);
 					if (thisData.traversed && thisData.loopId >= 0){
-						SimData oppData = GetBranchData (oppAddress);
+						BranchData oppData = GetBranchData (oppAddress);
 						Vector3 from = new Vector3(x, y, 0f) + offsets[i];
 						Vector3 to = new Vector3(oppAddress.x, oppAddress.y, 0f) + offsets[i];
 						Vector3 avPos = (from + to) * 0.5f;
@@ -504,14 +678,15 @@ public class Simluator : MonoBehaviour {
 				
 				// For each brnach address, see if it is valid, tranvered and what loopID it is
 				int loopId = -1;
-				int groupId = -1;;
+				int groupId = -1;
+				bool isOuter = false;
 				for (int i = 0; i < 4; ++i){
 					if (IsPointInGrid(squareAddresses[i].x, squareAddresses[i].y)){
-						SimData data = GetBranchData(squareAddresses[i]);
-						if (data.traversed && data.loopId >= 0){
-							if (loopId != -1 && loopId != data.loopId) Debug.LogError("Inconsistnet loop Ids");
+						BranchData data = GetBranchData(squareAddresses[i]);
+						if (data.traversed){
 							loopId = data.loopId;
 							groupId = data.groupId;
+							isOuter = data.isOuterLoop;
 						}
 						
 					}
@@ -519,12 +694,84 @@ public class Simluator : MonoBehaviour {
 				if (loopId != -1){
 					debugTextBoxes[x,y].SetActive(true);
 					TextMesh textMesh = debugTextBoxes[x,y].GetComponent<TextMesh>();
-					textMesh.color = GetUniqueColor((visMode == VisMode.kLoops) ? loopId : groupId);
-					textMesh.text = Mathf.Abs (loopCurrents[loopId])	.ToString("0.00");
+					textMesh.color = GetUniqueColor((visMode == VisMode.kLoops) ? (isOuter ? -1 : loopId): groupId);
+					textMesh.text = Mathf.Abs (loopCurrents[loopId]).ToString("0.00") + "A";
 				}
 				else{
 					debugTextBoxes[x,y].SetActive(false);
 				}
+				
+			}
+		}
+	}
+	
+	/*
+	
+	void DebugRenderVoltages(){
+		for (int x = 0; x < width; ++x){
+			for (int y = 0; y < height; ++y){
+				NodeData data = GetNodeData (new GridPoint(x, y));
+				// Only do something if we have some initial voltage estimate
+				if (data.initialVolt){
+					debugVoltageTextBoxes[x,y].SetActive(true);
+					TextMesh textMesh = debugVoltageTextBoxes[x,y].GetComponent<TextMesh>();
+					textMesh.color = Color.blue;
+					textMesh.text = data.voltage.ToString("0.00") + "V";
+					
+				}
+				else{
+					debugVoltageTextBoxes[x,y].SetActive(false);
+				}
+				
+			}
+		}
+	}
+	*/
+	
+	void CalcTotalCurrents(){
+		// The coodinates of a square are the coordinates of the bottom right corner
+		for (int x = 0; x < width-1; ++x){
+			for (int y = 0; y < height-1; ++y){
+				
+				// Do branch going right
+				float rightCurrent = 0f;
+				BranchAddress rightAddr = new BranchAddress(x, y, Circuit.kRight);
+				BranchAddress rightAddrInv = GetOppositeAddress(rightAddr);
+				BranchData rightData = GetBranchData (rightAddr);
+				BranchData rightInvData = GetBranchData (rightAddrInv);
+				
+				if (rightData.traversed){
+					rightCurrent += loopCurrents[GetBranchData (rightAddr).loopId];
+				}
+				if (rightInvData.traversed ){
+					rightCurrent -= loopCurrents[GetBranchData (rightAddrInv).loopId];
+				}
+				GetBranchData (rightAddr).totalCurrent = rightCurrent;
+				GetBranchData (rightAddrInv).totalCurrent = -rightCurrent;
+				
+				
+				
+				// Do branch going up
+				
+				float upCurrent = 0f;
+				BranchAddress upAddr = new BranchAddress(x, y, Circuit.kUp);
+				BranchAddress upAddrInv = GetOppositeAddress(upAddr);
+				BranchData upData = GetBranchData (upAddr);
+				BranchData upInvData = GetBranchData (upAddrInv);
+				
+				
+				if (upData.traversed){
+					upCurrent += loopCurrents[GetBranchData (upAddr).loopId];
+				}
+				if (upInvData.traversed ){
+					upCurrent -= loopCurrents[GetBranchData (upAddrInv).loopId];
+				}
+				
+				GetBranchData (upAddr).totalCurrent = upCurrent;
+				GetBranchData (upAddrInv).totalCurrent = -upCurrent;
+				
+				
+				
 				
 			}
 		}
@@ -536,69 +783,32 @@ public class Simluator : MonoBehaviour {
 		// The coodinates of a square are the coordinates of the bottom right corner
 		for (int x = 0; x < width-1; ++x){
 			for (int y = 0; y < height-1; ++y){
-			
-				/*
-				if (GetBranchData (new BranchAddress(x, y, 0)).traversed){
-					Debug.DrawLine(new Vector3(0f, 0f, 0f), new Vector3(x, y, 0f), Color.red);
-				}
-				if (GetBranchData (new BranchAddress(x, y, 1)).traversed){
-					Debug.DrawLine(new Vector3(1f, 0f, 0f), new Vector3(x, y, 0f), Color.green);
-				}
-				if (GetBranchData (new BranchAddress(x, y, 2)).traversed){
-					Debug.DrawLine(new Vector3(2f, 0f, 0f), new Vector3(x, y, 0f), Color.blue);
-				}
-				if (GetBranchData (new BranchAddress(x, y, 3)).traversed){
-					Debug.DrawLine(new Vector3(3f, 0f, 0f), new Vector3(x, y, 0f), Color.yellow);
-				}
-				*/
-				
-				
-				// Do branch going right
-				float rightCurrent = 0f;
+
 				BranchAddress rightAddr = new BranchAddress(x, y, Circuit.kRight);
-				BranchAddress rightAddrInv = GetOppositeAddress(rightAddr);
-				SimData rightData = GetBranchData (rightAddr);
-				SimData rightInvData = GetBranchData (rightAddrInv);
+
+				BranchData rightData = GetBranchData (rightAddr);
 				
-				if (rightData.traversed && rightData.loopId >= 0){
-					rightCurrent += loopCurrents[GetBranchData (rightAddr).loopId];
-				}
-				if (rightInvData.traversed && rightInvData.loopId >= 0){
-					rightCurrent -= loopCurrents[GetBranchData (rightAddrInv).loopId];
-				}
 				
-				if (!MathUtils.FP.Feq(rightCurrent, 0f)){
+				if (rightData.traversed){
 					debugCurrentTextBoxesRight[x,y].SetActive(true);
 					TextMesh textMesh = debugCurrentTextBoxesRight[x,y].GetComponent<TextMesh>();
 					textMesh.color = Color.white;
-					textMesh.text = Mathf.Abs (rightCurrent).ToString("0.00");
+					textMesh.text = Mathf.Abs (rightData.totalCurrent).ToString("0.00") + "A / " + rightData.totalVoltage.ToString("0.00") + "V";
 				}
 				else{
 					debugCurrentTextBoxesUp[x,y].SetActive(false);
 				}
 
 				
-				// Do branch going up
-					
-				float upCurrent = 0f;
 				BranchAddress upAddr = new BranchAddress(x, y, Circuit.kUp);
-				BranchAddress upAddrInv = GetOppositeAddress(upAddr);
-				SimData upData = GetBranchData (upAddr);
-				SimData upInvData = GetBranchData (upAddrInv);
 				
+				BranchData upData = GetBranchData (upAddr);
 				
-				if (upData.traversed && upData.loopId >= 0){
-					upCurrent += loopCurrents[GetBranchData (upAddr).loopId];
-				}
-				if (upInvData.traversed && upInvData.loopId >= 0){
-					upCurrent -= loopCurrents[GetBranchData (upAddrInv).loopId];
-				}
-				
-				if (!MathUtils.FP.Feq(upCurrent, 0f)){
+				if (upData.traversed){
 					debugCurrentTextBoxesUp[x,y].SetActive(true);
 					TextMesh textMesh = debugCurrentTextBoxesUp[x,y].GetComponent<TextMesh>();
 					textMesh.color = Color.white;
-					textMesh.text = Mathf.Abs (upCurrent).ToString("0.00");
+					textMesh.text = Mathf.Abs (upData.totalCurrent).ToString("0.00") + "A / " + upData.totalVoltage.ToString("0.00") + "V";
 				}
 				else{
 					debugCurrentTextBoxesUp[x,y].SetActive(false);
@@ -638,6 +848,16 @@ public class Simluator : MonoBehaviour {
 		}
 	}
 	
+	void DebugCreateVoltageVis(){
+		debugVoltageTextBoxes = new GameObject[width, height];
+		for (int x = 0; x < width; ++x){
+			for (int y = 0; y < height; ++y){
+				debugVoltageTextBoxes[x,y] = Instantiate (textMeshGO, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+				debugVoltageTextBoxes[x,y].transform.parent = transform;
+				debugVoltageTextBoxes[x,y].SetActive(false);
+			}		
+		}
+	}	
 	void ClearLoopCurrentVis(){
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
@@ -653,18 +873,15 @@ public class Simluator : MonoBehaviour {
 				debugCurrentTextBoxesUp[x,y].SetActive(false);
 			}		
 		}
-		/* - test
-		debugCurrentTextBoxesRight[10, 10].SetActive(true);
-		TextMesh textMeshRight = debugCurrentTextBoxesRight[10, 10].GetComponent<TextMesh>();
-		textMeshRight.color = Color.white;
-		textMeshRight.text = "Test-Right";
-
-		debugCurrentTextBoxesUp[10, 10].SetActive(true);
-		TextMesh textMeshUp = debugCurrentTextBoxesUp[10, 10].GetComponent<TextMesh>();
-		textMeshUp.color = Color.white;
-		textMeshUp.text = "Test-Up";
-		*/ 
 	}	
+
+	void ClearVoltageVis(){
+		for (int x = 0; x < width; ++x){
+			for (int y = 0; y < height; ++y){
+				debugVoltageTextBoxes[x,y].SetActive(false);
+			}		
+		}
+	}
 
 		// Update is called once per frame
 	void FixedUpdate () {
@@ -680,6 +897,26 @@ public class Simluator : MonoBehaviour {
 		else if (visMode == VisMode.kCurrents){
 			DebugRenderCurrents();	
 			DebugRenderCurrentVis();
+			//DebugRenderVoltages();
+		}
+		
+		// update the material animatoins
+		for (int x = 0; x < width; ++x){
+			for (int y = 0; y < height; ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				if (circuit.ElementExists(thisPoint)){
+					// Get the 
+					MeshRenderer mesh = circuit.GetGameObject (thisPoint).transform.GetChild(0).GetComponent<MeshRenderer>();
+					for (int i = 0; i < 4; ++i){
+						BranchData data = GetBranchData(new BranchAddress(x, y, i));
+						if (data.traversed){
+							int orient = circuit.GetElement(thisPoint).orient;
+							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -data.totalCurrent);
+							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(data.totalCurrent));
+						}
+					}
+				}
+			}		
 		}
 
 	
@@ -689,7 +926,7 @@ public class Simluator : MonoBehaviour {
 	void OnGUI () {
 		guiTextDisplay.GUIResetTextLayout();
 		guiTextDisplay.GUIPrintText( "Number of disjoint circuits: " + numGroups, Color.white);
-		guiTextDisplay.GUIPrintText( "Number of loops: " + loops.Count, Color.white);
+		guiTextDisplay.GUIPrintText( "Number of loops: " + numValidLoops, Color.white);
 		
 	}	
 }

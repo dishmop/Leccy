@@ -5,7 +5,6 @@ public class CircuitElementCell : CircuitElement {
 
 	public GameObject 	cellPrefab;
 	public GameObject	displayMesh;
-	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public bool			invertOrient;		// Turn through 180 degrees?
 	public float		voltage = 1;
 

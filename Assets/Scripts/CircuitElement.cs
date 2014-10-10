@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CircuitElement : MonoBehaviour {
 	
+	public int			orient = 0;			// In 90 degree steps anti-clockwise
+	
 	// 0 - up
 	// 1 - right
 	// 2 - down

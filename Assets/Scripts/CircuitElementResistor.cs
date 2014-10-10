@@ -4,7 +4,6 @@ using System.Collections;
 public class CircuitElementResistor : CircuitElement {
 	public GameObject 	resistorPrefab;
 	public GameObject	displayMesh;
-	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public float		resistance = 1;
 	
 

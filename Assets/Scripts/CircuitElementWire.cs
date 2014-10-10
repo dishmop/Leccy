@@ -12,7 +12,6 @@ public class CircuitElementWire : CircuitElement {
 		
 	public GameObject 	currentPrefab;
 	public GameObject	currentDisplay;
-	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	
 	
 	public void Start(){
@@ -115,7 +114,6 @@ public class CircuitElementWire : CircuitElement {
 	
 	void Update(){
 		SetupMesh ();
-
 	}
 	
 	void OnDestroy() {

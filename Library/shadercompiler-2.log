@@ -1,4 +1,6 @@
 Base path: /Applications/Unity/Unity.app/Contents
-Pipe name: \\.\pipe\UnityShaderCompiler-2--1593437784
+Pipe name: \\.\pipe\UnityShaderCompiler-2--1335607296
 Cmd: getPlatforms
 Cmd: compileSnippet
+  error: 2 plat 9 at (134): 'switch' : Reserved word. 'switch' : syntax error syntax error
+  api=9 type=0 insize=7139 outsize=0 kw= ok=0

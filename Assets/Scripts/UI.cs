@@ -82,7 +82,7 @@ public class UI : MonoBehaviour {
 		grid.SetSelected(newPoint, otherPoint);
 		
 		// If the mouse button is down
-		if (Input.GetMouseButton(0)){
+		if (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl)){
 			oldDrawPoint = newDrawPoint;
 			newDrawPoint = new GridPoint(newPoint);
 			

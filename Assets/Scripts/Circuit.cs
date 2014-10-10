@@ -380,17 +380,17 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	
-	bool IsPointInGrid(GridPoint point){
+	public bool IsPointInGrid(GridPoint point){
 		return 	
-			point.x > 0 &&
-			point.y > 0 &&
+			point.x >= 0 &&
+			point.y >= 0 &&
 			point.x < grid.gridWidth &&
 			point.y < grid.gridHeight;		
 	}	
 	
 	
 	// Assumed to be in the grid
-	bool ElementExists(GridPoint point){
+	public bool ElementExists(GridPoint point){
 		if (!IsPointInGrid(point))
 			Debug.LogError ("Element at point " + point.x + ", " + point.y + " is not in the grid");
 		return (elements[point.x, point.y] != null);
@@ -452,6 +452,11 @@ public class Circuit : MonoBehaviour {
 		return elements[point.x, point.y].GetComponent<CircuitElement>();
 	}
 	
+	public GameObject GetGameObject(GridPoint point){
+		if (!ElementExists(point)) 
+			Debug.LogError ("Element at poin t" + point.x + ", " + point.y + " does not exists");
+		return elements[point.x, point.y];
+	}
 	
 	void Awake(){
 		offsets[kLeft] = 	new GridPoint(-1,  0);

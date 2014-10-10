@@ -38,7 +38,7 @@ public class CamControl : MonoBehaviour {
 			gameObject.transform.position = camPos;
 		}
 		
-		if (Input.GetMouseButton(1)){
+		if (Input.GetMouseButton(1) || (Input.GetMouseButton(0) && Input.GetKey (KeyCode.LeftControl))){
 			Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( prevMousePos);
 			Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
 			

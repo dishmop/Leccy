@@ -24,15 +24,15 @@ Material:
       data:
         first:
           name: _Freq
-        second: 30
+        second: 20
       data:
         first:
           name: _Speed
-        second: 1
+        second: -.200000003
       data:
         first:
           name: _StaticSpeed
-        second: 1.5
+        second: .75
       data:
         first:
           name: _DetailScale
@@ -41,6 +41,22 @@ Material:
         first:
           name: _Overlap
         second: 0
+      data:
+        first:
+          name: _Speed0
+        second: -1
+      data:
+        first:
+          name: _Speed1
+        second: 0
+      data:
+        first:
+          name: _Speed2
+        second: 0
+      data:
+        first:
+          name: _Speed3
+        second: 1
     m_Colors:
       data:
         first:
@@ -49,7 +65,7 @@ Material:
       data:
         first:
           name: _Color1
-        second: {r: .507352948, g: 1, b: .527929187, a: 1}
+        second: {r: .286115915, g: .926470578, b: .312861383, a: 1}
       data:
         first:
           name: _BkColor
@@ -57,7 +73,7 @@ Material:
       data:
         first:
           name: _Color0
-        second: {r: 0, g: .242647052, b: .00795563124, a: 1}
+        second: {r: .399978399, g: 1, b: .419892281, a: 1}
       data:
         first:
           name: _BkColor0
