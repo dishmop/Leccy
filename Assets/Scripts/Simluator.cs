@@ -864,7 +864,18 @@ public class Simluator : MonoBehaviour {
 							int orient = circuit.GetElement(thisPoint).orient;
 							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -data.totalCurrent);
 							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(data.totalCurrent));
-							//mesh.materials[0].SetFloat (
+							
+							// Make up the colours
+							Color colMax = new Color(0.2f, 1.0f, 0.7f);
+							Color colMin = new Color(0.0f, 0.5f, 0.1f);
+							
+							// Clamp voltage value
+							float maxVolts = 2f;
+							Color useCol = Color.Lerp(colMin, colMax, data.totalVoltage/maxVolts);
+							
+							mesh.materials[0].SetColor ("_Color0", useCol);
+							mesh.materials[0].SetColor ("_Color1", useCol);
+							
 						}
 					}
 				}
