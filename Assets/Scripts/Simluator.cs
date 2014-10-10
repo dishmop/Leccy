@@ -26,7 +26,7 @@ public class Simluator : MonoBehaviour {
 	int							height;
 	
 	
-	BranchData[,,]					branchData;
+	BranchData[,,]				branchData;
 
 	
 	// List lof loops (the first loop is always the outer one which we can ignore
@@ -397,43 +397,53 @@ public class Simluator : MonoBehaviour {
 	void SolveForVoltages(){
 		if (loops.Count == 0) return;
 		
-		// We always need to seed a group  with a known voltge (as we don't have a "ground")
-		// Just do this with the first node that we have
-		int loopIdIndex = 0;
-		int loopId = voltageLoopOrder[loopIdIndex];
-		int groupStartId = GetBranchData(loops[loopId][0]).groupId;
-		
-		SetInitVoltage(loops[loopId][0], 0f);
-
-		float minGroupVoltage = 0f;
-
-		// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
-		// traversing
-		while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
+		float initialVoltage = 0;
+		float minGroupVoltage = 99f;
+		while (!MathUtils.FP.Feq (minGroupVoltage, 0f)){
+			minGroupVoltage = 0;
+			// We always need to seed a group  with a known voltge (as we don't have a "ground")
+			// Just do this with the first node that we have
+			int loopIdIndex = 0;
+			int loopId = voltageLoopOrder[loopIdIndex];
+			int groupStartId = GetBranchData(loops[loopId][0]).groupId;
 			
-			loopId = voltageLoopOrder[loopIdIndex];
-			BranchData startData = GetBranchData(loops[loopId][0]);
-			if (startData.initialVolt == false){
-				Debug.LogError ("No initial voltage");
-			}
-			
-			// Get data from the initial node in the group
-			float currentVoltage = startData.totalVoltage;
-			
-			for (int i = 1; i < loops[loopId].Count; ++i){
-				BranchAddress thisAddr = loops[loopId][i];
-				CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-				BranchData thisData = GetBranchData(thisAddr);
-			
-				currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+			SetInitVoltage(loops[loopId][0], initialVoltage);
+	
+	
+			// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
+			// traversing
+			while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
 				
-				SetInitVoltage(thisAddr, currentVoltage);
-
-				if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+				loopId = voltageLoopOrder[loopIdIndex];
+				BranchData startData = GetBranchData(loops[loopId][0]);
+				if (startData.initialVolt == false){
+					Debug.LogError ("No initial voltage");
+				}
+				
+				// Get data from the initial node in the group
+				float currentVoltage = startData.totalVoltage;
+				
+				for (int i = 1; i < loops[loopId].Count; ++i){
+					BranchAddress thisAddr = loops[loopId][i];
+					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					BranchData thisData = GetBranchData(thisAddr);
+				
+					currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+					
+					SetInitVoltage(thisAddr, currentVoltage);
+	
+					if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+				}
+				++loopIdIndex;
 			}
-			++loopIdIndex;
-			
+			if (!MathUtils.FP.Feq(minGroupVoltage, 0f)){
+				// if the minimum voltage around the certcuit is not zero, then do it all again, but with a new minimum voltage
+				initialVoltage = -minGroupVoltage;
+				minGroupVoltage= 99f;
+			}
 		}
+		
+		
 		
 	}
 	
@@ -854,6 +864,7 @@ public class Simluator : MonoBehaviour {
 							int orient = circuit.GetElement(thisPoint).orient;
 							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -data.totalCurrent);
 							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(data.totalCurrent));
+							//mesh.materials[0].SetFloat (
 						}
 					}
 				}
