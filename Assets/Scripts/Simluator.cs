@@ -27,7 +27,7 @@ public class Simluator : MonoBehaviour {
 	
 	
 	BranchData[,,]					branchData;
-	NodeData[,]						nodeData;
+
 	
 	// List lof loops (the first loop is always the outer one which we can ignore
 	// The remainder will form an indepednent set of loops
@@ -35,6 +35,9 @@ public class Simluator : MonoBehaviour {
 	int							numValidLoops;
 	int							numGroups;
 	float[]						loopCurrents;
+	
+	// The order in which we should traverse the loops in order to calculate the voltages
+	int[]						voltageLoopOrder;
 	
 	// GUI layout
 	GUITextDisplay				guiTextDisplay;
@@ -56,15 +59,6 @@ public class Simluator : MonoBehaviour {
 		public float totalVoltage;
 	}	
 	
-	// Used for calulating voltages. There is one of these for each node
-	class NodeData{
-		// Have we set a voltage which is compatible with the currents?
-		public bool initialVolt;
-		// Have we been through and adjusted it so the voltage is 0 at the lowest point
-		public bool balancedVolt;
-		// The voltage at this node
-		public float voltage;
-	}		
 	
 	// Corresponds to the branch exiting that node in that dir
 	struct BranchAddress{
@@ -99,9 +93,6 @@ public class Simluator : MonoBehaviour {
 		return branchData[address.x, address.y, address.dir];
 	}
 	
-	NodeData GetNodeData(GridPoint point){
-		return nodeData[point.x, point.y];
-	}
 	
 	// Return the address of the branch travelling in the oposite direction
 	BranchAddress GetOppositeAddress(BranchAddress address){
@@ -294,19 +285,7 @@ public class Simluator : MonoBehaviour {
 	}
 	
 	void SolveForCurrents(){
-	/*
-		// Test the equation solver (using example from : http://www.electronics-tutorials.ws/dccircuits/dcp_5.html)
-		double [,] A = new double[2,2];
-		double [,] B = new double[2,1];
-		A[0,0] = 50;
-		A[0,1] = -40;
-		A[1,0] = -40;
-		A[1,1] = 60;
-		B[0,0] = 10;
-		B[1,0] = -20;
-		
-		double[,] X = MathUtils.Matrix.SolveLinear(A, B);
-		*/
+	
 		
 		int numInvalidLoops = 0;
 		// Go through the loops and remove any which are outer loops or of zero length or an invlaid loop
@@ -316,11 +295,30 @@ public class Simluator : MonoBehaviour {
 				int newIndex = CreateLoop ();
 				loops[newIndex] = loops[i];
 				loops.RemoveAt (i);
+
 				++numInvalidLoops;
 			}
-			
-
 		}
+		
+		// It is useful rearrange the loops (see above), for the calculation of currents.
+		// However, for the purposes of voltage analysis, it is better to have then in their original aorder
+		// (as we can guarantee that the starting point of a loop starts connected to a loop we have already traverse
+		// unless we are the first loop in a group.
+		// This array is a way to store that original order  - we can calcukate it based on the fact that the loop Ids
+		// have not yet neen recalcualted
+			
+		voltageLoopOrder = new int[loops.Count];
+		for (int i = 0; i < loops.Count; ++i){
+			for (int j = 0; j < loops.Count; ++j){
+				if (GetBranchData(loops[j][0]).loopId == i){
+					voltageLoopOrder[i] = j;
+				}
+			}
+			
+		}		
+
+		
+		
 		
 		numValidLoops = loops.Count - numInvalidLoops;
 
@@ -400,8 +398,9 @@ public class Simluator : MonoBehaviour {
 		if (loops.Count == 0) return;
 		
 		// We always need to seed a group  with a known voltge (as we don't have a "ground")
-		// Just do this with the first node thast we have
-		int loopId = 0;
+		// Just do this with the first node that we have
+		int loopIdIndex = 0;
+		int loopId = voltageLoopOrder[loopIdIndex];
 		int groupStartId = GetBranchData(loops[loopId][0]).groupId;
 		
 		SetInitVoltage(loops[loopId][0], 0f);
@@ -410,7 +409,9 @@ public class Simluator : MonoBehaviour {
 
 		// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
 		// traversing
-		while (loopId < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
+		while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
+			
+			loopId = voltageLoopOrder[loopIdIndex];
 			BranchData startData = GetBranchData(loops[loopId][0]);
 			if (startData.initialVolt == false){
 				Debug.LogError ("No initial voltage");
@@ -430,7 +431,7 @@ public class Simluator : MonoBehaviour {
 
 				if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
 			}
-			++loopId;
+			++loopIdIndex;
 			
 		}
 		
@@ -475,46 +476,6 @@ public class Simluator : MonoBehaviour {
 	}	
 	
 	
-	// Assuming we have the currents sorted, this find the voltages at each node
-	void SolveForVoltages_Old(){
-		if (loops.Count == 0) return;
-	
-		// We always need to seed a group  with a known voltge (as we don't have a "ground")
-		// Just do this with the first node thast we have
-		int loopId = 0;
-		GridPoint startPoint = new GridPoint(loops[loopId][0].x, loops[loopId][0].y);
-		NodeData startData = GetNodeData (startPoint);
-		startData.voltage = 0f;
-		startData.initialVolt = true;
-		float minGroupVoltage = 0f;
-		int group = GetBranchData(loops[loopId][0]).groupId;
-		while (loopId < numValidLoops && GetBranchData(loops[loopId][0]).groupId == group){
-			// By construction, our loops always start off on a node of the previous loop (I think?)
-			startPoint = new GridPoint(loops[loopId][0].x, loops[loopId][0].y);
-			startData = GetNodeData (startPoint);
-			
-			if (startData.initialVolt == false) Debug.LogError ("No initial voltage");
-			
-			// Get data from the initial node in the group
-			float currentVoltage = startData.voltage;
-			
-			for (int i = 1; i < loops[loopId].Count; ++i){
-				GridPoint thisPoint = new GridPoint(loops[loopId][i].x, loops[loopId][i].y);
-				CircuitElement thisElement = circuit.GetElement(thisPoint);
-				int dir = loops[loopId][i].dir;
-				float thisCurrent = GetBranchData(loops[loopId][i]).totalCurrent;
-				currentVoltage = (thisElement.GetVoltageDrop(dir) - thisCurrent * thisElement.GetResistance(dir));
-				NodeData data = GetNodeData (thisPoint);
-				data.initialVolt = true;
-				data.voltage = currentVoltage;
-				if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
-			}
-			++loopId;
-		
-		}
-		
-	}
-		
 	void Simulate(){
 		// Find all the loops
 		FindLoops();
@@ -534,16 +495,17 @@ public class Simluator : MonoBehaviour {
 	void ClearSimulation(){
 		loops = new List<List<BranchAddress>>();
 		branchData = new BranchData[width, height, 4];
-		nodeData = new NodeData[width, height];
+		
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				for (int i = 0; i < 4; ++i){
 					branchData[x,y,i] = new BranchData();
 				}
-				nodeData[x, y] = new NodeData();
+			
 			}
 		}
 		loopCurrents = new float[0];
+		voltageLoopOrder = new int[0];
 		ClearLoopCurrentVis();		
 		ClearCurrentVis();
 		ClearVoltageVis();
@@ -705,28 +667,7 @@ public class Simluator : MonoBehaviour {
 		}
 	}
 	
-	/*
-	
-	void DebugRenderVoltages(){
-		for (int x = 0; x < width; ++x){
-			for (int y = 0; y < height; ++y){
-				NodeData data = GetNodeData (new GridPoint(x, y));
-				// Only do something if we have some initial voltage estimate
-				if (data.initialVolt){
-					debugVoltageTextBoxes[x,y].SetActive(true);
-					TextMesh textMesh = debugVoltageTextBoxes[x,y].GetComponent<TextMesh>();
-					textMesh.color = Color.blue;
-					textMesh.text = data.voltage.ToString("0.00") + "V";
-					
-				}
-				else{
-					debugVoltageTextBoxes[x,y].SetActive(false);
-				}
-				
-			}
-		}
-	}
-	*/
+
 	
 	void CalcTotalCurrents(){
 		// The coodinates of a square are the coordinates of the bottom right corner
