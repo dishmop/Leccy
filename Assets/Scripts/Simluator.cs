@@ -13,7 +13,15 @@ public class Simluator : MonoBehaviour {
 		kGroups,
 		kCurrents
 	};
-	public VisMode visMode = VisMode.kNone;
+	public VisMode 	visMode = 		VisMode.kNone;
+	public Color[]	voltageColors = new Color[7];
+	public ColorMode 	colorMode = ColorMode.kGreenSlime;
+	public enum ColorMode{
+		kGreenSlime,
+		kFullRainbowExp,
+		kFullRainbowELinear,
+		kGreenToPurpleLinear
+	};
 	
 	
 	GameObject[,]		debugTextBoxes;
@@ -865,16 +873,78 @@ public class Simluator : MonoBehaviour {
 							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -data.totalCurrent);
 							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(data.totalCurrent));
 							
-							// Make up the colours
-							Color colMax = new Color(0.2f, 1.0f, 0.7f);
-							Color colMin = new Color(0.0f, 0.5f, 0.1f);
-							
-							// Clamp voltage value
-							float maxVolts = 2f;
-							Color useCol = Color.Lerp(colMin, colMax, data.totalVoltage/maxVolts);
-							
-							mesh.materials[0].SetColor ("_Color0", useCol);
-							mesh.materials[0].SetColor ("_Color1", useCol);
+							switch(colorMode){
+								case ColorMode.kGreenSlime:{
+									// Make up the colours
+									Color colMax = new Color(0.2f, 1.0f, 0.7f);
+									Color colMin = new Color(0.0f, 0.5f, 0.1f);
+									
+									// Clamp voltage value
+									float maxVolts = 2f;
+									Color useCol = Color.Lerp(colMin, colMax, data.totalVoltage/maxVolts);
+									
+									mesh.materials[0].SetColor ("_Color0", useCol);
+									mesh.materials[0].SetColor ("_Color1", useCol);
+									break;
+								}
+								case ColorMode.kFullRainbowExp:{
+									// Assume zero volatge
+									float index = 0f;
+									if (data.totalVoltage > 0.25f){
+										// To log to base 2 of out voltage to get N, where 2 ^n = voltage
+										float mappedVal = Mathf.Log10(data.totalVoltage) / Mathf.Log10 (2);
+										// Shift so 2^-2 (0.25) is zero index
+										index = mappedVal + 2;
+									}
+									// clamp to our range
+									if (index < 0) index = 0;
+									if (index > voltageColors.Length) index = voltageColors.Length-0.001f;
+									int indexInt = (int)index;
+									float frac = index - indexInt;
+									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+									mesh.materials[0].SetColor ("_Color0", useCol);
+									mesh.materials[0].SetColor ("_Color1", useCol);
+									break;
+								}
+								case ColorMode.kFullRainbowELinear:{
+									float index = 0f;
+									if (!float.IsNaN(data.totalVoltage)){
+										index = data.totalVoltage / 2f;
+									}
+									
+									// clamp to our range
+									if (index > voltageColors.Length-1.001f) index = voltageColors.Length-1.001f;
+									int indexInt = (int)index;
+									float frac = index - indexInt;
+									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+									mesh.materials[0].SetColor ("_Color0", useCol);
+									mesh.materials[0].SetColor ("_Color1", useCol);
+									break;
+								}
+								case ColorMode.kGreenToPurpleLinear:{
+									float index = 0f;
+									if (!float.IsNaN(data.totalVoltage)){
+										index = data.totalVoltage / 2f;
+									}
+									
+									// Just used the coldest colours (green, Blue Indigo Voilet). 
+									float len = 4;
+									float offset = 2;
+									
+									
+									// clamp to our range
+									if (index < 0 ) index = 0f;
+									if (index >= len-0.001f) index = len-0.001f;
+									index += offset;
+									int indexInt = (int)index;
+									float frac = index - indexInt;
+									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+									mesh.materials[0].SetColor ("_Color0", useCol);
+									mesh.materials[0].SetColor ("_Color1", useCol);
+									break;
+								}
+								
+							}
 							
 						}
 					}

@@ -1,15 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Simluator.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CircuitElementCell.cs">
     <Files>
       <File FileName="Assets/Scripts/Grid.cs" Line="129" Column="1" />
       <File FileName="Assets/Tutorial_2/1_FlatColour.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="26" Column="21" />
       <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/TestFig8.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simluator.cs" Line="863" Column="27" />
+      <File FileName="Assets/Scripts/Simluator.cs" Line="873" Column="26" />
       <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />

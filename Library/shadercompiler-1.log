@@ -1,3 +1,13 @@
 Base path: /Applications/Unity/Unity.app/Contents
 Pipe name: \\.\pipe\UnityShaderCompiler-1--1593437784
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=8029 outsize=841 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7489 outsize=325 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (0): Instruction limit of 96 exceeded; 479 instructions needed to compile program
+  error: 1 plat 0 at (95): "noisePos.z" might be used before being initialized
+  api=0 type=1 insize=7489 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=8027 outsize=841 ok=1

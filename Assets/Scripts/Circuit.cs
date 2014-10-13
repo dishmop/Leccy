@@ -7,6 +7,7 @@ public class Circuit : MonoBehaviour {
 	public GameObject cellElementPrefab;	
 	public GameObject resistorElementPrefab;	
 	public GameObject gridGO;
+
 	
 	// Useful consts
 	public const int kErr = 	-1;
