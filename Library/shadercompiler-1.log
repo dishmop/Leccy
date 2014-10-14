@@ -11,3 +11,80 @@ Cmd: compileSnippet
   api=0 type=1 insize=7489 outsize=0 kw= ok=0
 Cmd: preprocess
   insize=8027 outsize=841 ok=1
+Cmd: preprocess
+  insize=8040 outsize=841 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7500 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7500 outsize=11566 kw= ok=1
+Cmd: preprocess
+  insize=8054 outsize=841 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7514 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7514 outsize=11588 kw= ok=1
+Cmd: preprocess
+  insize=8054 outsize=841 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7514 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7514 outsize=11606 kw= ok=1
+Cmd: preprocess
+  insize=8070 outsize=841 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7530 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7530 outsize=11632 kw= ok=1
+Cmd: preprocess
+  insize=8027 outsize=829 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7499 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7499 outsize=11632 kw= ok=1
+Cmd: preprocess
+  insize=8026 outsize=828 ok=1
+Cmd: preprocess
+  insize=8025 outsize=827 ok=1
+Cmd: preprocess
+  insize=8141 outsize=827 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7615 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (299): undefined variable "_EnableSquashing"
+  api=0 type=1 insize=7615 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=8167 outsize=826 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7641 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7641 outsize=11759 kw= ok=1
+Cmd: preprocess
+  insize=8175 outsize=827 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7649 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7649 outsize=11759 kw= ok=1
+Cmd: preprocess
+  insize=8225 outsize=877 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7649 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7649 outsize=11759 kw= ok=1
+Cmd: preprocess
+  insize=8225 outsize=877 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7649 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7649 outsize=11759 kw= ok=1
+Cmd: preprocess
+  insize=8233 outsize=877 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7657 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7657 outsize=11759 kw= ok=1
+Cmd: preprocess
+  insize=8225 outsize=877 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=7649 outsize=329 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=7649 outsize=11759 kw= ok=1

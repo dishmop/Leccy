@@ -14,8 +14,9 @@ Properties {
 	_BkColor0 ("BkColor0", Color) = (0.0, 0.0, 0.0)
 	_BkColor1 ("BkColor1", Color) = (0.0, 0.0, 0.0)
 //	_DetailScale("Detail scale", Float) = 2
-	_Overlap ("Overlap", Range(0,1)) = 0
-	_Overlap ("Overlap", Float) = 0
+	_EnableSquashing ("Enable Squashing", Range(0, 1)) = 0
+	_EnableSquashing ("Enable Squashing", Float) = 0
+
 }
 
 SubShader {
@@ -56,8 +57,9 @@ SubShader {
 		uniform float4 _BkColor0;
 		uniform float4 _Color1;
 		uniform float4 _BkColor1;
+		uniform float _EnableSquashing;
 		
-		uniform float _Overlap = 0.1;
+
 		
 		v2f vert(appdata_base v)
 		{
@@ -296,11 +298,17 @@ SubShader {
 			noisePos.x = noisePos.x  - intValX;
 			noisePos.x = noisePos.x / 5.0f;
 		
-			noisePos.y = sin(scaledY);
-			noisePos.w = cos(scaledY);	
+			if (_EnableSquashing > 0.5){
+				noisePos.y = sin(scaledY) / (0.1 + speedParam);
+				noisePos.w = cos(scaledY) / (0.1 + speedParam);	
+			}
+			else{
+				noisePos.y = sin(scaledY);
+				noisePos.w = cos(scaledY);	
+			}
 			
 			noisePos.x *= _Freq;
-			noisePos.y *= 0.25*_Freq/pi;
+			noisePos.y *= 0.25*_Freq /pi;
 			noisePos.w *= 0.25*_Freq/pi;
 			
 			

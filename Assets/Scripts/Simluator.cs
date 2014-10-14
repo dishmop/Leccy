@@ -15,13 +15,10 @@ public class Simluator : MonoBehaviour {
 	};
 	public VisMode 	visMode = 		VisMode.kNone;
 	public Color[]	voltageColors = new Color[7];
-	public ColorMode 	colorMode = ColorMode.kGreenSlime;
-	public enum ColorMode{
-		kGreenSlime,
-		kFullRainbowExp,
-		kFullRainbowELinear,
-		kGreenToPurpleLinear
-	};
+	public float maxVoltVis = 		50f;
+	public float currentMulVis = 	0.1f;
+
+	public bool solveVoltges = false;
 	
 	
 	GameObject[,]		debugTextBoxes;
@@ -405,50 +402,60 @@ public class Simluator : MonoBehaviour {
 	void SolveForVoltages(){
 		if (loops.Count == 0) return;
 		
-		float initialVoltage = 0;
-		float minGroupVoltage = 99f;
-		while (!MathUtils.FP.Feq (minGroupVoltage, 0f)){
-			minGroupVoltage = 0;
-			// We always need to seed a group  with a known voltge (as we don't have a "ground")
-			// Just do this with the first node that we have
-			int loopIdIndex = 0;
-			int loopId = voltageLoopOrder[loopIdIndex];
-			int groupStartId = GetBranchData(loops[loopId][0]).groupId;
+		int groupLoopIdIndex = 0;
+		while (groupLoopIdIndex != loops.Count){
 			
-			SetInitVoltage(loops[loopId][0], initialVoltage);
-	
-	
-			// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
-			// traversing
-			while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
+			float initialVoltage = 0;
+			float minGroupVoltage = 99f;
+			int loopIdIndex = 0;
+			while (!MathUtils.FP.Feq (minGroupVoltage, 0f)){
+				minGroupVoltage = 0;
+				// We always need to seed a group  with a known voltge (as we don't have a "ground")
+				// Just do this with the first node that we have
+				loopIdIndex = groupLoopIdIndex;
+				int loopId = voltageLoopOrder[loopIdIndex];
+				int groupStartId = GetBranchData(loops[loopId][0]).groupId;
 				
-				loopId = voltageLoopOrder[loopIdIndex];
-				BranchData startData = GetBranchData(loops[loopId][0]);
-				if (startData.initialVolt == false){
-					Debug.LogError ("No initial voltage");
-				}
-				
-				// Get data from the initial node in the group
-				float currentVoltage = startData.totalVoltage;
-				
-				for (int i = 1; i < loops[loopId].Count; ++i){
-					BranchAddress thisAddr = loops[loopId][i];
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-					BranchData thisData = GetBranchData(thisAddr);
-				
-					currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+				SetInitVoltage(loops[loopId][0], initialVoltage);
+		
+		
+				// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
+				// traversing
+				while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
 					
-					SetInitVoltage(thisAddr, currentVoltage);
-	
-					if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+					
+					BranchData startData = GetBranchData(loops[loopId][0]);
+					if (startData.initialVolt == false){
+						Debug.LogError ("No initial voltage");
+					}
+					
+					// Get data from the initial node in the group
+					float currentVoltage = startData.totalVoltage;
+					
+					for (int i = 1; i < loops[loopId].Count; ++i){
+						BranchAddress thisAddr = loops[loopId][i];
+						CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+						BranchData thisData = GetBranchData(thisAddr);
+					
+						currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+						
+						SetInitVoltage(thisAddr, currentVoltage);
+		
+						if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+					}
+					++loopIdIndex;
+					// %Length just to stop it over flowing
+					loopId = voltageLoopOrder[loopIdIndex % voltageLoopOrder.Length];
 				}
-				++loopIdIndex;
+				if (!MathUtils.FP.Feq(minGroupVoltage, 0f)){
+					// if the minimum voltage around the certcuit is not zero, then do it all again, but with a new minimum voltage
+					initialVoltage = -minGroupVoltage;
+					minGroupVoltage= 99f;
+				}
+	
 			}
-			if (!MathUtils.FP.Feq(minGroupVoltage, 0f)){
-				// if the minimum voltage around the certcuit is not zero, then do it all again, but with a new minimum voltage
-				initialVoltage = -minGroupVoltage;
-				minGroupVoltage= 99f;
-			}
+			groupLoopIdIndex  = loopIdIndex;		
+		
 		}
 		
 		
@@ -505,7 +512,8 @@ public class Simluator : MonoBehaviour {
 		SolveForCurrents();
 		CalcTotalCurrents();
 		// Use the currents we have found to calculate the voltages
-		SolveForVoltages();
+		if (solveVoltges)
+			SolveForVoltages();
 		
 
 	}
@@ -870,81 +878,22 @@ public class Simluator : MonoBehaviour {
 						BranchData data = GetBranchData(new BranchAddress(x, y, i));
 						if (data.traversed){
 							int orient = circuit.GetElement(thisPoint).orient;
-							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -data.totalCurrent);
-							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(data.totalCurrent));
+							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * data.totalCurrent);
+							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(currentMulVis * data.totalCurrent));
 							
-							switch(colorMode){
-								case ColorMode.kGreenSlime:{
-									// Make up the colours
-									Color colMax = new Color(0.2f, 1.0f, 0.7f);
-									Color colMin = new Color(0.0f, 0.5f, 0.1f);
-									
-									// Clamp voltage value
-									float maxVolts = 2f;
-									Color useCol = Color.Lerp(colMin, colMax, data.totalVoltage/maxVolts);
-									
-									mesh.materials[0].SetColor ("_Color0", useCol);
-									mesh.materials[0].SetColor ("_Color1", useCol);
-									break;
-								}
-								case ColorMode.kFullRainbowExp:{
-									// Assume zero volatge
-									float index = 0f;
-									if (data.totalVoltage > 0.25f){
-										// To log to base 2 of out voltage to get N, where 2 ^n = voltage
-										float mappedVal = Mathf.Log10(data.totalVoltage) / Mathf.Log10 (2);
-										// Shift so 2^-2 (0.25) is zero index
-										index = mappedVal + 2;
-									}
-									// clamp to our range
-									if (index < 0) index = 0;
-									if (index > voltageColors.Length) index = voltageColors.Length-0.001f;
-									int indexInt = (int)index;
-									float frac = index - indexInt;
-									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-									mesh.materials[0].SetColor ("_Color0", useCol);
-									mesh.materials[0].SetColor ("_Color1", useCol);
-									break;
-								}
-								case ColorMode.kFullRainbowELinear:{
-									float index = 0f;
-									if (!float.IsNaN(data.totalVoltage)){
-										index = data.totalVoltage / 2f;
-									}
-									
-									// clamp to our range
-									if (index > voltageColors.Length-1.001f) index = voltageColors.Length-1.001f;
-									int indexInt = (int)index;
-									float frac = index - indexInt;
-									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-									mesh.materials[0].SetColor ("_Color0", useCol);
-									mesh.materials[0].SetColor ("_Color1", useCol);
-									break;
-								}
-								case ColorMode.kGreenToPurpleLinear:{
-									float index = 0f;
-									if (!float.IsNaN(data.totalVoltage)){
-										index = data.totalVoltage / 2f;
-									}
-									
-									// Just used the coldest colours (green, Blue Indigo Voilet). 
-									float len = 4;
-									float offset = 2;
-									
-									
-									// clamp to our range
-									if (index < 0 ) index = 0f;
-									if (index >= len-0.001f) index = len-0.001f;
-									index += offset;
-									int indexInt = (int)index;
-									float frac = index - indexInt;
-									Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-									mesh.materials[0].SetColor ("_Color0", useCol);
-									mesh.materials[0].SetColor ("_Color1", useCol);
-									break;
-								}
-								
+							//
+							float index = 0f;
+							if (!float.IsNaN(data.totalVoltage)){
+								index = (voltageColors.Length - 1f) * data.totalVoltage / maxVoltVis;
 							}
+							
+							// clamp to our range
+							if (index > voltageColors.Length-1.001f) index = voltageColors.Length-1.001f;
+							int indexInt = (int)index;
+							float frac = index - indexInt;
+							Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+							mesh.materials[0].SetColor ("_Color0", useCol);
+							mesh.materials[0].SetColor ("_Color1", useCol);
 							
 						}
 					}

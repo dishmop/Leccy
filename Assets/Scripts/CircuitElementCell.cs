@@ -6,7 +6,8 @@ public class CircuitElementCell : CircuitElement {
 	public GameObject 	cellPrefab;
 	public GameObject	displayMesh;
 	public bool			invertOrient;		// Turn through 180 degrees?
-	public float		voltage = 1;
+	public float		voltage = 12f;
+	public float		resistance = 0.06f;
 
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
@@ -71,7 +72,7 @@ public class CircuitElementCell : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!isConnected[dir]) Debug.LogError("Being asked about a nonexistanct connection");
-		return 0f;
+		return resistance;
 	}
 	
 	public override float GetVoltageDrop(int dir){
