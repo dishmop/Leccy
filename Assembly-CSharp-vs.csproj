@@ -68,6 +68,7 @@
      <None Include="Assets\Shaders\noise-simplex_v02.shader" />
      <None Include="Assets\Tutorial_2\1_FlatColour.shader" />
      <None Include="Assets\Shaders\UVAnim.shader" />
+     <None Include="Assets\Shaders\PlasmaBalls.shader" />
      <None Include="Assets\Tutorial_1\BlendGreyLightmap.shader" />
      <None Include="Assets\Shaders\noiseSimplex.cginc" />
      <None Include="Assets\Tutorial_1\VertexColorLerp.shader" />

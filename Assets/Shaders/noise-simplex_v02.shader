@@ -97,12 +97,6 @@ SubShader {
 			float4 noisePos;
 			float3 upperNoisePos;	
 			
-			float speedspeedParam[5];
-			speedspeedParam[0] = _Speed0;
-			speedspeedParam[1] = _Speed1;
-			speedspeedParam[2] = _Speed2;
-			speedspeedParam[3] = _Speed3;
-			speedspeedParam[4] = 0;
 			
 			// Work out positions in texture we should be sampling
 			// Make the y component map to a circle in Yz space

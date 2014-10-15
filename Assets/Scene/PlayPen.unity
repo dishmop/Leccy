@@ -175,7 +175,7 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 0}
   maxVoltVis: 3
   currentMulVis: 1
-  enableVoltsgeAsHeight: 1
+  enableVoltsgeAsHeight: 0
   solveVoltges: 1
 --- !u!4 &791041405
 Transform:
@@ -566,7 +566,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
       propertyPath: enableVoltsgeAsHeight
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
