@@ -17,6 +17,7 @@ public class Simluator : MonoBehaviour {
 	public Color[]	voltageColors = new Color[7];
 	public float maxVoltVis = 		50f;
 	public float currentMulVis = 	0.1f;
+	public bool enableVoltsgeAsHeight = true;
 
 	public bool solveVoltges = false;
 	
@@ -586,7 +587,7 @@ public class Simluator : MonoBehaviour {
 						Vector3 avPos = (from + to) * 0.5f;
 						from = avPos + (from - avPos) * lengthScale;
 						to = avPos + (to - avPos) * lengthScale;
-						Color col = GetUniqueColor ((visMode == VisMode.kGroups) ? data.groupId : data.loopId);
+						Color col = GetUniqueColor((visMode == VisMode.kLoops) ? (data.isOuterLoop ? -1 : data.loopId): data.groupId);
 						
 						// If our currents are negative, draw the arrrows the other way round
 						if (loopCurrents[data.loopId] > 0f){
@@ -874,6 +875,7 @@ public class Simluator : MonoBehaviour {
 				if (circuit.ElementExists(thisPoint)){
 					// Get the 
 					MeshRenderer mesh = circuit.GetGameObject (thisPoint).transform.GetChild(0).GetComponent<MeshRenderer>();
+					float componentVolage = 0f;
 					for (int i = 0; i < 4; ++i){
 						BranchData data = GetBranchData(new BranchAddress(x, y, i));
 						if (data.traversed){
@@ -895,7 +897,17 @@ public class Simluator : MonoBehaviour {
 							mesh.materials[0].SetColor ("_Color0", useCol);
 							mesh.materials[0].SetColor ("_Color1", useCol);
 							
+							// For testing 3D visualisation
+							componentVolage = data.totalVoltage;
 						}
+						if (enableVoltsgeAsHeight){
+							if (float.IsNaN(componentVolage) || float.IsInfinity(componentVolage)) componentVolage = 0f;
+							
+							Vector3 pos = circuit.GetGameObject(thisPoint).transform.position;
+							pos.z = -componentVolage;
+							circuit.GetGameObject(thisPoint).transform.position = pos;
+						}
+						
 					}
 				}
 			}		

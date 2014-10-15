@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Simulator
+  m_Name: RainbowSimulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,6 +42,17 @@ MonoBehaviour:
   circuitGO: {fileID: 0}
   textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
   visMode: 0
+  voltageColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 1, g: .68275857, b: 0, a: 0}
+  - {r: .986206889, g: 1, b: 0, a: 0}
+  - {r: .0758621693, g: 1, b: 0, a: 0}
+  - {r: 0, g: .710344791, b: 1, a: 0}
+  - {r: 0, g: .172413349, b: 1, a: 0}
+  - {r: .448275566, g: 0, b: 1, a: 0}
+  maxVoltVis: 50
+  currentMulVis: .100000001
+  solveVoltges: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

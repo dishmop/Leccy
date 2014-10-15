@@ -18,12 +18,13 @@ public class UI : MonoBehaviour {
 		kWires,
 		kCells,
 		kResistors,
-		kErase
+		kErase,
+		kClearAll
 	};
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all"};
 
 		
 	// Use this for initialization
@@ -144,7 +145,12 @@ public class UI : MonoBehaviour {
 	}
 	
 	void OnGUI () {
+		InputMode oldInputMode = inputMode;
 		inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, toolbarStrings);
+		if (inputMode == InputMode.kClearAll){
+			Application.LoadLevel(Application.loadedLevel);
+			inputMode = oldInputMode;
+		}
 					
 	}
 	

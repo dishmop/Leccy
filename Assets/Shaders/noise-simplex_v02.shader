@@ -299,8 +299,8 @@ SubShader {
 			noisePos.x = noisePos.x / 5.0f;
 		
 			if (_EnableSquashing > 0.5){
-				noisePos.y = sin(scaledY) / (0.1 + speedParam);
-				noisePos.w = cos(scaledY) / (0.1 + speedParam);	
+				noisePos.y = sin(scaledY) / (0.2 + speedParam);
+				noisePos.w = cos(scaledY) / (0.2 + speedParam);	
 			}
 			else{
 				noisePos.y = sin(scaledY);

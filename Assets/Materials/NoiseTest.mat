@@ -57,6 +57,26 @@ Material:
         first:
           name: _Speed3
         second: 1
+      data:
+        first:
+          name: _StaticSpeed0
+        second: .300000012
+      data:
+        first:
+          name: _StaticSpeed1
+        second: .300000012
+      data:
+        first:
+          name: _StaticSpeed2
+        second: .300000012
+      data:
+        first:
+          name: _StaticSpeed3
+        second: .300000012
+      data:
+        first:
+          name: _EnableSquashing
+        second: 1
     m_Colors:
       data:
         first:

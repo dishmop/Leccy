@@ -39,12 +39,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa25f689611ee4cb78bbbcd1afc3e089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orient: 0
   isConnected: 00000000
   cellPrefab: {fileID: 100000, guid: 9f76e52687dda4447b51ac28e8138d45, type: 2}
   displayMesh: {fileID: 0}
-  orient: 0
   invertOrient: 0
-  voltage: 1
+  voltage: 12
+  resistance: .239999995
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

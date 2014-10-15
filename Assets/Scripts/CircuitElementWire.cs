@@ -12,6 +12,7 @@ public class CircuitElementWire : CircuitElement {
 		
 	public GameObject 	currentPrefab;
 	public GameObject	currentDisplay;
+	public float resistance = 0;
 	
 	
 	public void Start(){
@@ -121,6 +122,11 @@ public class CircuitElementWire : CircuitElement {
 		Debug.Log ("OnDestroy");
 		
 	}	
+	
+	public override float GetResistance(int dir){
+		if (!isConnected[dir]) Debug.LogError("Being asked about a nonexistanct connection");
+		return resistance;
+	}		
 	
 	
 	
