@@ -44,8 +44,8 @@ MonoBehaviour:
   cellPrefab: {fileID: 100000, guid: 9f76e52687dda4447b51ac28e8138d45, type: 2}
   displayMesh: {fileID: 0}
   invertOrient: 0
-  voltage: 12
-  resistance: .239999995
+  voltage: 1
+  resistance: .25
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

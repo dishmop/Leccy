@@ -74,97 +74,6 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
---- !u!1 &162285671
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-  m_PrefabInternal: {fileID: 192557545}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 162285673}
-  - 114: {fileID: 162285672}
-  m_Layer: 0
-  m_Name: Simulator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &162285672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576,
-    type: 2}
-  m_PrefabInternal: {fileID: 192557545}
-  m_GameObject: {fileID: 162285671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4524be5215f244a65889066b7ad63846, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  circuitGO: {fileID: 1074263306}
-  textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
-  visMode: 0
---- !u!4 &162285673
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-  m_PrefabInternal: {fileID: 192557545}
-  m_GameObject: {fileID: 162285671}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
---- !u!1001 &192557545
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-      propertyPath: circuitGO
-      value: 
-      objectReference: {fileID: 1074263306}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
-  m_RootGameObject: {fileID: 162285671}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &419512104
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +136,59 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
+--- !u!1 &791041403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+  m_PrefabInternal: {fileID: 1824848999}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 791041405}
+  - 114: {fileID: 791041404}
+  m_Layer: 0
+  m_Name: RainbowSimulator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &791041404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576,
+    type: 2}
+  m_PrefabInternal: {fileID: 1824848999}
+  m_GameObject: {fileID: 791041403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4524be5215f244a65889066b7ad63846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circuitGO: {fileID: 1074263306}
+  textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
+  visMode: 0
+  voltageColors:
+  - {r: .0351420343, g: .463235319, b: 0, a: 0}
+  - {r: 0, g: 1, b: .172549024, a: 0}
+  - {r: 0, g: 1, b: .960784316, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
+  maxVoltVis: 3
+  currentMulVis: 1
+  enableVoltsgeAsHeight: 1
+  solveVoltges: 1
+--- !u!4 &791041405
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+  m_PrefabInternal: {fileID: 1824848999}
+  m_GameObject: {fileID: 791041403}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!1 &1074263306
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +216,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!114 &1074263308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +271,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!1 &1318055787
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +356,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!114 &1318055793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,4 +468,108 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
+--- !u!1001 &1824848999
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: circuitGO
+      value: 
+      objectReference: {fileID: 1074263306}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[0].g
+      value: .463235319
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[0].b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[0].r
+      value: .0351420343
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[1].r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[1].g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[1].b
+      value: .172549024
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[2].b
+      value: .960784316
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[3].r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[3].g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: voltageColors.Array.data[3].b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: maxVoltVis
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: solveVoltges
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: enableVoltsgeAsHeight
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+  m_RootGameObject: {fileID: 791041403}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1

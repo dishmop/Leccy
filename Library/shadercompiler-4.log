@@ -6,3 +6,6 @@ Cmd: compileSnippet
 Cmd: compileSnippet
   error: 2 plat 4 at (318): variable 'noisePos' used without having been completely initialized
   api=4 type=1 insize=7649 outsize=0 kw= ok=0
+End of pipe
+
+Quitting shader compiler process

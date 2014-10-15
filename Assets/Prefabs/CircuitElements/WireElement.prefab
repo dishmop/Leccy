@@ -39,6 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0841bbc5fad4fdd930b8bf91c16e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orient: 0
   isConnected: 00000000
   wirePointPrefab: {fileID: 100000, guid: 304f2376f6fdf40c9a4863111e797161, type: 2}
   wireStraightDownPrefab: {fileID: 100000, guid: 75c10e5826ebe4fb99a1a16adb0f5638,
@@ -52,7 +53,7 @@ MonoBehaviour:
     type: 2}
   currentPrefab: {fileID: 0}
   currentDisplay: {fileID: 0}
-  orient: 0
+  resistance: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
