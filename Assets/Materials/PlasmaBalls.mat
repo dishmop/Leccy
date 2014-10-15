@@ -17,11 +17,11 @@ Material:
       data:
         first:
           name: _Speed0
-        second: .107142858
+        second: 2
       data:
         first:
           name: _Speed1
-        second: 0
+        second: 1
       data:
         first:
           name: _Speed2
@@ -37,15 +37,15 @@ Material:
       data:
         first:
           name: _Spacing
-        second: 2
+        second: 5
       data:
         first:
           name: _AlphaRadius
-        second: .357142895
+        second: .714285731
       data:
         first:
           name: _ColRadius
-        second: .517857134
+        second: .357142895
       data:
         first:
           name: _DoBalls
@@ -58,4 +58,4 @@ Material:
       data:
         first:
           name: _OuterColor
-        second: {r: 0, g: .875862122, b: 1, a: 1}
+        second: {r: 0, g: .793103218, b: 1, a: 1}

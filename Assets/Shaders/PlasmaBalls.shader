@@ -6,7 +6,7 @@
 		_AlphaRadius ("AlphaRadius", Float) = 0.1
 		_ColRadius ("ColRadius", Range(0,1)) = 0.1
 		_ColRadius ("ColRadius", Float) = 0.1
-		_Spacing ("Spacing", Range(1, 100)) = 10
+		_Spacing ("Spacing", Range(0, 20)) = 10
 		_Spacing ("Spacing", Float) = 10
 		_DoBalls ("Do Balls", Range(0, 1)) = 1
 		_Speed0 ("Speed0", Range(0,1)) = 0
@@ -74,10 +74,32 @@
 		// f(0.5) = 1
 		// f(1) = 0
 		// etc..
-		float TriangleFunction(float x){
+		float TriangleFunc(float x){
 			float xx = frac(x);
-			return abs(xx - 0.5)*2.0;
+			return 1 - abs(xx - 0.5)*2.0;
 		}
+		
+		
+		// Integral of the above function
+		float TriangleFuncIntg(float x){
+			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
+			float val0 = int(x) * 0.5;
+			
+			
+			// Now with the bit that is left, see if we are below 0.5
+			float val1 = 0;
+			float xx = frac(x);
+			if (xx < 0.5){
+				val1 = xx * xx;
+			}
+			else{
+				xx -= 0.5;
+				val1 = 0.25 + xx - xx*xx;
+			}
+			return val0 + val1;
+		}
+		
+		
 		
 		float4 frag(v2f i) : COLOR
 		{
@@ -107,11 +129,11 @@
 			 }		
 	
 			// move with time
-			float4 timeModdedUV = xRepeatedUV + float4(0, _Time.y * speedParam, 0, 0);
+			float frameInterval = 1/30.0;
+			float4 timeModdedUV = xRepeatedUV + float4(0, (_Time.y + frameInterval) * speedParam, 0, 0);
 			
 			// Get location of time at previous frame
-			float frameInterval = 1/1.0;
-			float4 lastTimeModdedUV = xRepeatedUV + float4(0, (_Time.y - frameInterval) * speedParam, 0, 0);
+			float4 lastTimeModdedUV = xRepeatedUV + float4(0, _Time.y * speedParam, 0, 0);
 			
 		 		
 			
@@ -124,23 +146,29 @@
 			float4 scaledUV = (timeModdedUV - originOffset) * _Spacing;
 			float4 lastScaledUV = (lastTimeModdedUV - originOffset) * _Spacing;
 			
-			// Repeate each period
-			float4 transUV = frac(scaledUV + 0.5  ) - 0.5;
-			float4 lastTransUV = 0;
-			
-			// Only dp this calc if we are within 0.5 texels of current
-			if (abs(scaledUV.y - lastScaledUV.y) < 0.5){
-				lastTransUV = frac(lastScaledUV + 0.5  ) - 0.5;
-			}
-			
 			// We now assume the ball is centred at origin and has radius 1
 			float dist = 0;
 			if (_DoBalls > 0.5) {
+				// Repeate each period
+				float4 transUV = frac(scaledUV + 0.5  ) - 0.5;
 				float distSq = transUV.x * transUV.x + transUV.y * transUV.y;
 				dist = sqrt(distSq);
 			}
 			else{
 			
+				float val = TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y)- TriangleFuncIntg(lastScaledUV.y)) / (scaledUV.y - lastScaledUV.y);
+				return CalcCol(val);
+			/*
+			
+				// Repeate each period
+				float4 transUV = frac(scaledUV + 0.5  ) - 0.5;
+				float4 lastTransUV = 0;
+				
+				// Only dp this calc if we are within 0.5 texels of current
+				if (abs(scaledUV.y - lastScaledUV.y) < 0.5){
+					lastTransUV = frac(lastScaledUV + 0.5  ) - 0.5;
+				}
+				
 				// If we are either side of the peak, then need to include tha too
 				if (transUV.y > 0 && lastTransUV.y < 0){
 					float dist = abs(transUV.y - lastTransUV.y);
@@ -178,6 +206,7 @@
 					float calcDist = 0.5 * (thisDist + lastDist) * dist / dist;
 					return CalcCol(calcDist);
 				}
+				*/
 			}
 			return CalcCol(dist);
 		}
