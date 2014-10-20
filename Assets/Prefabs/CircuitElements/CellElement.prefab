@@ -45,7 +45,7 @@ MonoBehaviour:
   displayMesh: {fileID: 0}
   invertOrient: 0
   voltage: 1
-  resistance: .25
+  resistance: .125
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

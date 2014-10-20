@@ -886,16 +886,18 @@ public class Simluator : MonoBehaviour {
 							//
 							float index = 0f;
 							if (!float.IsNaN(data.totalVoltage)){
-								index = (voltageColors.Length - 1f) * data.totalVoltage / maxVoltVis;
+								index = (voltageColors.Length - 2f) * data.totalVoltage / maxVoltVis;
 							}
 							
 							// clamp to our range
-							if (index > voltageColors.Length-1.001f) index = voltageColors.Length-1.001f;
+							if (index > voltageColors.Length-2.001f) index = voltageColors.Length-2.001f;
 							int indexInt = (int)index;
 							float frac = index - indexInt;
-							Color useCol = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-							mesh.materials[0].SetColor ("_Color0", useCol);
-							mesh.materials[0].SetColor ("_Color1", useCol);
+							Color useColOuter = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+							Color boosterCol = new Color(1.2f, 1.2f, 1.2f, 1f);
+							Color useColCentre = boosterCol * Color.Lerp (voltageColors[indexInt+1], voltageColors[indexInt+2], frac);
+							mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
+							mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
 							
 							// For testing 3D visualisation
 							componentVolage = data.totalVoltage;

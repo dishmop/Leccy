@@ -43,14 +43,14 @@ MonoBehaviour:
   textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
   visMode: 0
   voltageColors:
-  - {r: .610294104, g: .517697752, b: 0, a: 0}
-  - {r: .204259649, g: .558823526, b: 0, a: 0}
-  - {r: 0, g: 1, b: .255172253, a: 0}
-  - {r: 0, g: 1, b: .958620548, a: 0}
+  - {r: .720588207, g: 0, b: 0, a: 0}
+  - {r: .68777889, g: 0, b: .727941155, a: 0}
+  - {r: .191176474, g: .196754709, b: 1, a: 0}
+  - {r: .16911763, g: .828093529, b: 1, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}
-  maxVoltVis: 4
+  maxVoltVis: 3
   currentMulVis: 1
-  enableVoltsgeAsHeight: 1
+  enableVoltsgeAsHeight: 0
   solveVoltges: 1
 --- !u!1001 &100100000
 Prefab:
