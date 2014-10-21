@@ -16,8 +16,24 @@ Material:
     m_Floats:
       data:
         first:
+          name: _AlphaRadius
+        second: 1
+      data:
+        first:
+          name: _ColRadius
+        second: .625
+      data:
+        first:
+          name: _Spacing
+        second: 5
+      data:
+        first:
+          name: _DoBalls
+        second: 0
+      data:
+        first:
           name: _Speed0
-        second: 10
+        second: 0
       data:
         first:
           name: _Speed1
@@ -36,25 +52,41 @@ Material:
         second: .100000001
       data:
         first:
-          name: _Spacing
-        second: 5
-      data:
-        first:
-          name: _AlphaRadius
-        second: 1
-      data:
-        first:
-          name: _ColRadius
-        second: .821428597
-      data:
-        first:
-          name: _DoBalls
-        second: 0
-      data:
-        first:
           name: _ExposureRate
         second: 15
     m_Colors:
+      data:
+        first:
+          name: _CentreColor0
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _OuterColor0
+        second: {r: 0, g: .0482757092, b: 1, a: 1}
+      data:
+        first:
+          name: _CentreColor1
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _OuterColor1
+        second: {r: 0, g: 0, b: 1, a: 1}
+      data:
+        first:
+          name: _CentreColor2
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _OuterColor2
+        second: {r: 0, g: 0, b: 1, a: 1}
+      data:
+        first:
+          name: _CentreColor3
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _OuterColor3
+        second: {r: 0, g: 0, b: 1, a: 1}
       data:
         first:
           name: _CentreColor
@@ -63,35 +95,3 @@ Material:
         first:
           name: _OuterColor
         second: {r: 0, g: .856541872, b: .977941155, a: 1}
-      data:
-        first:
-          name: _CentreColor0
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _OuterColor0
-        second: {r: 0, g: .751724243, b: 1, a: 1}
-      data:
-        first:
-          name: _CentreColor1
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _OuterColor1
-        second: {r: 0, g: .749019623, b: 1, a: 1}
-      data:
-        first:
-          name: _CentreColor2
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _OuterColor2
-        second: {r: 0, g: .749019623, b: 1, a: 1}
-      data:
-        first:
-          name: _CentreColor3
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _OuterColor3
-        second: {r: 0, g: .749019623, b: 1, a: 1}

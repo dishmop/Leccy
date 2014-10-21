@@ -18,7 +18,7 @@
 		_Spacing ("Spacing", Float) = 10
 		_DoBalls ("Do Balls", Range(0, 1)) = 1
 
-		_Speed0 ("Speed0", Range(0,10)) = 0
+		_Speed0 ("Speed0", Range(0,6)) = 0
 		_Speed0 ("Speed0", Float) = 0
 		_Speed1 ("Speed1", Float) = 0
 		_Speed2 ("Speed2", Float) = 0
@@ -116,17 +116,21 @@
 		
 		// This is a square function
 		float TriangleFunc2(float x){
+
 			float xx = frac(x);
-			float ret =  1 - abs(xx - 0.5)*2.0;
-			return ret * ret;
+			return 4 * xx - 4 * xx * xx;
 		}
 		
 		// Integral of the above function
 		float TriangleFunc2Intg(float x){
 			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
-			float val0 = floor(x) * 0.3333333;
+			float val0 = 2f * floor(x) /3f;
 			
+			float xx = frac(x);
+			float val1 = 2f * xx * xx - (4f / 3f) * xx * xx * xx;
+			return val0 + val1;
 			
+			/*
 			// Now with the bit that is left, see if we are below 0.5
 			float val1 = 0;
 			float xx = frac(x);
@@ -138,6 +142,7 @@
 				val1 = 0.5 * 0.33333333 + xx - 4 * xx * xx * xx / 3;
 			}
 			return val0 + val1;
+			*/
 		}		
 			
 		
@@ -209,22 +214,44 @@
 			
 			// We now assume the ball is centred at origin and has radius 1
 			
+		//	if (i.uv.y < 0.05 || i.uv.y > 0.95) return 1;
+			
+		//	float amp = 0.5 - cos(speedParam * (i.uv.y) * 2 * 3.14159265);
+			
+			
+			//return CalcCol( 0.75 * (0.75 * amp + (TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
+			
+			
 			float distDelta = (scaledUV.y - lastScaledUV.y);
 			if (abs(distDelta) > 0.001){
 				return CalcCol( 0.75 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
 			}
 			else{
-				return CalcCol( 0.75 * (TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y)), centreCol, outerCol);
+				return CalcCol( 0.75 * ((TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
 			}
+			
 			
 			/*
 			float distDelta = (scaledUV.y - lastScaledUV.y);
 			if (abs(distDelta) > 0.001){
-				return CalcCol( 2.75 * (TriangleFunc2(scaledUV.x) + (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
+				return CalcCol( 0.5 * (0.75 * amp + TriangleFunc2(scaledUV.x * 1) + (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
 			}
 			else{
-				return CalcCol( 2.75 * (TriangleFunc2(scaledUV.x) + TriangleFunc2(scaledUV.y)), centreCol, outerCol);
-			}*/
+				return CalcCol( 0.5 * (0.75 * amp + TriangleFunc2(scaledUV.x * 1) + TriangleFunc2(scaledUV.y)), centreCol, outerCol);
+			}
+			*/
+			/*
+			
+			float distDelta = (scaledUV.y - lastScaledUV.y);
+			float val = 0f;
+			if (abs(distDelta) > 0.001){
+				val = (1- ((1-TriangleFunc2(scaledUV.x )) * (1- (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta)));
+			}
+			else{
+				val = (1- (1-TriangleFunc2(scaledUV.x )) * ((1-TriangleFunc2(scaledUV.y))));
+			}	
+			return CalcCol(val * val * val, centreCol, outerCol);		
+			*/
 			
 		}
 		
