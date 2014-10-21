@@ -33,7 +33,7 @@ Material:
       data:
         first:
           name: _Speed0
-        second: 0
+        second: .25
       data:
         first:
           name: _Speed1
