@@ -22,7 +22,14 @@
 		_Speed0 ("Speed0", Float) = 0
 		_Speed1 ("Speed1", Float) = 0
 		_Speed2 ("Speed2", Float) = 0
-		_Speed3 ("Speed3", Float) = 0		
+		_Speed3 ("Speed3", Float) = 0	
+		
+		_Seperation0 ("Seperation0", Float) = 1
+		_Seperation1 ("Seperation1", Float) = 1
+		_Seperation2 ("Seperation2", Float) = 1
+		_Seperation3 ("Seperation3", Float) = 1	
+		
+	//	_Voltae	("Voltage0", Float) = 0;				
 	}
 	SubShader {
 	Pass {
@@ -57,14 +64,33 @@
 		uniform float _Speed1;
 		uniform float _Speed2;
 		uniform float _Speed3;
+		uniform float _Seperation0;	
+		uniform float _Seperation1;
+		uniform float _Seperation2;
+		uniform float _Seperation3;
 		
-
-
 		
 		v2f vert(appdata_base v)
 		{
 			v2f o;
-
+			
+			// Changes thickness of wires - Must change this in two places!
+			float gamma = 0.5;
+			if (v.vertex.x > 0)
+				v.vertex.x =  0.5 * pow(2 * v.vertex.x, gamma);
+			else
+				v.vertex.x =  -0.5 * pow(-2 * v.vertex.x, gamma);
+			
+			if (v.vertex.y > 0)
+				v.vertex.y =  0.5 * pow(2 * v.vertex.y, gamma);
+			else
+				v.vertex.y =  -0.5 * pow(-2 * v.vertex.y, gamma);
+			/*
+			if (abs() < 0.5 - epsilon)
+				v.vertex.x *= 1;
+			if (abs(v.vertex.y) < 0.5 - epsilon)
+				v.vertex.y *= 1;	
+*/
 			o.pos =	mul(UNITY_MATRIX_MVP, v.vertex);
 			
 			o.uv = v.texcoord;
@@ -129,20 +155,7 @@
 			float xx = frac(x);
 			float val1 = 2f * xx * xx - (4f / 3f) * xx * xx * xx;
 			return val0 + val1;
-			
-			/*
-			// Now with the bit that is left, see if we are below 0.5
-			float val1 = 0;
-			float xx = frac(x);
-			if (xx < 0.5){
-				val1 = 4 * xx * xx * xx / 3;
-			}
-			else{
-				xx -= 0.5;
-				val1 = 0.5 * 0.33333333 + xx - 4 * xx * xx * xx / 3;
-			}
-			return val0 + val1;
-			*/
+
 		}		
 			
 		
@@ -150,12 +163,23 @@
 		
 		float4 frag(v2f i) : COLOR
 		{
+			// Changes thickness of wires - Must change this in two places!
+			float gamma = 0.5;
+			
+			float wireThickness = 2 * 0.5 * pow(2 * 0.05, gamma);
+			
+			float scaleX = 0.1 / wireThickness;
+			
 			
 			
 			float4 xRepeatedUV = frac(i.uv * float4(5, 1, 0, 0)) * float4(0.2, 1, 0, 0);
 			
+			xRepeatedUV.x /= scaleX;
+			
+						
 			// Work out the speed on our part of the track
 			float speedParam = 0;
+			float seperationParam = 1;
 			float4 centreCol = 0;
 			float4 outerCol = 0;
 			int intValX = floor(i.uv.x * 5);
@@ -164,21 +188,25 @@
 			 	centreCol = _CentreColor0;
 			 	outerCol = _OuterColor0;
 			 	speedParam = _Speed0;
+			 	seperationParam = _Seperation0;
 			 	break;
 			 case 1:
 			 	centreCol = _CentreColor1;
 			 	outerCol = _OuterColor1;
 			 	speedParam = _Speed1;
+			 	seperationParam = _Seperation1;
 			 	break;
 			 case 2:
 			 	centreCol = _CentreColor2;
 			 	outerCol = _OuterColor2;
 			 	speedParam = _Speed2;
+			 	seperationParam = _Seperation2;
 			 	break;
 			 case 3:
 			 	centreCol = _CentreColor3;
 			 	outerCol = _OuterColor3;
 			 	speedParam = _Speed3;
+			 	seperationParam = _Seperation3;
 			 	break;
 			 case 4:
 			 	// do nothing
@@ -187,17 +215,30 @@
 	
 			// move with time
 			float frameInterval = 1/30.0;
+			
+			
+			
 			float4 timeModdedUV = xRepeatedUV + float4(0, (_Time.y + frameInterval) * speedParam, 0, 0);
 			
 			// Get location of time at previous frame
 			float4 lastTimeModdedUV = xRepeatedUV + float4(0, _Time.y * speedParam, 0, 0);
 			
-		 		
 			
+			
+			/*
+			
+			float thisSpeedParam = 1;
+			if (speedParam < 0) thisSpeedParam = -1;
+			
+			float4 timeModdedUV = xRepeatedUV + float4(0, (_Time.y + frameInterval) * thisSpeedParam, 0, 0);
+			
+			// Get location of time at previous frame
+			float4 lastTimeModdedUV = xRepeatedUV + float4(0, _Time.y * thisSpeedParam, 0, 0);
+			*/
 			
 
 			// Transform based on size, movement and spacing
-			float4 originOffset = float4(0.05, 0.00, 0, 0);
+			float4 originOffset = float4(0.05, 0.00, 0, 0) / scaleX;
 			
 			// Lets rotate the origina around a little
 		//	float4 newOrigin = originOffset;
@@ -207,6 +248,9 @@
 			float4 scaledUV = (timeModdedUV - originOffset) * _Spacing;
 			float4 lastScaledUV = (lastTimeModdedUV - originOffset) * _Spacing;
 			
+			scaledUV.y *= seperationParam;
+			
+			lastScaledUV.y *= seperationParam;
 			
 			// For the moment don't blur:
 			//return CalcCol( TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y));
@@ -214,7 +258,7 @@
 			
 			// We now assume the ball is centred at origin and has radius 1
 			
-		//	if (i.uv.y < 0.05 || i.uv.y > 0.95) return 1;
+			//if (i.uv.y < 0.05 || i.uv.y > 0.95) return 1;
 			
 		//	float amp = 0.5 - cos(speedParam * (i.uv.y) * 2 * 3.14159265);
 			
@@ -223,11 +267,12 @@
 			
 			
 			float distDelta = (scaledUV.y - lastScaledUV.y);
+			float multVertical = 1;
 			if (abs(distDelta) > 0.001){
-				return CalcCol( 0.75 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
+				return CalcCol( 0.75 * (TriangleFunc(scaledUV.x * multVertical) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
 			}
 			else{
-				return CalcCol( 0.75 * ((TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
+				return CalcCol( 0.75 * ((TriangleFunc(scaledUV.x * multVertical) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
 			}
 			
 			

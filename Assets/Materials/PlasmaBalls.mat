@@ -17,15 +17,15 @@ Material:
       data:
         first:
           name: _AlphaRadius
-        second: 1
+        second: .696428597
       data:
         first:
           name: _ColRadius
-        second: .625
+        second: .321428567
       data:
         first:
           name: _Spacing
-        second: 5
+        second: 2
       data:
         first:
           name: _DoBalls
@@ -33,7 +33,7 @@ Material:
       data:
         first:
           name: _Speed0
-        second: .25
+        second: 0
       data:
         first:
           name: _Speed1
@@ -54,6 +54,22 @@ Material:
         first:
           name: _ExposureRate
         second: 15
+      data:
+        first:
+          name: _Seperation0
+        second: 1
+      data:
+        first:
+          name: _Seperation1
+        second: 1
+      data:
+        first:
+          name: _Seperation2
+        second: 1
+      data:
+        first:
+          name: _Seperation3
+        second: 1
     m_Colors:
       data:
         first:

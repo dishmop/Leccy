@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Shaders/PlasmaBalls.shader">
     <Files>
-      <File FileName="Assets/Scripts/Grid.cs" Line="129" Column="1" />
+      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="32" Column="4" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
       <File FileName="Assets/Tutorial_2/1_FlatColour.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="1" Column="1" />
@@ -15,8 +16,8 @@
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="211" Column="4" />
-      <File FileName="Assets/Scripts/TrailTest.cs" Line="148" Column="3" />
+      <File FileName="Assets/Scripts/TrailTest.cs" Line="1" Column="1" />
+      <File FileName="Assets/GameSettings.cs" Line="11" Column="17" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">

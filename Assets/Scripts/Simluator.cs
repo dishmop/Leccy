@@ -896,8 +896,9 @@ public class Simluator : MonoBehaviour {
 							Color useColOuter = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
 							Color boosterCol = new Color(1.2f, 1.2f, 1.2f, 1f);
 							Color useColCentre = boosterCol * Color.Lerp (voltageColors[indexInt+1], voltageColors[indexInt+2], frac);
-							mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
-							mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
+							//mesh.materials[0].SetFloat ("_Seperation" + ((i+ orient) % 4),-currentMulVis * data.totalCurrent);
+							//mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
+							//mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
 							
 							// For testing 3D visualisation
 							componentVolage = data.totalVoltage;
