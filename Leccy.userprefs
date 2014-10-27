@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Shaders/PlasmaBalls.shader">
     <Files>
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="32" Column="4" />
+      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="458" Column="23" />
       <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
       <File FileName="Assets/Tutorial_2/1_FlatColour.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
@@ -16,14 +16,21 @@
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/TrailTest.cs" Line="1" Column="1" />
-      <File FileName="Assets/GameSettings.cs" Line="11" Column="17" />
+      <File FileName="Assets/Scripts/TrailTest_2.cs" Line="136" Column="94" />
+      <File FileName="Assets/GameSettings.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>screenTexture</Value>
-          <Value>screenMaterial</Value>
+          <Value>yy</Value>
+          <Value>halfCycleArea</Value>
+          <Value>val0</Value>
+          <Value>val1</Value>
+          <Value>val</Value>
+          <Value>blurDist</Value>
+          <Value>x</Value>
+          <Value>y</Value>
+          <Value>val0 +val1</Value>
         </State>
       </Pad>
     </Pads>

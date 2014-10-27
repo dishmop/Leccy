@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Simluator.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
+     <Compile Include="Assets\Scripts\TrailTest_2.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
      <None Include="Assets\Tutorial_1\SolidColor.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />

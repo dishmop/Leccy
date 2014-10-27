@@ -1,11 +1,5 @@
 Base path: /Applications/Unity/Unity.app/Contents
-Pipe name: \\.\pipe\UnityShaderCompiler-4--1334009856
+Pipe name: \\.\pipe\UnityShaderCompiler-4--1333477376
 Cmd: getPlatforms
 Cmd: compileSnippet
-  api=1 type=1 insize=7487 outsize=9868 kw= ok=1
-Cmd: compileSnippet
-  error: 2 plat 4 at (318): variable 'noisePos' used without having been completely initialized
-  api=4 type=1 insize=7649 outsize=0 kw= ok=0
-End of pipe
-
-Quitting shader compiler process
+  api=1 type=1 insize=15390 outsize=23735 kw= ok=1

@@ -17,11 +17,11 @@ Material:
       data:
         first:
           name: _AlphaRadius
-        second: .696428597
+        second: .464285731
       data:
         first:
           name: _ColRadius
-        second: .321428567
+        second: .357142836
       data:
         first:
           name: _Spacing
@@ -33,7 +33,7 @@ Material:
       data:
         first:
           name: _Speed0
-        second: 0
+        second: 2.67857146
       data:
         first:
           name: _Speed1
@@ -46,14 +46,6 @@ Material:
         first:
           name: _Speed3
         second: 4
-      data:
-        first:
-          name: _Radius
-        second: .100000001
-      data:
-        first:
-          name: _ExposureRate
-        second: 15
       data:
         first:
           name: _Seperation0
@@ -70,39 +62,63 @@ Material:
         first:
           name: _Seperation3
         second: 1
+      data:
+        first:
+          name: _Radius
+        second: .100000001
+      data:
+        first:
+          name: _ExposureRate
+        second: 15
+      data:
+        first:
+          name: _Voltage0
+        second: -0
+      data:
+        first:
+          name: _Voltage1
+        second: 0
+      data:
+        first:
+          name: _Voltage2
+        second: 0
+      data:
+        first:
+          name: _Voltage3
+        second: 0
     m_Colors:
       data:
         first:
           name: _CentreColor0
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0, g: .647058845, b: .165111467, a: 1}
       data:
         first:
           name: _OuterColor0
-        second: {r: 0, g: .0482757092, b: 1, a: 1}
+        second: {r: .691176474, g: .961663306, b: 1, a: 1}
       data:
         first:
           name: _CentreColor1
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0, g: .654901981, b: .117647059, a: 1}
       data:
         first:
           name: _OuterColor1
-        second: {r: 0, g: 0, b: 1, a: 1}
+        second: {r: .356862754, g: .925490201, b: 1, a: 1}
       data:
         first:
           name: _CentreColor2
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0, g: .654901981, b: .117647059, a: 1}
       data:
         first:
           name: _OuterColor2
-        second: {r: 0, g: 0, b: 1, a: 1}
+        second: {r: .68235296, g: .960784316, b: 1, a: 1}
       data:
         first:
           name: _CentreColor3
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0, g: .654901981, b: .117647059, a: 1}
       data:
         first:
           name: _OuterColor3
-        second: {r: 0, g: 0, b: 1, a: 1}
+        second: {r: .68235296, g: .960784316, b: 1, a: 1}
       data:
         first:
           name: _CentreColor
@@ -111,3 +127,15 @@ Material:
         first:
           name: _OuterColor
         second: {r: 0, g: .856541872, b: .977941155, a: 1}
+      data:
+        first:
+          name: _Col0
+        second: {r: 0, g: .595588207, b: .176622704, a: 1}
+      data:
+        first:
+          name: _Col1
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _Col2
+        second: {r: .227941155, g: .710810721, b: 1, a: 1}

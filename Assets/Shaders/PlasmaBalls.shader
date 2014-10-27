@@ -1,13 +1,8 @@
 ﻿Shader "Custom/PlasmaBalls" {
 	Properties {
-		_CentreColor0 ("CentreColor0", Color) = (0.0, 0.0, 0.0)
-		_OuterColor0 ("OuterColor0", Color) = (0.0, 1.0, 0.0)
-		_CentreColor1 ("CentreColor1", Color) = (0.0, 0.0, 0.0)
-		_OuterColor1 ("OuterColor1", Color) = (0.0, 1.0, 0.0)
-		_CentreColor2 ("CentreColor2", Color) = (0.0, 0.0, 0.0)
-		_OuterColor2 ("OuterColor2", Color) = (0.0, 1.0, 0.0)
-		_CentreColor3 ("CentreColor3", Color) = (0.0, 0.0, 0.0)
-		_OuterColor3 ("OuterColor3", Color) = (0.0, 1.0, 0.0)
+		_Col0 ("Col0", Color) = (0.0, 0.0, 0.0)
+		_Col1 ("Col1", Color) = (0.0, 0.0, 0.0)
+		_Col2 ("Col2", Color) = (0.0, 0.0, 0.0)
 		
 		
 		_AlphaRadius ("AlphaRadius", Range(0, 1)) = 0.1
@@ -18,7 +13,7 @@
 		_Spacing ("Spacing", Float) = 10
 		_DoBalls ("Do Balls", Range(0, 1)) = 1
 
-		_Speed0 ("Speed0", Range(0,6)) = 0
+		_Speed0 ("Speed0", Range(0,15)) = 0
 		_Speed0 ("Speed0", Float) = 0
 		_Speed1 ("Speed1", Float) = 0
 		_Speed2 ("Speed2", Float) = 0
@@ -29,14 +24,20 @@
 		_Seperation2 ("Seperation2", Float) = 1
 		_Seperation3 ("Seperation3", Float) = 1	
 		
+		_Voltage0("Voltage0", Float) = 0
+		_Voltage1("Voltage1", Float) = 0
+		_Voltage2("Voltage2", Float) = 0
+		_Voltage3("Voltage3", Float) = 0
+		
 	//	_Voltae	("Voltage0", Float) = 0;				
 	}
 	SubShader {
 	Pass {
 		//Tags { "RenderType" = "Transparent" }
 		CGPROGRAM
-		
 		#pragma target 3.0		
+#pragma profileoption NumInstructionSlots=65534
+#pragma profileoption NumMathInstructionSlots=65534
 				
 		#pragma vertex vert
 		#pragma fragment frag
@@ -48,13 +49,9 @@
 			float4 uv : TEXCOORD0;
 		};
 		
-		uniform float4 _CentreColor0;
-		uniform float4 _OuterColor0;
-		uniform float4 _CentreColor1;
-		uniform float4 _OuterColor1;
-		uniform float4 _CentreColor2;
-		uniform float4 _OuterColor2;
-		uniform float4 _CentreColor3;
+		uniform float4 _Col0;
+		uniform float4 _Col1;
+		uniform float4 _Col2;
 		uniform float4 _OuterColor3;
 		uniform float _AlphaRadius;
 		uniform float _ColRadius;
@@ -68,6 +65,10 @@
 		uniform float _Seperation1;
 		uniform float _Seperation2;
 		uniform float _Seperation3;
+		uniform float _Voltage0;
+		uniform float _Voltage1;
+		uniform float _Voltage2;
+		uniform float _Voltage3;
 		
 		
 		v2f vert(appdata_base v)
@@ -75,7 +76,7 @@
 			v2f o;
 			
 			// Changes thickness of wires - Must change this in two places!
-			float gamma = 0.5;
+			float gamma =0.5f;
 			if (v.vertex.x > 0)
 				v.vertex.x =  0.5 * pow(2 * v.vertex.x, gamma);
 			else
@@ -99,15 +100,15 @@
 			return o;
 		}
 		
+
 		
-		float4 CalcCol(float dist, float4 centreColor, float4 outerColor){
+		float4 CalcCol(float dist, float4 col){
 			// These should be global constants
-			float4 white = float4(1, 1, 1, 1);
 			float4 black = float4(0, 0, 0, 1);
+		
+			//return DCColorLerp(black, col , dist);
 	
-			float4 alpha = lerp(white, black, clamp(dist / _AlphaRadius, 0, 1));
-			float4 col = lerp(centreColor, outerColor, clamp(dist / _ColRadius, 0, 1));
-			return col * alpha;
+			return lerp(black, col , clamp(dist, 0, 1));
 		}	
 		
 		// Returns function with straight slopes and period 1 where:
@@ -117,7 +118,7 @@
 		// etc..
 		float TriangleFunc(float x){
 			float xx = frac(x);
-			return 1 - abs(xx - 0.5)*2.0;
+			return abs(xx - 0.5)*2.0;
 		}
 		
 		
@@ -131,33 +132,108 @@
 			float val1 = 0;
 			float xx = frac(x);
 			if (xx < 0.5){
-				val1 = xx * xx;
+				val1 = xx - xx * xx;
 			}
 			else{
 				xx -= 0.5;
-				val1 = 0.25 + xx - xx*xx;
+				val1 = 0.25 + xx*xx;
 			}
 			return val0 + val1;
 		}
 		
 		// This is a square function
 		float TriangleFunc2(float x){
-
+		
 			float xx = frac(x);
-			return 4 * xx - 4 * xx * xx;
+			float yy =  xx - 0.5;
+			return yy * yy * 4;
 		}
 		
 		// Integral of the above function
 		float TriangleFunc2Intg(float x){
 			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
-			float val0 = 2f * floor(x) /3f;
+			float val0 = floor(x) /3f;
 			
 			float xx = frac(x);
-			float val1 = 2f * xx * xx - (4f / 3f) * xx * xx * xx;
+			float val1 = (4.0/3.0) * xx * xx * xx - 2.0 * xx *xx + xx;
+			return val0 + val1;
+
+		}	
+
+		// etc..
+		float TriangleFunc3(float x){
+			float xx = frac(x);
+			float yy =  xx - 0.5;
+			return yy * yy * yy * yy * 16;
+		}			
+			
+		
+		// Integral of the above function
+		float TriangleFunc3Intg(float x){
+			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
+			float val0 = floor(x) /10f;
+			
+			float xx = frac(x);
+			float val1 = (16.0/5.0) * xx * xx * xx * xx  * xx  - 2.0 * xx *xx + xx;
 			return val0 + val1;
 
 		}		
+		
+		float TriangleFuncN(float x, float power){
+			float xx = fmod(x + 0.5, 1);
+			return 1/pow(abs(xx - 0.5), power) -1/pow(0.3, power);
+		}
+		
+		/*
+		float TriangleFuncNXY(float x, float y, float power){
+			float thing = 0.5;
+			float xx = 0;//abs(frac(x+thing)-thing);
+			float yy = 0.5 - abs(frac(y) - thing);
+			//float dist = sqrt(xx*xx+yy*yy);
+			float dist = xx+yy;
+			return pow(dist, -power) -pow(0.5, -power);
+		}	
+		*/
+		
+		float TriangleFuncNXY(float x, float y, float power){
+			float xx = abs(frac(x + 0.5) - 0.5);
+			float yy = abs(frac(y + 0.5) - 0.5);
+			float dist = xx+yy;
+			return pow(dist, -power) -pow(0.5, -power);
+		}	
+
+		float TriangleFuncNXYIntgY(float x, float y, float power){
+			float xx = abs(frac(x + 0.5) - 0.5);
+		
+			// If the power is 1 then the integral is different
+			if (abs(power - 1.0) < 0.0001){
+				// Haven't worked this one out yet
+				return 0;
+			}
+			else{
+				float constant = -pow(xx, (1f - power))/(1f - power) + pow(0.5f, -power) * (xx);
+				float halfCycleArea = constant + pow(xx + 0.5, (1f - power)) / (1f - power) - pow(0.5, -power) * (0.5+xx);
+				float val0 = 2 * halfCycleArea * floor(y);
+				
+				// now suppose we are in the first half
+				float val1 = 0;
+				
+				float yy = y - floor(y);
+				
+				
+				if (yy < 0.5){
+					val1 = pow(xx + yy, (1f - power))/(1f - power) - pow(0.5, -power) * (yy+xx) + constant;
+				}
+				else{
+					float uu = 1 - yy;
+					val1 = 2 * halfCycleArea - pow((xx + uu), 1f - power)/(1f - power) + pow(0.5, -power) * (uu+xx) - constant;
+				}
+				
+				return val0 +val1;
+
+			}
 			
+		}					
 		
 		
 		
@@ -180,45 +256,45 @@
 			// Work out the speed on our part of the track
 			float speedParam = 0;
 			float seperationParam = 1;
-			float4 centreCol = 0;
-			float4 outerCol = 0;
+
+			float voltage = 0;
+			
 			int intValX = floor(i.uv.x * 5);
 			switch(intValX){
 			 case 0:
-			 	centreCol = _CentreColor0;
-			 	outerCol = _OuterColor0;
 			 	speedParam = _Speed0;
 			 	seperationParam = _Seperation0;
+			 	voltage = _Voltage0;
 			 	break;
 			 case 1:
-			 	centreCol = _CentreColor1;
-			 	outerCol = _OuterColor1;
 			 	speedParam = _Speed1;
 			 	seperationParam = _Seperation1;
+			 	voltage = _Voltage1;
 			 	break;
 			 case 2:
-			 	centreCol = _CentreColor2;
-			 	outerCol = _OuterColor2;
 			 	speedParam = _Speed2;
 			 	seperationParam = _Seperation2;
+			 	voltage = _Voltage2;
 			 	break;
 			 case 3:
-			 	centreCol = _CentreColor3;
-			 	outerCol = _OuterColor3;
 			 	speedParam = _Speed3;
 			 	seperationParam = _Seperation3;
+			 	voltage = _Voltage3;
 			 	break;
 			 case 4:
 			 	// do nothing
 			 	break;
-			 }		
+			}	
+			// Maximum blue value
+			if (abs(speedParam) > 15) speedParam = 15 * speedParam / abs(speedParam);
 	
 			// move with time
 			float frameInterval = 1/30.0;
 			
 			
 			
-			float4 timeModdedUV = xRepeatedUV + float4(0, (_Time.y + frameInterval) * speedParam, 0, 0);
+			// Add a bit on so the blue is never zero (this is  aproblem ifg speed ends up setting this to zero!)
+			float4 timeModdedUV = xRepeatedUV + float4(0, (_Time.y + frameInterval) * speedParam + 0.0001f, 0, 0);
 			
 			// Get location of time at previous frame
 			float4 lastTimeModdedUV = xRepeatedUV + float4(0, _Time.y * speedParam, 0, 0);
@@ -263,40 +339,132 @@
 		//	float amp = 0.5 - cos(speedParam * (i.uv.y) * 2 * 3.14159265);
 			
 			
-			//return CalcCol( 0.75 * (0.75 * amp + (TriangleFunc(scaledUV.x) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
 			
 			
 			float distDelta = (scaledUV.y - lastScaledUV.y);
 			float multVertical = 1;
-			if (abs(distDelta) > 0.001){
-				return CalcCol( 0.75 * (TriangleFunc(scaledUV.x * multVertical) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
-			}
-			else{
-				return CalcCol( 0.75 * ((TriangleFunc(scaledUV.x * multVertical) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
-			}
+			//return CalcCol( 0.5 * ((TriangleFunc(scaledUV.x * multVertical) + TriangleFunc(scaledUV.y))), centreCol, outerCol);
+			float4 col0;
+			float4 col1;
+			float4 col2;
+			float4 col3;
+			float4 col4;
 			
+			float val0 = 0;	
+			float val1 = 0;
+			float val2 = 0;
+			float val3 = 0;
+			float val4 = 0;
+			float val5 = 0;
+			float val6 = 0;
 			
-			/*
-			float distDelta = (scaledUV.y - lastScaledUV.y);
-			if (abs(distDelta) > 0.001){
-				return CalcCol( 0.5 * (0.75 * amp + TriangleFunc2(scaledUV.x * 1) + (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta), centreCol, outerCol);
-			}
-			else{
-				return CalcCol( 0.5 * (0.75 * amp + TriangleFunc2(scaledUV.x * 1) + TriangleFunc2(scaledUV.y)), centreCol, outerCol);
-			}
-			*/
-			/*
+			float mul0 = 0.5;
+			float sub0 = 0 ;
+			float power = 0.2;
+			float amp = clamp(abs(speedParam) / 15 + 1, 1, 2);
 			
-			float distDelta = (scaledUV.y - lastScaledUV.y);
-			float val = 0f;
-			if (abs(distDelta) > 0.001){
-				val = (1- ((1-TriangleFunc2(scaledUV.x )) * (1- (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta)));
+//				float val0 = - sub0 + mul0 * (TriangleFunc2((scaledUV.x * multVertical) + xOffset) + (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta);
+//				float val1 = - sub0 + mul0 * (TriangleFunc2((scaledUV.x * multVertical) - xOffset) + (TriangleFunc2Intg(scaledUV.y) - TriangleFunc2Intg(lastScaledUV.y)) / distDelta);
+//				col0 =  CalcCol( val0 + val1, centreCol);
+///				col1 =  CalcCol( -.50 + 0.5 * (TriangleFunc(scaledUV.x * multVertical) * (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), outerCol);
+			// Voltage 0 ->1
+			float epsilon = 0.0001;
+			if (voltage < 1-epsilon){
+				float xOffset = 0.1;
+				
+				val0 = -1.6 + 0.9 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val3 = -0.6 + 0.65 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				
+				col0 = CalcCol(amp * val0, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));
+				col1 = CalcCol(amp * val3, _Col0);
+				
+				return col1+ col0;
 			}
-			else{
-				val = (1- (1-TriangleFunc2(scaledUV.x )) * ((1-TriangleFunc2(scaledUV.y))));
-			}	
-			return CalcCol(val * val * val, centreCol, outerCol);		
-			*/
+			// Voltage 1 -> 2
+			 if (voltage < 2-epsilon){
+			 
+				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x , lastScaledUV.y, power))/ distDelta;
+				val3 = -0.5 + 0.5* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				// Bits of the next one
+				float xOffset = 0.2;		
+				
+				val4 = -1.5 + 1.05 * (TriangleFunc(scaledUV.x + xOffset) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val5 = -1.5 + 1.05 * (TriangleFunc(scaledUV.x - xOffset)+ (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);		
+
+				col0 =  CalcCol(amp * val0, _Col1);
+				col1 = CalcCol(amp * val3, _Col0);
+				col2 =  CalcCol(amp * (val4 + val5), lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));				
+				
+				return col0 + col1 + col2;
+			}
+			else if (voltage < 3-epsilon){
+			
+				float xOffset = lerp(0.15, 0.2, frac(voltage));		
+				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset , lastScaledUV.y, power))/ distDelta;
+				val1 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset , lastScaledUV.y, power))/ distDelta;
+				val3 = -0.5 + 0.5 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val4 = -1.0 + 0.5 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				
+				col0 =  CalcCol(amp * (val0 + val1), _Col1);
+				col1 = CalcCol(amp * val3, _Col0);
+				col2 =  CalcCol(amp * val4, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));
+
+				
+				return col0 + col1 + col2;
+			}
+			else if (voltage < 4-epsilon){
+				float xOffset1 = 0.2;		
+				float xOffset2 = 0.1;							
+				val0 = -sub0 + mul0 * 1.4 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val1 = -sub0 + mul0 * 1.4 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val2 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x , lastScaledUV.y, power))/ distDelta;
+				val3 = -0.5 + 0.25* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val4 = -0.5 + 0.5* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val5 = -1.5 + 1 * (TriangleFunc(scaledUV.x + xOffset1) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				val6 = -1.5 + 1 * (TriangleFunc(scaledUV.x - xOffset1) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);			
+					
+				col0 =  CalcCol(amp * (val0 + val1), _Col1);
+				col1 = CalcCol(amp * val3, _Col2);
+				col2 = CalcCol(amp * val4, _Col0);
+				col3 =  CalcCol(amp * val2, _Col2);	
+				col4 =  CalcCol(amp * (val5 + val6), lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col2, frac(voltage)));					
+				
+				return col0 + col1 + col2 + col3 + col4;
+			}
+			else if (voltage < 5-epsilon){
+				float xOffset0 = 0.1;		
+				float xOffset1 = 0.2;		
+				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , lastScaledUV.y, power))/ distDelta;
+				val1 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset0 , lastScaledUV.y, power))/ distDelta;
+				val2 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val3 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val4 = -0.5 + 0.35 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);			
+				col0 = CalcCol(amp * (val0 + val1), _Col2);
+				col1 = CalcCol(amp * (val2 + val3), _Col1);
+				col2 = CalcCol(amp * val4, _Col2);
+				col3 = CalcCol(amp * val4, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col2, frac(voltage)));
+
+				return col0 + col1 + col2 + col3;
+				
+			}
+			else {//if (voltage < 6-epsilon){
+				float xOffset0 = 0.1;		
+				float xOffset1 = 0.2;		
+				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , lastScaledUV.y, power))/ distDelta;
+				val1 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset0 , lastScaledUV.y, power))/ distDelta;
+				val2 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val3 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x - xOffset1 , lastScaledUV.y, power))/ distDelta;
+				val4 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x , lastScaledUV.y, power))/ distDelta;
+				val5 = -0.5 + 0.45* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
+				
+				col0 = CalcCol(amp * (val0 + val1 + val2 + val3 + val4), _Col1);
+				col2 = CalcCol(amp * val5, _Col2);
+				return col0 + col2;
+			}									
+			
+
+			return 0;
+			
 			
 		}
 		

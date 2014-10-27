@@ -899,6 +899,7 @@ public class Simluator : MonoBehaviour {
 							//mesh.materials[0].SetFloat ("_Seperation" + ((i+ orient) % 4),-currentMulVis * data.totalCurrent);
 							//mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
 							//mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
+							mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  data.totalVoltage);
 							
 							// For testing 3D visualisation
 							componentVolage = data.totalVoltage;
