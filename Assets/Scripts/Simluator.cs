@@ -850,6 +850,17 @@ public class Simluator : MonoBehaviour {
 			}		
 		}
 	}
+	
+	void FindMeshRenderers(GameObject go, List<MeshRenderer> list){
+		
+		MeshRenderer mesh = go.transform.GetComponent<MeshRenderer>();
+		if (mesh != null){
+			list.Add (mesh);
+		}
+		foreach (Transform child in go.transform){
+			FindMeshRenderers (child.gameObject, list);
+		}
+	}
 
 		// Update is called once per frame
 	void FixedUpdate () {
@@ -874,44 +885,48 @@ public class Simluator : MonoBehaviour {
 				GridPoint thisPoint = new GridPoint(x, y);
 				if (circuit.ElementExists(thisPoint)){
 					// Get the 
-					MeshRenderer mesh = circuit.GetGameObject (thisPoint).transform.GetChild(0).GetComponent<MeshRenderer>();
-					float componentVolage = 0f;
-					for (int i = 0; i < 4; ++i){
-						BranchData data = GetBranchData(new BranchAddress(x, y, i));
-						if (data.traversed){
-							int orient = circuit.GetElement(thisPoint).orient;
-							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * data.totalCurrent);
-							mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(currentMulVis * data.totalCurrent));
-							
-							//
-							float index = 0f;
-							if (!float.IsNaN(data.totalVoltage)){
-								index = (voltageColors.Length - 2f) * data.totalVoltage / maxVoltVis;
+					List<MeshRenderer> meshes = new List<MeshRenderer>();
+					FindMeshRenderers(circuit.GetGameObject (thisPoint), meshes);
+					for (int k = 0; k < meshes.Count; ++k){
+						MeshRenderer mesh = meshes[k];
+						float componentVolage = 0f;
+						for (int i = 0; i < 4; ++i){
+							BranchData data = GetBranchData(new BranchAddress(x, y, i));
+							if (data.traversed){
+								int orient = circuit.GetElement(thisPoint).orient;
+								mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * data.totalCurrent);
+								mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(currentMulVis * data.totalCurrent));
+								
+								//
+								float index = 0f;
+								if (!float.IsNaN(data.totalVoltage)){
+									index = (voltageColors.Length - 2f) * data.totalVoltage / maxVoltVis;
+								}
+								
+								// clamp to our range
+								if (index > voltageColors.Length-2.001f) index = voltageColors.Length-2.001f;
+								int indexInt = (int)index;
+								float frac = index - indexInt;
+								Color useColOuter = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
+								Color boosterCol = new Color(1.2f, 1.2f, 1.2f, 1f);
+								Color useColCentre = boosterCol * Color.Lerp (voltageColors[indexInt+1], voltageColors[indexInt+2], frac);
+								//mesh.materials[0].SetFloat ("_Seperation" + ((i+ orient) % 4),-currentMulVis * data.totalCurrent);
+								//mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
+								//mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
+								mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  data.totalVoltage);
+								
+								// For testing 3D visualisation
+								componentVolage = data.totalVoltage;
+							}
+							if (enableVoltsgeAsHeight){
+								if (float.IsNaN(componentVolage) || float.IsInfinity(componentVolage)) componentVolage = 0f;
+								
+								Vector3 pos = circuit.GetGameObject(thisPoint).transform.position;
+								pos.z = -componentVolage;
+								circuit.GetGameObject(thisPoint).transform.position = pos;
 							}
 							
-							// clamp to our range
-							if (index > voltageColors.Length-2.001f) index = voltageColors.Length-2.001f;
-							int indexInt = (int)index;
-							float frac = index - indexInt;
-							Color useColOuter = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-							Color boosterCol = new Color(1.2f, 1.2f, 1.2f, 1f);
-							Color useColCentre = boosterCol * Color.Lerp (voltageColors[indexInt+1], voltageColors[indexInt+2], frac);
-							//mesh.materials[0].SetFloat ("_Seperation" + ((i+ orient) % 4),-currentMulVis * data.totalCurrent);
-							//mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
-							//mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
-							mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  data.totalVoltage);
-							
-							// For testing 3D visualisation
-							componentVolage = data.totalVoltage;
 						}
-						if (enableVoltsgeAsHeight){
-							if (float.IsNaN(componentVolage) || float.IsInfinity(componentVolage)) componentVolage = 0f;
-							
-							Vector3 pos = circuit.GetGameObject(thisPoint).transform.position;
-							pos.z = -componentVolage;
-							circuit.GetGameObject(thisPoint).transform.position = pos;
-						}
-						
 					}
 				}
 			}		

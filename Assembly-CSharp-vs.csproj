@@ -63,7 +63,7 @@
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
-     <None Include="Assets\Tutorial_1\SolidColor.shader" />
+     <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />
      <None Include="Assets\Tutorial_2\2_Lambert.shader" />
      <None Include="Assets\Shaders\noise-simplex.shader" />
