@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class CircuitElementCell : CircuitElement {
 
@@ -11,6 +14,23 @@ public class CircuitElementCell : CircuitElement {
 
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
+	}
+	
+	override public void Save(BinaryWriter bw){
+		base.Save (bw);	
+		
+		bw.Write (voltage);
+		bw.Write(resistance);
+		bw.Write(invertOrient);
+	}
+	
+	
+	override public void Load(BinaryReader br){
+		base.Load (br);	
+		
+		voltage = br.ReadSingle();
+		resistance = br.ReadSingle();
+		invertOrient = br.ReadBoolean();
 	}
 
 	public override void OnClick(){

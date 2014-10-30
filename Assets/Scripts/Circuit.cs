@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Collections.Generic;
 
 public class Circuit : MonoBehaviour {
 	
@@ -23,8 +27,77 @@ public class Circuit : MonoBehaviour {
 	Grid 	grid;
 	
 	public GameObject[,] 	elements;
-
 	
+	[Serializable]
+	class ElementSerializationData{
+		public int x;
+		public int y;
+		public string id;
+		
+		// Constructor
+		public ElementSerializationData(){}
+		
+		public ElementSerializationData(int x, int y, string id){
+			this.x = x;
+			this.y = y;
+			this.id = id;
+		}
+	};
+	
+	
+	
+	public 	void Save(BinaryWriter bw){
+		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				if (elements[x,y] != null){
+					dataList.Add ( new ElementSerializationData(x, y, elements[x,y].GetComponent<SerializationID>().id));					 
+				}
+			}
+		}	
+		bw.Write (dataList.Count);
+		for (int i = 0; i < dataList.Count; ++i){
+			bw.Write (dataList[i].x);
+			bw.Write(dataList[i].y);
+			bw.Write (dataList[i].id);
+		}
+		for (int i = 0; i < dataList.Count; ++i){
+			GetElement (new GridPoint(dataList[i].x, dataList[i].y)).Save(bw);
+		}
+	}
+	
+	public 	void Load(BinaryReader br){
+		CreateBlankCircuit();
+
+		// Get the list of objects
+		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+		int numElements = br.ReadInt32();
+		
+		for (int i = 0; i < numElements; ++i){
+			ElementSerializationData data = new ElementSerializationData();
+			data.x = br.ReadInt32 ();
+			data.y = br.ReadInt32 ();
+			data.id = br.ReadString ();
+			dataList.Add (data);
+		}		
+		
+		// Go through each entry adding a crcuit element to the circuit
+		for (int i = 0; i < numElements; ++i){
+			ElementSerializationData data = dataList[i];
+			if (data.id == wireElementPrefab.GetComponent<SerializationID>().id){
+				RawAddElement(new GridPoint(data.x, data.y), wireElementPrefab);
+			}
+			else if (data.id == cellElementPrefab.GetComponent<SerializationID>().id){
+				RawAddElement(new GridPoint(data.x, data.y), cellElementPrefab);
+			}
+			else if (data.id == resistorElementPrefab.GetComponent<SerializationID>().id){
+				RawAddElement(new GridPoint(data.x, data.y), resistorElementPrefab);
+			}
+			GetElement (new GridPoint(data.x, data.y)).Load(br);
+			GetElement (new GridPoint(data.x, data.y)).SetupMesh();
+		}
+	}
+		
 	
 	public void AddCell(GridPoint point){
 		AddStraighComponent(point, cellElementPrefab);
@@ -61,7 +134,7 @@ public class Circuit : MonoBehaviour {
 		
 		// If there is already a striaght component here, then just send it an on-click message and return
 		if (ElementExists (point) && 
-			Object.ReferenceEquals(GetElement (point).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
+			UnityEngine.Object.ReferenceEquals(GetElement (point).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
 				GetElement (point).OnClick();
 				return;
 			}
@@ -70,7 +143,7 @@ public class Circuit : MonoBehaviour {
 		// Now create our new resistor
 		GameObject newElement = Instantiate(
 			prefab, 
-			new Vector3(point.x, point.y, wireElementPrefab.transform.position.z), 
+			new Vector3(point.x, point.y, prefab.transform.position.z), 
 			Quaternion.identity)
 			as GameObject;
 		newElement.transform.parent = transform;	
@@ -143,10 +216,10 @@ public class Circuit : MonoBehaviour {
 		// If there is no element here or the one that is here is not a resistor, then 
 		// make a new element and add it into the map
 		if (!ElementExists (nextPoint) || 
-		    !Object.ReferenceEquals(GetElement (nextPoint).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
+		    !UnityEngine.Object.ReferenceEquals(GetElement (nextPoint).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
 			GameObject newElement = Instantiate(
 				prefab, 
-				new Vector3(nextPoint.x, nextPoint.y, wireElementPrefab.transform.position.z), 
+				new Vector3(nextPoint.x, nextPoint.y, prefab.transform.position.z), 
 				Quaternion.identity)
 				as GameObject;
 			newElement.transform.parent = transform;	
@@ -168,6 +241,27 @@ public class Circuit : MonoBehaviour {
 		ValidateNeighbourConnections(nextPoint);
 		
 		GetElement(nextPoint).SetupMesh();
+	}
+	
+	// Add the element without doing anything clever (you need to call SetupMesh yourself afterwards()
+	void RawAddElement(GridPoint point, GameObject prefab){
+		if (!IsPointInGrid(point)) return;
+		
+		// If there is already something there, then don't add it (and assert)
+		if (ElementExists (point)){
+			Debug.LogError("Attempting to RAW add a circuit element over one that is there already");
+		}
+		
+		GameObject newElement = Instantiate(
+			prefab, 
+			new Vector3(point.x, point.y, prefab.transform.position.z), 
+			Quaternion.identity)
+			as GameObject;
+		newElement.transform.parent = transform;
+
+		
+		elements[point.x, point.y] = newElement;
+		GetElement(point).SetupMesh();			
 	}
 		
 	// Circuit modification interface
@@ -466,9 +560,20 @@ public class Circuit : MonoBehaviour {
 		offsets[kDown] = 	new GridPoint( 0,  -1);	
 
 		grid = gridGO.GetComponent<Grid>();
+		CreateBlankCircuit();
+	}
+
+	void CreateBlankCircuit(){	
+		// If there is a load of circuit elemnts here already, go through and destroy them all
+		if (elements != null){
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					UnityEngine.Object.Destroy(elements[x,y]);
+				}
+			}
+		}
 		elements = new GameObject[grid.gridWidth, grid.gridHeight];
 	}
-	
 	
 	// Use this for initialization
 	void Start () {

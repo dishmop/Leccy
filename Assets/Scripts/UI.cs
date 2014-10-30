@@ -5,6 +5,7 @@ public class UI : MonoBehaviour {
 
 	public GameObject 	gridGO;
 	public GameObject	circuitGO;
+	public GameObject 	levelSerialiserGO;
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
 	
@@ -13,24 +14,28 @@ public class UI : MonoBehaviour {
 
 	Grid				grid;
 	Circuit				circuit;
+	LevelSerializer		levelSerializer;
 	
 	public enum InputMode{
 		kWires,
 		kCells,
 		kResistors,
 		kErase,
-		kClearAll
+		kClearAll,
+		kLoadLevel,
+		kSaveLevel
 	};
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level"};
 
 		
 	// Use this for initialization
 	void Start () {
 		grid = gridGO.GetComponent<Grid>();	
 		circuit = circuitGO.GetComponent<Circuit>();	
+		levelSerializer = levelSerialiserGO.GetComponent<LevelSerializer>();
 		
 	}
 	
@@ -151,7 +156,15 @@ public class UI : MonoBehaviour {
 			Application.LoadLevel(Application.loadedLevel);
 			inputMode = oldInputMode;
 		}
-					
+		else if (inputMode == InputMode.kLoadLevel){
+			levelSerializer.LoadLevel("playerinfo.dat");
+			inputMode = oldInputMode;
+		}
+		else if (inputMode == InputMode.kSaveLevel){
+			levelSerializer.SaveLevel("playerinfo.dat");
+			inputMode = oldInputMode;
+		}
+		
 	}
 	
 }

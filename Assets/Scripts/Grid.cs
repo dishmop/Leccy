@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Grid : MonoBehaviour {
 
@@ -25,14 +28,39 @@ public class Grid : MonoBehaviour {
 	GridPoint		otherNewSelection = new GridPoint();
 	bool			enableEraseHighlight =false;
 	
+	// Serialization data
+	[Serializable]
+	class SerializationData{
+		public SerializationData(int width, int height){
+			this.width = width;
+			this.height = height;
+		}
+		public int width;
+		public int height;
+	};
+	
+
+	public 	void Save(BinaryWriter bw){
+		bw.Write (gridWidth);
+		bw.Write (gridHeight);
+	}
+	
+	public 	void Load(BinaryReader br){
+		gridWidth = br.ReadInt32();	
+		gridHeight = br.ReadInt32();	
+		
+		CreateGrid();
+	}
+	
 	public void SetSelected(GridPoint newPoint, GridPoint otherPoint){
 		newSelection = new GridPoint(newPoint);
 		otherNewSelection = new GridPoint(otherPoint);
 		
 	}
 	
-	public void EnableEraseHighlightMode(bool enable){
 	
+
+	public void EnableEraseHighlightMode(bool enable){
 		enableEraseHighlight = enable;
 		if (enable){
 			highlightPrefabToUse = eraseHighlightPrefab;
@@ -43,15 +71,8 @@ public class Grid : MonoBehaviour {
 		
 	}
 	
-	void Awake(){
-	}
+	void CreateGrid(){
 	
-
-	// Use this for initialization
-	void Start () {
-
-		highlightPrefabToUse = highlightPrefab;
-		
 		for (int x = 0; x < gridWidth; ++x){
 			for (int y = 0; y < gridHeight; ++y){
 				GameObject gridSquare = Instantiate(
@@ -64,6 +85,15 @@ public class Grid : MonoBehaviour {
 			
 		}
 		
+	}
+	
+
+	// Use this for initialization
+	void Start () {
+
+		highlightPrefabToUse = highlightPrefab;
+		
+		CreateGrid ();		
 		guiTextDisplay = new GUITextDisplay(10f, 200f, 500f, 20f);
 	
 	}

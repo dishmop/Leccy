@@ -46,7 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\GameSettings.cs" />
      <Compile Include="Assets\Scripts\CamControl.cs" />
      <Compile Include="Assets\Scripts\Circuit.cs" />
      <Compile Include="Assets\Scripts\CircuitElement.cs" />
@@ -56,8 +55,10 @@
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\GridPoint.cs" />
+     <Compile Include="Assets\Scripts\LevelSerializer.cs" />
      <Compile Include="Assets\Scripts\MathUtils.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
+     <Compile Include="Assets\Scripts\SerializationID.cs" />
      <Compile Include="Assets\Scripts\Simluator.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />

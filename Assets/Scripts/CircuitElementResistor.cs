@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 public class CircuitElementResistor : CircuitElement {
 	public GameObject 	resistorPrefab;
@@ -11,6 +15,18 @@ public class CircuitElementResistor : CircuitElement {
 	public void Start(){
 		Debug.Log ("CircuitElementResistor:Start()");
 	}
+	
+	override public void Save(BinaryWriter bw){
+		base.Save (bw);	
+		bw.Write(resistance);
+	}
+	
+	
+	override public void Load(BinaryReader br){
+		base.Load (br);	
+		
+		resistance = br.ReadSingle();
+	}	
 	
 	
 	// Analyse current connections and ensure they are valid for this object

@@ -1,5 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
+
+
 
 public class CircuitElement : MonoBehaviour {
 	
@@ -11,6 +17,26 @@ public class CircuitElement : MonoBehaviour {
 	// 3  - left 
 	public bool[] isConnected = new bool[4];
 	
+	
+	public virtual void Save(BinaryWriter bw){
+		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
+		////		bw.Write (orient);
+		for (int i = 0; i < 4; ++i){
+			bw.Write (isConnected[i]);
+		}
+	
+	
+	}
+		
+		
+	public 	virtual void Load(BinaryReader br){
+	// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
+//		orient = br.ReadInt32();
+		for (int i = 0; i < 4; ++i){
+			isConnected[i] = br.ReadBoolean();
+		}
+	}
+
 	public void CopyConnectionsFrom(CircuitElement other){
 		if (!other) return;	
 		for (int i = 0; i < 4; ++i){

@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class CircuitElementWire : CircuitElement {
 
@@ -19,6 +22,19 @@ public class CircuitElementWire : CircuitElement {
 		Debug.Log ("CircuitElementWire:Start()");
 	}
 	
+	
+	override public void Save(BinaryWriter bw){
+		base.Save (bw);	
+		bw.Write(resistance);
+	}
+	
+	
+	override public void Load(BinaryReader br){
+		base.Load (br);	
+		
+		resistance = br.ReadSingle();
+	}
+		
 	public override void SetupMesh(){
 		// Placeholder
 		GameObject newPrefab;
