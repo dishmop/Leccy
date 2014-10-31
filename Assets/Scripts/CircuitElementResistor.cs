@@ -92,7 +92,7 @@ public class CircuitElementResistor : CircuitElement {
 			orient = newOrient;
 			displayMesh.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
-	
+		HandleAnchorMeshes();
 	}	
 	
 	public override float GetResistance(int dir){

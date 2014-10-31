@@ -118,7 +118,7 @@ public class CircuitElementCell : CircuitElement {
 			orient = newOrient;
 			displayMesh.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
-		
+		HandleAnchorMeshes();	
 	}	
 	
 	// Use this for initialization

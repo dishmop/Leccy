@@ -10,6 +10,7 @@ using System.IO;
 public class CircuitElement : MonoBehaviour {
 	
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
+	public GameObject	anchorPrefab;
 	
 	// 0 - up
 	// 1 - right
@@ -17,6 +18,9 @@ public class CircuitElement : MonoBehaviour {
 	// 3  - left 
 	public bool[] isConnected = new bool[4];
 	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
+	
+	GameObject[]	anchors = new GameObject[4];
+	int				lastBakedHash = -1;
 	
 	
 	// Generally is any of our connections are baked, then the component itself is also baked
@@ -34,8 +38,51 @@ public class CircuitElement : MonoBehaviour {
 			bw.Write (isConnected[i]);
 			bw.Write(isBaked[i]);
 		}
+	}
 	
+	protected int CalcBakedHash(){
+		return (isBaked[0] ? 1 : 0) + (isBaked[1]  ? 2 : 0) + (isBaked[2] ? 4 : 0) + (isBaked[3] ? 8 : 0);
+	}
 	
+	protected void HandleAnchorMeshes(){
+		// Check if the baking has changed
+		int newBakedHash = CalcBakedHash();
+		if (newBakedHash != lastBakedHash){
+			lastBakedHash = newBakedHash;
+			
+			// Destory all the existing Anchor meshes
+			for (int i = 0; i < 4; ++i){
+				GameObject.Destroy(anchors[i]);
+			}
+			// Create new ones as needed
+			Vector3[] positions = new Vector3[4];
+			positions[0] = new Vector3(-0.5f, 0.5f, 0f);
+			positions[1] = new Vector3(0.5f, 0.5f, 0f);
+			positions[2] = new Vector3(0.5f, -0.5f, 0f);
+			positions[3] = new Vector3(-0.5f, -0.5f, 0f);
+			
+			Quaternion[] orientations = new Quaternion[4];
+			orientations[0] = Quaternion.Euler(0, 0, 270);
+			orientations[1] = Quaternion.Euler(0, 0, 180);
+			orientations[2] = Quaternion.Euler(0, 0, 90);
+			orientations[3] = Quaternion.Euler(0, 0, 0);
+			
+			for (int i = 0; i < 4; ++i){
+				if (isBaked[i]){
+					
+					GameObject newElement = Instantiate(
+						anchorPrefab, 
+						new Vector3(transform.position.x + positions[i].x, transform.position.y + positions[i].y, anchorPrefab.transform.position.z), 
+						orientations[i])
+						as GameObject;
+					newElement.transform.parent = transform;	
+					anchors[i] = newElement;
+				}
+			}
+			
+			
+			
+		}
 	}
 		
 		
@@ -61,7 +108,7 @@ public class CircuitElement : MonoBehaviour {
 	public virtual void ValidateConnections(){
 	}
 	
-	
+		
 	// Return true if it is ok to set this connection on this element
 	public virtual bool CanSetConnection(int dir, bool value){
 		return true;

@@ -16,22 +16,6 @@ Material:
     m_Floats:
       data:
         first:
-          name: _AlphaRadius
-        second: .464285731
-      data:
-        first:
-          name: _ColRadius
-        second: .357142836
-      data:
-        first:
-          name: _Spacing
-        second: 2
-      data:
-        first:
-          name: _DoBalls
-        second: 0
-      data:
-        first:
           name: _Speed0
         second: 0
       data:
@@ -46,6 +30,22 @@ Material:
         first:
           name: _Speed3
         second: 4
+      data:
+        first:
+          name: _AlphaRadius
+        second: .464285731
+      data:
+        first:
+          name: _ColRadius
+        second: .357142836
+      data:
+        first:
+          name: _Spacing
+        second: 2
+      data:
+        first:
+          name: _DoBalls
+        second: 0
       data:
         first:
           name: _Seperation0

@@ -41,9 +41,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orient: 0
+  anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   isConnected: 00000000
   isBaked: 00000000
-  cellPrefab: {fileID: 100004, guid: b8b4f099dd0854ca18774cc31fc5b5c8, type: 2}
+  cellPrefab: {fileID: 100006, guid: b8b4f099dd0854ca18774cc31fc5b5c8, type: 2}
   displayMesh: {fileID: 0}
   invertOrient: 0
   voltage: 1

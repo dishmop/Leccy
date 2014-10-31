@@ -127,6 +127,7 @@ public class CircuitElementWire : CircuitElement {
 			orient = newOrient;
 			currentDisplay.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
+		HandleAnchorMeshes();
 	}	
 	
 	void Update(){

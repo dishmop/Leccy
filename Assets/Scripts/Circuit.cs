@@ -701,7 +701,7 @@ public class Circuit : MonoBehaviour {
 		if (elements != null){
 			for (int x = 0; x < elements.GetLength (0); ++x){
 				for (int y = 0; y < elements.GetLength(1); ++y){
-					UnityEngine.Object.Destroy(elements[x,y]);
+					GameObject.Destroy(elements[x,y]);
 				}
 			}
 		}

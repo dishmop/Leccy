@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orient: 0
+  anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   isConnected: 00000000
   isBaked: 00000000
   resistorPrefab: {fileID: 100000, guid: 759864fa2c23e4d31b559388af516bc5, type: 2}

@@ -41,17 +41,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orient: 0
+  anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   isConnected: 00000000
   isBaked: 00000000
-  wirePointPrefab: {fileID: 100000, guid: 304f2376f6fdf40c9a4863111e797161, type: 2}
-  wireStraightDownPrefab: {fileID: 100000, guid: 75c10e5826ebe4fb99a1a16adb0f5638,
+  wirePointPrefab: {fileID: 100004, guid: 304f2376f6fdf40c9a4863111e797161, type: 2}
+  wireStraightDownPrefab: {fileID: 100004, guid: 75c10e5826ebe4fb99a1a16adb0f5638,
     type: 2}
-  wireDownLeftCornerPrefab: {fileID: 100000, guid: 20e6218b509b441bfafbbd3c59be5f57,
+  wireDownLeftCornerPrefab: {fileID: 100004, guid: 20e6218b509b441bfafbbd3c59be5f57,
     type: 2}
-  wireDeadEndDownPrefab: {fileID: 100000, guid: 018c466a9f2794ae8b834ac70ac2457d,
+  wireDeadEndDownPrefab: {fileID: 100004, guid: 018c466a9f2794ae8b834ac70ac2457d,
     type: 2}
-  wireCrossPrefab: {fileID: 100000, guid: 587480b2311ef41309cafc16d8e0e198, type: 2}
-  wireTJuncFromTopPrefab: {fileID: 100000, guid: d5c065e672ccc44a09ed53b516d216e3,
+  wireCrossPrefab: {fileID: 100004, guid: 587480b2311ef41309cafc16d8e0e198, type: 2}
+  wireTJuncFromTopPrefab: {fileID: 100004, guid: d5c065e672ccc44a09ed53b516d216e3,
     type: 2}
   currentPrefab: {fileID: 0}
   currentDisplay: {fileID: 0}
