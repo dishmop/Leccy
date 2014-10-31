@@ -8,8 +8,11 @@ public class UI : MonoBehaviour {
 	public GameObject 	levelSerialiserGO;
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
+	public string 		levelToSave = "DefaultLevel";
+	public TextAsset	levelToLoad;
+	public bool			enableEditMode = true;
 	
-	public Rect			toolbarRect = new Rect(25, 25, 500, 30);
+	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
 
 
 	Grid				grid;
@@ -23,12 +26,14 @@ public class UI : MonoBehaviour {
 		kErase,
 		kClearAll,
 		kLoadLevel,
-		kSaveLevel
+		kSaveLevel,
+		kBakeLevel,
+		kUnbakeLevel
 	};
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level", "Bake Level", "Unbake Level"};
 
 		
 	// Use this for initialization
@@ -94,7 +99,7 @@ public class UI : MonoBehaviour {
 			
 			// If the point we are drawing to has changed and the new one is valid
 			if (!oldDrawPoint.IsEqual(newDrawPoint) && newDrawPoint.IsValid()){
-			
+						
 				// If drawing wires
 				if (inputMode == InputMode.kWires){
 					if (oldDrawPoint.IsValid ()){
@@ -149,6 +154,7 @@ public class UI : MonoBehaviour {
 	
 	}
 	
+	
 	void OnGUI () {
 		InputMode oldInputMode = inputMode;
 		inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, toolbarStrings);
@@ -157,14 +163,22 @@ public class UI : MonoBehaviour {
 			inputMode = oldInputMode;
 		}
 		else if (inputMode == InputMode.kLoadLevel){
-			levelSerializer.LoadLevel("playerinfo.dat");
+			levelSerializer.LoadLevel(levelToLoad.name + ".bytes");
 			inputMode = oldInputMode;
 		}
 		else if (inputMode == InputMode.kSaveLevel){
-			levelSerializer.SaveLevel("playerinfo.dat");
+			levelSerializer.SaveLevel(levelToSave + ".bytes");
 			inputMode = oldInputMode;
 		}
-		
+		else if (inputMode == InputMode.kBakeLevel){
+			circuit.Bake();
+			inputMode = oldInputMode;
+		}				
+		else if (inputMode == InputMode.kUnbakeLevel){
+			circuit.Unbake();
+			inputMode = oldInputMode;
+		}				
+			
 	}
 	
 }

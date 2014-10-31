@@ -76,7 +76,7 @@
 			v2f o;
 			
 			// Changes thickness of wires - Must change this in two places!
-			float gamma =0.5f;
+			float gamma =1f;
 			if (v.vertex.x > 0)
 				v.vertex.x =  0.5 * pow(2 * v.vertex.x, gamma);
 			else
@@ -240,7 +240,7 @@
 		float4 frag(v2f i) : COLOR
 		{
 			// Changes thickness of wires - Must change this in two places!
-			float gamma = 0.5;
+			float gamma = 1;
 			
 			float wireThickness = 2 * 0.5 * pow(2 * 0.05, gamma);
 			
@@ -321,8 +321,9 @@
 		//	newOrigin.x = originOffset.x + originOffset.x  * sin(1000*_Time.y/(2*3.14159));
 			
 			// Move so that origin is over correct place in texture and scale up so there is alarge gap between unit squares
-			float4 scaledUV = (timeModdedUV - originOffset) * _Spacing;
-			float4 lastScaledUV = (lastTimeModdedUV - originOffset) * _Spacing;
+			float4 vecSpacing = float4(_Spacing * 3, _Spacing, _Spacing, _Spacing);
+			float4 scaledUV = (timeModdedUV - originOffset) * vecSpacing;
+			float4 lastScaledUV = (lastTimeModdedUV - originOffset) * vecSpacing;
 			
 			scaledUV.y *= seperationParam;
 			

@@ -504,11 +504,14 @@ MonoBehaviour:
   oldDrawPoint:
     x: -1
     y: -1
+  levelToSave: DefaultLevel
+  levelToLoad: {fileID: 4900000, guid: b21634a8a8e9043958710efb29de7dbc, type: 3}
+  enableEditMode: 1
   toolbarRect:
     serializedVersion: 2
     x: 25
     y: 25
-    width: 500
+    width: 1000
     height: 30
   inputMode: 0
 --- !u!4 &1482048799

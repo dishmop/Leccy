@@ -162,13 +162,17 @@ public class Simluator : MonoBehaviour {
 		loops.Add (new List<BranchAddress>());
 		return loops.Count-1;
 	}
+
 	
 	
 	// This method will only work if there are no wires crossing over each other
 	// It does it in a slightly odd way because it needs to also group the loops by disjoint circuits
 	void FindLoops(){
-		int groupId = 0;
-		
+		if (!circuit.Validate()){
+			Debug.Log("Circuit is invalid and cannot be simulated");
+			return;
+		}
+		int groupId = 0;		
 		// Can the grid until we find a connector which has not yet  been traversed
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){

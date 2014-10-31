@@ -33,7 +33,7 @@ Material:
       data:
         first:
           name: _Speed0
-        second: 2.67857146
+        second: 0
       data:
         first:
           name: _Speed1
@@ -73,7 +73,7 @@ Material:
       data:
         first:
           name: _Voltage0
-        second: -0
+        second: -2.1500001
       data:
         first:
           name: _Voltage1

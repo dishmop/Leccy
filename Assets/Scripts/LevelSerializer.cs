@@ -19,7 +19,7 @@ public class LevelSerializer : MonoBehaviour {
 	
 
 	public void SaveLevel(string filename){
-		FileStream file = File.Create(Application.persistentDataPath + "/" + filename);
+		FileStream file = File.Create(BuildFullPath(filename));
 		BinaryWriter bw = new BinaryWriter(file);
 		
 		grid.Save(bw);
@@ -27,12 +27,19 @@ public class LevelSerializer : MonoBehaviour {
 
 		file.Close();
 	}
+	
+	
+	string BuildFullPath(string filename){
+		return Application.dataPath + "/Levels/" + filename;
+		//return Application.persistentDataPath + "/" + filename;
+		
+	}
 
 
 	
 	public void LoadLevel(string filename){
-		if (File.Exists(Application.persistentDataPath + "/" + filename)){
-			FileStream file = File.OpenRead(Application.persistentDataPath + "/" + filename);
+		if (File.Exists(BuildFullPath(filename))){
+			FileStream file = File.OpenRead(BuildFullPath(filename));
 			BinaryReader br = new BinaryReader(file);
 			
 			grid.Load(br);

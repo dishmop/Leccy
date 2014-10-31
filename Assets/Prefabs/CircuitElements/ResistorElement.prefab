@@ -42,6 +42,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orient: 0
   isConnected: 00000000
+  isBaked: 00000000
   resistorPrefab: {fileID: 100000, guid: 759864fa2c23e4d31b559388af516bc5, type: 2}
   displayMesh: {fileID: 0}
   resistance: 1

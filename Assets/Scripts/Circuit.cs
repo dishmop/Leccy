@@ -97,6 +97,39 @@ public class Circuit : MonoBehaviour {
 			GetElement (new GridPoint(data.x, data.y)).SetupMesh();
 		}
 	}
+	
+	public void Bake(){
+		if (elements != null){
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					GridPoint thisPoint = new GridPoint(x,y);
+					if (ElementExists(thisPoint)){
+						for (int i = 0; i < 4; ++i){
+							GetElement(thisPoint).isBaked[i] = GetElement(thisPoint).isConnected[i];
+						}
+					}
+					
+				}
+			}
+		}
+	}
+	
+	public void Unbake(){
+		if (elements != null){
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					GridPoint thisPoint = new GridPoint(x,y);
+					if (ElementExists(thisPoint)){
+						for (int i = 0; i < 4; ++i){
+							GetElement(thisPoint).isBaked[i] = false;
+							
+						}
+					}
+				}
+			}
+		}
+	}
+									
 		
 	
 	public void AddCell(GridPoint point){
@@ -125,21 +158,61 @@ public class Circuit : MonoBehaviour {
 		}
 
 			
-	}	
+	}
+	
+	public bool Validate(){
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				if (ElementExists (thisPoint)){
+					CircuitElement thisElement = GetElement (thisPoint);
+					for (int i = 0; i < 4; ++i){
+						if (thisElement.isConnected[i]){
+							GridPoint otherPoint = thisPoint + offsets[i];
+							if (!IsPointInGrid(otherPoint)) return false;
+							if (!ElementExists(otherPoint)) return false;
+							if (GetElement (otherPoint).isConnected[CircuitElement.CalcInvDir(i)] == false) return false;
+							
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 	
 	
 	void AddStraighComponent(GridPoint point, GameObject prefab){
 	
 		if (!IsPointInGrid(point)) return;
 		
-		// If there is already a striaght component here, then just send it an on-click message and return
-		if (ElementExists (point) && 
-			UnityEngine.Object.ReferenceEquals(GetElement (point).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
-				GetElement (point).OnClick();
-				return;
-			}
+		// If there is a component here which is already baked then cannot do anything else
+		if (ElementExists (point) && GetElement (point).IsComponentBaked()) return;
+		
+		// If there is already the same kind of straight component here, then just send it an on-click message and return
+		if (ElementExists (point) && UnityEngine.Object.ReferenceEquals(GetElement (point).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
+			GetElement (point).OnClick();
+			return;
+		}
+		
+		// Do a test to ensure that there are no baking restictions that stop us placing it here at all
+		GridPoint upPoint = point + offsets[kUp];
+		GridPoint downPoint = point + offsets[kDown];
+		GridPoint leftPoint = point + offsets[kLeft];
+		GridPoint rightPoint = point + offsets[kRight];
 		
 		
+		bool upOK = 	(!ElementExists(upPoint)    || !GetElement (upPoint).IsComponentBaked()    || GetElement (upPoint).CanSetConnection(kDown, true));
+		bool downOK = 	(!ElementExists(downPoint)  || !GetElement (downPoint).IsComponentBaked()  || GetElement (downPoint).CanSetConnection(kUp, true));
+		bool leftOK = 	(!ElementExists(leftPoint)  || !GetElement (leftPoint).IsComponentBaked()  || GetElement (leftPoint).CanSetConnection(kRight, true));
+		bool rightOK = 	(!ElementExists(rightPoint) || !GetElement (rightPoint).IsComponentBaked() || GetElement (rightPoint).CanSetConnection(kLeft, true));
+		
+		bool upDownOK = (upOK && downOK);
+		bool leftRightOK = (leftOK && rightOK);
+		
+		// If we can't place one up and down or we can't place one left and right then we can't place once at all.
+		if (!upDownOK && !upDownOK) return;
+			
 		// Now create our new resistor
 		GameObject newElement = Instantiate(
 			prefab, 
@@ -148,31 +221,58 @@ public class Circuit : MonoBehaviour {
 			as GameObject;
 		newElement.transform.parent = transform;	
 		
+	
 		
 		// Copy any connections already there to the new resistor component
-		// We clean them up aferwards
+		// We clean them up afterwards
 		if (ElementExists (point)){
 			newElement.GetComponent<CircuitElement>().CopyConnectionsFrom(GetElement (point));
 			RawRemoveElement (point);
 		}	
 		elements[point.x, point.y] = newElement;
 		
+		CircuitElement  thisElement = GetElement(point);
+		// If due to baking constraints, we are only allowed to go verically or horizontally, then simply place it
+		// Otherwise do a whoel load of complex logic to decern where to put it
+		if (!upDownOK){
+			thisElement.isConnected[kLeft] = true;
+			thisElement.isConnected[kRight] = true;
+			if (ElementExists (leftPoint)) GetElement (leftPoint).isConnected[kRight] = true;
+			if (ElementExists (rightPoint)) GetElement (rightPoint).isConnected[kLeft] = true;
+			
+			thisElement.SetupMesh();	
+			return;
+		}
+		if (!leftRightOK){
+			thisElement.isConnected[kUp] = true;
+			thisElement.isConnected[kDown] = true;
+			if (ElementExists (upPoint)) GetElement (upPoint).isConnected[kDown] = true;
+			if (ElementExists (downPoint)) GetElement (downPoint).isConnected[kUp] = true;
+			
+			thisElement.SetupMesh();	
+			return;
+		}	
+
 		// If we have not got any connections, then we should have a look at our neighbours
 		// and connect to any which are close enough
-		if (GetElement(point).CountNumConnections() == 0){
+		if (thisElement.CountNumConnections() == 0){
 			for (int i = 0; i < 4; ++i){
 				GridPoint neigbourPoint = point + offsets[i];
 				if (IsPointInGrid(neigbourPoint) && ElementExists(neigbourPoint)){
 					// Check that we can add ourselves
 					if (GetElement (neigbourPoint).CanSetConnection(CircuitElement.CalcInvDir(i), true)){
-						GetElement (point).isConnected[i] = true;
+						// Check the connection at the other side to see if it is a baked component who cannot make this connection
+						GridPoint oppositPoint = point + offsets[CircuitElement.CalcInvDir(i)];
+						if (IsPointInGrid(oppositPoint) && ElementExists (oppositPoint) && (!GetElement(oppositPoint).IsComponentBaked() || GetElement(oppositPoint).CanSetConnection(i, true))){
+							thisElement.isConnected[i] = true;
+						}
 					}
 				}
 			}
 		}
 		// If we still don't have any, see if there are any places we CAN'T connect to
 		// (this is a pretty horrible bit of code)
-		if (GetElement(point).CountNumConnections() == 0){
+		if (thisElement.CountNumConnections() == 0){
 			for (int i = 0; i < 4; ++i){
 				GridPoint neigbourPoint = point + offsets[i];
 				if (IsPointInGrid(neigbourPoint) && ElementExists(neigbourPoint)){
@@ -186,7 +286,7 @@ public class Circuit : MonoBehaviour {
 							if (!ElementExists (newNeightbour1) || GetElement (newNeightbour1).CanSetConnection(CircuitElement.CalcInvDir((i + 1) % 4), true)) ++ok;
 							if (!ElementExists (newNeightbour2) || GetElement (newNeightbour2).CanSetConnection(CircuitElement.CalcInvDir((i + 3) % 4), true)) ++ok;
 						}
-						if (ok == 2) GetElement (point).isConnected[(i + 1) % 4] = true;
+						if (ok == 2) thisElement.isConnected[(i + 1) % 4] = true;
 						break;
 					}
 				}
@@ -208,15 +308,24 @@ public class Circuit : MonoBehaviour {
 		
 		if (!IsPointInGrid(nextPoint)) return;
 		
-		int dir = CalcNeighbourDir(nextPoint, prevPoint);
+		// If there is a component here which is already baked then cannot do anything else
+		if (ElementExists (nextPoint) && GetElement (nextPoint).IsComponentBaked()) return;
 		
-		// Can't currently deal with putting resistor between two distanct points
+		
+		int dir = CalcNeighbourDir(prevPoint, nextPoint);
+		
+		// Can't currently deal with putting resistor between two distant points
 		if (dir == kErr) return;
+		
+		// Check if there is a baking restriction
+		GridPoint furtherPoint = nextPoint + offsets[dir];
+		if (!IsPointInGrid(furtherPoint)) return;
+		if (ElementExists (furtherPoint) && GetElement(furtherPoint).IsComponentBaked() && !GetElement (furtherPoint).CanSetConnection(CircuitElement.CalcInvDir(dir), true)) return;
+		if (ElementExists (prevPoint) && GetElement (prevPoint).IsComponentBaked() && !GetElement(prevPoint).CanSetConnection(dir, true)) return;
 		
 		// If there is no element here or the one that is here is not a resistor, then 
 		// make a new element and add it into the map
-		if (!ElementExists (nextPoint) || 
-		    !UnityEngine.Object.ReferenceEquals(GetElement (nextPoint).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
+		if (!ElementExists (nextPoint) ||  !UnityEngine.Object.ReferenceEquals(GetElement (nextPoint).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
 			GameObject newElement = Instantiate(
 				prefab, 
 				new Vector3(nextPoint.x, nextPoint.y, prefab.transform.position.z), 
@@ -263,7 +372,7 @@ public class Circuit : MonoBehaviour {
 		elements[point.x, point.y] = newElement;
 		GetElement(point).SetupMesh();			
 	}
-		
+	
 	// Circuit modification interface
 	public void AddWire(GridPoint point){
 	
@@ -271,6 +380,10 @@ public class Circuit : MonoBehaviour {
 		
 		// If there is already a wire here, then nothing to do
 		if (ElementExists (point) && GetElement (point) as CircuitElementWire) return;
+		
+		// Or if the element exists, it is not a wire, but some of its connections are baked, then nothing to do
+		if (ElementExists (point) && GetElement(point).IsComponentBaked()) return;
+		
 		
 		GameObject newElement = Instantiate(
 			wireElementPrefab, 
@@ -302,6 +415,9 @@ public class Circuit : MonoBehaviour {
 	void AddWireRaw(GridPoint prevPoint, GridPoint nextPoint){
 	
 		if (!IsPointInGrid(nextPoint)) return;
+		
+		// If the place we are trying to connect to has a baked non-wire element then exit
+		if (ElementExists(nextPoint) && (GetElement (nextPoint) as CircuitElementWire == null) && GetElement(nextPoint).IsComponentBaked()) return;
 		
 		// First we just add the new point (the old oneshould already be there)
 		AddWire(nextPoint);
@@ -338,7 +454,10 @@ public class Circuit : MonoBehaviour {
 		int thisDir = CalcNeighbourDir(thisPoint, otherPoint);
 		int otherDir = CircuitElement.CalcInvDir(thisDir);
 		
-		// If we can' set these connection to removed, then replace this elment with a wire
+		// If either of them are baked, then nothing to do
+		if (thisElement.isBaked[thisDir] || otherElement.isBaked[otherDir]) return;
+		
+		// If we can't set these connection to removed, then replace this elment with a wire
 		if (!thisElement.CanSetConnection(thisDir, false)){
 			AddWire (thisPoint);
 			thisElement = GetElement (thisPoint);	
@@ -365,14 +484,22 @@ public class Circuit : MonoBehaviour {
 	
 	
 	public void Erase(GridPoint point){
+	
+		if (!IsPointInGrid(point) || !ElementExists (point)) return;
+		
+		CircuitElement thisElement = GetElement (point);
 		
 		// First remove connections
 		for (int i = 0; i < 4; ++i){
+			// If the connection we are trying to remove is baked, then do not remove it
+			if (thisElement.isBaked[i]) continue;
+			
 			GridPoint otherPoint = point + offsets[i];
 			
 			if (IsPointInGrid(otherPoint) && ElementExists(otherPoint))
 			{
 				CircuitElement otherElement = GetElement (otherPoint);
+				
 				// If we can't remove this connection, replace this neighbour with a wire 
 				if (!otherElement.CanSetConnection(CircuitElement.CalcInvDir(i), false)){
 					AddWire (otherPoint);
@@ -381,18 +508,24 @@ public class Circuit : MonoBehaviour {
 						
 				otherElement.isConnected[CircuitElement.CalcInvDir(i)] = false;
 				if (otherElement.CountNumConnections() == 0) RawRemoveElement(otherPoint);
+				
+				// Remove the connect on this element to
+				thisElement.isConnected[i] = false;
 			}
 			
 		}
 		
+		// If we have managed to remove all out connections, then remove the elment
+		
 		// Now remove the element
-		if (IsPointInGrid(point))
+		if (!thisElement.HasAnyConnections(true, true, true,true)){
 			RawRemoveElement(point);
+		}
 		
 	}
 	
 	// Given a circuit element (with a set of connections) - this ensures the neighbours
-	// all conform to these connections. 
+	// all conform to these connections. If 
 	void ValidateNeighbourConnections(GridPoint point){
 		CircuitElement thisElement = GetElement (point);
 		// Cycle through the 4 neighbours

@@ -16,13 +16,23 @@ public class CircuitElement : MonoBehaviour {
 	// 2 - down
 	// 3  - left 
 	public bool[] isConnected = new bool[4];
+	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
 	
+	
+	// Generally is any of our connections are baked, then the component itself is also baked
+	public bool IsComponentBaked(){
+		for (int i = 0; i < 4; ++i){
+			if (isBaked[i]) return true;
+		}
+		return false;
+	}
 	
 	public virtual void Save(BinaryWriter bw){
 		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
 		////		bw.Write (orient);
 		for (int i = 0; i < 4; ++i){
 			bw.Write (isConnected[i]);
+			bw.Write(isBaked[i]);
 		}
 	
 	
@@ -34,6 +44,7 @@ public class CircuitElement : MonoBehaviour {
 //		orient = br.ReadInt32();
 		for (int i = 0; i < 4; ++i){
 			isConnected[i] = br.ReadBoolean();
+			isBaked[i] = br.ReadBoolean();
 		}
 	}
 
@@ -66,6 +77,13 @@ public class CircuitElement : MonoBehaviour {
 				isConnected[2] == down &&
 				isConnected[3] == left;
 	}
+	
+	public bool HasAnyConnections(bool up, bool right, bool down, bool left){
+		return 	isConnected[0] == up ||
+				isConnected[1] == right ||
+				isConnected[2] == down ||
+				isConnected[3] == left;
+	}	
 	
 	public int CountNumConnections(){
 		int count = 0;

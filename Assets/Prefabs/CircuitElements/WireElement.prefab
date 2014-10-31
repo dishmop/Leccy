@@ -42,6 +42,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orient: 0
   isConnected: 00000000
+  isBaked: 00000000
   wirePointPrefab: {fileID: 100000, guid: 304f2376f6fdf40c9a4863111e797161, type: 2}
   wireStraightDownPrefab: {fileID: 100000, guid: 75c10e5826ebe4fb99a1a16adb0f5638,
     type: 2}
