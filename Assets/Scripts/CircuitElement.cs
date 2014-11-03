@@ -56,16 +56,16 @@ public class CircuitElement : MonoBehaviour {
 			}
 			// Create new ones as needed
 			Vector3[] positions = new Vector3[4];
-			positions[0] = new Vector3(-0.5f, 0.5f, 0f);
-			positions[1] = new Vector3(0.5f, 0.5f, 0f);
-			positions[2] = new Vector3(0.5f, -0.5f, 0f);
-			positions[3] = new Vector3(-0.5f, -0.5f, 0f);
+			positions[0] = isConnected[0] ? new Vector3(-0.5f, 0.5f, 0f) : new Vector3(0f, 0.5f, 0f);
+			positions[1] = isConnected[1] ? new Vector3(0.5f, 0.5f, 0f) : new Vector3(0.5f, 0f, 0f);
+			positions[2] = isConnected[2] ? new Vector3(0.5f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
+			positions[3] = isConnected[3] ? new Vector3(-0.5f, -0.5f, 0f) : new Vector3(-0.5f, 0f, 0f);
 			
 			Quaternion[] orientations = new Quaternion[4];
-			orientations[0] = Quaternion.Euler(0, 0, 270);
-			orientations[1] = Quaternion.Euler(0, 0, 180);
-			orientations[2] = Quaternion.Euler(0, 0, 90);
-			orientations[3] = Quaternion.Euler(0, 0, 0);
+			orientations[0] = isConnected[0] ? Quaternion.Euler(0, 0, 270) : Quaternion.Euler(0, 0, 180);
+			orientations[1] = isConnected[1] ? Quaternion.Euler(0, 0, 180) : Quaternion.Euler(0, 0, 90);
+			orientations[2] = isConnected[2] ? Quaternion.Euler(0, 0, 90) : Quaternion.Euler(0, 0, 0);
+			orientations[3] = isConnected[3] ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 0, 270);
 			
 			for (int i = 0; i < 4; ++i){
 				if (isBaked[i]){
@@ -111,7 +111,7 @@ public class CircuitElement : MonoBehaviour {
 		
 	// Return true if it is ok to set this connection on this element
 	public virtual bool CanSetConnection(int dir, bool value){
-		return true;
+		return !isBaked[dir] || isConnected[dir] == value;
 	}
 	
 	public virtual void OnClick(){

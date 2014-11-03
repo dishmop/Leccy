@@ -27,13 +27,14 @@ public class UI : MonoBehaviour {
 		kClearAll,
 		kLoadLevel,
 		kSaveLevel,
-		kBakeLevel,
-		kUnbakeLevel
+		kBakeConnect,
+		kBakeAll,
+		kUnbake
 	};
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level", "Bake Level", "Unbake Level"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
@@ -170,11 +171,15 @@ public class UI : MonoBehaviour {
 			levelSerializer.SaveLevel(levelToSave + ".bytes");
 			inputMode = oldInputMode;
 		}
-		else if (inputMode == InputMode.kBakeLevel){
-			circuit.Bake();
+		else if (inputMode == InputMode.kBakeConnect){
+			circuit.BakeConnect();
 			inputMode = oldInputMode;
-		}				
-		else if (inputMode == InputMode.kUnbakeLevel){
+		}	
+		else if (inputMode == InputMode.kBakeAll){
+			circuit.BakeAll();
+			inputMode = oldInputMode;
+		}						
+		else if (inputMode == InputMode.kUnbake){
 			circuit.Unbake();
 			inputMode = oldInputMode;
 		}				

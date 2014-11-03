@@ -98,7 +98,7 @@ public class Circuit : MonoBehaviour {
 		}
 	}
 	
-	public void Bake(){
+	public void BakeConnect(){
 		if (elements != null){
 			for (int x = 0; x < elements.GetLength (0); ++x){
 				for (int y = 0; y < elements.GetLength(1); ++y){
@@ -113,6 +113,23 @@ public class Circuit : MonoBehaviour {
 			}
 		}
 	}
+	
+	public void BakeAll(){
+		if (elements != null){
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					GridPoint thisPoint = new GridPoint(x,y);
+					// If we have an element here, then bake all connections
+					if (ElementExists(thisPoint)){
+						for (int i = 0; i < 4; ++i){
+							GetElement(thisPoint).isBaked[i] = true;
+						}
+					}
+					
+				}
+			}
+		}
+	}	
 	
 	public void Unbake(){
 		if (elements != null){
@@ -416,16 +433,20 @@ public class Circuit : MonoBehaviour {
 	
 		if (!IsPointInGrid(nextPoint)) return;
 		
-		// If the place we are trying to connect to has a baked non-wire element then exit
-		if (ElementExists(nextPoint) && (GetElement (nextPoint) as CircuitElementWire == null) && GetElement(nextPoint).IsComponentBaked()) return;
+		int dir = CalcNeighbourDir(prevPoint, nextPoint);
+		if (dir == kErr){
+			Debug.LogError("Trying to connect distant points?");
+		}
+		// If the place we are trying to connect to has a baked element which will not let us connect
+		if (ElementExists(nextPoint) && GetElement(nextPoint).IsComponentBaked() && !GetElement (nextPoint).CanSetConnection(CircuitElement.CalcInvDir(dir), true)) return;
 		
+	
 		// First we just add the new point (the old oneshould already be there)
 		AddWire(nextPoint);
 		
 		if (IsPointInGrid(prevPoint)){
-			// Check if this new point is a neighbour and if so, add connection nextPoint both points
-			int dir = CalcNeighbourDir(prevPoint, nextPoint);
-			if (dir != kErr){
+			if (GetElement (prevPoint).CanSetConnection(dir, true))
+			{
 				GetElement (prevPoint).isConnected[dir] = true;
 				GetElement (nextPoint).isConnected[CircuitElement.CalcInvDir (dir)] = true;
 			}
