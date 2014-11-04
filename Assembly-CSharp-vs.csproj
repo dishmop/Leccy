@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\Circuit.cs" />
      <Compile Include="Assets\Scripts\CircuitElement.cs" />
      <Compile Include="Assets\Scripts\CircuitElementCell.cs" />
+     <Compile Include="Assets\Scripts\CircuitElementExit.cs" />
      <Compile Include="Assets\Scripts\CircuitElementResistor.cs" />
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />
@@ -59,7 +60,7 @@
      <Compile Include="Assets\Scripts\MathUtils.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />
-     <Compile Include="Assets\Scripts\Simluator.cs" />
+     <Compile Include="Assets\Scripts\Simulator.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
@@ -74,6 +75,7 @@
      <None Include="Assets\Shaders\UVAnim.shader" />
      <None Include="Assets\Shaders\PlasmaBalls.shader" />
      <None Include="Assets\Tutorial_1\BlendGreyLightmap.shader" />
+     <None Include="Assets\Shaders\LitSign.shader" />
      <None Include="Assets\Shaders\noiseSimplex.cginc" />
      <None Include="Assets\Tutorial_1\VertexColorLerp.shader" />
   </ItemGroup>

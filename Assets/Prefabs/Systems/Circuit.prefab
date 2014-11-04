@@ -43,6 +43,7 @@ MonoBehaviour:
   cellElementPrefab: {fileID: 100000, guid: 8ce9f5c271da94170adc35a2e924d3c1, type: 2}
   resistorElementPrefab: {fileID: 100000, guid: cb12f5f1d86954580a018b0475acf34d,
     type: 2}
+  exitElementPrefab: {fileID: 100000, guid: 571dfdbebada94c599988d416080dd63, type: 2}
   gridGO: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:

@@ -10,6 +10,7 @@ public class Circuit : MonoBehaviour {
 	public GameObject wireElementPrefab;	
 	public GameObject cellElementPrefab;	
 	public GameObject resistorElementPrefab;	
+	public GameObject exitElementPrefab;	
 	public GameObject gridGO;
 
 	
@@ -93,6 +94,9 @@ public class Circuit : MonoBehaviour {
 			else if (data.id == resistorElementPrefab.GetComponent<SerializationID>().id){
 				RawAddElement(new GridPoint(data.x, data.y), resistorElementPrefab);
 			}
+			else if (data.id == exitElementPrefab.GetComponent<SerializationID>().id){
+				RawAddElement(new GridPoint(data.x, data.y), exitElementPrefab);
+			}			
 			GetElement (new GridPoint(data.x, data.y)).Load(br);
 			GetElement (new GridPoint(data.x, data.y)).SetupMesh();
 		}
@@ -158,6 +162,22 @@ public class Circuit : MonoBehaviour {
 		for (int i = 0; i < path.GetLength(0)-1; ++i){
 			AddStraighComponent( path[i], path[i+1], cellElementPrefab);
 		}
+		
+	}	
+	
+	
+	
+	
+	public void AddExit(GridPoint point){
+		AddStraighComponent(point, exitElementPrefab);
+	}
+	
+	public void AddExit(GridPoint prevPoint, GridPoint nextPoint){
+		GridPoint[] path = CalcGridPath(prevPoint, nextPoint);
+		for (int i = 0; i < path.GetLength(0)-1; ++i){
+			AddStraighComponent( path[i], path[i+1], exitElementPrefab);
+		}
+		
 		
 	}	
 	
@@ -237,6 +257,7 @@ public class Circuit : MonoBehaviour {
 			Quaternion.identity)
 			as GameObject;
 		newElement.transform.parent = transform;	
+		newElement.GetComponent<CircuitElement>().SetGridPoint(point);
 		
 	
 		
@@ -349,6 +370,7 @@ public class Circuit : MonoBehaviour {
 				Quaternion.identity)
 				as GameObject;
 			newElement.transform.parent = transform;	
+			newElement.GetComponent<CircuitElement>().SetGridPoint(nextPoint);
 		
 			
 			// Copy any connections already there to the new resistor component
@@ -384,6 +406,7 @@ public class Circuit : MonoBehaviour {
 			Quaternion.identity)
 			as GameObject;
 		newElement.transform.parent = transform;
+		newElement.GetComponent<CircuitElement>().SetGridPoint(point);
 
 		
 		elements[point.x, point.y] = newElement;

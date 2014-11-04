@@ -23,6 +23,7 @@ public class UI : MonoBehaviour {
 		kWires,
 		kCells,
 		kResistors,
+		kExits,
 		kErase,
 		kClearAll,
 		kLoadLevel,
@@ -34,7 +35,7 @@ public class UI : MonoBehaviour {
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Eraser", "Clear all", "Load Level", "Save Level", "Bake connect", "Bake All", "Unbake"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Exits", "Eraser", "Clear all", "Load Level", "Save Level", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
@@ -110,16 +111,7 @@ public class UI : MonoBehaviour {
 						circuit.AddWire(newDrawPoint);
 					}
 				}
-				// If drawing resistors
-				if (inputMode == InputMode.kResistors){
-					if (oldDrawPoint.IsValid ()){
-						circuit.AddResistor(oldDrawPoint, newDrawPoint);
-					}
-					else{
-						circuit.AddResistor(newDrawPoint);
-					}
-					
-				}
+
 				// If drawing cells
 				if (inputMode == InputMode.kCells){
 					if (oldDrawPoint.IsValid ()){
@@ -130,7 +122,26 @@ public class UI : MonoBehaviour {
 					}
 					
 				}				
-				
+				// If drawing resistors
+				if (inputMode == InputMode.kResistors){
+					if (oldDrawPoint.IsValid ()){
+						circuit.AddResistor(oldDrawPoint, newDrawPoint);
+					}
+					else{
+						circuit.AddResistor(newDrawPoint);
+					}
+					
+				}
+				// If drawing Exits
+				if (inputMode == InputMode.kExits){
+					if (oldDrawPoint.IsValid ()){
+						circuit.AddExit(oldDrawPoint, newDrawPoint);
+					}
+					else{
+						circuit.AddExit(newDrawPoint);
+					}
+					
+				}
 				// If erasing
 				if (inputMode == InputMode.kErase){
 					if (oldDrawPoint.IsValid ()){

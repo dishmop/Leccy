@@ -19,6 +19,8 @@ public class CircuitElement : MonoBehaviour {
 	public bool[] isConnected = new bool[4];
 	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
 	
+	protected GridPoint	thisPoint;
+	
 	GameObject[]	anchors = new GameObject[4];
 	int				lastBakedHash = -1;
 	
@@ -29,6 +31,10 @@ public class CircuitElement : MonoBehaviour {
 			if (isBaked[i]) return true;
 		}
 		return false;
+	}
+	
+	public void SetGridPoint(GridPoint thisPoint){
+		this.thisPoint = thisPoint;
 	}
 	
 	public virtual void Save(BinaryWriter bw){
@@ -163,5 +169,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	public virtual void SetupMesh(){
 	}
+	
+
 	
 }

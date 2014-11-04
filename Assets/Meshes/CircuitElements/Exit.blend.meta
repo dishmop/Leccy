@@ -8,23 +8,43 @@ ModelImporter:
     100004: Plane_001
     100006: Plane_002
     100008: Plane_003
+    100010: Outline
+    100012: ResistorWire
+    100014: SignPanel
+    100016: Wire
     400000: //RootNode
     400002: Plane
     400004: Plane_001
     400006: Plane_002
     400008: Plane_003
+    400010: Outline
+    400012: ResistorWire
+    400014: SignPanel
+    400016: Wire
     2300000: Plane
     2300002: Plane_001
     2300004: Plane_002
     2300006: Plane_003
+    2300008: Outline
+    2300010: ResistorWire
+    2300012: SignPanel
+    2300014: Wire
     3300000: Plane
     3300002: Plane_001
     3300004: Plane_002
     3300006: Plane_003
+    3300008: Outline
+    3300010: ResistorWire
+    3300012: SignPanel
+    3300014: Wire
     4300000: Plane_002
     4300002: Plane_001
     4300004: Plane
     4300006: Plane_003
+    4300008: SignPanel
+    4300010: ResistorWire
+    4300012: Outline
+    4300014: Wire
     7400000: Default Take
     9500000: //RootNode
   materials:

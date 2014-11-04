@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Simluator : MonoBehaviour {
+public class Simulator : MonoBehaviour {
 
 	public GameObject	circuitGO;
 	public GameObject 	textMeshGO;
@@ -20,6 +20,8 @@ public class Simluator : MonoBehaviour {
 	public bool enableVoltsgeAsHeight = true;
 
 	public bool solveVoltges = false;
+	
+	public static Simulator simSingleton = null;
 	
 	
 	GameObject[,]		debugTextBoxes;
@@ -82,6 +84,7 @@ public class Simluator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		simSingleton = this;
 		circuit = circuitGO.GetComponent<Circuit>();
 		width = circuit.elements.GetLength(0);
 		height = circuit.elements.GetLength(1);
@@ -93,6 +96,14 @@ public class Simluator : MonoBehaviour {
 
 		// Sert up the text gui
 		guiTextDisplay = new GUITextDisplay(10f, 70f, 500f, 20f);
+	}
+	
+	public float GetVoltage(int x, int y, int dir){
+		return GetBranchData(new BranchAddress(x, y, dir)).totalVoltage;
+	}
+
+	public float GetCurrent(int x, int y, int dir){
+		return GetBranchData(new BranchAddress(x, y, dir)).totalCurrent;
 	}
 	
 	BranchData GetBranchData(BranchAddress address){

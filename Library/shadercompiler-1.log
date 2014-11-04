@@ -1,3 +1,87 @@
 Base path: /Applications/Unity/Unity.app/Contents
 Pipe name: \\.\pipe\UnityShaderCompiler-1--1599577688
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=920 outsize=338 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (31): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (37): expression left of ."texcoord" is not a struct or array; invalid type in type constructor; expression type incompatible with function return type
+  api=0 type=0 insize=879 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=914 outsize=337 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (31): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (37): invalid type in type constructor; expression type incompatible with function return type
+  api=0 type=0 insize=873 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=914 outsize=338 ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (31): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (37): invalid type in type constructor; expression type incompatible with function return type
+  api=0 type=0 insize=873 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1189 outsize=391 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1095 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  error: 1 plat 0 at (34): implicit cast from "float4" to "float2"
+  error: 2 plat 0 at (40): undefined variable "c" unable to find compatible overloaded function "sin(error)"
+  api=0 type=1 insize=1095 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=914 outsize=338 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (37): invalid type in type constructor; expression type incompatible with function return type
+  api=0 type=0 insize=873 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1191 outsize=390 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1097 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1097 outsize=444 kw= ok=1
+Cmd: preprocess
+  insize=910 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=869 outsize=325 kw= ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at (37): ambiguous overloaded function reference "tex2D(sampler2D, float4)"
+  api=0 type=1 insize=869 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=910 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=869 outsize=328 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=869 outsize=98 kw= ok=1
+Cmd: preprocess
+  insize=971 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=930 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=930 outsize=98 kw= ok=1
+Cmd: preprocess
+  insize=980 outsize=338 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=939 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=939 outsize=160 kw= ok=1
+Cmd: preprocess
+  insize=1144 outsize=448 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=993 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=993 outsize=160 kw= ok=1
+Cmd: preprocess
+  insize=1141 outsize=445 ok=1
+Cmd: preprocess
+  insize=1138 outsize=442 ok=1
+Cmd: preprocess
+  insize=1347 outsize=442 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1202 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1202 outsize=309 kw= ok=1
+Cmd: preprocess
+  insize=1067 outsize=337 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=1027 outsize=365 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=1027 outsize=160 kw= ok=1
