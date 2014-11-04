@@ -54,9 +54,11 @@
      <Compile Include="Assets\Scripts\CircuitElementResistor.cs" />
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />
+     <Compile Include="Assets\Scripts\GameSettings.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\GridPoint.cs" />
      <Compile Include="Assets\Scripts\LevelSerializer.cs" />
+     <Compile Include="Assets\Scripts\LevelSettings.cs" />
      <Compile Include="Assets\Scripts\MathUtils.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />

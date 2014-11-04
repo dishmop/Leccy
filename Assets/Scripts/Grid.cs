@@ -27,18 +27,8 @@ public class Grid : MonoBehaviour {
 	GridPoint		otherSelection = new GridPoint();
 	GridPoint		otherNewSelection = new GridPoint();
 	bool			enableEraseHighlight =false;
-	
-	// Serialization data
-	[Serializable]
-	class SerializationData{
-		public SerializationData(int width, int height){
-			this.width = width;
-			this.height = height;
-		}
-		public int width;
-		public int height;
-	};
-	
+
+
 
 	public 	void Save(BinaryWriter bw){
 		bw.Write (gridWidth);

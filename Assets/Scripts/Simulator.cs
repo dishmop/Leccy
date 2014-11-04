@@ -21,7 +21,7 @@ public class Simulator : MonoBehaviour {
 
 	public bool solveVoltges = false;
 	
-	public static Simulator simSingleton = null;
+	public static Simulator singleton = null;
 	
 	
 	GameObject[,]		debugTextBoxes;
@@ -84,7 +84,7 @@ public class Simulator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		simSingleton = this;
+		singleton = this;
 		circuit = circuitGO.GetComponent<Circuit>();
 		width = circuit.elements.GetLength(0);
 		height = circuit.elements.GetLength(1);

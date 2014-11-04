@@ -124,7 +124,7 @@ public class CircuitElementExit : CircuitElement {
 		foreach (Transform child in displayMesh.transform){
 			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
 			if (mesh.name == "SignPanel"){
-				float current = Mathf.Abs (Simulator.simSingleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.simSingleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
+				float current = Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
 				Color useCol = offCol;
 				if (current > 0.1f) useCol = halfOnCol;
 				if (current >= thresholdCurrent) useCol = onCol;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class UI : MonoBehaviour {
 
@@ -25,17 +26,20 @@ public class UI : MonoBehaviour {
 		kResistors,
 		kExits,
 		kErase,
-		kClearAll,
+		kToggleEdit,
 		kLoadLevel,
 		kSaveLevel,
+		kClearAll,
 		kBakeConnect,
 		kBakeAll,
-		kUnbake
+		kUnbake,
+		kNumButtons
 	};
+	public int numNonEditButtons = 7;
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Exits", "Eraser", "Clear all", "Load Level", "Save Level", "Bake connect", "Bake All", "Unbake"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Exits", "Eraser", "Toggle edit", "Load Level", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
@@ -103,7 +107,7 @@ public class UI : MonoBehaviour {
 			if (!oldDrawPoint.IsEqual(newDrawPoint) && newDrawPoint.IsValid()){
 						
 				// If drawing wires
-				if (inputMode == InputMode.kWires){
+				if (inputMode == InputMode.kWires && GetNumWiresRemaining() > 0){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddWire(oldDrawPoint, newDrawPoint);
 					}
@@ -113,7 +117,7 @@ public class UI : MonoBehaviour {
 				}
 
 				// If drawing cells
-				if (inputMode == InputMode.kCells){
+				if (inputMode == InputMode.kCells && GetNumCellsRemaining() > 0){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddCell(oldDrawPoint, newDrawPoint);
 					}
@@ -123,7 +127,7 @@ public class UI : MonoBehaviour {
 					
 				}				
 				// If drawing resistors
-				if (inputMode == InputMode.kResistors){
+				if (inputMode == InputMode.kResistors && GetNumResistorsRemaining() > 0){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddResistor(oldDrawPoint, newDrawPoint);
 					}
@@ -133,7 +137,7 @@ public class UI : MonoBehaviour {
 					
 				}
 				// If drawing Exits
-				if (inputMode == InputMode.kExits){
+				if (inputMode == InputMode.kExits && GetNumExitsRemaining() > 0){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddExit(oldDrawPoint, newDrawPoint);
 					}
@@ -166,10 +170,39 @@ public class UI : MonoBehaviour {
 	
 	}
 	
+	int GetNumWiresRemaining(){
+		return (LevelSettings.singleton.numWires + LevelSettings.singleton.numWiresOnStartup - circuit.numElementsUsed["Wire"]);
+	}
 	
+	int GetNumCellsRemaining(){
+		return (LevelSettings.singleton.numCells + LevelSettings.singleton.numCellsOnStartup - circuit.numElementsUsed["Cell"]) ;
+	}
+
+	int GetNumResistorsRemaining(){
+		return (LevelSettings.singleton.numResistors + LevelSettings.singleton.numResistorsOnStartup - circuit.numElementsUsed["Resistor"]);
+	}
+
+	int GetNumExitsRemaining(){
+		return (LevelSettings.singleton.numExits + LevelSettings.singleton.numExitsOnStartup - circuit.numElementsUsed["Exit"]);
+	}
+
+		
 	void OnGUI () {
+		// If not in editor mode we only want to show a subset of the buttons
+		int numButtons = GameSettings.singleton.enableEdit ? (int)InputMode.kNumButtons : numNonEditButtons;
+		string[] useStrings = new string[numButtons];
+		Array.Copy(toolbarStrings, useStrings, numButtons);
+		
+		// If not in edit mode, append the number of elements let to use
+		if (!GameSettings.singleton.enableEdit){
+			useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
+			useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
+			useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
+			useStrings[(int)InputMode.kExits] += 	 " (" + GetNumExitsRemaining()  +")";
+		}
+		
 		InputMode oldInputMode = inputMode;
-		inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, toolbarStrings);
+		inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, useStrings);
 		if (inputMode == InputMode.kClearAll){
 			Application.LoadLevel(Application.loadedLevel);
 			inputMode = oldInputMode;
@@ -194,7 +227,11 @@ public class UI : MonoBehaviour {
 			circuit.Unbake();
 			inputMode = oldInputMode;
 		}				
-			
+		else if (inputMode == InputMode.kToggleEdit){
+			GameSettings.singleton.enableEdit = !GameSettings.singleton.enableEdit;
+			inputMode = oldInputMode;
+		}				
+		
 	}
 	
 }

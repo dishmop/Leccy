@@ -1,18 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CircuitElementExit.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LevelSettings.cs">
     <Files>
-      <File FileName="Assets/Scripts/Circuit.cs" Line="688" Column="48" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="164" Column="28" />
-      <File FileName="Assets/Scripts/CircuitElementExit.cs" Line="119" Column="2" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="133" Column="6" />
-      <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelSerializer.cs" Line="56" Column="1" />
+      <File FileName="Assets/Scripts/GameSettings.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelSerializer.cs" Line="50" Column="27" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="3" Column="1" />
+      <File FileName="Assets/Scripts/LevelSettings.cs" Line="5" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

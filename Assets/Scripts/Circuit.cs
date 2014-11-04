@@ -12,6 +12,9 @@ public class Circuit : MonoBehaviour {
 	public GameObject resistorElementPrefab;	
 	public GameObject exitElementPrefab;	
 	public GameObject gridGO;
+	
+	// Keep track of the number of each type of circuit element used
+	public Dictionary<string, int> numElementsUsed;
 
 	
 	// Useful consts
@@ -258,6 +261,7 @@ public class Circuit : MonoBehaviour {
 			as GameObject;
 		newElement.transform.parent = transform;	
 		newElement.GetComponent<CircuitElement>().SetGridPoint(point);
+		numElementsUsed[prefab.GetComponent<SerializationID>().id]++;
 		
 	
 		
@@ -371,7 +375,8 @@ public class Circuit : MonoBehaviour {
 				as GameObject;
 			newElement.transform.parent = transform;	
 			newElement.GetComponent<CircuitElement>().SetGridPoint(nextPoint);
-		
+			numElementsUsed[prefab.GetComponent<SerializationID>().id]++;
+			
 			
 			// Copy any connections already there to the new resistor component
 			// We clean them up aferwards
@@ -407,7 +412,8 @@ public class Circuit : MonoBehaviour {
 			as GameObject;
 		newElement.transform.parent = transform;
 		newElement.GetComponent<CircuitElement>().SetGridPoint(point);
-
+		numElementsUsed[prefab.GetComponent<SerializationID>().id]++;
+		
 		
 		elements[point.x, point.y] = newElement;
 		GetElement(point).SetupMesh();			
@@ -431,6 +437,7 @@ public class Circuit : MonoBehaviour {
 			Quaternion.identity)
 			as GameObject;
 		newElement.transform.parent = transform;
+		numElementsUsed[wireElementPrefab.GetComponent<SerializationID>().id]++;
 		
 		
 		// Copy any connections already there to the new component
@@ -634,6 +641,9 @@ public class Circuit : MonoBehaviour {
 
 	
 	void RawRemoveElement(GridPoint point){
+		if (ElementExists(point)){
+			numElementsUsed[GetElement (point).GetComponent<SerializationID>().id]--;
+		}
 		GameObject.Destroy(elements[point.x, point.y]);
 		elements[point.x, point.y] = null;	
 	}
@@ -735,7 +745,8 @@ public class Circuit : MonoBehaviour {
 		offsets[kRight] = 	new GridPoint( 1,  0);
 		offsets[kUp] = 		new GridPoint( 0,  1);
 		offsets[kDown] = 	new GridPoint( 0,  -1);	
-
+		
+		
 		grid = gridGO.GetComponent<Grid>();
 		CreateBlankCircuit();
 	}
@@ -750,6 +761,12 @@ public class Circuit : MonoBehaviour {
 			}
 		}
 		elements = new GameObject[grid.gridWidth, grid.gridHeight];
+		
+		numElementsUsed = new Dictionary<string, int>();
+		numElementsUsed.Add (wireElementPrefab.GetComponent<SerializationID>().id, 0);
+		numElementsUsed.Add (resistorElementPrefab.GetComponent<SerializationID>().id, 0);
+		numElementsUsed.Add (cellElementPrefab.GetComponent<SerializationID>().id, 0);
+		numElementsUsed.Add (exitElementPrefab.GetComponent<SerializationID>().id, 0);
 	}
 	
 	// Use this for initialization
