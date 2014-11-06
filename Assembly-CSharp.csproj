@@ -66,6 +66,10 @@
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
+     <Compile Include="Assets\Scripts\Tuple.cs" />
+     <Compile Include="Assets\Scripts\Tuple2.cs" />
+     <Compile Include="Assets\Scripts\Tuple3.cs" />
+     <Compile Include="Assets\Scripts\Tuple4.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Scripts\alglib\src\alglibinternal.cs" />
      <Compile Include="Assets\Scripts\alglib\src\alglibmisc.cs" />

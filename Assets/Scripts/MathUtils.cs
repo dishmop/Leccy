@@ -13,7 +13,7 @@
 #pragma warning disable 0659 // Define Equals() but not Gethashcode
 #pragma warning disable 0219 // Variable defined but never used
 
-
+using UnityEngine;
 using System;
 
 namespace MathUtils
@@ -378,7 +378,10 @@ namespace MathUtils
 			{
 				throw new MatrixNullException();
 			}
-			if (Cols1 != Rows2) throw new MatrixDimensionException();
+//			if (Cols1 != Rows2) throw new MatrixDimensionException();
+			if (Cols1 != Rows2){
+				Debug.LogError("Incompatible dimensions");
+			}
 			
 			sol = new double[Rows1 + 1, Cols2 + 1];
 			
@@ -1961,7 +1964,7 @@ namespace MathUtils
 		/// </summary>
 		/// <param name="obj">The object to compare with the current object</param>
 		/// <returns>This method returns true if obj is the specified Matrix object identical to this Matrix object; otherwise, false.</returns>
-		public override bool Equals(Object obj)
+		public override bool Equals(System.Object obj)
 		{
 			try { return (bool)(this == (Matrix)obj); }
 			catch { return false; }
