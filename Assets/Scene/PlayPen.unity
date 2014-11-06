@@ -441,12 +441,12 @@ Prefab:
       objectReference: {fileID: 327570111}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelToSave
-      value: Level1
+      value: Bug1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelToLoad
       value: 
-      objectReference: {fileID: 4900000, guid: 3e1db761b811a4f12a80985887ffc3e4, type: 3}
+      objectReference: {fileID: 4900000, guid: fd99bd5943b69491795693a1b45d009e, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: toolbarRect.width
       value: 1200
@@ -768,8 +768,8 @@ MonoBehaviour:
   oldDrawPoint:
     x: -1
     y: -1
-  levelToSave: Level1
-  levelToLoad: {fileID: 4900000, guid: 3e1db761b811a4f12a80985887ffc3e4, type: 3}
+  levelToSave: Bug1
+  levelToLoad: {fileID: 4900000, guid: fd99bd5943b69491795693a1b45d009e, type: 3}
   enableEditMode: 1
   toolbarRect:
     serializedVersion: 2
@@ -825,6 +825,8 @@ MonoBehaviour:
     type: 2}
   exitElementPrefab: {fileID: 100000, guid: 571dfdbebada94c599988d416080dd63, type: 2}
   gridGO: {fileID: 1697485505}
+  particleExplosionPrefab: {fileID: 100000, guid: 4a59df0bd718e4f0ba4ecdb13f07a130,
+    type: 2}
 --- !u!4 &1643868794
 Transform:
   m_ObjectHideFlags: 0

@@ -45,6 +45,8 @@ MonoBehaviour:
     type: 2}
   exitElementPrefab: {fileID: 100000, guid: 571dfdbebada94c599988d416080dd63, type: 2}
   gridGO: {fileID: 0}
+  particleExplosionPrefab: {fileID: 100000, guid: 4a59df0bd718e4f0ba4ecdb13f07a130,
+    type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

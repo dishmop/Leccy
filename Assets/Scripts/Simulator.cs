@@ -305,7 +305,7 @@ public class Simulator : MonoBehaviour {
 		
 	}
 	
-	void SolveForCurrents(){
+	bool SolveForCurrents(){
 	
 		
 		int numInvalidLoops = 0;
@@ -382,22 +382,84 @@ public class Simulator : MonoBehaviour {
 		// Currents
 		double[,] I = new double[0,0];
 		
-		// for some reason the solver doens't work with one equation
-		if (numValidLoops == 1){
-			I = new double[1,1];
-			I[0,0] = (V[0,0] / R[0,0]);
+		// IF we do not have full rankm then find a solution using the Moore-Pensrose Pseudo-inverse
+		// Method taken from here: http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse#The_iterative_method_of_Ben-Israel_and_Cohen
+		// search for "A computationally simple and accurate way to compute the pseudo inverse " ont his page
+		
+		
+//		if (R.GetLength (0) != R.GetLength (1)){
+//			Debug.LogError ("Matrix is not square, yet we expect it to be!");
+//		}
+//		
+		
+		// First we need to calc the SVD of the matrix
+		double[] W = null;	// S matrix as a vector (leading diagonal)
+		double[,] U = null;
+		double[,] Vt = null;
+		alglib.svd.rmatrixsvd(R, R.GetLength (0), R.GetLength (1), 2, 2, 2, ref W, ref U, ref Vt);
+		
+		double[,] S = new double[W.GetLength (0), W.GetLength (0)];
+		
+		for (int i = 0; i < R.GetLength (0); ++i){
+			S[i,i] = W[i];
 		}
-		else if (numValidLoops> 0){
-			if (MathUtils.Matrix.Rank(R) == numValidLoops){
-				I = MathUtils.Matrix.SolveLinear(R, V);
-			}
-			else{
-				I = new double[numValidLoops,1];
-				for (int i = 0; i < numValidLoops; ++i){
-					I[i,0] = float.NaN;
+		//				MathUtils.Matrix.SVD(R, out S, out U, out Vt);
+		// Log the results
+		
+//		double[,] testR0 = MathUtils.Matrix.Multiply(U, S);
+//		double[,] testR1 = MathUtils.Matrix.Multiply(testR0, Vt);
+		
+		double[,] Ut = MathUtils.Matrix.Transpose(U);
+		double[,] Vtt = MathUtils.Matrix.Transpose (Vt);
+		
+		// Get the psuedo inverse of the U matrix (which is diagonal)
+		// The way we do this is by taking the recipricol of each diagonal element, leaving the (close to) zero's in place
+		// and transpose (actually we don't need to transpose because we always have square matricies)
+		
+		// I assume this gets initialised with zeros
+		double[,] SInv = new double[S.GetLength(0), S.GetLength(0)];
+		
+		double epsilon = 0.0001;
+		for (int i = 0; i < S.GetLength(0); ++i){
+			if (Math.Abs (S[i,i]) > epsilon){
+				SInv[i,i] = 1.0 / S[i,i];
+				
+			}					
+		}
+		
+		//Rinv = Vtt Uinv St
+		double[,] RInvTemp = MathUtils.Matrix.Multiply (Vtt, SInv);
+		double[,] RInv = MathUtils.Matrix.Multiply (RInvTemp, Ut);
+		
+//		// Test thast we have a psueoinverse
+//		double[,] res0 = MathUtils.Matrix.Multiply(R, RInv);
+//		double[,] res1 = MathUtils.Matrix.Multiply(res0, R);
+		
+		I = new double[numValidLoops,1];
+		I = MathUtils.Matrix.Multiply(RInv, V); 
+		
+		// Check that we get V - if not we have an unsolvable set of equations and 
+		// it means we have a loop of zero resistance with a voltage different in it
+		double[,] testV = MathUtils.Matrix.Multiply(R, I);
+		
+		bool failed = false;
+		for (int i = 0; i < numValidLoops; ++i){
+			// f we find a bad loop
+			if (Math.Abs (V[i, 0] - testV[i, 0]) > epsilon){
+				// Then follow this loop finding all the voltage sources and put them in Emergency mode
+				for (int j = 0; j < loops[i].Count; ++j){
+					BranchAddress thisAddr = loops[i][j];
+					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+						thisElement.TriggerEmergency();
+						failed = true;
+					}
 				}
 			}
 		}
+		if (failed) return false;
+		
+
 		
 		loopCurrents = new float[loops.Count];
 		if (I.GetLength(0) != 0){
@@ -410,6 +472,8 @@ public class Simulator : MonoBehaviour {
 			}
 			
 		}
+		// all went well
+		return true;
 		
 	}
 	
@@ -517,20 +581,24 @@ public class Simulator : MonoBehaviour {
 	}	
 	
 	
-	void Simulate(){
+	bool Simulate(){
 		// Find all the loops
 		FindLoops();
 		// Flag the ones going round the outside of disjoint circuits as 0 (so we can ignore them)
 		FlagOuterLoops();
 		// Go through each loop and remove any elements which are from a "Spoke" - i.e., not a loop
 		//TrimSpokes();
-		// Set up equations and solve them
-		SolveForCurrents();
+		// Set up equations and solve them (repeat if failed the first time as the failure situation triggers emergency measures which should make it ok)
+		if (!SolveForCurrents()){
+			return false;
+		}
 		CalcTotalCurrents();
 		// Use the currents we have found to calculate the voltages
-		if (solveVoltges)
+		if (solveVoltges){
 			SolveForVoltages();
-		
+		}
+		return true;
+	
 
 	}
 	
@@ -880,9 +948,11 @@ public class Simulator : MonoBehaviour {
 		// Update is called once per frame
 	void FixedUpdate () {
 	
-
-		ClearSimulation();
-		Simulate();
+		bool finished = false;
+		while (!finished){
+			ClearSimulation();
+			finished = Simulate();
+		}
 		
 		if (visMode == VisMode.kGroups || visMode == VisMode.kLoops){
 			DebugRenderLoops();	

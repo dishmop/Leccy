@@ -67,10 +67,26 @@
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\alglibinternal.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\alglibmisc.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\ap.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\dataanalysis.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\diffequations.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\fasttransforms.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\integration.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\interpolation.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\linalg.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\optimization.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\solvers.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\specialfunctions.cs" />
+     <Compile Include="Assets\Scripts\alglib\src\statistics.cs" />
      <None Include="Assets\Shaders\SolidColor.shader" />
+     <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />
+     <None Include="Assets\Scripts\alglib\gpl2.txt" />
      <None Include="Assets\Tutorial_2\2_Lambert.shader" />
      <None Include="Assets\Shaders\noise-simplex.shader" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Tutorial_1\Black.shader" />
      <None Include="Assets\Shaders\noise-simplex_v02.shader" />
      <None Include="Assets\Tutorial_2\1_FlatColour.shader" />
@@ -80,6 +96,11 @@
      <None Include="Assets\Shaders\LitSign.shader" />
      <None Include="Assets\Shaders\noiseSimplex.cginc" />
      <None Include="Assets\Tutorial_1\VertexColorLerp.shader" />
+     <None Include="Assets\Scripts\alglib\gpl3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{871B85E3-F638-C2A9-382B-ABF3C0202A8E}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

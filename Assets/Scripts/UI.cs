@@ -107,7 +107,7 @@ public class UI : MonoBehaviour {
 			if (!oldDrawPoint.IsEqual(newDrawPoint) && newDrawPoint.IsValid()){
 						
 				// If drawing wires
-				if (inputMode == InputMode.kWires && GetNumWiresRemaining() > 0){
+				if (inputMode == InputMode.kWires && (GameSettings.singleton.enableEdit || GetNumWiresRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddWire(oldDrawPoint, newDrawPoint);
 					}
@@ -117,7 +117,7 @@ public class UI : MonoBehaviour {
 				}
 
 				// If drawing cells
-				if (inputMode == InputMode.kCells && GetNumCellsRemaining() > 0){
+				if (inputMode == InputMode.kCells && (GameSettings.singleton.enableEdit || GetNumCellsRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddCell(oldDrawPoint, newDrawPoint);
 					}
@@ -127,7 +127,7 @@ public class UI : MonoBehaviour {
 					
 				}				
 				// If drawing resistors
-				if (inputMode == InputMode.kResistors && GetNumResistorsRemaining() > 0){
+				if (inputMode == InputMode.kResistors && (GameSettings.singleton.enableEdit || GetNumResistorsRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddResistor(oldDrawPoint, newDrawPoint);
 					}
@@ -137,7 +137,7 @@ public class UI : MonoBehaviour {
 					
 				}
 				// If drawing Exits
-				if (inputMode == InputMode.kExits && GetNumExitsRemaining() > 0){
+				if (inputMode == InputMode.kExits && (GameSettings.singleton.enableEdit || GetNumExitsRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddExit(oldDrawPoint, newDrawPoint);
 					}

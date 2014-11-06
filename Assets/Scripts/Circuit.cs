@@ -7,11 +7,14 @@ using System.Collections.Generic;
 
 public class Circuit : MonoBehaviour {
 	
+	public static Circuit singleton = null;
+	
 	public GameObject wireElementPrefab;	
 	public GameObject cellElementPrefab;	
 	public GameObject resistorElementPrefab;	
 	public GameObject exitElementPrefab;	
 	public GameObject gridGO;
+	public GameObject particleExplosionPrefab;
 	
 	// Keep track of the number of each type of circuit element used
 	public Dictionary<string, int> numElementsUsed;
@@ -152,6 +155,17 @@ public class Circuit : MonoBehaviour {
 				}
 			}
 		}
+	}
+	
+	public void TriggerExplosion(GridPoint point){
+		GameObject newElement = Instantiate(
+			particleExplosionPrefab, 
+			new Vector3(point.x, point.y, particleExplosionPrefab.transform.position.z), 
+			Quaternion.identity)
+			as GameObject;
+		newElement.transform.parent = transform;
+		newElement.GetComponent<ParticleEmitter>().Emit();
+		
 	}
 									
 		
@@ -638,6 +652,7 @@ public class Circuit : MonoBehaviour {
 		}
 		
 	}
+	
 
 	
 	void RawRemoveElement(GridPoint point){
@@ -741,6 +756,7 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	void Awake(){
+		singleton = this;
 		offsets[kLeft] = 	new GridPoint(-1,  0);
 		offsets[kRight] = 	new GridPoint( 1,  0);
 		offsets[kUp] = 		new GridPoint( 0,  1);

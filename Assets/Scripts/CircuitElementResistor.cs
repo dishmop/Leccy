@@ -114,7 +114,8 @@ public class CircuitElementResistor : CircuitElement {
 	// Update is called once per frame
 	void Update () {
 		SetupMesh ();
-
+		VisualiseTemperature();
+		
 		
 	}
 }

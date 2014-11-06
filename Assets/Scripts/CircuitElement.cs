@@ -11,6 +11,9 @@ public class CircuitElement : MonoBehaviour {
 	
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public GameObject	anchorPrefab;
+	public float		temperature = 0;
+	protected float 	maxTemp = 45f;
+	
 	
 	// 0 - up
 	// 1 - right
@@ -33,6 +36,11 @@ public class CircuitElement : MonoBehaviour {
 		return false;
 	}
 	
+	public virtual void TriggerEmergency(){
+		
+		
+	}
+	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
 	}
@@ -44,6 +52,17 @@ public class CircuitElement : MonoBehaviour {
 			bw.Write (isConnected[i]);
 			bw.Write(isBaked[i]);
 		}
+		bw.Write (temperature);
+	}
+	
+	public 	virtual void Load(BinaryReader br){
+		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
+		//		orient = br.ReadInt32();
+		for (int i = 0; i < 4; ++i){
+			isConnected[i] = br.ReadBoolean();
+			isBaked[i] = br.ReadBoolean();
+		}
+		temperature = br.ReadSingle();
 	}
 	
 	protected int CalcBakedHash(){
@@ -92,14 +111,7 @@ public class CircuitElement : MonoBehaviour {
 	}
 		
 		
-	public 	virtual void Load(BinaryReader br){
-	// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
-//		orient = br.ReadInt32();
-		for (int i = 0; i < 4; ++i){
-			isConnected[i] = br.ReadBoolean();
-			isBaked[i] = br.ReadBoolean();
-		}
-	}
+
 
 	public void CopyConnectionsFrom(CircuitElement other){
 		if (!other) return;	
@@ -168,6 +180,20 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	public virtual void SetupMesh(){
+	}
+	
+	protected void VisualiseTemperature(){
+		foreach (Transform child in transform.GetChild(0)){
+			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
+			mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
+		}		
+		
+	}	
+	
+	protected void DestorySelf(){
+		Circuit.singleton.Erase(thisPoint);
+		Circuit.singleton.TriggerExplosion(thisPoint);
+	
 	}
 	
 

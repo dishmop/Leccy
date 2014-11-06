@@ -132,6 +132,7 @@ public class CircuitElementWire : CircuitElement {
 	
 	void Update(){
 		SetupMesh ();
+		VisualiseTemperature();
 	}
 	
 	void OnDestroy() {

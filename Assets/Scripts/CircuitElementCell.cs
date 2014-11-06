@@ -11,12 +11,14 @@ public class CircuitElementCell : CircuitElement {
 	public bool			invertOrient;		// Turn through 180 degrees?
 	public float		voltage = 12f;
 	public float		resistance = 0.06f;
-
+	float				maxCurrent = 100f;
+	bool				isInEmergency = false;
+	
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
 	}
 	
-	override public void Save(BinaryWriter bw){
+	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
 		
 		bw.Write (voltage);
@@ -25,13 +27,17 @@ public class CircuitElementCell : CircuitElement {
 	}
 	
 	
-	override public void Load(BinaryReader br){
+	public override void Load(BinaryReader br){
 		base.Load (br);	
 		
 		voltage = br.ReadSingle();
 		resistance = br.ReadSingle();
 		invertOrient = br.ReadBoolean();
 	}
+	
+	public override void TriggerEmergency(){
+		isInEmergency = true;
+	}	
 
 	public override void OnClick(){
 		invertOrient = !invertOrient;
@@ -92,7 +98,7 @@ public class CircuitElementCell : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!isConnected[dir]) Debug.LogError("Being asked about a nonexistanct connection");
-		return resistance;
+		return isInEmergency ? 0.001f : resistance;
 	}
 	
 	public override float GetVoltageDrop(int dir){
@@ -132,10 +138,34 @@ public class CircuitElementCell : CircuitElement {
 		GameObject.Destroy (displayMesh);
 	}
 	
+	float GetAbsCurrentFlow(){
+		return  Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
+	}
+	
 	// Update is called once per frame
 	void Update () {
 		SetupMesh ();
 		
+		// If our current is not huge then we are probably in a zero resistance loop
+		// and we should stay in out state of emergency. However, if we are not, then the player 
+		// has got in quickly enough so can reset our emegency flag
+		float currentFlow = GetAbsCurrentFlow();
+		if (isInEmergency && currentFlow < maxCurrent){
+			Debug.Log ("Resetting emergency staste");
+			isInEmergency = false;
+		}
+		if (GetAbsCurrentFlow() > maxCurrent && temperature < maxTemp){
+			temperature += 1f;
+		}
+		else{
+			if (temperature > 0) temperature -= 1f;
+		}
+		// If we reach our maximum temperature then we should remove the component
+		if (temperature == maxTemp){
+			DestorySelf();
+		}
+		VisualiseTemperature();
+
 		
 	}
 }
