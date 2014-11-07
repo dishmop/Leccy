@@ -111,10 +111,26 @@ public class CircuitElementResistor : CircuitElement {
 		GameObject.Destroy (displayMesh);
 	}
 	
+	
+	float GetAbsCurrentFlow(){
+		return  Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
+	}
+	
+	
 	// Update is called once per frame
 	void Update () {
 		SetupMesh ();
 		VisualiseTemperature();
+		
+		// If our current is not huge then we are probably in a zero resistance loop
+		// and we should stay in out state of emergency. However, if we are not, then the player 
+		// has got in quickly enough so can reset our emegency flag
+		float currentFlow = GetAbsCurrentFlow();
+
+		
+		// Set up the audio
+		AudioSource source = gameObject.GetComponent<AudioSource>();
+		source.pitch = currentFlow * 0.1f;		
 		
 		
 	}

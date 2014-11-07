@@ -105,6 +105,10 @@ public class UI : MonoBehaviour {
 			
 			// If the point we are drawing to has changed and the new one is valid
 			if (!oldDrawPoint.IsEqual(newDrawPoint) && newDrawPoint.IsValid()){
+			
+				// Play an (indiscriminate) sound effect
+				AudioSource source = gameObject.GetComponent<AudioSource>();
+				source.Play();
 						
 				// If drawing wires
 				if (inputMode == InputMode.kWires && (GameSettings.singleton.enableEdit || GetNumWiresRemaining() > 0)){

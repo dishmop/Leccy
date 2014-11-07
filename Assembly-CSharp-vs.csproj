@@ -84,6 +84,7 @@
      <Compile Include="Assets\Scripts\alglib\src\solvers.cs" />
      <Compile Include="Assets\Scripts\alglib\src\specialfunctions.cs" />
      <Compile Include="Assets\Scripts\alglib\src\statistics.cs" />
+     <Compile Include="Assets\TriggerSound.cs" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />
