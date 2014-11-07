@@ -15,6 +15,14 @@ public class Simulator : MonoBehaviour {
 		kCurrents
 	};
 	public VisMode 	visMode = 		VisMode.kNone;
+	public enum MinMode{
+		kLoops,
+		kBranches,
+		kElements,
+		kElementsOpt
+	};
+	public MinMode minMode = MinMode.kLoops;
+	
 	public Color[]	voltageColors = new Color[7];
 	public float maxVoltVis = 		50f;
 	public float currentMulVis = 	0.1f;
@@ -355,8 +363,8 @@ public class Simulator : MonoBehaviour {
 		
 	}
 	
-	bool SolveForCurrents(){
-	
+	bool SolveForCurrentsOptElements(){
+		
 		int numInvalidLoops = 0;
 		// Go through the loops and remove any which are outer loops or of zero length or an invlaid loop
 		// e.g. an outer loop and place them at the end
@@ -476,7 +484,7 @@ public class Simulator : MonoBehaviour {
 								loopCombinations.Add (new Eppy.Tuple<int, int>(val0, val1));
 							}
 						}
-							
+						
 					}
 				}
 			}
@@ -487,12 +495,12 @@ public class Simulator : MonoBehaviour {
 		
 		
 		// Dictionary version
-//		int k = 0;
-//		foreach (KeyValuePair<Eppy.Tuple<int, int>, bool> entry in loopCombinations){
-//			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = 1;
-//			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -1;
-//			++k;
-//		}
+		//		int k = 0;
+		//		foreach (KeyValuePair<Eppy.Tuple<int, int>, bool> entry in loopCombinations){
+		//			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = 1;
+		//			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -1;
+		//			++k;
+		//		}
 		
 		int k = 0;
 		foreach (Eppy.Tuple<int, int> entry in loopCombinations){
@@ -503,9 +511,9 @@ public class Simulator : MonoBehaviour {
 		
 		// If we just wanted to calculate A solution for the loops, we would write:
 		// Since we may not have full rank,, we find a solution using the Moore-Pensrose Pseudo-inverse
-//		double[,] RInv = CalcPseudoInverse(R);
-//		I = MathUtils.Matrix.Multiply(RInv, V); 
-
+		//		double[,] RInv = CalcPseudoInverse(R);
+		//		I = MathUtils.Matrix.Multiply(RInv, V); 
+		
 		// However, this doesn't distribute the current well over the different branches of the circuit if there is
 		// no reisstance in it
 		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
@@ -546,16 +554,215 @@ public class Simulator : MonoBehaviour {
 			}
 		}
 		
-//		Debug.Log ("L = " + L.GetLength(0) + " X " + L.GetLength (1));
-//		Debug.Log ("I = " + I.GetLength(0) + " X " + I.GetLength (1));
-//		
-//		
-//		double[,] currentTest = MathUtils.Matrix.Multiply (L, I);
-//		
-//		double[,] testLoops = MathUtils.Matrix.Multiply (LInv, C);
-//		double[,] doubleCheck1 = MathUtils.Matrix.Multiply (L, I);
-//		double[,] doubleCheck2 = MathUtils.Matrix.Multiply (L, testLoops);
-//		
+		//		Debug.Log ("L = " + L.GetLength(0) + " X " + L.GetLength (1));
+		//		Debug.Log ("I = " + I.GetLength(0) + " X " + I.GetLength (1));
+		//		
+		//		
+		//		double[,] currentTest = MathUtils.Matrix.Multiply (L, I);
+		//		
+		//		double[,] testLoops = MathUtils.Matrix.Multiply (LInv, C);
+		//		double[,] doubleCheck1 = MathUtils.Matrix.Multiply (L, I);
+		//		double[,] doubleCheck2 = MathUtils.Matrix.Multiply (L, testLoops);
+		//		
+		if (failed) return false;
+		
+		
+		
+		
+		
+		loopCurrents = new float[loops.Count];
+		if (I.GetLength(0) != 0){
+			for (int i = 0; i < numValidLoops; ++i){
+				loopCurrents[i] = (float)I[i,0];
+			}
+			// For the invalid loops, just set the current to zero
+			for (int i = numValidLoops; i < loops.Count; ++i){
+				loopCurrents[i] = 0f;
+			}
+			
+		}
+		// all went well
+		return true;
+		
+	}
+	
+	bool SolveForCurrentsOptBranches(){
+		
+		int numInvalidLoops = 0;
+		// Go through the loops and remove any which are outer loops or of zero length or an invlaid loop
+		// e.g. an outer loop and place them at the end
+		for (int i = loops.Count-1; i >=0 ; --i){
+			if (loops[i].Count == 0 || GetBranchData(loops[i][0]).isOuterLoop){
+				int newIndex = CreateLoop ();
+				loops[newIndex] = loops[i];
+				loops.RemoveAt (i);
+				
+				++numInvalidLoops;
+			}
+		}
+		
+		// It is useful rearrange the loops (see above), for the calculation of currents.
+		// However, for the purposes of voltage analysis, it is better to have then in their original aorder
+		// (as we can guarantee that the starting point of a loop starts connected to a loop we have already traverse
+		// unless we are the first loop in a group.
+		// This array is a way to store that original order  - we can calcukate it based on the fact that the loop Ids
+		// have not yet neen recalcualted
+		
+		voltageLoopOrder = new int[loops.Count];
+		for (int i = 0; i < loops.Count; ++i){
+			for (int j = 0; j < loops.Count; ++j){
+				if (GetBranchData(loops[j][0]).loopId == i){
+					voltageLoopOrder[i] = j;
+				}
+			}
+			
+		}		
+		
+		
+		
+		
+		numValidLoops = loops.Count - numInvalidLoops;
+		
+		// Now renumber our loops (up to the valid ones  the invalid ones should retain an ID of -1 or whatever)
+		for (int i = 0; i < loops.Count; ++i){
+			for (int j= 0; j < loops[i].Count; ++j){
+				GetBranchData(loops[i][j]).loopId = i;
+			}
+		}
+		
+		
+		// Create arrays need to solve equation coeffs
+		double [,] R = new double[numValidLoops, numValidLoops];
+		double [,] V = new double[numValidLoops, 1];
+		
+		Dictionary<Eppy.Tuple<int, int>, bool> loopCombinations = new Dictionary<Eppy.Tuple<int, int>, bool>();
+		//List<Eppy.Tuple<int, int>> loopCombinations = new List<Eppy.Tuple<int, int>>();
+		
+		// run through each loop in ruen (for each row in the matrices)
+		for (int i = 0; i < numValidLoops; ++i){
+			// For each connection in the loop, check the resistance and any voltage drop
+			// We do this by considering the properties of the node we are leaving
+			for (int j = 0; j < loops[i].Count; ++j){
+				// This connection
+				BranchAddress thisAddress = loops[i][j];
+				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				BranchData thisData = GetBranchData (thisAddress);
+				
+				// Our data loopID should be the same as i
+				if (thisData.loopId != i) Debug.LogError ("LoopId/i missmatch!@");
+				
+				// Get current ID for current travelling in the opposite direction
+				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
+				BranchData oppData	= GetBranchData (oppAddress);
+				
+				
+				// We build up the resistance matrix 
+				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
+				if (!oppData.isOuterLoop){
+					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+				}
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				
+				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
+				
+				// Also build a list of unique combinations of loops which corresponds to wires which 
+				// sit on those loops as we want to spread the current out euqally amonst these combinations
+				int val0 = thisData.isOuterLoop ? -1 : thisData.loopId;
+				int val1 = oppData.isOuterLoop ? -1 : oppData.loopId;
+				
+				if (val0 > val1){
+					int temp = val0;
+					val0 = val1;
+					val1 = temp;
+				}
+				
+				
+				
+				Eppy.Tuple<int, int> key = new Eppy.Tuple<int, int>(val0, val1);
+				
+				
+				if (!loopCombinations.ContainsKey(key)){
+					loopCombinations.Add (key, true);
+				}
+				
+			}
+		}  
+		
+
+		// Create "Loop Matrix" which maps loop currents onto the currents on the branches of our graph
+		double [,] L = new double[loopCombinations.Count, numValidLoops];
+		
+		
+		// Dictionary version
+		//		int k = 0;
+		//		foreach (KeyValuePair<Eppy.Tuple<int, int>, bool> entry in loopCombinations){
+		//			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = 1;
+		//			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -1;
+		//			++k;
+		//		}
+		
+		int k = 0;
+		foreach (KeyValuePair<Eppy.Tuple<int, int>, bool> entry in loopCombinations){
+			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = 1;
+			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -1;
+			++k;
+		}
+		
+		// If we just wanted to calculate A solution for the loops, we would write:
+		// Since we may not have full rank,, we find a solution using the Moore-Pensrose Pseudo-inverse
+		//		double[,] RInv = CalcPseudoInverse(R);
+		//		I = MathUtils.Matrix.Multiply(RInv, V); 
+		
+		// However, this doesn't distribute the current well over the different branches of the circuit if there is
+		// no reisstance in it
+		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
+		// what the loops should be (in the final version we should just lose the whole Loop business)
+		
+		// Find the pseudo inverse of this matrix
+		double[,] LInv = CalcPseudoInverse (L);
+		
+		// Suppose C are the individual currents in our mesh, then
+		// V = R x LInv x C
+		
+		// So, find R X LInv, and then find the Pseudo inverse of thast
+		double[,] comb = MathUtils.Matrix.Multiply(R, LInv);
+		double[,] combInv = CalcPseudoInverse(comb);
+		double[,] C = MathUtils.Matrix.Multiply(combInv, V);
+		
+		// Currents
+		double[,] I = MathUtils.Matrix.Multiply (LInv, C);
+		
+		
+		// Check that we get V - if not we have an unsolvable set of equations and 
+		// it means we have a loop of zero resistance with a voltage different in it
+		double[,] testV = MathUtils.Matrix.Multiply(R, I);
+		
+		bool failed = false;
+		for (int i = 0; i < numValidLoops; ++i){
+			// f we find a bad loop
+			if (Math.Abs (V[i, 0] - testV[i, 0]) > epsilon){
+				// Then follow this loop finding all the voltage sources and put them in Emergency mode
+				for (int j = 0; j < loops[i].Count; ++j){
+					BranchAddress thisAddr = loops[i][j];
+					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+						thisElement.TriggerEmergency();
+						failed = true;
+					}
+				}
+			}
+		}
+		
+		//		Debug.Log ("L = " + L.GetLength(0) + " X " + L.GetLength (1));
+		//		Debug.Log ("I = " + I.GetLength(0) + " X " + I.GetLength (1));
+		//		
+		//		
+		//		double[,] currentTest = MathUtils.Matrix.Multiply (L, I);
+		//		
+		//		double[,] testLoops = MathUtils.Matrix.Multiply (LInv, C);
+		//		double[,] doubleCheck1 = MathUtils.Matrix.Multiply (L, I);
+		//		double[,] doubleCheck2 = MathUtils.Matrix.Multiply (L, testLoops);
+		//		
 		if (failed) return false;
 		
 		
@@ -579,7 +786,225 @@ public class Simulator : MonoBehaviour {
 	}
 	
 	
-	bool SolveForCurrents_old(){
+	bool SolveForCurrentsOptBranchesElements(){
+		
+		int numInvalidLoops = 0;
+		// Go through the loops and remove any which are outer loops or of zero length or an invlaid loop
+		// e.g. an outer loop and place them at the end
+		for (int i = loops.Count-1; i >=0 ; --i){
+			if (loops[i].Count == 0 || GetBranchData(loops[i][0]).isOuterLoop){
+				int newIndex = CreateLoop ();
+				loops[newIndex] = loops[i];
+				loops.RemoveAt (i);
+				
+				++numInvalidLoops;
+			}
+		}
+		
+		// It is useful rearrange the loops (see above), for the calculation of currents.
+		// However, for the purposes of voltage analysis, it is better to have then in their original aorder
+		// (as we can guarantee that the starting point of a loop starts connected to a loop we have already traverse
+		// unless we are the first loop in a group.
+		// This array is a way to store that original order  - we can calcukate it based on the fact that the loop Ids
+		// have not yet neen recalcualted
+		
+		voltageLoopOrder = new int[loops.Count];
+		for (int i = 0; i < loops.Count; ++i){
+			for (int j = 0; j < loops.Count; ++j){
+				if (GetBranchData(loops[j][0]).loopId == i){
+					voltageLoopOrder[i] = j;
+				}
+			}
+			
+		}		
+		
+		
+		
+		
+		numValidLoops = loops.Count - numInvalidLoops;
+		
+		// Now renumber our loops (up to the valid ones  the invalid ones should retain an ID of -1 or whatever)
+		for (int i = 0; i < loops.Count; ++i){
+			for (int j= 0; j < loops[i].Count; ++j){
+				GetBranchData(loops[i][j]).loopId = i;
+			}
+		}
+		
+		
+		// Create arrays need to solve equation coeffs
+		double [,] R = new double[numValidLoops, numValidLoops];
+		double [,] V = new double[numValidLoops, 1];
+		
+		Dictionary<Eppy.Tuple<int, int>, float> loopCombinations = new Dictionary<Eppy.Tuple<int, int>, float>();
+		//List<Eppy.Tuple<int, int>> loopCombinations = new List<Eppy.Tuple<int, int>>();
+		
+		// run through each loop in ruen (for each row in the matrices)
+		for (int i = 0; i < numValidLoops; ++i){
+			// For each connection in the loop, check the resistance and any voltage drop
+			// We do this by considering the properties of the node we are leaving
+			for (int j = 0; j < loops[i].Count; ++j){
+				// This connection
+				BranchAddress thisAddress = loops[i][j];
+				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				BranchData thisData = GetBranchData (thisAddress);
+				
+				// Our data loopID should be the same as i
+				if (thisData.loopId != i) Debug.LogError ("LoopId/i missmatch!@");
+				
+				// Get current ID for current travelling in the opposite direction
+				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
+				BranchData oppData	= GetBranchData (oppAddress);
+				
+				
+				// We build up the resistance matrix 
+				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
+				if (!oppData.isOuterLoop){
+					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+				}
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				
+				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
+				
+				// Also build a list of unique combinations of loops which corresponds to wires which 
+				// sit on those loops as we want to spread the current out euqally amonst these combinations
+				int val0 = thisData.isOuterLoop ? -1 : thisData.loopId;
+				int val1 = oppData.isOuterLoop ? -1 : oppData.loopId;
+				
+				if (val0 > val1){
+					int temp = val0;
+					val0 = val1;
+					val1 = temp;
+				}
+				
+				// If one of the entries is an outer loop, then the value  we add is doubled?
+				float val = 1f;
+				if (val0 == -1){
+					val = 2f;
+				}
+				
+				
+				
+				Eppy.Tuple<int, int> key = new Eppy.Tuple<int, int>(val0, val1);
+				
+				
+				if (!loopCombinations.ContainsKey(key)){
+					loopCombinations.Add (key, val);
+				}
+				else{
+					loopCombinations[key] += val;
+				}
+				
+			}
+		}  
+		
+		
+		// Create "Loop Matrix" which maps loop currents onto the currents on the branches of our graph
+		double [,] L = new double[loopCombinations.Count, numValidLoops];
+		
+		
+		// Dictionary version
+		//		int k = 0;
+		//		foreach (KeyValuePair<Eppy.Tuple<int, int>, bool> entry in loopCombinations){
+		//			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = 1;
+		//			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -1;
+		//			++k;
+		//		}
+		
+		int k = 0;
+		foreach (KeyValuePair<Eppy.Tuple<int, int>, float> entry in loopCombinations){
+			if (entry.Key.Item1 != -1) L[k, entry.Key.Item1] = Mathf.Sqrt(entry.Value);
+			if (entry.Key.Item2 != -1) L[k, entry.Key.Item2] = -Mathf.Sqrt(entry.Value);
+			++k;
+		}
+		
+		// If we just wanted to calculate A solution for the loops, we would write:
+		// Since we may not have full rank,, we find a solution using the Moore-Pensrose Pseudo-inverse
+		//		double[,] RInv = CalcPseudoInverse(R);
+		//		I = MathUtils.Matrix.Multiply(RInv, V); 
+		
+		// However, this doesn't distribute the current well over the different branches of the circuit if there is
+		// no reisstance in it
+		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
+		// what the loops should be (in the final version we should just lose the whole Loop business)
+		
+		// Find the pseudo inverse of this matrix
+		double[,] LInv = CalcPseudoInverse (L);
+		
+		// Suppose C are the individual currents in our mesh, then
+		// V = R x LInv x C
+		
+		// So, find R X LInv, and then find the Pseudo inverse of thast
+		double[,] comb = MathUtils.Matrix.Multiply(R, LInv);
+		double[,] combInv = CalcPseudoInverse(comb);
+		double[,] C = MathUtils.Matrix.Multiply(combInv, V);
+		
+		// Now we need to reduce our resultant currents
+		/*
+		k = 0;
+		foreach (KeyValuePair<Eppy.Tuple<int, int>, float> entry in loopCombinations){
+			C[k,0] = C[k,0] / Mathf.Sqrt(entry.Value);
+			++k;
+		}
+		*/
+		
+		// Currents
+		double[,] I = MathUtils.Matrix.Multiply (LInv, C);
+		
+		
+		// Check that we get V - if not we have an unsolvable set of equations and 
+		// it means we have a loop of zero resistance with a voltage different in it
+		double[,] testV = MathUtils.Matrix.Multiply(R, I);
+		
+		bool failed = false;
+		for (int i = 0; i < numValidLoops; ++i){
+			// f we find a bad loop
+			if (Math.Abs (V[i, 0] - testV[i, 0]) > epsilon){
+				// Then follow this loop finding all the voltage sources and put them in Emergency mode
+				for (int j = 0; j < loops[i].Count; ++j){
+					BranchAddress thisAddr = loops[i][j];
+					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+						thisElement.TriggerEmergency();
+						failed = true;
+					}
+				}
+			}
+		}
+		
+		//		Debug.Log ("L = " + L.GetLength(0) + " X " + L.GetLength (1));
+		//		Debug.Log ("I = " + I.GetLength(0) + " X " + I.GetLength (1));
+		//		
+		//		
+		//		double[,] currentTest = MathUtils.Matrix.Multiply (L, I);
+		//		
+		//		double[,] testLoops = MathUtils.Matrix.Multiply (LInv, C);
+		//		double[,] doubleCheck1 = MathUtils.Matrix.Multiply (L, I);
+		//		double[,] doubleCheck2 = MathUtils.Matrix.Multiply (L, testLoops);
+		//		
+		if (failed) return false;
+		
+		
+		
+		
+		
+		loopCurrents = new float[loops.Count];
+		if (I.GetLength(0) != 0){
+			for (int i = 0; i < numValidLoops; ++i){
+				loopCurrents[i] = (float)I[i,0];
+			}
+			// For the invalid loops, just set the current to zero
+			for (int i = numValidLoops; i < loops.Count; ++i){
+				loopCurrents[i] = 0f;
+			}
+			
+		}
+		// all went well
+		return true;
+		
+	}
+	
+	
+	bool SolveForCurrentsOptLoop(){
 	
 		
 		int numInvalidLoops = 0;
@@ -862,7 +1287,30 @@ public class Simulator : MonoBehaviour {
 		// Go through each loop and remove any elements which are from a "Spoke" - i.e., not a loop
 		//TrimSpokes();
 		// Set up equations and solve them (repeat if failed the first time as the failure situation triggers emergency measures which should make it ok)
-		if (!SolveForCurrents()){
+		bool ok = false;
+		switch (minMode){
+			case MinMode.kLoops:
+			{
+				ok = SolveForCurrentsOptLoop();
+				break;
+			}
+			case MinMode.kBranches:
+			{
+				ok = SolveForCurrentsOptBranches();
+				break;
+			}
+			case MinMode.kElements:
+			{
+				ok = SolveForCurrentsOptElements();
+				break;
+			}
+			case MinMode.kElementsOpt:
+			{
+				ok = SolveForCurrentsOptBranchesElements();
+				break;
+			}
+		};
+		if (!ok){
 			return false;
 		}
 		CalcTotalCurrents();

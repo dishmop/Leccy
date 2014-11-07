@@ -148,6 +148,28 @@ public class Grid : MonoBehaviour {
 	void OnGUI () {
 		guiTextDisplay.GUIResetTextLayout();
 		guiTextDisplay.GUIPrintText( "Selected Gird Position: " + selection.x + ", " + selection.y, Color.yellow);
+		float selVolt = 0f;
+		float selAmp = 0f;
+		GridPoint thisPoint = new GridPoint(selection.x, selection.y);
+		if (Circuit.singleton.IsPointInGrid(thisPoint) && Circuit.singleton.ElementExists(thisPoint)){
+			selVolt = Mathf.Max(
+				Mathf.Max(
+					Mathf.Abs(Simulator.singleton.GetVoltage(selection.x, selection.y, 0)), 
+					Mathf.Abs(Simulator.singleton.GetVoltage(selection.x, selection.y, 1))),
+				Mathf.Max(
+					Mathf.Abs(Simulator.singleton.GetVoltage(selection.x, selection.y, 2)), 
+					Mathf.Abs(Simulator.singleton.GetVoltage(selection.x, selection.y, 3))));
+					
+			selAmp = Mathf.Max(
+				Mathf.Max(
+					Mathf.Abs(Simulator.singleton.GetCurrent(selection.x, selection.y, 0)), 
+					Mathf.Abs(Simulator.singleton.GetCurrent(selection.x, selection.y, 1))),
+				Mathf.Max(
+					Mathf.Abs(Simulator.singleton.GetCurrent(selection.x, selection.y, 2)), 
+					Mathf.Abs(Simulator.singleton.GetCurrent(selection.x, selection.y, 3))));
+				
+			}
+		guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
 		
 	}
 	

@@ -216,6 +216,10 @@ Prefab:
       propertyPath: circuitGO
       value: 
       objectReference: {fileID: 1643868792}
+    - target: {fileID: 11400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
+      propertyPath: minMode
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
   m_RootGameObject: {fileID: 791041403}
@@ -441,12 +445,12 @@ Prefab:
       objectReference: {fileID: 327570111}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelToSave
-      value: Bug1
+      value: Trash
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelToLoad
       value: 
-      objectReference: {fileID: 4900000, guid: fd99bd5943b69491795693a1b45d009e, type: 3}
+      objectReference: {fileID: 4900000, guid: 9af162f8a9d9044a982fa0e55d3322ca, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: toolbarRect.width
       value: 1200
@@ -487,6 +491,7 @@ MonoBehaviour:
   circuitGO: {fileID: 1643868792}
   textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
   visMode: 0
+  minMode: 3
   voltageColors:
   - {r: .720588207, g: 0, b: 0, a: 0}
   - {r: .537170172, g: 0, b: .727941155, a: 0}
@@ -768,8 +773,8 @@ MonoBehaviour:
   oldDrawPoint:
     x: -1
     y: -1
-  levelToSave: Bug1
-  levelToLoad: {fileID: 4900000, guid: fd99bd5943b69491795693a1b45d009e, type: 3}
+  levelToSave: Trash
+  levelToLoad: {fileID: 4900000, guid: 9af162f8a9d9044a982fa0e55d3322ca, type: 3}
   enableEditMode: 1
   toolbarRect:
     serializedVersion: 2
