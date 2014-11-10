@@ -104,7 +104,7 @@ MonoBehaviour:
   temperature: 0
   isConnected: 00000000
   isBaked: 00000000
-  resistorPrefab: {fileID: 100006, guid: c29f1b726b3e24dc7af13d73c1516cf9, type: 2}
+  resistorPrefab: {fileID: 100006, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
   displayMesh: {fileID: 0}
   resistance: 1
 --- !u!114 &11400002

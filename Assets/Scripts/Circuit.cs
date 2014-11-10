@@ -12,7 +12,7 @@ public class Circuit : MonoBehaviour {
 	public GameObject wireElementPrefab;	
 	public GameObject cellElementPrefab;	
 	public GameObject resistorElementPrefab;	
-	public GameObject exitElementPrefab;	
+	public GameObject ameterElementPrefab;	
 	public GameObject gridGO;
 	public GameObject particleExplosionPrefab;
 	
@@ -100,8 +100,8 @@ public class Circuit : MonoBehaviour {
 			else if (data.id == resistorElementPrefab.GetComponent<SerializationID>().id){
 				RawAddElement(new GridPoint(data.x, data.y), resistorElementPrefab);
 			}
-			else if (data.id == exitElementPrefab.GetComponent<SerializationID>().id){
-				RawAddElement(new GridPoint(data.x, data.y), exitElementPrefab);
+			else if (data.id == ameterElementPrefab.GetComponent<SerializationID>().id){
+				RawAddElement(new GridPoint(data.x, data.y), ameterElementPrefab);
 			}			
 			GetElement (new GridPoint(data.x, data.y)).Load(br);
 			GetElement (new GridPoint(data.x, data.y)).SetupMesh();
@@ -185,14 +185,14 @@ public class Circuit : MonoBehaviour {
 	
 	
 	
-	public void AddExit(GridPoint point){
-		AddStraighComponent(point, exitElementPrefab);
+	public void AddAmeter(GridPoint point){
+		AddStraighComponent(point, ameterElementPrefab);
 	}
 	
-	public void AddExit(GridPoint prevPoint, GridPoint nextPoint){
+	public void AddAmeter(GridPoint prevPoint, GridPoint nextPoint){
 		GridPoint[] path = CalcGridPath(prevPoint, nextPoint);
 		for (int i = 0; i < path.GetLength(0)-1; ++i){
-			AddStraighComponent( path[i], path[i+1], exitElementPrefab);
+			AddStraighComponent( path[i], path[i+1], ameterElementPrefab);
 		}
 		
 		
@@ -451,6 +451,7 @@ public class Circuit : MonoBehaviour {
 			Quaternion.identity)
 			as GameObject;
 		newElement.transform.parent = transform;
+		newElement.GetComponent<CircuitElement>().SetGridPoint(point);
 		numElementsUsed[wireElementPrefab.GetComponent<SerializationID>().id]++;
 		
 		
@@ -545,10 +546,12 @@ public class Circuit : MonoBehaviour {
 	}
 		
 		
-		
-	
-	
 	public void Erase(GridPoint point){
+		Erase (point, true);
+	}
+	
+	// Set doCount to false if we don't want to replenish out "numebr of elements left" counter
+	public void Erase(GridPoint point, bool doCount){
 	
 		if (!IsPointInGrid(point) || !ElementExists (point)) return;
 		
@@ -584,7 +587,7 @@ public class Circuit : MonoBehaviour {
 		
 		// Now remove the element
 		if (!thisElement.HasAnyConnections(true, true, true,true)){
-			RawRemoveElement(point);
+			RawRemoveElement(point, doCount);
 		}
 		
 	}
@@ -662,6 +665,15 @@ public class Circuit : MonoBehaviour {
 		GameObject.Destroy(elements[point.x, point.y]);
 		elements[point.x, point.y] = null;	
 	}
+	
+	void RawRemoveElement(GridPoint point, bool doCount){
+		if (ElementExists(point) && doCount){
+			numElementsUsed[GetElement (point).GetComponent<SerializationID>().id]--;
+		}
+		GameObject.Destroy(elements[point.x, point.y]);
+		elements[point.x, point.y] = null;	
+	}
+	
 	
 	// Returns the connection direction from thisPoint to the other point
 	int CalcNeighbourDir(GridPoint thisPoint, GridPoint otherPoint){
@@ -782,7 +794,7 @@ public class Circuit : MonoBehaviour {
 		numElementsUsed.Add (wireElementPrefab.GetComponent<SerializationID>().id, 0);
 		numElementsUsed.Add (resistorElementPrefab.GetComponent<SerializationID>().id, 0);
 		numElementsUsed.Add (cellElementPrefab.GetComponent<SerializationID>().id, 0);
-		numElementsUsed.Add (exitElementPrefab.GetComponent<SerializationID>().id, 0);
+		numElementsUsed.Add (ameterElementPrefab.GetComponent<SerializationID>().id, 0);
 	}
 	
 	// Use this for initialization

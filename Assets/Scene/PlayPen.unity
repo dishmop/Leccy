@@ -116,7 +116,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
 --- !u!1001 &366862871
 Prefab:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
       propertyPath: circuit
@@ -162,7 +162,7 @@ Prefab:
       objectReference: {fileID: 1643868793}
     - target: {fileID: 11400004, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
       propertyPath: enableEdit
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
@@ -206,7 +206,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 970b8e4f844e14af0a3f70382822b576, type: 2}
       propertyPath: m_Name
@@ -325,12 +325,16 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
       propertyPath: gridGO
       value: 
       objectReference: {fileID: 1697485505}
+    - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
+      propertyPath: exitElementPrefab
+      value: 
+      objectReference: {fileID: 100000, guid: 038924efb4d3b43068969ab6913df1e0, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
   m_RootGameObject: {fileID: 1643868792}
@@ -373,7 +377,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b25fa5dca73b74f96b18c99c35155eb0, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b25fa5dca73b74f96b18c99c35155eb0, type: 2}
       propertyPath: gridGO
@@ -429,7 +433,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: gridGO
@@ -450,10 +454,14 @@ Prefab:
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelToLoad
       value: 
-      objectReference: {fileID: 4900000, guid: 9af162f8a9d9044a982fa0e55d3322ca, type: 3}
+      objectReference: {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: toolbarRect.width
       value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: loadLevelOnStartup
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
@@ -568,7 +576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39dc6f628614f6eb56d8de247045ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableEdit: 1
+  enableEdit: 0
 --- !u!114 &1207189022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,11 +593,11 @@ MonoBehaviour:
   numWires: 10
   numCells: 10
   numResistors: 10
-  numExits: 1
+  numAmeters: 1
   numWiresOnStartup: 0
   numCellsOnStartup: 0
   numResistorsOnStartup: 0
-  numExitsOnStartup: 0
+  numAmetersOnStartup: 0
 --- !u!1 &1318055787
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,7 +737,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
@@ -775,8 +783,10 @@ MonoBehaviour:
     x: -1
     y: -1
   levelToSave: Trash
-  levelToLoad: {fileID: 4900000, guid: 9af162f8a9d9044a982fa0e55d3322ca, type: 3}
+  levelToLoad: {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
   enableEditMode: 1
+  loadLevelOnStartup: 1
+  nextLevel: {fileID: 0}
   toolbarRect:
     serializedVersion: 2
     x: 25
@@ -887,7 +897,7 @@ MonoBehaviour:
   cellElementPrefab: {fileID: 100000, guid: 8ce9f5c271da94170adc35a2e924d3c1, type: 2}
   resistorElementPrefab: {fileID: 100000, guid: cb12f5f1d86954580a018b0475acf34d,
     type: 2}
-  exitElementPrefab: {fileID: 100000, guid: 571dfdbebada94c599988d416080dd63, type: 2}
+  ameterElementPrefab: {fileID: 100000, guid: 038924efb4d3b43068969ab6913df1e0, type: 2}
   gridGO: {fileID: 1697485505}
   particleExplosionPrefab: {fileID: 100000, guid: 4a59df0bd718e4f0ba4ecdb13f07a130,
     type: 2}
@@ -902,7 +912,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!1001 &1667523746
 Prefab:
   m_ObjectHideFlags: 0
@@ -940,7 +950,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2797f44ac4f2941b49ae61ae81933608, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2797f44ac4f2941b49ae61ae81933608, type: 2}

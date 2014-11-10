@@ -1,30 +1,36 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MathUtils.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI.cs">
     <Files>
-      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelSerializer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="17" Column="44" />
+      <File FileName="Assets/Scripts/LevelSerializer.cs" Line="70" Column="39" />
       <File FileName="Assets/Scripts/GameSettings.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="171" Column="2" />
-      <File FileName="Assets/Scripts/LevelSettings.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="190" Column="12" />
-      <File FileName="Assets/Scripts/MathUtils.cs" Line="10" Column="3" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="882" Column="15" />
-      <File FileName="Assets/Scripts/CircuitElementExit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelSettings.cs" Line="21" Column="22" />
+      <File FileName="Assets/Scripts/UI.cs" Line="234" Column="1" />
+      <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmpMeter.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/Outline.shader" Line="38" Column="99" />
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tuple.cs" Line="1" Column="1" />
+      <File FileName="Assets/TriggerSound.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementExit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GUITextDisplay.cs" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="214" Column="66" />
+      <File FileName="Assets/Scripts/SerializationID.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="383" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="968" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="385" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/UI.cs" line="260" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/UI.cs" line="279" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -4,6 +4,8 @@ using System;
 
 public class UI : MonoBehaviour {
 
+	public static UI singleton;
+
 	public GameObject 	gridGO;
 	public GameObject	circuitGO;
 	public GameObject 	levelSerialiserGO;
@@ -12,6 +14,14 @@ public class UI : MonoBehaviour {
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset	levelToLoad;
 	public bool			enableEditMode = true;
+	public bool			loadLevelOnStartup = false;
+	public TextAsset 	nextLevel;
+	
+	
+	bool 				startupLevelLoaded = false;
+	int 				triggersTriggered = 0;
+	int					numLevelTriggers = 0;
+	bool				levelComplete = false;
 	
 	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
 
@@ -24,7 +34,7 @@ public class UI : MonoBehaviour {
 		kWires,
 		kCells,
 		kResistors,
-		kExits,
+		kAmeters,
 		kErase,
 		kToggleEdit,
 		kLoadLevel,
@@ -39,15 +49,17 @@ public class UI : MonoBehaviour {
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Exits", "Eraser", "Toggle edit", "Load Level", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Ameter", "Eraser", "Toggle edit", "Load Level", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
 	void Start () {
+		singleton = this;
 		grid = gridGO.GetComponent<Grid>();	
 		circuit = circuitGO.GetComponent<Circuit>();	
 		levelSerializer = levelSerialiserGO.GetComponent<LevelSerializer>();
 		
+
 	}
 	
 	bool IsPosInUI(Vector3 pos){
@@ -56,7 +68,13 @@ public class UI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-			// If we are in erase mode, put grid highligher in that mode
+	
+		if (loadLevelOnStartup && !startupLevelLoaded){
+			levelSerializer.LoadLevel(levelToLoad.name + ".bytes");
+			startupLevelLoaded = true;
+		}
+			
+		// If we are in erase mode, put grid highligher in that mode
 		grid.EnableEraseHighlightMode((inputMode == InputMode.kErase));
 	
 		// Track the mouse pointer highlight
@@ -140,13 +158,13 @@ public class UI : MonoBehaviour {
 					}
 					
 				}
-				// If drawing Exits
-				if (inputMode == InputMode.kExits && (GameSettings.singleton.enableEdit || GetNumExitsRemaining() > 0)){
+				// If drawing Ameter
+				if (inputMode == InputMode.kAmeters && (GameSettings.singleton.enableEdit || GetNumAmetersRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
-						circuit.AddExit(oldDrawPoint, newDrawPoint);
+						circuit.AddAmeter(oldDrawPoint, newDrawPoint);
 					}
 					else{
-						circuit.AddExit(newDrawPoint);
+						circuit.AddAmeter(newDrawPoint);
 					}
 					
 				}
@@ -171,8 +189,19 @@ public class UI : MonoBehaviour {
 			// Set to invalid
 			newDrawPoint = new GridPoint();
 		}
+		
+
 	
 	}
+
+	
+	
+	void LateUpdate(){
+		levelComplete =  (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
+		// Reset this as it must be reevaualted every frame
+		triggersTriggered = 0;
+		
+	}	
 	
 	int GetNumWiresRemaining(){
 		return (LevelSettings.singleton.numWires + LevelSettings.singleton.numWiresOnStartup - circuit.numElementsUsed["Wire"]);
@@ -186,8 +215,8 @@ public class UI : MonoBehaviour {
 		return (LevelSettings.singleton.numResistors + LevelSettings.singleton.numResistorsOnStartup - circuit.numElementsUsed["Resistor"]);
 	}
 
-	int GetNumExitsRemaining(){
-		return (LevelSettings.singleton.numExits + LevelSettings.singleton.numExitsOnStartup - circuit.numElementsUsed["Exit"]);
+	int GetNumAmetersRemaining(){
+		return (LevelSettings.singleton.numAmeters + LevelSettings.singleton.numAmetersOnStartup - circuit.numElementsUsed["Ameter"]);
 	}
 
 		
@@ -202,7 +231,7 @@ public class UI : MonoBehaviour {
 			useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
 			useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
 			useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
-			useStrings[(int)InputMode.kExits] += 	 " (" + GetNumExitsRemaining()  +")";
+			useStrings[(int)InputMode.kAmeters] += 	 " (" + GetNumAmetersRemaining()  +")";
 		}
 		
 		InputMode oldInputMode = inputMode;
@@ -212,6 +241,7 @@ public class UI : MonoBehaviour {
 			inputMode = oldInputMode;
 		}
 		else if (inputMode == InputMode.kLoadLevel){
+
 			levelSerializer.LoadLevel(levelToLoad.name + ".bytes");
 			inputMode = oldInputMode;
 		}
@@ -234,8 +264,38 @@ public class UI : MonoBehaviour {
 		else if (inputMode == InputMode.kToggleEdit){
 			GameSettings.singleton.enableEdit = !GameSettings.singleton.enableEdit;
 			inputMode = oldInputMode;
-		}				
+		}		
+		
+		if (levelComplete ){
+			float labelWidth = 400f;
+			float labelHeight = 50f;
+			float borderWidth = 0.5f * (Screen.width - labelWidth);
+			float borderHeight = 100f;
+			
+			GUIStyle labelStyle = new GUIStyle();
+			
+			labelStyle.alignment = TextAnchor.UpperCenter;
+			labelStyle.fontSize = (int)labelHeight;
+			labelStyle.normal.textColor = Color.yellow;
+					
+			GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level Complete!", labelStyle);
+//			if (GUI.Button(new Rect
+		}
+
 		
 	}
+		
+	public void TriggerComplete(){
+		triggersTriggered++;
+	}
 	
+	public void RegisterLevelTrigger(){
+		// If below zero (i.e. no triggers in level) step it up to 0 before adding one
+		numLevelTriggers++;
+	}	
+	
+	public void UnregisterLevelTrigger(){
+		// If below zero (i.e. no triggers in level) step it up to 0 before adding one
+		numLevelTriggers--;
+	}	
 }

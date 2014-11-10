@@ -185,17 +185,42 @@ public class CircuitElement : MonoBehaviour {
 	protected void VisualiseTemperature(){
 		foreach (Transform child in transform.GetChild(0)){
 			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
-			mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
+			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
 		}		
 		
 	}	
 	
 	protected void DestorySelf(){
-		Circuit.singleton.Erase(thisPoint);
+		isBaked[0] = false;
+		isBaked[1] = false;
+		isBaked[2] = false;
+		isBaked[3] = false;
+		Circuit.singleton.Erase(thisPoint, false);
 		Circuit.singleton.TriggerExplosion(thisPoint);
 	
 	}
 	
+	// Return the maximum voltage difference accross all connections
+	public float GetMaxVoltage(){
+		return Mathf.Max(
+			Mathf.Max(
+				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 0)), 
+				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 1))),
+			Mathf.Max(
+				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 2)), 
+				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 3))));
+	}
+	
+	
+	public float GetMaxCurrent(){
+		return Mathf.Max(
+			Mathf.Max(
+				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0)), 
+				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1))),
+			Mathf.Max(
+				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 2)), 
+				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 3))));	
+	}	
 
 	
 }

@@ -76,7 +76,7 @@
 			v2f o;
 			
 			// Changes thickness of wires - Must change this in two places!
-			float gamma =1f;
+			float gamma =1;
 			if (v.vertex.x > 0)
 				v.vertex.x =  0.5 * pow(2 * v.vertex.x, gamma);
 			else
@@ -152,7 +152,7 @@
 		// Integral of the above function
 		float TriangleFunc2Intg(float x){
 			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
-			float val0 = floor(x) /3f;
+			float val0 = floor(x) /3;
 			
 			float xx = frac(x);
 			float val1 = (4.0/3.0) * xx * xx * xx - 2.0 * xx *xx + xx;
@@ -171,7 +171,7 @@
 		// Integral of the above function
 		float TriangleFunc3Intg(float x){
 			// First work out number of entire cycles ad multiply by area under one cycle (0.5)
-			float val0 = floor(x) /10f;
+			float val0 = floor(x) /10;
 			
 			float xx = frac(x);
 			float val1 = (16.0/5.0) * xx * xx * xx * xx  * xx  - 2.0 * xx *xx + xx;
@@ -211,8 +211,8 @@
 				return 0;
 			}
 			else{
-				float constant = -pow(xx, (1f - power))/(1f - power) + pow(0.5f, -power) * (xx);
-				float halfCycleArea = constant + pow(xx + 0.5, (1f - power)) / (1f - power) - pow(0.5, -power) * (0.5+xx);
+				float constant = -pow(xx, (1 - power))/(1 - power) + pow(0.5f, -power) * (xx);
+				float halfCycleArea = constant + pow(xx + 0.5, (1 - power)) / (1 - power) - pow(0.5, -power) * (0.5+xx);
 				float val0 = 2 * halfCycleArea * floor(y);
 				
 				// now suppose we are in the first half
@@ -222,11 +222,11 @@
 				
 				
 				if (yy < 0.5){
-					val1 = pow(xx + yy, (1f - power))/(1f - power) - pow(0.5, -power) * (yy+xx) + constant;
+					val1 = pow(xx + yy, (1 - power))/(1 - power) - pow(0.5, -power) * (yy+xx) + constant;
 				}
 				else{
 					float uu = 1 - yy;
-					val1 = 2 * halfCycleArea - pow((xx + uu), 1f - power)/(1f - power) + pow(0.5, -power) * (uu+xx) - constant;
+					val1 = 2 * halfCycleArea - pow((xx + uu), 1 - power)/(1 - power) + pow(0.5, -power) * (uu+xx) - constant;
 				}
 				
 				return val0 +val1;

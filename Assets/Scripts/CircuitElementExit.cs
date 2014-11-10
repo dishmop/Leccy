@@ -23,6 +23,7 @@ public class CircuitElementExit : CircuitElement {
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
 		bw.Write(resistance);
+		bw.Write (thresholdCurrent);
 	}
 	
 	
@@ -30,6 +31,7 @@ public class CircuitElementExit : CircuitElement {
 		base.Load (br);	
 		
 		resistance = br.ReadSingle();
+		thresholdCurrent = br.ReadSingle();
 	}	
 	
 	
@@ -123,7 +125,7 @@ public class CircuitElementExit : CircuitElement {
 		
 		foreach (Transform child in displayMesh.transform){
 			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
-			if (mesh.name == "SignPanel"){
+			if (mesh != null && mesh.name == "SignPanel"){
 				float current = Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
 				Color useCol = offCol;
 				if (current > 0.1f) useCol = halfOnCol;

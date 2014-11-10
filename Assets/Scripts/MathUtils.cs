@@ -23,6 +23,8 @@ namespace MathUtils
 	class FP{
 		public static bool Feq(float a, float b){return Math.Abs(a - b) < 0.0001f;}
 		public static bool Feq(double a, double b){return Math.Abs(a - b) < 0.0001D;}
+		public static bool Feq(float a, float b, float epsilon){return Math.Abs(a - b) < epsilon;}
+		public static bool Feq(double a, double b, double epsilon){return Math.Abs(a - b) < epsilon;}
 	}	
 	
 	#endregion

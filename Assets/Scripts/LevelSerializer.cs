@@ -34,23 +34,40 @@ public class LevelSerializer : MonoBehaviour {
 	
 	
 	string BuildFullPath(string filename){
-		return Application.dataPath + "/Levels/" + filename;
+		return Application.dataPath + "/Resources/Levels/" + filename;
 		//return Application.persistentDataPath + "/" + filename;
 		
 	}
+	
+	string BuildResourcePath(string filename){
+		String filenameWIthoutExtentions = filename.Substring(0, filename.Length - 6);
+		return "Levels/" + filenameWIthoutExtentions;
+		//return Application.persistentDataPath + "/" + filename;
+		
+	}	
 
 
 	
 	public void LoadLevel(string filename){
-		if (File.Exists(BuildFullPath(filename))){
-			FileStream file = File.OpenRead(BuildFullPath(filename));
-			BinaryReader br = new BinaryReader(file);
+		String path = BuildResourcePath(filename);
+		Debug.Log("LoadLevel: " + path);
+		TextAsset asset = Resources.Load(path) as TextAsset;
+		if (asset != null){
+			Debug.Log ("Loading asset");
+			Stream s = new MemoryStream(asset.bytes);
+			BinaryReader br = new BinaryReader(s);
+			
+//			FileStream file = File.OpenRead(BuildFullPath(filename));
+//			BinaryReader br = new BinaryReader(file);
 			
 			grid.Load(br);
 			circuit.Load(br);
 			levelSettings.Load(br);
 			
-			file.Close();
+			Resources.UnloadAsset(asset);
 		}	
+		else{
+			Debug.Log ("Failed to load asset");
+		}
 	}
 }

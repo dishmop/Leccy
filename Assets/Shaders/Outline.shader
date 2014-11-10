@@ -35,7 +35,7 @@
 		
 		        float4 frag(v2f i) : COLOR
 		        {
-		        	float4 heatCol =  float4( _Temperature, pow(_Temperature, 20), pow(_Temperature, 40), 1f);
+		        	float4 heatCol =  float4( _Temperature, pow(_Temperature, 20), pow(_Temperature, 40), 1);
 
 		        	return _Color +  heatCol;
 		        }
