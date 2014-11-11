@@ -182,6 +182,10 @@ public class Circuit : MonoBehaviour {
 		
 	}	
 	
+	public void ClickCell(GridPoint point){
+		ClickStraighComponent(point, cellElementPrefab);
+	}
+	
 	
 	
 	
@@ -236,6 +240,19 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	
+	void ClickStraighComponent(GridPoint point, GameObject prefab){
+		if (!IsPointInGrid(point)) return;
+		
+		// If there is a component here which is already baked then cannot do anything else
+		if (ElementExists (point) && GetElement (point).IsComponentBaked()) return;
+		
+		// If there is already the same kind of straight component here, then just send it an on-click message and return
+		if (ElementExists (point) && UnityEngine.Object.ReferenceEquals(GetElement (point).GetType (), prefab.GetComponent<CircuitElement>().GetType ())){
+			GetElement (point).OnClick();
+			return;
+		}
+	}
+	
 	void AddStraighComponent(GridPoint point, GameObject prefab){
 	
 		if (!IsPointInGrid(point)) return;
@@ -265,7 +282,7 @@ public class Circuit : MonoBehaviour {
 		bool leftRightOK = (leftOK && rightOK);
 		
 		// If we can't place one up and down or we can't place one left and right then we can't place once at all.
-		if (!upDownOK && !upDownOK) return;
+		if (!leftRightOK && !upDownOK) return;
 			
 		// Now create our new resistor
 		GameObject newElement = Instantiate(

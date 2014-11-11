@@ -49,6 +49,10 @@ public class LevelSerializer : MonoBehaviour {
 
 	
 	public void LoadLevel(string filename){
+		if (filename == null){
+			Debug.Log ("Attempting to load null level");
+			return;
+		}
 		String path = BuildResourcePath(filename);
 		Debug.Log("LoadLevel: " + path);
 		TextAsset asset = Resources.Load(path) as TextAsset;

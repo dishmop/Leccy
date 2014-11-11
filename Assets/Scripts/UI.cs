@@ -12,7 +12,8 @@ public class UI : MonoBehaviour {
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
 	public string 		levelToSave = "DefaultLevel";
-	public TextAsset	levelToLoad;
+	public TextAsset[]	levelsToLoad = new TextAsset[10];
+	public int			currentLevelIndex = 0;
 	public bool			enableEditMode = true;
 	public bool			loadLevelOnStartup = false;
 	public TextAsset 	nextLevel;
@@ -22,6 +23,7 @@ public class UI : MonoBehaviour {
 	int 				triggersTriggered = 0;
 	int					numLevelTriggers = 0;
 	bool				levelComplete = false;
+	float				levelLoadFade = 0;
 	
 	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
 
@@ -36,8 +38,8 @@ public class UI : MonoBehaviour {
 		kResistors,
 		kAmeters,
 		kErase,
-		kToggleEdit,
 		kLoadLevel,
+		kToggleEdit,
 		kSaveLevel,
 		kClearAll,
 		kBakeConnect,
@@ -49,7 +51,7 @@ public class UI : MonoBehaviour {
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Ameter", "Eraser", "Toggle edit", "Load Level", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Ameter", "Eraser", "Reload Level", "Toggle edit", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
@@ -67,10 +69,18 @@ public class UI : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 	
+		if (levelLoadFade > 0) levelLoadFade -= 0.01f;
+	
+		Camera.main.transform.FindChild("Quad").gameObject.SetActive(levelComplete);
+		if (levelComplete){
+			return;
+		}
 		if (loadLevelOnStartup && !startupLevelLoaded){
-			levelSerializer.LoadLevel(levelToLoad.name + ".bytes");
+			if (levelsToLoad[currentLevelIndex] != null){
+				LoadLevel(currentLevelIndex);
+			}
 			startupLevelLoaded = true;
 		}
 			
@@ -139,15 +149,21 @@ public class UI : MonoBehaviour {
 				}
 
 				// If drawing cells
-				if (inputMode == InputMode.kCells && (GameSettings.singleton.enableEdit || GetNumCellsRemaining() > 0)){
-					if (oldDrawPoint.IsValid ()){
-						circuit.AddCell(oldDrawPoint, newDrawPoint);
+				if (inputMode == InputMode.kCells ){
+					if (GameSettings.singleton.enableEdit || GetNumCellsRemaining() > 0){
+						if (oldDrawPoint.IsValid ()){
+							circuit.AddCell(oldDrawPoint, newDrawPoint);
+						}
+						else{
+							circuit.AddCell(newDrawPoint);
+						}
 					}
 					else{
-						circuit.AddCell(newDrawPoint);
+						circuit.ClickCell(newDrawPoint);
 					}
 					
-				}				
+				}
+				
 				// If drawing resistors
 				if (inputMode == InputMode.kResistors && (GameSettings.singleton.enableEdit || GetNumResistorsRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
@@ -218,69 +234,128 @@ public class UI : MonoBehaviour {
 	int GetNumAmetersRemaining(){
 		return (LevelSettings.singleton.numAmeters + LevelSettings.singleton.numAmetersOnStartup - circuit.numElementsUsed["Ameter"]);
 	}
+	
+	void LoadLevel(int index){
+		if (index < levelsToLoad.Length && levelsToLoad[index] != null){
+			levelSerializer.LoadLevel(levelsToLoad[index].name + ".bytes");
+			inputMode = InputMode.kWires;
+			levelLoadFade = 2;
+		}
+	}
 
 		
-	void OnGUI () {
-		// If not in editor mode we only want to show a subset of the buttons
-		int numButtons = GameSettings.singleton.enableEdit ? (int)InputMode.kNumButtons : numNonEditButtons;
-		string[] useStrings = new string[numButtons];
-		Array.Copy(toolbarStrings, useStrings, numButtons);
+	void OnGUI (){
+	
+		// For big labels accross the centre of the screen
+		float labelWidth = 500f;
+		float labelHeight = 50f;
+		float borderWidth = 0.5f * (Screen.width - labelWidth);
+		float borderHeight = 0.5f * (Screen.height - labelHeight);
 		
-		// If not in edit mode, append the number of elements let to use
-		if (!GameSettings.singleton.enableEdit){
-			useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
-			useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
-			useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
-			useStrings[(int)InputMode.kAmeters] += 	 " (" + GetNumAmetersRemaining()  +")";
-		}
 		
-		InputMode oldInputMode = inputMode;
-		inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, useStrings);
-		if (inputMode == InputMode.kClearAll){
-			Application.LoadLevel(Application.loadedLevel);
-			inputMode = oldInputMode;
-		}
-		else if (inputMode == InputMode.kLoadLevel){
-
-			levelSerializer.LoadLevel(levelToLoad.name + ".bytes");
-			inputMode = oldInputMode;
-		}
-		else if (inputMode == InputMode.kSaveLevel){
-			levelSerializer.SaveLevel(levelToSave + ".bytes");
-			inputMode = oldInputMode;
-		}
-		else if (inputMode == InputMode.kBakeConnect){
-			circuit.BakeConnect();
-			inputMode = oldInputMode;
-		}	
-		else if (inputMode == InputMode.kBakeAll){
-			circuit.BakeAll();
-			inputMode = oldInputMode;
-		}						
-		else if (inputMode == InputMode.kUnbake){
-			circuit.Unbake();
-			inputMode = oldInputMode;
-		}				
-		else if (inputMode == InputMode.kToggleEdit){
-			GameSettings.singleton.enableEdit = !GameSettings.singleton.enableEdit;
-			inputMode = oldInputMode;
-		}		
-		
+	
 		if (levelComplete ){
-			float labelWidth = 400f;
-			float labelHeight = 50f;
-			float borderWidth = 0.5f * (Screen.width - labelWidth);
-			float borderHeight = 100f;
-			
+		
+			float buttonWidth = 200f;
 			GUIStyle labelStyle = new GUIStyle();
 			
 			labelStyle.alignment = TextAnchor.UpperCenter;
 			labelStyle.fontSize = (int)labelHeight;
 			labelStyle.normal.textColor = Color.yellow;
-					
-			GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level Complete!", labelStyle);
-//			if (GUI.Button(new Rect
+			
+			if (currentLevelIndex != levelsToLoad.Length-1){
+				GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + " Complete!", labelStyle);
+				GUI.color = Color.yellow;
+				if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1))){
+					LoadLevel(currentLevelIndex);
+				}
+				if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Load next level")){
+					currentLevelIndex++;
+					LoadLevel(currentLevelIndex);
+				}
+			}
+			else{
+				GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Game Complete!!!", labelStyle);
+				GUI.color = Color.yellow;
+				if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1))){
+					LoadLevel(currentLevelIndex);
+				}
+				if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Restart the game")){
+					currentLevelIndex = 0;
+					LoadLevel(currentLevelIndex);
+				}
+			}
+			//			if (GUI.Button(new Rect
 		}
+		else
+		{
+			// if we have just started a level
+			if (levelLoadFade > 0){
+				float buttonWidth = 200f;
+				GUIStyle labelStyle = new GUIStyle();
+				
+				labelStyle.alignment = TextAnchor.UpperCenter;
+				labelStyle.fontSize = (int)labelHeight;
+				Color useCol = Color.green;
+				useCol.a = levelLoadFade;
+				labelStyle.normal.textColor = useCol;
+				
+				if (currentLevelIndex != levelsToLoad.Length - 1){
+					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + ": " + levelsToLoad[currentLevelIndex].name, labelStyle);
+				}
+				else{
+					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Final Level: " + levelsToLoad[currentLevelIndex].name, labelStyle);
+				}
+					
+			}
+		
+			// If not in editor mode we only want to show a subset of the buttons
+			int numButtons = GameSettings.singleton.enableEdit ? (int)InputMode.kNumButtons : numNonEditButtons;
+			string[] useStrings = new string[numButtons];
+			Array.Copy(toolbarStrings, useStrings, numButtons);
+			
+			// If not in edit mode, append the number of elements let to use
+			if (!GameSettings.singleton.enableEdit){
+				useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
+				useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
+				useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
+				useStrings[(int)InputMode.kAmeters] += 	 " (" + GetNumAmetersRemaining()  +")";
+			}
+			
+			InputMode oldInputMode = inputMode;
+			inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, useStrings);
+			if (inputMode == InputMode.kClearAll){
+				Application.LoadLevel(Application.loadedLevel);
+				inputMode = oldInputMode;
+			}
+			else if (inputMode == InputMode.kLoadLevel){
+	
+				LoadLevel(currentLevelIndex);
+				inputMode = oldInputMode;
+			}
+			else if (inputMode == InputMode.kSaveLevel){
+				levelSerializer.SaveLevel(levelToSave + ".bytes");
+				inputMode = oldInputMode;
+			}
+			else if (inputMode == InputMode.kBakeConnect){
+				circuit.BakeConnect();
+				inputMode = oldInputMode;
+			}	
+			else if (inputMode == InputMode.kBakeAll){
+				circuit.BakeAll();
+				inputMode = oldInputMode;
+			}						
+			else if (inputMode == InputMode.kUnbake){
+				circuit.Unbake();
+				inputMode = oldInputMode;
+			}				
+			else if (inputMode == InputMode.kToggleEdit){
+				GameSettings.singleton.enableEdit = !GameSettings.singleton.enableEdit;
+				inputMode = oldInputMode;
+			}	
+		}	
+		
+
 
 		
 	}

@@ -403,6 +403,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -462,6 +466,26 @@ Prefab:
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: loadLevelOnStartup
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: b365594f4e213442d835a6697251462b, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: e67504fa10ed4427488280e96e155114, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[2]
+      value: 
+      objectReference: {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: numNonEditButtons
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: currentLevelIndex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
@@ -684,7 +708,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 10, y: 10, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1462364797}
   m_Father: {fileID: 0}
   m_RootOrder: 2
 --- !u!114 &1318055793
@@ -744,6 +769,62 @@ Prefab:
   m_RootGameObject: {fileID: 1697485505}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1462364793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1462364797}
+  - 33: {fileID: 1462364796}
+  - 23: {fileID: 1462364794}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1462364794
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1462364793}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 5e9f5db08f7b74e2a87ef7875ce346fd, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1462364796
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1462364793}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1462364797
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1462364793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalScale: {x: 200, y: 200, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1318055792}
+  m_RootOrder: 0
 --- !u!1 &1482048797
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,7 +864,11 @@ MonoBehaviour:
     x: -1
     y: -1
   levelToSave: Trash
-  levelToLoad: {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
+  levelsToLoad:
+  - {fileID: 4900000, guid: b365594f4e213442d835a6697251462b, type: 3}
+  - {fileID: 4900000, guid: e67504fa10ed4427488280e96e155114, type: 3}
+  - {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
+  currentLevelIndex: 0
   enableEditMode: 1
   loadLevelOnStartup: 1
   nextLevel: {fileID: 0}
@@ -793,7 +878,7 @@ MonoBehaviour:
     y: 25
     width: 1200
     height: 30
-  numNonEditButtons: 7
+  numNonEditButtons: 6
   inputMode: 0
 --- !u!4 &1482048799
 Transform:
@@ -950,7 +1035,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2797f44ac4f2941b49ae61ae81933608, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2797f44ac4f2941b49ae61ae81933608, type: 2}

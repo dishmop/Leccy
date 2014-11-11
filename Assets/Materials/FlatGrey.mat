@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Outline
-  m_Shader: {fileID: 4800000, guid: 916f77c0720924678b205c11c49d0daf, type: 3}
+  m_Name: FlatGrey
+  m_Shader: {fileID: 10753, guid: 0000000000000000e000000000000000, type: 0}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -17,7 +17,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 0f1f2b1a614224b83b652deb6f271341, type: 3}
+          m_Texture: {fileID: 2800000, guid: 2d3c30d5587404812b0218ed5662064d, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -25,12 +25,8 @@ Material:
         first:
           name: PixelSnap
         second: 0
-      data:
-        first:
-          name: _Temperature
-        second: 0
     m_Colors:
       data:
         first:
           name: _Color
-        second: {r: .027032854, g: .588757157, b: .735294104, a: 1}
+        second: {r: 1, g: 1, b: 1, a: 1}
