@@ -335,7 +335,7 @@ public class Circuit : MonoBehaviour {
 					// Check that we can add ourselves
 					if (GetElement (neigbourPoint).CanSetConnection(CircuitElement.CalcInvDir(i), true)){
 						// Check the connection at the other side to see if it is a baked component who cannot make this connection
-						GridPoint oppositPoint = point + offsets[CircuitElement.CalcInvDir(i)];
+						GridPoint oppositPoint = point + offsets[i];
 						if (IsPointInGrid(oppositPoint) && ElementExists (oppositPoint) && (!GetElement(oppositPoint).IsComponentBaked() || GetElement(oppositPoint).CanSetConnection(i, true))){
 							thisElement.isConnected[i] = true;
 						}

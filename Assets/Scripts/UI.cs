@@ -14,7 +14,6 @@ public class UI : MonoBehaviour {
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 0;
-	public bool			enableEditMode = true;
 	public bool			loadLevelOnStartup = false;
 	public TextAsset 	nextLevel;
 	
@@ -73,7 +72,7 @@ public class UI : MonoBehaviour {
 	
 		if (levelLoadFade > 0) levelLoadFade -= 0.01f;
 	
-		Camera.main.transform.FindChild("Quad").gameObject.SetActive(levelComplete);
+		Camera.main.transform.FindChild("Quad").gameObject.SetActive(levelComplete && !GameSettings.singleton.enableEdit );
 		if (levelComplete){
 			return;
 		}
@@ -254,7 +253,7 @@ public class UI : MonoBehaviour {
 		
 		
 	
-		if (levelComplete ){
+		if (levelComplete && !GameSettings.singleton.enableEdit){
 		
 			float buttonWidth = 200f;
 			GUIStyle labelStyle = new GUIStyle();

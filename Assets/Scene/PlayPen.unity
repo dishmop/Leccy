@@ -405,7 +405,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelsToLoad.Array.size
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: m_LocalPosition.x
@@ -470,15 +470,15 @@ Prefab:
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelsToLoad.Array.data[0]
       value: 
-      objectReference: {fileID: 4900000, guid: b365594f4e213442d835a6697251462b, type: 3}
+      objectReference: {fileID: 4900000, guid: 2f809e82a53cd443f8ffb2dd7ea6749b, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelsToLoad.Array.data[1]
       value: 
-      objectReference: {fileID: 4900000, guid: e67504fa10ed4427488280e96e155114, type: 3}
+      objectReference: {fileID: 4900000, guid: da371028293bf43debf0c2c6ac379a6c, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelsToLoad.Array.data[2]
       value: 
-      objectReference: {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
+      objectReference: {fileID: 4900000, guid: 01b044be77e65435e8f7a69b89587f94, type: 3}
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: numNonEditButtons
       value: 6
@@ -487,6 +487,54 @@ Prefab:
       propertyPath: currentLevelIndex
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: enableEditMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: newDrawPoint.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: newDrawPoint.y
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: oldDrawPoint.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: oldDrawPoint.y
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[3]
+      value: 
+      objectReference: {fileID: 4900000, guid: 0a78abf6ef9f147a7bc01aa04cc365f3, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[4]
+      value: 
+      objectReference: {fileID: 4900000, guid: 7aaf8b20c0d1540aca20ed19fbf21721, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[5]
+      value: 
+      objectReference: {fileID: 4900000, guid: caea36956f4aa434a8a3275ff784c71a, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[6]
+      value: 
+      objectReference: {fileID: 4900000, guid: 67b6e0e09b85a4a14ad7cc1a57589dba, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[7]
+      value: 
+      objectReference: {fileID: 4900000, guid: 5ef168e1ccb024d06a8c860f9c191865, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[8]
+      value: 
+      objectReference: {fileID: 4900000, guid: 7e4b5047a78254a469960b49d352d60c, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[9]
+      value: 
+      objectReference: {fileID: 4900000, guid: 68eae94e313ce4b62a8602a5579d4549, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
   m_RootGameObject: {fileID: 1482048797}
@@ -858,18 +906,24 @@ MonoBehaviour:
   circuitGO: {fileID: 1643868792}
   levelSerialiserGO: {fileID: 327570111}
   newDrawPoint:
-    x: -1
-    y: -1
+    x: 10
+    y: 13
   oldDrawPoint:
-    x: -1
-    y: -1
+    x: 10
+    y: 13
   levelToSave: Trash
   levelsToLoad:
-  - {fileID: 4900000, guid: b365594f4e213442d835a6697251462b, type: 3}
-  - {fileID: 4900000, guid: e67504fa10ed4427488280e96e155114, type: 3}
-  - {fileID: 4900000, guid: 8d35a2638f35745bd98d217f212070de, type: 3}
+  - {fileID: 4900000, guid: 2f809e82a53cd443f8ffb2dd7ea6749b, type: 3}
+  - {fileID: 4900000, guid: da371028293bf43debf0c2c6ac379a6c, type: 3}
+  - {fileID: 4900000, guid: 01b044be77e65435e8f7a69b89587f94, type: 3}
+  - {fileID: 4900000, guid: 0a78abf6ef9f147a7bc01aa04cc365f3, type: 3}
+  - {fileID: 4900000, guid: 7aaf8b20c0d1540aca20ed19fbf21721, type: 3}
+  - {fileID: 4900000, guid: caea36956f4aa434a8a3275ff784c71a, type: 3}
+  - {fileID: 4900000, guid: 67b6e0e09b85a4a14ad7cc1a57589dba, type: 3}
+  - {fileID: 4900000, guid: 5ef168e1ccb024d06a8c860f9c191865, type: 3}
+  - {fileID: 4900000, guid: 7e4b5047a78254a469960b49d352d60c, type: 3}
+  - {fileID: 4900000, guid: 68eae94e313ce4b62a8602a5579d4549, type: 3}
   currentLevelIndex: 0
-  enableEditMode: 1
   loadLevelOnStartup: 1
   nextLevel: {fileID: 0}
   toolbarRect:
