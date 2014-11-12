@@ -118,7 +118,7 @@ public class CircuitElementAmpMeter : CircuitElement {
 	
 	void OnDestroy(){
 		GameObject.Destroy (displayMesh);
-		UI.singleton.UnregisterLevelTrigger();
+		if (hasTarget) UI.singleton.UnregisterLevelTrigger();
 	}
 	
 	bool IsOnTarget(){

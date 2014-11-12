@@ -15,7 +15,7 @@ public class UI : MonoBehaviour {
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 0;
 	public bool			loadLevelOnStartup = false;
-	public TextAsset 	nextLevel;
+
 	
 	
 	bool 				startupLevelLoaded = false;
@@ -212,7 +212,7 @@ public class UI : MonoBehaviour {
 	
 	
 	void LateUpdate(){
-		levelComplete =  (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
+		levelComplete =  (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers && !GameSettings.singleton.enableEdit);
 		// Reset this as it must be reevaualted every frame
 		triggersTriggered = 0;
 		
@@ -239,6 +239,7 @@ public class UI : MonoBehaviour {
 			levelSerializer.LoadLevel(levelsToLoad[index].name + ".bytes");
 			inputMode = InputMode.kWires;
 			levelLoadFade = 2;
+			inputMode = InputMode.kWires;
 		}
 	}
 
@@ -253,7 +254,7 @@ public class UI : MonoBehaviour {
 		
 		
 	
-		if (levelComplete && !GameSettings.singleton.enableEdit){
+		if (levelComplete){
 		
 			float buttonWidth = 200f;
 			GUIStyle labelStyle = new GUIStyle();
@@ -290,7 +291,6 @@ public class UI : MonoBehaviour {
 		{
 			// if we have just started a level
 			if (levelLoadFade > 0){
-				float buttonWidth = 200f;
 				GUIStyle labelStyle = new GUIStyle();
 				
 				labelStyle.alignment = TextAnchor.UpperCenter;
@@ -330,7 +330,7 @@ public class UI : MonoBehaviour {
 			else if (inputMode == InputMode.kLoadLevel){
 	
 				LoadLevel(currentLevelIndex);
-				inputMode = oldInputMode;
+				inputMode = InputMode.kWires;
 			}
 			else if (inputMode == InputMode.kSaveLevel){
 				levelSerializer.SaveLevel(levelToSave + ".bytes");

@@ -405,7 +405,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: levelsToLoad.Array.size
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
       propertyPath: m_LocalPosition.x
@@ -535,6 +535,14 @@ Prefab:
       propertyPath: levelsToLoad.Array.data[9]
       value: 
       objectReference: {fileID: 4900000, guid: 68eae94e313ce4b62a8602a5579d4549, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[10]
+      value: 
+      objectReference: {fileID: 4900000, guid: cf317dee0c7784b2d89b2b97bc8d067d, type: 3}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: levelsToLoad.Array.data[11]
+      value: 
+      objectReference: {fileID: 4900000, guid: 5a6fd987eccbe41708df6da2eca18aca, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
   m_RootGameObject: {fileID: 1482048797}
@@ -923,9 +931,10 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 5ef168e1ccb024d06a8c860f9c191865, type: 3}
   - {fileID: 4900000, guid: 7e4b5047a78254a469960b49d352d60c, type: 3}
   - {fileID: 4900000, guid: 68eae94e313ce4b62a8602a5579d4549, type: 3}
+  - {fileID: 4900000, guid: cf317dee0c7784b2d89b2b97bc8d067d, type: 3}
+  - {fileID: 4900000, guid: 5a6fd987eccbe41708df6da2eca18aca, type: 3}
   currentLevelIndex: 0
   loadLevelOnStartup: 1
-  nextLevel: {fileID: 0}
   toolbarRect:
     serializedVersion: 2
     x: 25

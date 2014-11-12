@@ -22,7 +22,9 @@ public class LevelSerializer : MonoBehaviour {
 	
 
 	public void SaveLevel(string filename){
+#if UNITY_EDITOR		
 		FileStream file = File.Create(BuildFullPath(filename));
+		
 		BinaryWriter bw = new BinaryWriter(file);
 		
 		grid.Save(bw);
@@ -30,6 +32,11 @@ public class LevelSerializer : MonoBehaviour {
 		levelSettings.Save(bw);
 
 		file.Close();
+		
+		// Ensure the assets are all realoaded and the cache cleared.
+
+		UnityEditor.AssetDatabase.Refresh();
+#endif
 	}
 	
 	
