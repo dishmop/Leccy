@@ -119,6 +119,8 @@ public class CircuitElementResistor : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		displayMesh.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
+		
 		SetupMesh ();
 		VisualiseTemperature();
 		

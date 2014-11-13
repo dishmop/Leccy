@@ -23,6 +23,10 @@ public class FractionCalc : MonoBehaviour {
 	void Update () {
 	
 		Transform recentreT = transform.FindChild ("Recentre").transform;
+		
+		// Ensure the text always points upwards
+		recentreT.rotation = Quaternion.identity;
+		
 		recentreT.FindChild("Integer").GetComponent<TextMesh>().color = color;
 		recentreT.FindChild("Numerator").GetComponent<TextMesh>().color = color;
 		recentreT.FindChild("Denominator").GetComponent<TextMesh>().color = color;
@@ -63,8 +67,16 @@ public class FractionCalc : MonoBehaviour {
 		float maxX= Mathf.Max (Mathf.Max (integerBounds.max.x, numeratorBounds.max.x), denominatorBounds.max.x);
 		float midX = 0.5f * (minX + maxX);
 		
-		Vector3 offset = new Vector3(recentreT.position.x - midX, 0, 0);
-		recentreT.transform.localPosition  = offset;
+		Vector3 offset = new Vector3(transform.position.x - midX, 0, 0);
+		
+		// Need to do this to cope with Amater effect scaking the number
+		offset.x *= 1f/recentreT.lossyScale.x;
+		offset.y *= 1f/recentreT.lossyScale.y;
+		
+		Vector3 newPos = recentreT.position + offset;
+		recentreT.position  = newPos;
+		
+		
 		
 	}
 	

@@ -8,12 +8,18 @@ using System.IO;
 public class CircuitElementAmpMeter : CircuitElement {
 	public GameObject 	meterPrefab;
 	public GameObject	displayMesh;
+	public GameObject	triggerEffect;
 	public float		targetAmp = 1;
 	public bool			hasTarget = true;
 	public Color		textColorNorm;
 	public Color		textColorTarget;
 	public Color 		signColorNorm;
 	public Color 		signColorTarget;
+	
+	
+	bool				wasOnTarget = false;
+	
+	float pulse = 0;
 	
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
@@ -125,10 +131,28 @@ public class CircuitElementAmpMeter : CircuitElement {
 		return hasTarget && MathUtils.FP.Feq(GetMaxCurrent(), targetAmp);
 	}
 	
+	
+	void TriggerTargetEffect(){
+		Transform actualText = displayMesh.transform.FindChild ("ActualText");
+		GameObject effect = GameObject.Instantiate(triggerEffect, actualText.position, actualText.rotation) as GameObject;
+		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetMaxCurrent();
+		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().color = actualText.gameObject.GetComponent<FractionCalc>().color;
+		effect.transform.parent = transform;
+	
+	}
+	
 
 	
 	// Update is called once per frame
 	void Update () {
+		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
+		
+		if (wasOnTarget != IsOnTarget() && IsOnTarget()){
+			TriggerTargetEffect();
+						
+		}
+		wasOnTarget = IsOnTarget();
+		
 		SetupMesh ();
 		
 		if (hasTarget != prevHasTarget){
@@ -177,7 +201,12 @@ public class CircuitElementAmpMeter : CircuitElement {
 			}		
 			if (child.name == "SignPanel"){
 				MeshRenderer mesh = child.gameObject.GetComponent<MeshRenderer>();
-				mesh.materials[0].SetColor ("_Color", IsOnTarget() ? signColorTarget : signColorNorm);
+				Color useCol = signColorNorm;
+				if (IsOnTarget()){
+					useCol = Color.Lerp(signColorNorm, signColorTarget, pulse);
+				}
+				
+				mesh.materials[0].SetColor ("_Color",  useCol);
 				
 			}						
 			

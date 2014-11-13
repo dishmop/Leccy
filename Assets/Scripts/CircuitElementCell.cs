@@ -144,6 +144,8 @@ public class CircuitElementCell : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+	
+		displayMesh.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = voltage;
 		SetupMesh ();
 		
 		

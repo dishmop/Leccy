@@ -56,11 +56,11 @@ MonoBehaviour:
   numWires: 10
   numCells: 10
   numResistors: 10
-  numExits: 1
+  numAmeters: 1
   numWiresOnStartup: 0
   numCellsOnStartup: 0
   numResistorsOnStartup: 0
-  numExitsOnStartup: 0
+  numAmetersOnStartup: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,7 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39dc6f628614f6eb56d8de247045ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableEdit: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

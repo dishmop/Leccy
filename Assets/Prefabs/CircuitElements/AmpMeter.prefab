@@ -59,12 +59,13 @@ MonoBehaviour:
   isBaked: 00000000
   meterPrefab: {fileID: 100008, guid: 5c48c6770043a460981604685285b7de, type: 2}
   displayMesh: {fileID: 0}
+  triggerEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
   targetAmp: 1
   hasTarget: 1
-  textColorNorm: {r: .24080883, g: .81376797, b: .963235319, a: 1}
+  textColorNorm: {r: .41911763, g: .807707787, b: 1, a: 1}
   textColorTarget: {r: 1, g: 1, b: 1, a: 1}
-  signColorNorm: {r: .259515554, g: .281064332, b: .705882311, a: 0}
-  signColorTarget: {r: 0, g: .710344791, b: 1, a: 0}
+  signColorNorm: {r: .367647052, g: .502839684, b: 1, a: 0}
+  signColorTarget: {r: .911764681, g: .974442184, b: 1, a: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

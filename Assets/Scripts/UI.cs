@@ -9,21 +9,34 @@ public class UI : MonoBehaviour {
 	public GameObject 	gridGO;
 	public GameObject	circuitGO;
 	public GameObject 	levelSerialiserGO;
+	public GameObject	simulationGO;
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 0;
 	public bool			loadLevelOnStartup = false;
+	public bool			enableEditor = true;
 
 	
 	
 	bool 				startupLevelLoaded = false;
 	int 				triggersTriggered = 0;
 	int					numLevelTriggers = 0;
-	bool				levelComplete = false;
 	float				levelLoadFade = 0;
+	float				buttonPulseAlpha = 0;
+	int					levelCompleteMsgCountdown;
 	
+	
+	enum GameMode{
+		kNone,
+		kStartScreen,
+		kPlayGame,
+		kLevelComplete,
+		kGameComplete,
+		kEditMode
+	};
+	GameMode			gameMode = GameMode.kNone;
 	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
 
 
@@ -59,6 +72,7 @@ public class UI : MonoBehaviour {
 		grid = gridGO.GetComponent<Grid>();	
 		circuit = circuitGO.GetComponent<Circuit>();	
 		levelSerializer = levelSerialiserGO.GetComponent<LevelSerializer>();
+		gameMode = (enableEditor) ? GameMode.kEditMode : GameMode.kStartScreen;
 		
 
 	}
@@ -70,18 +84,27 @@ public class UI : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 	
-		if (levelLoadFade > 0) levelLoadFade -= 0.01f;
+		buttonPulseAlpha = 0.75f + 0.25f * Mathf.Sin (10 * Time.realtimeSinceStartup);
 	
-		Camera.main.transform.FindChild("Quad").gameObject.SetActive(levelComplete && !GameSettings.singleton.enableEdit );
-		if (levelComplete){
+		//Camera.main.transform.FindChild("Quad").gameObject.SetActive(gameMode == GameMode.kLevelComplete || gameMode == GameMode.kGameComplete);
+		Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
+		Camera.main.transform.FindChild("StartScreen").gameObject.SetActive(gameMode == GameMode.kStartScreen );
+		
+		gridGO.SetActive(gameMode != GameMode.kStartScreen);
+		simulationGO.SetActive(gameMode != GameMode.kStartScreen);
+		
+		// Ensure that when we do complete a level, it takes a little time before all the messages and buttons appear
+		if (gameMode == GameMode.kPlayGame) levelCompleteMsgCountdown = 60;
+		
+		
+		if (gameMode == GameMode.kLevelComplete || gameMode == GameMode.kGameComplete || gameMode == GameMode.kStartScreen){
+			levelCompleteMsgCountdown--;
 			return;
 		}
-		if (loadLevelOnStartup && !startupLevelLoaded){
-			if (levelsToLoad[currentLevelIndex] != null){
-				LoadLevel(currentLevelIndex);
-			}
-			startupLevelLoaded = true;
-		}
+	
+		
+		if (levelLoadFade > 0) levelLoadFade -= 0.01f;
+		
 			
 		// If we are in erase mode, put grid highligher in that mode
 		grid.EnableEraseHighlightMode((inputMode == InputMode.kErase));
@@ -138,7 +161,7 @@ public class UI : MonoBehaviour {
 				source.Play();
 						
 				// If drawing wires
-				if (inputMode == InputMode.kWires && (GameSettings.singleton.enableEdit || GetNumWiresRemaining() > 0)){
+				if (inputMode == InputMode.kWires && (gameMode == GameMode.kEditMode || GetNumWiresRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddWire(oldDrawPoint, newDrawPoint);
 					}
@@ -149,7 +172,7 @@ public class UI : MonoBehaviour {
 
 				// If drawing cells
 				if (inputMode == InputMode.kCells ){
-					if (GameSettings.singleton.enableEdit || GetNumCellsRemaining() > 0){
+					if (gameMode == GameMode.kEditMode || GetNumCellsRemaining() > 0){
 						if (oldDrawPoint.IsValid ()){
 							circuit.AddCell(oldDrawPoint, newDrawPoint);
 						}
@@ -164,7 +187,7 @@ public class UI : MonoBehaviour {
 				}
 				
 				// If drawing resistors
-				if (inputMode == InputMode.kResistors && (GameSettings.singleton.enableEdit || GetNumResistorsRemaining() > 0)){
+				if (inputMode == InputMode.kResistors && (gameMode == GameMode.kEditMode || GetNumResistorsRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddResistor(oldDrawPoint, newDrawPoint);
 					}
@@ -174,7 +197,7 @@ public class UI : MonoBehaviour {
 					
 				}
 				// If drawing Ameter
-				if (inputMode == InputMode.kAmeters && (GameSettings.singleton.enableEdit || GetNumAmetersRemaining() > 0)){
+				if (inputMode == InputMode.kAmeters && (gameMode == GameMode.kEditMode || GetNumAmetersRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddAmeter(oldDrawPoint, newDrawPoint);
 					}
@@ -212,7 +235,19 @@ public class UI : MonoBehaviour {
 	
 	
 	void LateUpdate(){
-		levelComplete =  (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers && !GameSettings.singleton.enableEdit);
+		if  (gameMode == GameMode.kPlayGame && numLevelTriggers != 0 && triggersTriggered == numLevelTriggers){
+			if (currentLevelIndex != levelsToLoad.Length-1){
+				gameMode = GameMode.kLevelComplete;
+			}
+			else{
+				gameMode = GameMode.kGameComplete;
+			}
+		}
+		if (gameMode == GameMode.kLevelComplete && (numLevelTriggers == 0 || triggersTriggered != numLevelTriggers)){
+			gameMode = GameMode.kPlayGame;	
+		}
+		
+
 		// Reset this as it must be reevaualted every frame
 		triggersTriggered = 0;
 		
@@ -239,7 +274,9 @@ public class UI : MonoBehaviour {
 			levelSerializer.LoadLevel(levelsToLoad[index].name + ".bytes");
 			inputMode = InputMode.kWires;
 			levelLoadFade = 2;
-			inputMode = InputMode.kWires;
+			Simulator.singleton.ClearSimulation();
+			Circuit.singleton.CalcBounds();
+			Camera.main.GetComponent<CamControl>().CentreCamera();
 		}
 	}
 
@@ -250,71 +287,126 @@ public class UI : MonoBehaviour {
 		float labelWidth = 500f;
 		float labelHeight = 50f;
 		float borderWidth = 0.5f * (Screen.width - labelWidth);
-		float borderHeight = 0.5f * (Screen.height - labelHeight);
+		float borderHeight = 0.2f * (Screen.height - labelHeight);
 		
+		float buttonWidth = 150f;
+		GUIStyle labelStyle = new GUIStyle();
 		
-	
-		if (levelComplete){
-		
-			float buttonWidth = 200f;
-			GUIStyle labelStyle = new GUIStyle();
-			
-			labelStyle.alignment = TextAnchor.UpperCenter;
-			labelStyle.fontSize = (int)labelHeight;
-			labelStyle.normal.textColor = Color.yellow;
-			
-			if (currentLevelIndex != levelsToLoad.Length-1){
-				GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + " Complete!", labelStyle);
-				GUI.color = Color.yellow;
-				if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1))){
-					LoadLevel(currentLevelIndex);
-				}
-				if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Load next level")){
-					currentLevelIndex++;
-					LoadLevel(currentLevelIndex);
-				}
-			}
-			else{
-				GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Game Complete!!!", labelStyle);
-				GUI.color = Color.yellow;
-				if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1))){
-					LoadLevel(currentLevelIndex);
-				}
-				if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Restart the game")){
-					currentLevelIndex = 0;
-					LoadLevel(currentLevelIndex);
-				}
-			}
-			//			if (GUI.Button(new Rect
-		}
-		else
+		labelStyle.alignment = TextAnchor.UpperCenter;
+		labelStyle.fontSize = (int)labelHeight;
+		labelStyle.normal.textColor = Color.yellow;
+
+		switch (gameMode)
 		{
-			// if we have just started a level
-			if (levelLoadFade > 0){
-				GUIStyle labelStyle = new GUIStyle();
-				
-				labelStyle.alignment = TextAnchor.UpperCenter;
-				labelStyle.fontSize = (int)labelHeight;
-				Color useCol = Color.green;
-				useCol.a = levelLoadFade;
-				labelStyle.normal.textColor = useCol;
-				
-				if (currentLevelIndex != levelsToLoad.Length - 1){
-					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + ": " + levelsToLoad[currentLevelIndex].name, labelStyle);
-				}
-				else{
-					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Final Level: " + levelsToLoad[currentLevelIndex].name, labelStyle);
-				}
+			case GameMode.kLevelComplete:
+			{
+				if (levelCompleteMsgCountdown < 0){
+					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + " Complete!", labelStyle);
 					
+					GUIStyle buttonStyle = new GUIStyle(GUI.skin.GetStyle("button"));
+					buttonStyle.fontSize = 20;
+					Color useColor = Color.green;
+					buttonStyle.normal.textColor = useColor;
+				
+					if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1), buttonStyle)){
+						LoadLevel(currentLevelIndex);
+					}
+					if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Restart game", buttonStyle)){
+						Application.LoadLevel(Application.loadedLevel);
+					}
+					useColor.a = buttonPulseAlpha;
+					buttonStyle.normal.textColor = useColor;
+					if (GUI.Button(new Rect(Screen.width/2 - buttonWidth/2, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Load next level", buttonStyle)){
+						currentLevelIndex++;
+						LoadLevel(currentLevelIndex);
+					}
+				}
+			
+				break;
 			}
+			case GameMode.kGameComplete:
+			{
+				if (levelCompleteMsgCountdown < 0){
+					
+					GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Game Complete!!!", labelStyle);
+					
+					GUIStyle buttonStyle = new GUIStyle(GUI.skin.GetStyle("button"));
+					buttonStyle.fontSize = 20;
+					Color useColor = Color.green;
+					buttonStyle.normal.textColor = useColor;
+					
+					if (GUI.Button(new Rect(borderWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Reload Level " + (currentLevelIndex+1), buttonStyle)){
+						LoadLevel(currentLevelIndex);
+					}
+					
+					useColor.a = buttonPulseAlpha;
+					buttonStyle.normal.textColor = useColor;
+					if (GUI.Button(new Rect(Screen.width - borderWidth - buttonWidth, Screen.height - borderHeight - labelHeight + 100, buttonWidth, labelHeight), "Restart game", buttonStyle)){
+						Application.LoadLevel(Application.loadedLevel);
+					}					
+				}
+				break;
+			}	
+			case GameMode.kStartScreen:
+			{
+				GUIStyle buttonStyle = new GUIStyle(GUI.skin.GetStyle("button"));
+				buttonStyle.fontSize = 34;
+				Color useColor = Color.green;
+				useColor.a = buttonPulseAlpha;
+				
+				buttonStyle.normal.textColor = useColor;
+				
+				
+				//GUI.color = Color.green;
+				
+				float thisButtonWidth = 300;
+				
+				if (GUI.Button(new Rect(Screen.width/2 - thisButtonWidth/2, Screen.height/3 - labelHeight - 20, thisButtonWidth, labelHeight), "Start Game", buttonStyle)){
+					if (loadLevelOnStartup && !startupLevelLoaded){
+						if (levelsToLoad[currentLevelIndex] != null){
+							LoadLevel(currentLevelIndex);
+						}
+						startupLevelLoaded = true;
+						
+					}
+					gameMode = GameMode.kPlayGame;
+				
+				}
+				
+				break;
+			}	
+			case GameMode.kPlayGame:
+			{
+				// if we have just started a level
+				if (levelLoadFade > 0){
+					
+					labelStyle.alignment = TextAnchor.UpperCenter;
+					labelStyle.fontSize = (int)labelHeight;
+					Color useCol = Color.green;
+					useCol.a = levelLoadFade;
+					labelStyle.normal.textColor = useCol;
+					
+					if (currentLevelIndex != levelsToLoad.Length - 1){
+						GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Level " + (currentLevelIndex+1) + ": " + levelsToLoad[currentLevelIndex].name, labelStyle);
+					}
+					else{
+						GUI.Label(new Rect(borderWidth, Screen.height - borderHeight - labelHeight, labelWidth, labelHeight), "Final Level: " + levelsToLoad[currentLevelIndex].name, labelStyle);
+					}
+				}
+				break;
+			}
+		}
+		
+		if (gameMode == GameMode.kEditMode || gameMode == GameMode.kPlayGame)
+		{
 		
 			// If not in editor mode we only want to show a subset of the buttons
-			int numButtons = GameSettings.singleton.enableEdit ? (int)InputMode.kNumButtons : numNonEditButtons;
+			int numButtons = gameMode == GameMode.kEditMode ? (int)InputMode.kNumButtons : numNonEditButtons;
 			string[] useStrings = new string[numButtons];
 			Array.Copy(toolbarStrings, useStrings, numButtons);
 			
 			// If not in edit mode, append the number of elements let to use
-			if (!GameSettings.singleton.enableEdit){
+			if (gameMode == GameMode.kPlayGame){
 				useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
 				useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
 				useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
@@ -349,7 +441,8 @@ public class UI : MonoBehaviour {
 				inputMode = oldInputMode;
 			}				
 			else if (inputMode == InputMode.kToggleEdit){
-				GameSettings.singleton.enableEdit = !GameSettings.singleton.enableEdit;
+				enableEditor = !enableEditor;
+				gameMode = enableEditor ? GameMode.kEditMode : GameMode.kPlayGame;
 				inputMode = oldInputMode;
 			}	
 		}	

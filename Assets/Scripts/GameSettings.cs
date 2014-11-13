@@ -6,10 +6,7 @@ using System.Collections;
 public class GameSettings : MonoBehaviour {
 
 	public static GameSettings singleton = null;
-	
-	// Settings that anyone can read
-	public bool enableEdit = true;
-	
+
 
 	// Use this for initialization
 	void Start () {

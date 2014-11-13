@@ -1323,7 +1323,7 @@ public class Simulator : MonoBehaviour {
 
 	}
 	
-	void ClearSimulation(){
+	public void ClearSimulation(){
 		loops = new List<List<BranchAddress>>();
 		branchData = new BranchData[width, height, 4];
 		

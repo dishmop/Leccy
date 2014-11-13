@@ -38,6 +38,7 @@ public class CamControl : MonoBehaviour {
 			gameObject.transform.position = camPos;
 		}
 		
+		
 		if (Input.GetMouseButton(1) || (Input.GetMouseButton(0) && Input.GetKey (KeyCode.LeftControl))){
 			Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( prevMousePos);
 			Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
@@ -49,8 +50,19 @@ public class CamControl : MonoBehaviour {
 			
 		
 		}
-		
 		prevMousePos = mousePos;
+			
 		
+	}
+	
+	public void CentreCamera(){
+		Rect bounds = Circuit.singleton.bounds;
+		Vector2 centre = new Vector2((bounds.xMin + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
+		Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
+		transform.position = newCamPos;
+		
+		float range = Mathf.Max (bounds.height, bounds.width) + 2;
+
+		transform.GetComponent<Camera>().orthographicSize = range * 0.55f;
 	}
 }

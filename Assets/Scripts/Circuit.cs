@@ -16,6 +16,8 @@ public class Circuit : MonoBehaviour {
 	public GameObject gridGO;
 	public GameObject particleExplosionPrefab;
 	
+	public Rect bounds;
+	
 	// Keep track of the number of each type of circuit element used
 	public Dictionary<string, int> numElementsUsed;
 
@@ -313,6 +315,7 @@ public class Circuit : MonoBehaviour {
 			if (ElementExists (leftPoint)) GetElement (leftPoint).isConnected[kRight] = true;
 			if (ElementExists (rightPoint)) GetElement (rightPoint).isConnected[kLeft] = true;
 			
+			ValidateNeighbourConnections(point);
 			thisElement.SetupMesh();	
 			return;
 		}
@@ -322,6 +325,7 @@ public class Circuit : MonoBehaviour {
 			if (ElementExists (upPoint)) GetElement (upPoint).isConnected[kDown] = true;
 			if (ElementExists (downPoint)) GetElement (downPoint).isConnected[kUp] = true;
 			
+			ValidateNeighbourConnections(point);
 			thisElement.SetupMesh();	
 			return;
 		}	
@@ -819,8 +823,30 @@ public class Circuit : MonoBehaviour {
 		
 	}
 	
+	public void CalcBounds(){
+		bounds.xMin = 1000;
+		bounds.yMin = 1000;
+		bounds.xMax = -1000;
+		bounds.yMax = -1000;
+		
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				if (ElementExists(new GridPoint(x, y))){
+					bounds.xMin = Mathf.Min (bounds.xMin, x);
+					bounds.yMin = Mathf.Min (bounds.yMin, y);
+					bounds.xMax = Mathf.Max (bounds.xMax, x);
+					bounds.yMax = Mathf.Max (bounds.yMax, y);
+				}
+
+			}
+		}
+		
+	}
+	
 	// Update is called once per frame
 	void Update () {
+	
+		CalcBounds();
 		
 	}
 }
