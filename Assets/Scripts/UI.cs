@@ -63,7 +63,7 @@ public class UI : MonoBehaviour {
 	public InputMode inputMode;
 	
 	// Toolbar
-	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Ameter", "Eraser", "Reload Level", "Toggle edit", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
+	string[] toolbarStrings = {"Wires", "Cells", "Resistors", "Ammeter", "Eraser", "Reload Level", "Toggle edit", "Save Level", "Clear all", "Bake connect", "Bake All", "Unbake"};
 
 		
 	// Use this for initialization
