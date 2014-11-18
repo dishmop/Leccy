@@ -1128,6 +1128,10 @@ Prefab:
       propertyPath: enableEditor
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
+      propertyPath: loadLevelOnStartup
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 104ed32d45c77489f872272c64eeca9c, type: 2}
   m_RootGameObject: {fileID: 1482048797}

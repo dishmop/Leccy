@@ -349,7 +349,7 @@ public class Simulator : MonoBehaviour {
 		// I assume this gets initialised with zeros (note we are making the transpose)
 		double[,] SInv = new double[S.GetLength(1), S.GetLength(0)];
 		
-		double epsilon = 0.0001;
+		double epsilon = 0.000001;
 		for (int i = 0; i < W.GetLength(0); ++i){
 			if (Math.Abs (S[i,i]) > epsilon){
 				SInv[i,i] = 1.0 / S[i,i];
@@ -1670,9 +1670,14 @@ public class Simulator : MonoBehaviour {
 	void FixedUpdate () {
 	
 		bool finished = false;
-		while (!finished){
+		int attempts = 3;
+		while (!finished && attempts > 0){
 			ClearSimulation();
 			finished = Simulate();
+			attempts--;
+		}
+		if (attempts == 0){
+			Debug.LogError ("Failed to solve circuit equations");
 		}
 		
 		if (visMode == VisMode.kGroups || visMode == VisMode.kLoops){

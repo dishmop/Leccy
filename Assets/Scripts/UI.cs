@@ -361,7 +361,7 @@ public class UI : MonoBehaviour {
 				
 				float thisButtonWidth = 300;
 				
-				if (GUI.Button(new Rect(Screen.width/2 - thisButtonWidth/2, Screen.height/3 - labelHeight - 20, thisButtonWidth, labelHeight), "Start Game", buttonStyle)){
+				if (GUI.Button(new Rect(Screen.width/2 - thisButtonWidth/2, Screen.height/3 - labelHeight + 70, thisButtonWidth, labelHeight), "Start Game", buttonStyle)){
 					if (loadLevelOnStartup && !startupLevelLoaded){
 						if (levelsToLoad[currentLevelIndex] != null){
 							LoadLevel(currentLevelIndex);

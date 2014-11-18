@@ -112,7 +112,7 @@ public class CircuitElementAmpMeter : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!isConnected[dir]) Debug.LogError("Being asked about a nonexistanct connection");
-		return 0f;
+		return 0.00001f;
 	}	
 	
 	// Use this for initialization
