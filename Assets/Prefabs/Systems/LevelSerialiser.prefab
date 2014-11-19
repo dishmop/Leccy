@@ -41,7 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridGO: {fileID: 0}
   circuitGO: {fileID: 0}
-  GlobalGO: {fileID: 0}
+  factoryGO: {fileID: 100000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

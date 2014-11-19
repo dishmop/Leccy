@@ -57,12 +57,15 @@ public class CamControl : MonoBehaviour {
 	
 	public void CentreCamera(){
 		Rect bounds = Circuit.singleton.bounds;
-		Vector2 centre = new Vector2((bounds.xMin + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
-		Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
-		transform.position = newCamPos;
+		if (bounds.width > 1 && bounds.height > 1){
 		
-		float range = Mathf.Max (bounds.height, bounds.width) + 2;
-
-		transform.GetComponent<Camera>().orthographicSize = range * 0.55f;
+			Vector2 centre = new Vector2((bounds.xMin + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
+			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
+			transform.position = newCamPos;
+			
+			float range = Mathf.Max (bounds.height, bounds.width) + 2;
+	
+			transform.GetComponent<Camera>().orthographicSize = range * 0.55f;
+		}
 	}
 }

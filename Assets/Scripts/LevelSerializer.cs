@@ -7,17 +7,17 @@ using System.IO;
 public class LevelSerializer : MonoBehaviour {
 	public GameObject gridGO;
 	public GameObject circuitGO;
-	public GameObject GlobalGO;
+	public GameObject factoryGO;
 	
 	
 	Grid			grid;
 	Circuit			circuit;
-	LevelSettings	levelSettings;
+	ElementFactory	factory;
 	
 	void Start(){
 		grid = gridGO.GetComponent<Grid>();	
 		circuit = circuitGO.GetComponent<Circuit>();	
-		levelSettings = GlobalGO.GetComponent<LevelSettings>();
+		factory = factoryGO.GetComponent<ElementFactory>();
 	}
 	
 
@@ -29,7 +29,7 @@ public class LevelSerializer : MonoBehaviour {
 		
 		grid.Save(bw);
 		circuit.Save(bw);
-		levelSettings.Save(bw);
+		factory.Save(bw);
 
 		file.Close();
 		
@@ -73,7 +73,7 @@ public class LevelSerializer : MonoBehaviour {
 			
 			grid.Load(br);
 			circuit.Load(br);
-			levelSettings.Load(br);
+			factory.Load(br);
 			
 			Resources.UnloadAsset(asset);
 		}	

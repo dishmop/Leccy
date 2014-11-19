@@ -138,7 +138,7 @@ public class Simulator : MonoBehaviour {
 	BranchAddress CalcNextDir(GridPoint point, int[] choices){
 		CircuitElement nextElement = circuit.GetElement(point);
 		for (int i = 0;  i < 4; ++i){
-			if (nextElement.isConnected[choices[i]]) return new BranchAddress(point.x, point.y, choices[i]);
+			if (nextElement.IsConnected(choices[i])) return new BranchAddress(point.x, point.y, choices[i]);
 		}
 		Debug.LogError ("Error in CalcNextDir");
 		return new BranchAddress();
@@ -205,7 +205,7 @@ public class Simulator : MonoBehaviour {
 					// a connection along that branch
 					CircuitElement thisElement = circuit.GetElement(new GridPoint(x, y));
 					for (int i = 0; i < 4; ++i){
-						if (thisElement.isConnected[i]){
+						if (thisElement.IsConnected(i)){
 							BranchAddress thisAddress = new BranchAddress(x, y, i);
 							if (!GetBranchData(thisAddress).traversed){
 								// Yes! we have found one
@@ -223,7 +223,7 @@ public class Simulator : MonoBehaviour {
 										GridPoint thisPoint2 = new GridPoint(loops[searchloop][searchIndex].x, loops[searchloop][searchIndex].y);
 										CircuitElement thisElement2 = circuit.GetElement(thisPoint2);
 										for (int j = 0; j < 4; ++j){
-											if (thisElement2.isConnected[j]){
+											if (thisElement2.IsConnected(j)){
 												BranchAddress thisAddress2 = new BranchAddress(thisPoint2.x, thisPoint2.y, j);
 												if (!GetBranchData(thisAddress2).traversed){
 													loopId = CreateLoop ();
@@ -471,7 +471,7 @@ public class Simulator : MonoBehaviour {
 				if (circuit.ElementExists(thisPoint)){
 					// Only check two of the directions (so we only check each connection once
 					for (int dir = 0; dir < 2; ++dir){
-						if (circuit.GetElement(thisPoint).isConnected[dir]){
+						if (circuit.GetElement(thisPoint).IsConnected(dir)){
 							BranchAddress thisAddress = new BranchAddress(x, y, dir);
 							BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 							BranchData thisData = GetBranchData(thisAddress);
@@ -1257,7 +1257,7 @@ public class Simulator : MonoBehaviour {
 	void SetInitWireVoltage(BranchAddress addr, CircuitElement element, float currentVoltage){
 		// Do all the branches coming from this node
 		for (int i = 0; i < 4; ++i){
-			if (element.isConnected[i]){
+			if (element.IsConnected(i)){
 				BranchAddress setAddr = new BranchAddress(addr.x, addr.y, i);
 				BranchAddress setOppAddr = GetOppositeAddress(setAddr);
 				GetBranchData(setAddr).initialVolt = true;

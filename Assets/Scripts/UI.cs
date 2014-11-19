@@ -10,6 +10,7 @@ public class UI : MonoBehaviour {
 	public GameObject	circuitGO;
 	public GameObject 	levelSerialiserGO;
 	public GameObject	simulationGO;
+	public GameObject   factoryGO;
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
 	public string 		levelToSave = "DefaultLevel";
@@ -43,12 +44,13 @@ public class UI : MonoBehaviour {
 	Grid				grid;
 	Circuit				circuit;
 	LevelSerializer		levelSerializer;
+	ElementFactory		factory;
 	
 	public enum InputMode{
 		kWires,
 		kCells,
 		kResistors,
-		kAmeters,
+		kAmmeters,
 		kErase,
 		kLoadLevel,
 		kToggleEdit,
@@ -72,6 +74,7 @@ public class UI : MonoBehaviour {
 		grid = gridGO.GetComponent<Grid>();	
 		circuit = circuitGO.GetComponent<Circuit>();	
 		levelSerializer = levelSerialiserGO.GetComponent<LevelSerializer>();
+		factory = factoryGO.GetComponent<ElementFactory>();
 		gameMode = (enableEditor) ? GameMode.kEditMode : GameMode.kStartScreen;
 		
 
@@ -145,9 +148,19 @@ public class UI : MonoBehaviour {
 			}
 		}
 		
-		
+
 		grid.SetSelected(newPoint, otherPoint);
 		
+		switch (inputMode){
+			case InputMode.kResistors:
+//				circuit.TrialElement(newPoint, resistorPrefab);
+				break;
+		
+		}
+		
+		
+		
+		/*						
 		// If the mouse button is down
 		if (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl)){
 			oldDrawPoint = newDrawPoint;
@@ -159,7 +172,8 @@ public class UI : MonoBehaviour {
 				// Play an (indiscriminate) sound effect
 				AudioSource source = gameObject.GetComponent<AudioSource>();
 				source.Play();
-						
+				
+				
 				// If drawing wires
 				if (inputMode == InputMode.kWires && (gameMode == GameMode.kEditMode || GetNumWiresRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
@@ -197,7 +211,7 @@ public class UI : MonoBehaviour {
 					
 				}
 				// If drawing Ameter
-				if (inputMode == InputMode.kAmeters && (gameMode == GameMode.kEditMode || GetNumAmetersRemaining() > 0)){
+				if (inputMode == InputMode.kAmmeters && (gameMode == GameMode.kEditMode || GetNumAmetersRemaining() > 0)){
 					if (oldDrawPoint.IsValid ()){
 						circuit.AddAmeter(oldDrawPoint, newDrawPoint);
 					}
@@ -228,6 +242,7 @@ public class UI : MonoBehaviour {
 			newDrawPoint = new GridPoint();
 		}
 		
+		*/
 
 	
 	}
@@ -252,23 +267,7 @@ public class UI : MonoBehaviour {
 		triggersTriggered = 0;
 		
 	}	
-	
-	int GetNumWiresRemaining(){
-		return (LevelSettings.singleton.numWires + LevelSettings.singleton.numWiresOnStartup - circuit.numElementsUsed["Wire"]);
-	}
-	
-	int GetNumCellsRemaining(){
-		return (LevelSettings.singleton.numCells + LevelSettings.singleton.numCellsOnStartup - circuit.numElementsUsed["Cell"]) ;
-	}
-
-	int GetNumResistorsRemaining(){
-		return (LevelSettings.singleton.numResistors + LevelSettings.singleton.numResistorsOnStartup - circuit.numElementsUsed["Resistor"]);
-	}
-
-	int GetNumAmetersRemaining(){
-		return (LevelSettings.singleton.numAmeters + LevelSettings.singleton.numAmetersOnStartup - circuit.numElementsUsed["Ameter"]);
-	}
-	
+		
 	void LoadLevel(int index){
 		if (index < levelsToLoad.Length && levelsToLoad[index] != null){
 			levelSerializer.LoadLevel(levelsToLoad[index].name + ".bytes");
@@ -407,10 +406,10 @@ public class UI : MonoBehaviour {
 			
 			// If not in edit mode, append the number of elements let to use
 			if (gameMode == GameMode.kPlayGame){
-				useStrings[(int)InputMode.kWires] += 	 " (" + GetNumWiresRemaining()  +")";
-				useStrings[(int)InputMode.kCells] += 	 " (" + GetNumCellsRemaining() +")";
-				useStrings[(int)InputMode.kResistors] += " (" + GetNumResistorsRemaining()  +")";
-				useStrings[(int)InputMode.kAmeters] += 	 " (" + GetNumAmetersRemaining()  +")";
+				useStrings[(int)InputMode.kWires] += 	 " (" + factory.GetStockRemaining("Wires")  +")";
+				useStrings[(int)InputMode.kCells] += 	 " (" + factory.GetStockRemaining("Cells") +")";
+				useStrings[(int)InputMode.kResistors] += " (" + factory.GetStockRemaining("Resistors")  +")";
+				useStrings[(int)InputMode.kAmmeters] +=  " (" + factory.GetStockRemaining("Ammeters")  +")";
 			}
 			
 			InputMode oldInputMode = inputMode;

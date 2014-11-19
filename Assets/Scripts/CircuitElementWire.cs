@@ -13,9 +13,8 @@ public class CircuitElementWire : CircuitElement {
 	public GameObject wireCrossPrefab;
 	public GameObject wireTJuncFromTopPrefab;
 		
-	public GameObject 	currentPrefab;
-	public GameObject	currentDisplay;
-	public float resistance = 0;
+	GameObject 	currentPrefab;
+	GameObject	currentDisplay;
 	
 	
 	public void Start(){
@@ -25,17 +24,16 @@ public class CircuitElementWire : CircuitElement {
 	
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
-		bw.Write(resistance);
 	}
 	
 	
 	override public void Load(BinaryReader br){
 		base.Load (br);	
-		
-		resistance = br.ReadSingle();
 	}
 		
-	public override void SetupMesh(){
+	public override void RebuildMesh(){
+		base.RebuildMesh();
+		
 		// Placeholder
 		GameObject newPrefab;
 		int newOrient = -1;
@@ -127,11 +125,9 @@ public class CircuitElementWire : CircuitElement {
 			orient = newOrient;
 			currentDisplay.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
-		HandleAnchorMeshes();
 	}	
 	
 	void Update(){
-		SetupMesh ();
 		VisualiseTemperature();
 	}
 	
@@ -141,14 +137,6 @@ public class CircuitElementWire : CircuitElement {
 		
 	}	
 	
-	public override float GetResistance(int dir){
-		if (!isConnected[dir]) Debug.LogError("Being asked about a nonexistanct connection");
-		return resistance;
-	}		
-	
-	
-	
-
 
 
 }
