@@ -14,6 +14,16 @@ public class CircuitElement : MonoBehaviour {
 	public float		temperature = 0;
 	
 	
+	// What is the best UI scheme to use when placing these elents
+	public enum UIModel{
+		kNone,
+		kDraw,			// Lay them out in lines like drawing with a pen
+		kPlace			// Place sinlge elements down one at a time
+	};
+	
+	public UIModel uiMode = UIModel.kNone;
+	
+	
 	// These enums describe the connection situation in a given direction
 	public enum ConnectionStatus{ 
 		kConnected,		// There is a connection
@@ -28,6 +38,7 @@ public class CircuitElement : MonoBehaviour {
 	// 3  - left 
 	public ConnectionStatus[] connectionStatus = new ConnectionStatus[4];
 	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
+
 	
 	protected float 	maxTemp = 45f;
 	protected GridPoint	thisPoint;

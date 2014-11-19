@@ -39,9 +39,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4524be5215f244a65889066b7ad63846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circuitGO: {fileID: 0}
   textMeshGO: {fileID: 100000, guid: 233d47f6c624b4c519186bac528e6b70, type: 2}
   visMode: 0
+  minMode: 3
   voltageColors:
   - {r: .720588207, g: 0, b: 0, a: 0}
   - {r: .537170172, g: 0, b: .727941155, a: 0}

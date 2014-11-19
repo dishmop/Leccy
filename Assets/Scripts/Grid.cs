@@ -6,6 +6,8 @@ using System.IO;
 
 public class Grid : MonoBehaviour {
 
+	public static Grid singleton = null;
+
 	public int gridWidth;
 	public int gridHeight;
 	public float squareWidth = 1f;
@@ -60,6 +62,32 @@ public class Grid : MonoBehaviour {
 		}
 		
 	}
+	
+	
+	public bool IsPointInGrid(GridPoint point){
+		return 	point.x >= 0 &&
+				point.y >= 0 &&
+				point.x < gridWidth &&
+				point.y < gridHeight;		
+	}
+
+	public bool IsPointInGrid(int x, int y){
+		return 	x >= 0 &&
+				y >= 0 &&
+				x < gridWidth &&
+				y < gridHeight;		
+	}			
+	
+	void Awake(){
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+	}
+	
+	void OnDestroy(){
+		singleton = null;
+	}
+	
+	
 	
 	void CreateGrid(){
 	
@@ -151,9 +179,8 @@ public class Grid : MonoBehaviour {
 		float selVolt = 0f;
 		float selAmp = 0f;
 		GridPoint thisPoint = new GridPoint(selection.x, selection.y);
-		Circuit circuit = Circuit.singleton;
-		if (circuit.IsPointInGrid(thisPoint) && circuit.ElementExists(thisPoint)){
-			CircuitElement thisElement = circuit.GetElement(thisPoint);
+		CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
+		if (thisElement){
 			selVolt = thisElement.GetMaxVoltage();
 			selAmp = thisElement.GetMaxCurrent();
 				

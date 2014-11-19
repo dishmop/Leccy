@@ -6,13 +6,10 @@ public class UI : MonoBehaviour {
 
 	public static UI singleton;
 
-	public GameObject 	gridGO;
-	public GameObject	circuitGO;
-	public GameObject 	levelSerialiserGO;
-	public GameObject	simulationGO;
-	public GameObject   factoryGO;
 	public GridPoint	newDrawPoint = new GridPoint();
 	public GridPoint	oldDrawPoint = new GridPoint();
+	
+	// Loading and saving
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 0;
@@ -40,11 +37,6 @@ public class UI : MonoBehaviour {
 	GameMode			gameMode = GameMode.kNone;
 	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
 
-
-	Grid				grid;
-	Circuit				circuit;
-	LevelSerializer		levelSerializer;
-	ElementFactory		factory;
 	
 	public enum InputMode{
 		kWires,
@@ -71,10 +63,7 @@ public class UI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		singleton = this;
-		grid = gridGO.GetComponent<Grid>();	
-		circuit = circuitGO.GetComponent<Circuit>();	
-		levelSerializer = levelSerialiserGO.GetComponent<LevelSerializer>();
-		factory = factoryGO.GetComponent<ElementFactory>();
+	
 		gameMode = (enableEditor) ? GameMode.kEditMode : GameMode.kStartScreen;
 		
 
@@ -93,8 +82,8 @@ public class UI : MonoBehaviour {
 		Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 		Camera.main.transform.FindChild("StartScreen").gameObject.SetActive(gameMode == GameMode.kStartScreen );
 		
-		gridGO.SetActive(gameMode != GameMode.kStartScreen);
-		simulationGO.SetActive(gameMode != GameMode.kStartScreen);
+		Grid.singleton.gameObject.SetActive(gameMode != GameMode.kStartScreen);
+		Simulator.singleton.gameObject.SetActive(gameMode != GameMode.kStartScreen);
 		
 		// Ensure that when we do complete a level, it takes a little time before all the messages and buttons appear
 		if (gameMode == GameMode.kPlayGame) levelCompleteMsgCountdown = 60;
@@ -110,7 +99,7 @@ public class UI : MonoBehaviour {
 		
 			
 		// If we are in erase mode, put grid highligher in that mode
-		grid.EnableEraseHighlightMode((inputMode == InputMode.kErase));
+		Grid.singleton.EnableEraseHighlightMode((inputMode == InputMode.kErase));
 	
 		// Track the mouse pointer highlight
 		Vector3 mousePos = Input.mousePosition;
@@ -118,7 +107,7 @@ public class UI : MonoBehaviour {
 		// If inside the UI, then not active and nothing else to do
 		// as UI is hangled in OnGUI function
 		if (IsPosInUI(new Vector3(mousePos.x, Screen.height - mousePos.y, 0f))){
-			grid.SetSelected(new GridPoint(), new GridPoint());
+			Grid.singleton.SetSelected(new GridPoint(), new GridPoint());
 			return;
 		}
 		mousePos.z = transform.position.z - Camera.main.transform.position.z;
@@ -149,7 +138,7 @@ public class UI : MonoBehaviour {
 		}
 		
 
-		grid.SetSelected(newPoint, otherPoint);
+		Grid.singleton.SetSelected(newPoint, otherPoint);
 		
 		switch (inputMode){
 			case InputMode.kResistors:
@@ -270,7 +259,7 @@ public class UI : MonoBehaviour {
 		
 	void LoadLevel(int index){
 		if (index < levelsToLoad.Length && levelsToLoad[index] != null){
-			levelSerializer.LoadLevel(levelsToLoad[index].name + ".bytes");
+			LevelSerializer.singleton.LoadLevel(levelsToLoad[index].name + ".bytes");
 			inputMode = InputMode.kWires;
 			levelLoadFade = 2;
 			Simulator.singleton.ClearSimulation();
@@ -406,10 +395,10 @@ public class UI : MonoBehaviour {
 			
 			// If not in edit mode, append the number of elements let to use
 			if (gameMode == GameMode.kPlayGame){
-				useStrings[(int)InputMode.kWires] += 	 " (" + factory.GetStockRemaining("Wires")  +")";
-				useStrings[(int)InputMode.kCells] += 	 " (" + factory.GetStockRemaining("Cells") +")";
-				useStrings[(int)InputMode.kResistors] += " (" + factory.GetStockRemaining("Resistors")  +")";
-				useStrings[(int)InputMode.kAmmeters] +=  " (" + factory.GetStockRemaining("Ammeters")  +")";
+				useStrings[(int)InputMode.kWires] += 	 " (" + ElementFactory.singleton.GetStockRemaining("Wires")  +")";
+				useStrings[(int)InputMode.kCells] += 	 " (" + ElementFactory.singleton.GetStockRemaining("Cells") +")";
+				useStrings[(int)InputMode.kResistors] += " (" + ElementFactory.singleton.GetStockRemaining("Resistors")  +")";
+				useStrings[(int)InputMode.kAmmeters] +=  " (" + ElementFactory.singleton.GetStockRemaining("Ammeters")  +")";
 			}
 			
 			InputMode oldInputMode = inputMode;
@@ -424,19 +413,19 @@ public class UI : MonoBehaviour {
 				inputMode = InputMode.kWires;
 			}
 			else if (inputMode == InputMode.kSaveLevel){
-				levelSerializer.SaveLevel(levelToSave + ".bytes");
+				LevelSerializer.singleton.SaveLevel(levelToSave + ".bytes");
 				inputMode = oldInputMode;
 			}
 			else if (inputMode == InputMode.kBakeConnect){
-				circuit.BakeConnect();
+				Circuit.singleton.BakeConnect();
 				inputMode = oldInputMode;
 			}	
 			else if (inputMode == InputMode.kBakeAll){
-				circuit.BakeAll();
+				Circuit.singleton.BakeAll();
 				inputMode = oldInputMode;
 			}						
 			else if (inputMode == InputMode.kUnbake){
-				circuit.Unbake();
+				Circuit.singleton.Unbake();
 				inputMode = oldInputMode;
 			}				
 			else if (inputMode == InputMode.kToggleEdit){

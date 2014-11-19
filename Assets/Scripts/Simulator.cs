@@ -6,8 +6,10 @@ using System.Collections.Generic;
 
 public class Simulator : MonoBehaviour {
 
-	public GameObject	circuitGO;
+	public static Simulator singleton = null;
+	
 	public GameObject 	textMeshGO;
+	
 	public enum VisMode{
 		kNone,
 		kLoops,
@@ -30,7 +32,7 @@ public class Simulator : MonoBehaviour {
 
 	public bool solveVoltges = false;
 	
-	public static Simulator singleton = null;
+
 	
 	double epsilon = 0.0001;
 	
@@ -41,9 +43,8 @@ public class Simulator : MonoBehaviour {
 	GameObject[,]       debugCurrentTextBoxesUp;
 	GameObject[,]		debugVoltageTextBoxes;
 	
-	Circuit						circuit;
-	int							width;
-	int							height;
+	int					width;
+	int					height;
 	
 	
 	BranchData[,,]				branchData;
@@ -93,19 +94,24 @@ public class Simulator : MonoBehaviour {
 		public int y;
 		public int dir; 		// 0 - kUp, 1 - kRight, 2 - kDown, 3 - kLeft
 	};
+	
+	void Awake(){
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+	}
+	
+	void OnDestroy(){
+		singleton = null;
+	}
 
 	// Use this for initialization
 	void Start () {
-		singleton = this;
-		circuit = circuitGO.GetComponent<Circuit>();
-		width = circuit.elements.GetLength(0);
-		height = circuit.elements.GetLength(1);
-		
+		BuildArrays ();		
 		DebugCreateLoopCurrentVis();
 		DebugCreateCurrentVis();
 		DebugCreateVoltageVis ();
 		ClearSimulation ();
-
+		
 		// Sert up the text gui
 		guiTextDisplay = new GUITextDisplay(10f, 70f, 500f, 20f);
 	}
@@ -136,7 +142,7 @@ public class Simulator : MonoBehaviour {
 	
 	
 	BranchAddress CalcNextDir(GridPoint point, int[] choices){
-		CircuitElement nextElement = circuit.GetElement(point);
+		CircuitElement nextElement = Circuit.singleton.GetElement(point);
 		for (int i = 0;  i < 4; ++i){
 			if (nextElement.IsConnected(choices[i])) return new BranchAddress(point.x, point.y, choices[i]);
 		}
@@ -189,9 +195,9 @@ public class Simulator : MonoBehaviour {
 	
 	
 	// This method will only work if there are no wires crossing over each other
-	// It does it in a slightly odd way because it needs to also group the loops by disjoint circuits
+	// It does it in a slightly odd way because it needs to also group the loops by disjoint circuit
 	void FindLoops(){
-		if (!circuit.Validate()){
+		if (!Circuit.singleton.Validate()){
 			Debug.Log("Circuit is invalid and cannot be simulated");
 			return;
 		}
@@ -200,10 +206,10 @@ public class Simulator : MonoBehaviour {
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				// If no element at this node, then no connections to it
-				if (circuit.elements[x,y]){
+				if (Circuit.singleton.elements[x,y]){
 					// Go through each of the branches from this node and only consider data on them if we have
 					// a connection along that branch
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(x, y));
+					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(x, y));
 					for (int i = 0; i < 4; ++i){
 						if (thisElement.IsConnected(i)){
 							BranchAddress thisAddress = new BranchAddress(x, y, i);
@@ -221,7 +227,7 @@ public class Simulator : MonoBehaviour {
 								while (searchloop <= loopId){
 									for  (int searchIndex = 0; searchIndex < loops[searchloop].Count; ++searchIndex){
 										GridPoint thisPoint2 = new GridPoint(loops[searchloop][searchIndex].x, loops[searchloop][searchIndex].y);
-										CircuitElement thisElement2 = circuit.GetElement(thisPoint2);
+										CircuitElement thisElement2 = Circuit.singleton.GetElement(thisPoint2);
 										for (int j = 0; j < 4; ++j){
 											if (thisElement2.IsConnected(j)){
 												BranchAddress thisAddress2 = new BranchAddress(thisPoint2.x, thisPoint2.y, j);
@@ -244,7 +250,7 @@ public class Simulator : MonoBehaviour {
 		numGroups = groupId;
 	}
 	
-	// ALl loops that simply tracing the outline of a disjoint circuit 
+	// ALl loops that simply tracing the outline of a disjoint Circuit.singleton 
 	// are not needed for current calulations so are iflagged ot be ignored
 	void FlagOuterLoops(){
 		int lastGroupId = -1;
@@ -422,7 +428,7 @@ public class Simulator : MonoBehaviour {
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
-				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				CircuitElement thisElement = Circuit.singleton.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
 				BranchData thisData = GetBranchData (thisAddress);
 				
 				// Our data loopID should be the same as i
@@ -468,10 +474,10 @@ public class Simulator : MonoBehaviour {
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				GridPoint thisPoint = new GridPoint(x,y);
-				if (circuit.ElementExists(thisPoint)){
+				if (Circuit.singleton.ElementExists(thisPoint)){
 					// Only check two of the directions (so we only check each connection once
 					for (int dir = 0; dir < 2; ++dir){
-						if (circuit.GetElement(thisPoint).IsConnected(dir)){
+						if (Circuit.singleton.GetElement(thisPoint).IsConnected(dir)){
 							BranchAddress thisAddress = new BranchAddress(x, y, dir);
 							BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 							BranchData thisData = GetBranchData(thisAddress);
@@ -514,7 +520,7 @@ public class Simulator : MonoBehaviour {
 		//		double[,] RInv = CalcPseudoInverse(R);
 		//		I = MathUtils.Matrix.Multiply(RInv, V); 
 		
-		// However, this doesn't distribute the current well over the different branches of the circuit if there is
+		// However, this doesn't distribute the current well over the different branches of the Circuit.singleton if there is
 		// no reisstance in it
 		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
 		// what the loops should be (in the final version we should just lose the whole Loop business)
@@ -545,7 +551,7 @@ public class Simulator : MonoBehaviour {
 				// Then follow this loop finding all the voltage sources and put them in Emergency mode
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
 						thisElement.TriggerEmergency();
 						failed = true;
@@ -645,7 +651,7 @@ public class Simulator : MonoBehaviour {
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
-				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				CircuitElement thisElement = Circuit.singleton.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
 				BranchData thisData = GetBranchData (thisAddress);
 				
 				// Our data loopID should be the same as i
@@ -713,7 +719,7 @@ public class Simulator : MonoBehaviour {
 		//		double[,] RInv = CalcPseudoInverse(R);
 		//		I = MathUtils.Matrix.Multiply(RInv, V); 
 		
-		// However, this doesn't distribute the current well over the different branches of the circuit if there is
+		// However, this doesn't distribute the current well over the different branches of the Circuit.singleton if there is
 		// no reisstance in it
 		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
 		// what the loops should be (in the final version we should just lose the whole Loop business)
@@ -744,7 +750,7 @@ public class Simulator : MonoBehaviour {
 				// Then follow this loop finding all the voltage sources and put them in Emergency mode
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
 						thisElement.TriggerEmergency();
 						failed = true;
@@ -845,7 +851,7 @@ public class Simulator : MonoBehaviour {
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
-				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				CircuitElement thisElement = Circuit.singleton.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
 				BranchData thisData = GetBranchData (thisAddress);
 				
 				// Our data loopID should be the same as i
@@ -922,7 +928,7 @@ public class Simulator : MonoBehaviour {
 		//		double[,] RInv = CalcPseudoInverse(R);
 		//		I = MathUtils.Matrix.Multiply(RInv, V); 
 		
-		// However, this doesn't distribute the current well over the different branches of the circuit if there is
+		// However, this doesn't distribute the current well over the different branches of the Circuit.singleton if there is
 		// no reisstance in it
 		// Instead, we calculate the crrents for each brnach (using a pseudo inverse) and then reverse calculate
 		// what the loops should be (in the final version we should just lose the whole Loop business)
@@ -962,7 +968,7 @@ public class Simulator : MonoBehaviour {
 				// Then follow this loop finding all the voltage sources and put them in Emergency mode
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
 						thisElement.TriggerEmergency();
 						failed = true;
@@ -1061,7 +1067,7 @@ public class Simulator : MonoBehaviour {
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
-				CircuitElement thisElement = circuit.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
+				CircuitElement thisElement = Circuit.singleton.GetElement (new GridPoint(thisAddress.x, thisAddress.y));
 				BranchData thisData = GetBranchData (thisAddress);
 
 								// Our data loopID shoudl be the same as i
@@ -1147,7 +1153,7 @@ public class Simulator : MonoBehaviour {
 				// Then follow this loop finding all the voltage sources and put them in Emergency mode
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
-					CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
 						thisElement.TriggerEmergency();
 						failed = true;
@@ -1212,7 +1218,7 @@ public class Simulator : MonoBehaviour {
 					
 					for (int i = 1; i < loops[loopId].Count; ++i){
 						BranchAddress thisAddr = loops[loopId][i];
-						CircuitElement thisElement = circuit.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
+						CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 						BranchData thisData = GetBranchData(thisAddr);
 					
 						currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
@@ -1242,7 +1248,7 @@ public class Simulator : MonoBehaviour {
 	
 	// This is pretty hacky - we shouldn't have to check if this is a wire or not
 	void SetInitVoltage(BranchAddress addr, float currentVoltage){
-		CircuitElement element = circuit.GetElement(new GridPoint(addr.x, addr.y));
+		CircuitElement element = Circuit.singleton.GetElement(new GridPoint(addr.x, addr.y));
 		
 		// Check if this is a wire (because then the voltage is the same accross all its connections)
 		if (GameObject.ReferenceEquals(element.GetType (), typeof(CircuitElementWire))){
@@ -1282,7 +1288,7 @@ public class Simulator : MonoBehaviour {
 	bool Simulate(){
 		// Find all the loops
 		FindLoops();
-		// Flag the ones going round the outside of disjoint circuits as 0 (so we can ignore them)
+		// Flag the ones going round the outside of disjoint Circuit.singletons as 0 (so we can ignore them)
 		FlagOuterLoops();
 		// Go through each loop and remove any elements which are from a "Spoke" - i.e., not a loop
 		//TrimSpokes();
@@ -1323,7 +1329,10 @@ public class Simulator : MonoBehaviour {
 
 	}
 	
-	public void ClearSimulation(){
+	void BuildArrays(){
+		width = Grid.singleton.gridWidth;
+		height = Grid.singleton.gridHeight;
+		
 		loops = new List<List<BranchAddress>>();
 		branchData = new BranchData[width, height, 4];
 		
@@ -1332,11 +1341,15 @@ public class Simulator : MonoBehaviour {
 				for (int i = 0; i < 4; ++i){
 					branchData[x,y,i] = new BranchData();
 				}
-			
+				
 			}
 		}
 		loopCurrents = new float[0];
 		voltageLoopOrder = new int[0];
+	}
+	
+	public void ClearSimulation(){
+
 		ClearLoopCurrentVis();		
 		ClearCurrentVis();
 		ClearVoltageVis();
@@ -1445,14 +1458,6 @@ public class Simulator : MonoBehaviour {
 			}
 		}
 	}	
-	
-	bool IsPointInGrid(int x, int y){
-		return 	
-			x > 0 &&
-			y > 0 &&
-			x < width &&
-			y < height;		
-	}	
 
 	
 	// Go through each of the squares and find edges which have a loop current in them
@@ -1474,7 +1479,7 @@ public class Simulator : MonoBehaviour {
 				int groupId = -1;
 				bool isOuter = false;
 				for (int i = 0; i < 4; ++i){
-					if (IsPointInGrid(squareAddresses[i].x, squareAddresses[i].y)){
+					if (Grid.singleton.IsPointInGrid(squareAddresses[i].x, squareAddresses[i].y)){
 						BranchData data = GetBranchData(squareAddresses[i]);
 						if (data.traversed){
 							loopId = data.loopId;
@@ -1677,7 +1682,7 @@ public class Simulator : MonoBehaviour {
 			attempts--;
 		}
 		if (attempts == 0){
-			Debug.LogError ("Failed to solve circuit equations");
+			Debug.LogError ("Failed to solve Circuit.singleton equations");
 		}
 		
 		if (visMode == VisMode.kGroups || visMode == VisMode.kLoops){
@@ -1694,17 +1699,17 @@ public class Simulator : MonoBehaviour {
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				GridPoint thisPoint = new GridPoint(x, y);
-				if (circuit.ElementExists(thisPoint)){
+				if (Circuit.singleton.ElementExists(thisPoint)){
 					// Get the 
 					List<MeshRenderer> meshes = new List<MeshRenderer>();
-					FindMeshRenderers(circuit.GetGameObject (thisPoint), meshes);
+					FindMeshRenderers(Circuit.singleton.GetGameObject (thisPoint), meshes);
 					for (int k = 0; k < meshes.Count; ++k){
 						MeshRenderer mesh = meshes[k];
 						float componentVolage = 0f;
 						for (int i = 0; i < 4; ++i){
 							BranchData data = GetBranchData(new BranchAddress(x, y, i));
 							if (data.traversed){
-								int orient = circuit.GetElement(thisPoint).orient;
+								int orient = Circuit.singleton.GetElement(thisPoint).orient;
 								mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * data.totalCurrent);
 								mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(currentMulVis * data.totalCurrent));
 								
@@ -1732,9 +1737,9 @@ public class Simulator : MonoBehaviour {
 							if (enableVoltsgeAsHeight){
 								if (float.IsNaN(componentVolage) || float.IsInfinity(componentVolage)) componentVolage = 0f;
 								
-								Vector3 pos = circuit.GetGameObject(thisPoint).transform.position;
+								Vector3 pos = Circuit.singleton.GetGameObject(thisPoint).transform.position;
 								pos.z = -componentVolage;
-								circuit.GetGameObject(thisPoint).transform.position = pos;
+								Circuit.singleton.GetGameObject(thisPoint).transform.position = pos;
 							}
 							
 						}
@@ -1749,7 +1754,7 @@ public class Simulator : MonoBehaviour {
 	
 	void OnGUI () {
 		guiTextDisplay.GUIResetTextLayout();
-		guiTextDisplay.GUIPrintText( "Number of disjoint circuits: " + numGroups, Color.white);
+		guiTextDisplay.GUIPrintText( "Number of disjoint Circuit.singletons: " + numGroups, Color.white);
 		guiTextDisplay.GUIPrintText( "Number of loops: " + numValidLoops, Color.white);
 		
 	}	

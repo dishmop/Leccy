@@ -9,9 +9,6 @@ public class Circuit : MonoBehaviour {
 	
 	public static Circuit singleton = null;
 	
-
-	public GameObject gridGO;
-	public GameObject factoryGO;
 	public GameObject particleExplosionPrefab;
 	
 	public Rect bounds;
@@ -27,9 +24,6 @@ public class Circuit : MonoBehaviour {
 	// Useful array of offsets
 	GridPoint[] offsets = new GridPoint[4];
 	
-	// Scripts associatd with the game objects
-	Grid 			grid;
-	ElementFactory	factory;
 	
 	public GameObject[,] 	elements;
 	
@@ -98,7 +92,7 @@ public class Circuit : MonoBehaviour {
 		// Go through each entry adding a crcuit element to the circuit
 		for (int i = 0; i < numElements; ++i){
 			ElementSerializationData data = dataList[i];
-			AddElement (new GridPoint(data.x, data.y), factory.InstantiateElement(data.id));
+			AddElement (new GridPoint(data.x, data.y), ElementFactory.singleton.InstantiateElement(data.id));
 //			if (data.id == wireElementPrefab.GetComponent<SerializationID>().id){
 //				RawAddElement(new GridPoint(data.x, data.y), wireElementPrefab);
 //			}
@@ -193,20 +187,11 @@ public class Circuit : MonoBehaviour {
 			return 	kDown;			
 		return kErr;
 	}
-	
-	
-	public bool IsPointInGrid(GridPoint point){
-		return 	
-			point.x >= 0 &&
-			point.y >= 0 &&
-			point.x < grid.gridWidth &&
-			point.y < grid.gridHeight;		
-	}	
-	
+
 	
 	// Assumed to be in the grid
 	public bool ElementExists(GridPoint point){
-		return (IsPointInGrid(point) &&  elements[point.x, point.y] != null);
+		return (Grid.singleton.IsPointInGrid(point) &&  elements[point.x, point.y] != null);
 	}
 	
 	GridPoint[] CalcGridPath(GridPoint prevPoint, GridPoint nextPoint){
@@ -270,19 +255,28 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	
-	
+	void Start(){
+		CreateBlankCircuit();
+	}
+		
+		
 	void Awake(){
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+		
 		offsets[kLeft] = 	new GridPoint(-1,  0);
 		offsets[kRight] = 	new GridPoint( 1,  0);
 		offsets[kUp] = 		new GridPoint( 0,  1);
 		offsets[kDown] = 	new GridPoint( 0,  -1);	
 		
-		
-		grid = gridGO.GetComponent<Grid>();
-		factory = factoryGO.GetComponent<ElementFactory>();
-		
-		CreateBlankCircuit();
+			
+
 	}
+	
+	void OnDestroy(){
+		singleton = null;
+	}
+	
 
 	 void CreateBlankCircuit(){	
 		// If there is a load of circuit elemnts here already, go through and destroy them all
@@ -293,7 +287,7 @@ public class Circuit : MonoBehaviour {
 				}
 			}
 		}
-		elements = new GameObject[grid.gridWidth, grid.gridHeight];
+		elements = new GameObject[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
 		
 	}
 

@@ -1,3 +1,21 @@
 Base path: /Applications/Unity/Unity.app/Contents
 Pipe name: \\.\pipe\UnityShaderCompiler-1--1596501592
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=1070 outsize=397 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at /UnityCG.cginc(48): profile specifier "Ztest" not allowed on non-function "unity_ColorSpaceGrey"
+  error: 1 plat 0 at /UnityCG.cginc(48): unrecognized profile specifier "always" unrecognized profile specifier "Ztest"
+  api=0 type=0 insize=970 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1069 outsize=397 ok=1
+Cmd: compileSnippet
+  error: 2 plat 0 at /UnityCG.cginc(48): profile specifier "Ztest" not allowed on non-function "unity_ColorSpaceGrey"
+  error: 1 plat 0 at /UnityCG.cginc(48): unrecognized profile specifier "never" unrecognized profile specifier "Ztest"
+  api=0 type=0 insize=969 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=1051 outsize=397 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=951 outsize=281 kw= ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=951 outsize=238 kw= ok=1

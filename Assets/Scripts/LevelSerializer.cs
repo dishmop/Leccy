@@ -5,39 +5,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 public class LevelSerializer : MonoBehaviour {
-	public GameObject gridGO;
-	public GameObject circuitGO;
-	public GameObject factoryGO;
 	
-	
-	Grid			grid;
-	Circuit			circuit;
-	ElementFactory	factory;
-	
-	void Start(){
-		grid = gridGO.GetComponent<Grid>();	
-		circuit = circuitGO.GetComponent<Circuit>();	
-		factory = factoryGO.GetComponent<ElementFactory>();
-	}
-	
+	public static LevelSerializer singleton = null;
 
-	public void SaveLevel(string filename){
-#if UNITY_EDITOR		
-		FileStream file = File.Create(BuildFullPath(filename));
-		
-		BinaryWriter bw = new BinaryWriter(file);
-		
-		grid.Save(bw);
-		circuit.Save(bw);
-		factory.Save(bw);
-
-		file.Close();
-		
-		// Ensure the assets are all realoaded and the cache cleared.
-
-		UnityEditor.AssetDatabase.Refresh();
-#endif
-	}
 	
 	
 	string BuildFullPath(string filename){
@@ -52,8 +22,37 @@ public class LevelSerializer : MonoBehaviour {
 		//return Application.persistentDataPath + "/" + filename;
 		
 	}	
+	
+	
+	
+	void Awake(){
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+	}
+	
+	void OnDestroy(){
+		singleton = null;
+	}	
 
 
+
+public void SaveLevel(string filename){
+#if UNITY_EDITOR		
+		FileStream file = File.Create(BuildFullPath(filename));
+		
+		BinaryWriter bw = new BinaryWriter(file);
+		
+		Grid.singleton.Save(bw);
+		Circuit.singleton.Save(bw);
+		ElementFactory.singleton.Save(bw);
+		
+		file.Close();
+		
+		// Ensure the assets are all realoaded and the cache cleared.
+		
+		UnityEditor.AssetDatabase.Refresh();
+#endif
+	}
 	
 	public void LoadLevel(string filename){
 		if (filename == null){
@@ -71,9 +70,9 @@ public class LevelSerializer : MonoBehaviour {
 //			FileStream file = File.OpenRead(BuildFullPath(filename));
 //			BinaryReader br = new BinaryReader(file);
 			
-			grid.Load(br);
-			circuit.Load(br);
-			factory.Load(br);
+			Grid.singleton.Load(br);
+			Circuit.singleton.Load(br);
+			ElementFactory.singleton.Load(br);
 			
 			Resources.UnloadAsset(asset);
 		}	
