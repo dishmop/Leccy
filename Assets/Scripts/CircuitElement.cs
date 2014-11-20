@@ -62,7 +62,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public virtual GameObject   GetUIMehsPrefab(){
+	public virtual GameObject   GetDisplayMesh(){
 		return null;
 	}
 	
@@ -211,10 +211,10 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	protected void VisualiseTemperature(){
-		foreach (Transform child in transform.GetChild(0)){
-			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
-			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
-		}		
+//		foreach (Transform child in transform.GetChild(0)){
+//			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
+//			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
+//		}		
 		
 	}	
 	
@@ -230,6 +230,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	// Return the maximum voltage difference accross all connections
 	public float GetMaxVoltage(){
+		if (thisPoint == null) return 0f;
 		return Mathf.Max(
 			Mathf.Max(
 				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 0)), 
@@ -241,6 +242,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 	public float GetMaxCurrent(){
+		if (thisPoint == null) return 0f;
 		return Mathf.Max(
 			Mathf.Max(
 				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0)), 

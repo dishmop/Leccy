@@ -8,6 +8,8 @@ public class ElementSelectPanel : MonoBehaviour {
 	public float					xCount;		// Number of buttons in a row
 	public float					yCount;		// Number of buttons in a column
 	
+	
+
 	// Use this for initialization
 	void Start () {
 		ElementFactory factory = ElementFactory.singleton;
@@ -38,8 +40,8 @@ public class ElementSelectPanel : MonoBehaviour {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
 	
-	}
+	
+
+	
 }

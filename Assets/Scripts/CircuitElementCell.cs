@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -38,8 +38,8 @@ public class CircuitElementCell : CircuitElement {
 	}	
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public override GameObject   GetUIMehsPrefab(){
-		return cellPrefab;
+	public  override GameObject GetDisplayMesh(){
+		return displayMesh;
 	}	
 	
 	public override string GetUIString(){
@@ -137,6 +137,7 @@ public class CircuitElementCell : CircuitElement {
 	}
 	
 	float GetAbsCurrentFlow(){
+		if (thisPoint == null) return 0f;
 		return  Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
 	}
 	

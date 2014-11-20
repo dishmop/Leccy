@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -14,8 +14,14 @@ public class CircuitElementWire : CircuitElement {
 	public GameObject wireTJuncFromTopPrefab;
 		
 	GameObject 	currentPrefab;
-	GameObject	currentDisplay;
+	GameObject	displayMesh;
 	
+	
+	// Se this up so that the UI mesh is reasonable
+	void Awake(){
+		connectionStatus[0] = ConnectionStatus.kConnected;
+		connectionStatus[2] = ConnectionStatus.kConnected;
+	}
 	
 	public void Start(){
 		Debug.Log ("CircuitElementWire:Start()");
@@ -116,21 +122,21 @@ public class CircuitElementWire : CircuitElement {
 		
 		
 		if (newPrefab != currentPrefab){
-			GameObject.Destroy(currentDisplay);
+			GameObject.Destroy(displayMesh);
 			currentPrefab = newPrefab;
-			currentDisplay = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
-			currentDisplay.transform.parent = transform;
+			displayMesh = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
+			displayMesh.transform.parent = transform;
 		}
 		else if (newOrient != orient){
 			orient = newOrient;
-			currentDisplay.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
+			displayMesh.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
 	}	
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public override GameObject   GetUIMehsPrefab(){
-		return wireStraightDownPrefab;
-	}	
+	public  override GameObject GetDisplayMesh(){
+		return displayMesh;
+	}		
 	
 	public override string GetUIString(){
 		return "Wire";

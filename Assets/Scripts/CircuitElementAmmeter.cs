@@ -44,8 +44,8 @@ public class CircuitElementAmmeter : CircuitElement {
 	}	
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public  override GameObject   GetUIMehsPrefab(){
-		return ammeterPrefab;
+	public  override GameObject GetDisplayMesh(){
+		return displayMesh;
 	}	
 	
 	public override string GetUIString(){

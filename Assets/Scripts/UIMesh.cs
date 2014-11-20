@@ -21,11 +21,17 @@ public class UIMesh : MonoBehaviour {
 		OnChange ();
 		
 	}
+	
+	public GameObject GetPrefab(){
+		return prefabMesh;
+	}
 
 	void ConstructCanvasRenderer(GameObject thisObj, GameObject refMesh){
 	
 		// Enusre the scale etc. are set up correctly
 		thisObj.transform.localScale = refMesh.transform.localScale;
+		thisObj.transform.localRotation = refMesh.transform.localRotation;;
+		//thisObj.transform.localPosition = refMesh.transform.localPosition;;
 		
 		MeshFilter meshFilter = refMesh.GetComponent<MeshFilter>();
 		MeshRenderer meshRenderer = refMesh.GetComponent<MeshRenderer>();
@@ -92,7 +98,7 @@ public class UIMesh : MonoBehaviour {
 		
 		// Need to make an instaniation of the prefab and then access that to read the verx data
 		// otherwise we end up destroying the prefab (from some reason).
-		GameObject mesh = Instantiate(prefabMesh, transform.position, transform.rotation) as GameObject;
+		GameObject mesh = Instantiate(prefabMesh) as GameObject;
 		mesh.transform.parent = transform;
 		
 		GameObject scalingChild = InstantiateEmptyChild(gameObject);
@@ -111,7 +117,6 @@ public class UIMesh : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		CreateSelf();
 	}
 	
 

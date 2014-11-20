@@ -7,48 +7,36 @@ using System.IO;
 public class ElementFactory : MonoBehaviour {
 	public static ElementFactory singleton = null;
 	
-	public int defaultStockRemaining = 0;
-	
 	int[]	typeCount;
 
 	//----------------------------------------------
 	[Serializable]
-	public class FactoryData{
+	public class FactoryPrefabData{
 		public GameObject	prefab;
+		public int		  	initialStockCount;
+
+	}
+	
+
+	//----------------------------------------------
+	public FactoryPrefabData[] 	initialStock;
+	
+
+	class FactoryData{
+		public GameObject	factoryPrefab;
 		public int		  	stockRemaining;
 		public int		  	typeIndex;
 		public int			index;
 	}
-
-	public FactoryData[] stock;
 	
-
-	//----------------------------------------------
-	void Awake(){
-		if (singleton != null) Debug.LogError ("Error assigning singleton");
-		singleton = this;
-		
-		
-		// Will get initialised to zero
-		typeCount = new int[(int)CircuitElement.UIType.kNumTypes];
-		
-		for (int i = 0; i < stock.Length; ++i){
-			FactoryData data = stock[i];
-			int uiType = (int)(data.prefab.GetComponent<CircuitElement>().uiType);
-			
-			data.stockRemaining = defaultStockRemaining;
-			data.typeIndex = typeCount[uiType]++;
-			data.typeIndex = i;
-			
-		}
-		
+	
+	FactoryData[] 		stock;
+	
+	
+	// Call if you make any changes to the prefab
+	public void OnChangePrefab(){
 	}
 	
-
-	
-	void OnDestroy(){
-		singleton = null;
-	}
 	
 	//----------------------------------------------
 	public int GetNumElements(CircuitElement.UIType uiType){
@@ -78,13 +66,15 @@ public class ElementFactory : MonoBehaviour {
 	//----------------------------------------------
 	// Create a new circuit element
 	public GameObject InstantiateElement(int index){
-		return Instantiate(stock[index].prefab) as GameObject;
+		GameObject obj =   Instantiate(stock[index].factoryPrefab) as GameObject;
+		obj.SetActive(true);
+		return obj;
 	}	
 
 	// Get a pointer to the prefab we use to instantiate new elements
 	// This can be modified if we want (e.g. change its orientation)
 	public GameObject GetPrefab(int index){
-		return stock[index].prefab;
+		return stock[index].factoryPrefab;
 	}
 	
 	
@@ -131,15 +121,19 @@ public class ElementFactory : MonoBehaviour {
 	
 
 	public 	void Save(BinaryWriter bw){
+	
+	/*
 		int numStock = stock.Length;
 		bw.Write(numStock);
 		for (int i = 0; i < numStock; ++i){
-			bw.Write (stock[i].prefab.GetComponent<SerializationID>().id);
+			bw.Write (stock[i].factoryPrefab.GetComponent<SerializationID>().id);
 			bw.Write (stock[i].stockRemaining);
 		}
+		*/
 	}
 	
 	public 	void Load(BinaryReader br){
+	/*
 		foreach (FactoryData data in stock){
 			data.stockRemaining = defaultStockRemaining;
 		}
@@ -151,17 +145,51 @@ public class ElementFactory : MonoBehaviour {
 			string id = br.ReadString();
 			FindStockData(id).stockRemaining = br.ReadInt32 ();
 		}
+		*/
 	}
 	
-	// for the moment, do an exhaustive search (should use a dictionary)
-	FactoryData FindStockData(string id){
-		return Array.Find(stock, element => element.prefab.GetComponent<SerializationID>().id == id);
+	
+	//----------------------------------------------
+	void Awake(){
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+		
+		// Create our stock list fromthe initial lis
+		stock = new FactoryData[initialStock.Length];		
+		
+		// Will get initialised to zero
+		typeCount = new int[(int)CircuitElement.UIType.kNumTypes];
+		
+		for (int i = 0; i < stock.Length; ++i){
+			int uiType = (int)(initialStock[i].prefab.GetComponent<CircuitElement>().uiType);
+			stock[i] = new FactoryData();
+			
+			stock[i].stockRemaining = initialStock[i].initialStockCount;
+			stock[i].typeIndex = typeCount[uiType]++;
+			stock[i].index = i;
+			stock[i].factoryPrefab = Instantiate(initialStock[i].prefab, transform.position, transform.rotation) as GameObject;
+			stock[i].factoryPrefab.transform.parent = transform;
+			stock[i].factoryPrefab.SetActive(false);
+			
+		}
 		
 	}
 	
+	
+	
+	void OnDestroy(){
+		singleton = null;
+	}	
+	// for the moment, do an exhaustive search (should use a dictionary)
+	FactoryData FindStockData(string id){
+		return Array.Find(stock, element => element.factoryPrefab.GetComponent<SerializationID>().id == id);
+		
+	}
+	
+	//----------------------------------------------
 	// for the moment, do an exhaustive search (should use a dictionary)
 	FactoryData FindStockData(CircuitElement.UIType uiType, int typeIndex){
-		return Array.Find(stock, element => (element.prefab.GetComponent<CircuitElement>().uiType == uiType && element.typeIndex == typeIndex));
+		return Array.Find(stock, element => (element.factoryPrefab.GetComponent<CircuitElement>().uiType == uiType && element.typeIndex == typeIndex));
 		
 	}	
 	
