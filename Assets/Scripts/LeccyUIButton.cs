@@ -9,8 +9,8 @@ public class LeccyUIButton : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if (circuitElementPrefab){
-			transform.FindChild("Text").GetComponent<Text>().text = circuitElementPrefab.GetComponent<CircuitElement>().GetUIString();
-			transform.FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().prefabMesh = circuitElementPrefab.GetComponent<CircuitElement>().GetUIMehsPrefab();
+			transform.FindChild ("TextFrame").FindChild("Text").GetComponent<Text>().text = circuitElementPrefab.GetComponent<CircuitElement>().GetUIString();
+			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().SetPrefabMesh(circuitElementPrefab.GetComponent<CircuitElement>().GetUIMehsPrefab());
 		}
 		
 	}

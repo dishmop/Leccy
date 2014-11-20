@@ -1,14 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UIMesh : MonoBehaviour {
 
-	public GameObject prefabMesh;
 	public GameObject emptyGO;
 
 	
+	GameObject prefabMesh;
 	Bounds	bounds;
+
 	
+	public void OnChange(){
+		UncreateSelf ();
+		CreateSelf();
+	}
+	
+	public void SetPrefabMesh(GameObject prefab){
+		prefabMesh = prefab;
+		OnChange ();
+		
+	}
+
 	void ConstructCanvasRenderer(GameObject thisObj, GameObject refMesh){
 	
 		// Enusre the scale etc. are set up correctly
@@ -72,9 +85,11 @@ public class UIMesh : MonoBehaviour {
 		newObj.transform.parent = thisObj.transform;
 		return newObj;
 	}
-
-	// Use this for initialization
-	void Start () {
+	
+	void CreateSelf(){
+		// If we don't have a prefab, then cannot make ourselves
+		if (!prefabMesh) return;
+		
 		// Need to make an instaniation of the prefab and then access that to read the verx data
 		// otherwise we end up destroying the prefab (from some reason).
 		GameObject mesh = Instantiate(prefabMesh, transform.position, transform.rotation) as GameObject;
@@ -91,16 +106,22 @@ public class UIMesh : MonoBehaviour {
 		float xScale = rectTrans.rect.width / bounds.size.x;
 		float yScale = rectTrans.rect.height / bounds.size.y;
 		float scale = Mathf.Min (xScale, yScale);
-		scalingChild.transform.localScale = new Vector3(scale, scale, 1f);
-		
+		scalingChild.transform.localScale = new Vector3(scale, scale, 1f);	
+	}
+
+	// Use this for initialization
+	void Start () {
+		CreateSelf();
 	}
 	
-	void OnDestroy(){
-		
+
+	
+	void UncreateSelf(){
+		List<GameObject> children = new List<GameObject>();
+		foreach (Transform child in transform) children.Add(child.gameObject);
+		children.ForEach(child => Destroy(child));	
 	}
 	
-	// Update is called once per frame
-	void Update () {
 	
-	}
 }
+	
