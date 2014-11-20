@@ -112,7 +112,7 @@ public class Grid : MonoBehaviour {
 		highlightPrefabToUse = highlightPrefab;
 		
 		CreateGrid ();		
-		guiTextDisplay = new GUITextDisplay(10f, 200f, 500f, 20f);
+		guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
 	
 	}
 	

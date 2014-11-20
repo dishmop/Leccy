@@ -55,7 +55,7 @@ MonoBehaviour:
   orient: 0
   anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   temperature: 0
-  uiMode: 2
+  uiType: 2
   connectionStatus: 00000000000000000000000000000000
   isBaked: 00000000
   ammeterPrefab: {fileID: 100008, guid: 5c48c6770043a460981604685285b7de, type: 2}

@@ -92,6 +92,16 @@ public class CircuitElementResistor : CircuitElement {
 		return resistance;
 	}	
 	
+	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
+	public override GameObject   GetUIMehsPrefab(){
+		return resistorPrefab;
+	}	
+	
+	public override string GetUIString(){
+		return "Resistor";
+	}
+		
+	
 	// Use this for initialization
 	void Awake () {
 		displayMesh = Instantiate(resistorPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;

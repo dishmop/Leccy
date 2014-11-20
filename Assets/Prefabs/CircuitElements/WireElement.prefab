@@ -43,7 +43,7 @@ MonoBehaviour:
   orient: 0
   anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   temperature: 0
-  uiMode: 1
+  uiType: 1
   connectionStatus: 00000000000000000000000000000000
   isBaked: 00000000
   wirePointPrefab: {fileID: 100004, guid: 304f2376f6fdf40c9a4863111e797161, type: 2}

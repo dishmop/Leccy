@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22400000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: UIMesh
@@ -25,23 +24,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1254083943, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AspectMode: 2
-  m_AspectRatio: 1
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5e495d86ad14fa6bcacae887d2c93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabMesh: {fileID: 100006, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
+  prefabMesh: {fileID: 0}
   emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
 --- !u!224 &22400000
 RectTransform:
@@ -50,16 +36,16 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -56.4457016, y: 124.969849}
-  m_SizeDelta: {x: 0, y: 73}
-  m_Pivot: {x: .499999702, y: .500000179}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 2.28881836e-05, y: 2.67028809e-05}
+  m_SizeDelta: {x: 4.57759998e-05, y: 4.57759998e-05}
+  m_Pivot: {x: .49999997, y: .50000006}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -34,8 +34,8 @@ public class UI : MonoBehaviour {
 		kGameComplete,
 		kEditMode
 	};
-	GameMode			gameMode = GameMode.kNone;
-	public Rect			toolbarRect = new Rect(25, 25, 1000, 30);
+	GameMode		gameMode = GameMode.kNone;
+	Rect			toolbarRect = new Rect(400, 25, 1000, 30);
 
 	
 	public enum InputMode{

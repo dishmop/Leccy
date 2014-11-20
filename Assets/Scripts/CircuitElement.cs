@@ -15,13 +15,14 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 	// What is the best UI scheme to use when placing these elents
-	public enum UIModel{
+	public enum UIType{
 		kNone,
 		kDraw,			// Lay them out in lines like drawing with a pen
-		kPlace			// Place sinlge elements down one at a time
+		kPlace,			// Place sinlge elements down one at a time
+		kNumTypes		// Useufl for iterating over the,
 	};
 	
-	public UIModel uiMode = UIModel.kNone;
+	public UIType uiType = UIType.kNone;
 	
 	
 	// These enums describe the connection situation in a given direction
@@ -58,6 +59,17 @@ public class CircuitElement : MonoBehaviour {
 		
 		
 	}
+	
+	
+	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
+	public virtual GameObject   GetUIMehsPrefab(){
+		return null;
+	}
+	
+	public virtual string GetUIString(){
+		return "None";
+	}
+	
 	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;

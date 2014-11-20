@@ -36,6 +36,15 @@ public class CircuitElementCell : CircuitElement {
 	public override void TriggerEmergency(){
 		isInEmergency = true;
 	}	
+	
+	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
+	public override GameObject   GetUIMehsPrefab(){
+		return cellPrefab;
+	}	
+	
+	public override string GetUIString(){
+		return "Cell";
+	}	
 
 //	public override void OnClick(){
 //		invertOrient = !invertOrient;

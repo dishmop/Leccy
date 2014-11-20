@@ -29,7 +29,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		Debug.Log ("CircuitElementAmpMeter:Start()");
 	}
 	
-	override public void Save(BinaryWriter bw){
+	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
 		bw.Write (targetAmp);
 		bw.Write (hasTarget);
@@ -37,10 +37,19 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	
-	override public void Load(BinaryReader br){
+	public override void Load(BinaryReader br){
 		base.Load (br);	
 		targetAmp = br.ReadSingle ();
 		hasTarget = br.ReadBoolean();
+	}	
+	
+	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
+	public  override GameObject   GetUIMehsPrefab(){
+		return ammeterPrefab;
+	}	
+	
+	public override string GetUIString(){
+		return "Ammeter";
 	}	
 	
 	

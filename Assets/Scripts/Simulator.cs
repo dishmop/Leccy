@@ -113,7 +113,7 @@ public class Simulator : MonoBehaviour {
 		ClearSimulation ();
 		
 		// Sert up the text gui
-		guiTextDisplay = new GUITextDisplay(10f, 70f, 500f, 20f);
+		guiTextDisplay = new GUITextDisplay(400f, 70f, 500f, 20f);
 	}
 	
 	public float GetVoltage(int x, int y, int dir){

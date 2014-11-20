@@ -10,6 +10,10 @@ public class UIMesh : MonoBehaviour {
 	Bounds	bounds;
 	
 	void ConstructCanvasRenderer(GameObject thisObj, GameObject refMesh){
+	
+		// Enusre the scale etc. are set up correctly
+		thisObj.transform.localScale = refMesh.transform.localScale;
+		
 		MeshFilter meshFilter = refMesh.GetComponent<MeshFilter>();
 		MeshRenderer meshRenderer = refMesh.GetComponent<MeshRenderer>();
 		// If we have one, then create a corresponding CanvasRendeer and fill it with data
@@ -57,6 +61,8 @@ public class UIMesh : MonoBehaviour {
 		foreach (Transform child in refMesh.transform){
 			GameObject newObj = InstantiateEmptyChild(thisObj);
 			newObj.name = child.gameObject.name;
+
+			
 			ConstructCanvasRenderer(newObj, child.gameObject);
 		}
 	}
@@ -68,7 +74,7 @@ public class UIMesh : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		// Need to make an instaniation of the prefab and then access that to read the verx data
 		// otherwise we end up destroying the prefab (from some reason).
 		GameObject mesh = Instantiate(prefabMesh, transform.position, transform.rotation) as GameObject;

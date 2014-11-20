@@ -102,10 +102,10 @@ MonoBehaviour:
   orient: 0
   anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   temperature: 0
-  uiMode: 2
+  uiType: 2
   connectionStatus: 00000000000000000000000000000000
   isBaked: 00000000
-  resistorPrefab: {fileID: 100006, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
+  resistorPrefab: {fileID: 100008, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
   resistance: 1
 --- !u!114 &11400002
 MonoBehaviour:

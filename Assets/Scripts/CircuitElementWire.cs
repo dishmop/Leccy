@@ -127,6 +127,16 @@ public class CircuitElementWire : CircuitElement {
 		}
 	}	
 	
+	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
+	public override GameObject   GetUIMehsPrefab(){
+		return wireStraightDownPrefab;
+	}	
+	
+	public override string GetUIString(){
+		return "Wire";
+	}		
+	
+	
 	void Update(){
 		VisualiseTemperature();
 	}

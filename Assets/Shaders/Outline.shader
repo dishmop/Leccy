@@ -5,6 +5,7 @@
             _Temperature ("Temperature", Float) = 0
         }
         SubShader {
+        	ZTest Always
             Pass {
 
 		        CGPROGRAM
