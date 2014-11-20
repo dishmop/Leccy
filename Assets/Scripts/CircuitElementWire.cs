@@ -21,6 +21,7 @@ public class CircuitElementWire : CircuitElement {
 	void Awake(){
 		connectionStatus[0] = ConnectionStatus.kConnected;
 		connectionStatus[2] = ConnectionStatus.kConnected;
+		RebuildMesh();
 	}
 	
 	public void Start(){
@@ -140,7 +141,12 @@ public class CircuitElementWire : CircuitElement {
 	
 	public override string GetUIString(){
 		return "Wire";
-	}		
+	}	
+	
+	// Called when mouse is lciked on this. Return true if we changed the object in some way
+	public override bool OnClick(){
+		return  false;
+	}			
 	
 	
 	void Update(){

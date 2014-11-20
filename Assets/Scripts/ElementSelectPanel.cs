@@ -9,6 +9,11 @@ public class ElementSelectPanel : MonoBehaviour {
 	public float					yCount;		// Number of buttons in a column
 	
 	
+	public void ClearSelection(){
+		foreach (Transform child in transform){
+			child.GetComponent<LeccyUIButton>().isSelected = false;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {

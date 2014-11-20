@@ -55,7 +55,6 @@
      <Compile Include="Assets\Scripts\CircuitElementResistor.cs" />
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
-     <Compile Include="Assets\Scripts\ElementSelectButton.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
      <Compile Include="Assets\Scripts\FractionCalc.cs" />
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />

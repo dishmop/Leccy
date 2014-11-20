@@ -27,10 +27,10 @@ public class CircuitElement : MonoBehaviour {
 	
 	// These enums describe the connection situation in a given direction
 	public enum ConnectionStatus{ 
-		kConnected,		// There is a connection
-		kReceptive,		// There is no connection but if invited to make one, I wil say yes
 		kUnreceptive,   // there is no connection, and if invited to make one, I will say no
+		kReceptive,		// There is no connection but if invited to make one, I wil say yes
 		kSocialble,		// There is no connection, but I will invite anyone to connect here
+		kConnected,		// There is a connection
 	};
 	
 	// 0 - up
@@ -188,6 +188,12 @@ public class CircuitElement : MonoBehaviour {
 	public virtual float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
 		return 0f;
+	}
+	
+	// Called when mouse is lciked on this. Return true if we changed the object in some way
+	public virtual bool OnClick(){
+		Rotate (1);
+		return  true;
 	}
 	
 	public virtual float GetVoltageDrop(int dir){
