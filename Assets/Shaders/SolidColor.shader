@@ -6,8 +6,12 @@
 	}
 
 	SubShader {
-		Color[_Color]
-		Pass{}
+        ZTest Always
+        
+        Color[_Color]
+		Pass{
+
+		}
 		
 	} 
 }

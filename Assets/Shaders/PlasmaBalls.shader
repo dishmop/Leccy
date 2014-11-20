@@ -32,6 +32,7 @@
 	//	_Voltae	("Voltage0", Float) = 0;				
 	}
 	SubShader {
+        ZTest Always
 	Pass {
 		//Tags { "RenderType" = "Transparent" }
 		CGPROGRAM
