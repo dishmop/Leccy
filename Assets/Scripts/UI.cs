@@ -118,11 +118,11 @@ public class UI : MonoBehaviour {
 		
 		// if we have just transitioned to a new point (and button held at both points, we should now get these two
 		// elements to invite each other to connect to keep things symetrical
-		if (thisPoint != lastPoint){
+		if (!thisPoint.IsEqual(lastPoint)){
+			CircuitElement thisElement =  Circuit.singleton.GetElement(thisPoint);
 			CircuitElement lastElement =  Circuit.singleton.GetElement(lastPoint);
-			CircuitElement thisElement =  Circuit.singleton.GetElement(lastPoint);
-			lastElement.SuggestInvite(thisElement);
 			thisElement.SuggestInvite(lastElement);
+			lastElement.SuggestInvite(thisElement);
 		}
 		
 				

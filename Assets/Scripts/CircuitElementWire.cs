@@ -33,7 +33,10 @@ public class CircuitElementWire : CircuitElement {
 	}
 	
 	public override bool SuggestInvite(CircuitElement otherElement){
-		return false;
+		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
+		isConnected[dir] = true;
+		RebuildMesh();
+		return true;
 	}
 	
 	

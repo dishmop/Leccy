@@ -1679,6 +1679,8 @@ public class Simulator : MonoBehaviour {
 		// Update is called once per frame
 	void FixedUpdate () {
 	
+		return;
+	
 		bool finished = false;
 		int attempts = 3;
 		while (!finished && attempts > 0){

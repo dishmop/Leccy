@@ -100,6 +100,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 	
+	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
 	public  GameObject GetDisplayMesh(){
 		Transform dispTrans = transform.FindChild(displayMeshName);
@@ -117,6 +118,10 @@ public class CircuitElement : MonoBehaviour {
 			transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
 		}
 		RebuildMesh();
+	}
+	
+	public GridPoint GetGridPoint(){
+		return thisPoint;
 	}
 	
 	public virtual void Save(BinaryWriter bw){
