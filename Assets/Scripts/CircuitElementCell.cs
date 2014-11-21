@@ -15,9 +15,12 @@ public class CircuitElementCell : CircuitElement {
 
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
-		CreateDisplayMesh();	
 	}
 	
+	public void Awake(){
+		CreateDisplayMesh();	
+	}
+
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
 		
@@ -124,17 +127,14 @@ public class CircuitElementCell : CircuitElement {
 
 
 	
-	// Call this if instantiating an inactive version
-	public override void InactveStart(){
-		CreateDisplayMesh();	
-	}
-	
+
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());
-		GameObject displayMesh = Instantiate(cellPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh = Instantiate(cellPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
 		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
+		
 		RebuildMesh();	
 	}
 	
@@ -147,6 +147,7 @@ public class CircuitElementCell : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleDisplayMeshChlid();
 		HandleAlpha();
 		
 		GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = voltage;

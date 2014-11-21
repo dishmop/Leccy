@@ -12,9 +12,12 @@ public class CircuitElementResistor : CircuitElement {
 
 	public void Start(){
 		Debug.Log ("CircuitElementResistor:Start()");
-		CreateDisplayMesh();	
 	}
 	
+	public void Awake(){
+		CreateDisplayMesh();	
+	}
+
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
 		bw.Write(resistance);
@@ -99,16 +102,13 @@ public class CircuitElementResistor : CircuitElement {
 	
 
 	
-	// Call this if instantiating an inactive version
-	public override void InactveStart(){
-		CreateDisplayMesh();	
-	}	
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());
-		GameObject displayMesh = Instantiate(resistorPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh = Instantiate(resistorPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
 		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
+		
 		RebuildMesh ();
 	}	
 	
@@ -124,9 +124,10 @@ public class CircuitElementResistor : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleDisplayMeshChlid();	
 		HandleAlpha();
 
-				GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
+		GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
 		
 		VisualiseTemperature();
 		

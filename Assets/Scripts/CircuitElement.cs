@@ -17,6 +17,8 @@ public class CircuitElement : MonoBehaviour {
 	float 	alpha = 1f;
 	bool 	dirtyAlpha = false;
 	
+	protected GameObject	displayMesh;
+	
 	
 	// What is the best UI scheme to use when placing these elents
 	public enum UIType{
@@ -103,8 +105,9 @@ public class CircuitElement : MonoBehaviour {
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
 	public  GameObject GetDisplayMesh(){
-		Transform dispTrans = transform.FindChild(displayMeshName);
-		return dispTrans ? dispTrans.gameObject : null;
+		return displayMesh;
+//		Transform dispTrans = transform.FindChild(displayMeshName);
+//		return dispTrans ? dispTrans.gameObject : null;
 	}	
 	
 	public virtual string GetUIString(){
@@ -148,10 +151,18 @@ public class CircuitElement : MonoBehaviour {
 		RebuildMesh ();
 	}
 	
-	// Call this if instantiating an inactive version
-	public virtual void InactveStart(){
+	protected void HandleDisplayMeshChlid()
+	{
 	
+		foreach (Transform child in transform){
+			if (child.gameObject.name == displayMeshName && child.gameObject != displayMesh){
+				Destroy (child.gameObject);
+			}
+			
+		}
 	}
+	
+	
 	
 	public virtual bool SuggestInvite(CircuitElement otherElement){
 		return false;

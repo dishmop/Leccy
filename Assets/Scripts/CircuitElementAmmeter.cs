@@ -27,13 +27,12 @@ public class CircuitElementAmmeter : CircuitElement {
 
 	public void Start(){
 		Debug.Log ("CircuitElementAmpMeter:Start()");
+	}
+	
+	public void Awake(){
 		CreateDisplayMesh();	
 	}
 	
-	// Call this if instantiating an inactive version
-	public override void InactveStart(){
-		CreateDisplayMesh();	
-	}	
 	
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
@@ -120,7 +119,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());
-		GameObject displayMesh = Instantiate(ammeterPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh = Instantiate(ammeterPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
 		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
 		RebuildMesh();
@@ -148,7 +147,9 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleDisplayMeshChlid();	
 		HandleAlpha();
+		
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		
 		if (wasOnTarget != IsOnTarget() && IsOnTarget()){

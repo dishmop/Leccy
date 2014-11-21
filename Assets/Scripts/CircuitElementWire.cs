@@ -17,19 +17,15 @@ public class CircuitElementWire : CircuitElement {
 	//GameObject	displayMesh;
 	
 
-	public void Awake(){
-		
-	}
+
 	
 	public void Start(){
 		Debug.Log ("CircuitElementWire:Start()");
-		RebuildMesh();
 		
 	}
 	
-	// Call this if instantiating an inactive version
-	public override void InactveStart(){
-		RebuildMesh();	
+	public void Awake(){
+		RebuildMesh();
 	}
 	
 	public override bool SuggestInvite(CircuitElement otherElement){
@@ -143,9 +139,10 @@ public class CircuitElementWire : CircuitElement {
 			GameObject dispMesh = GetDisplayMesh();
 			GameObject.Destroy(dispMesh);
 			currentPrefab = newPrefab;
-			GameObject displayMesh = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
+			displayMesh = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
 			displayMesh.name = displayMeshName;
 			displayMesh.transform.parent = transform;
+			
 		}
 		else if (newOrient != orient){
 			orient = newOrient;
@@ -168,6 +165,8 @@ public class CircuitElementWire : CircuitElement {
 	
 	void Update () {
 		HandleAlpha();
+		HandleDisplayMeshChlid();	
+
 		VisualiseTemperature();
 	}
 	
