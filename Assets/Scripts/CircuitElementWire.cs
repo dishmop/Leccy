@@ -32,6 +32,11 @@ public class CircuitElementWire : CircuitElement {
 		RebuildMesh();	
 	}
 	
+	public override bool SuggestInvite(CircuitElement otherElement){
+		return false;
+	}
+	
+	
 	
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	

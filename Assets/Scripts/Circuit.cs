@@ -190,7 +190,7 @@ public class Circuit : MonoBehaviour {
 		
 	
 	// Returns the connection direction from thisPoint to the other point
-	int CalcNeighbourDir(GridPoint thisPoint, GridPoint otherPoint){
+	public static int CalcNeighbourDir(GridPoint thisPoint, GridPoint otherPoint){
 		if (otherPoint.x == thisPoint.x + 1 && otherPoint.y == thisPoint.y)
 			return 	kRight;
 		if (otherPoint.x == thisPoint.x - 1 && otherPoint.y == thisPoint.y)

@@ -113,7 +113,9 @@ public class CircuitElement : MonoBehaviour {
 	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
-		transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
+		if (thisPoint != null){
+			transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
+		}
 		RebuildMesh();
 	}
 	
@@ -144,6 +146,10 @@ public class CircuitElement : MonoBehaviour {
 	// Call this if instantiating an inactive version
 	public virtual void InactveStart(){
 	
+	}
+	
+	public virtual bool SuggestInvite(CircuitElement otherElement){
+		return false;
 	}
 	
 	
@@ -238,6 +244,20 @@ public class CircuitElement : MonoBehaviour {
 	public virtual bool OnClick(){
 		Rotate (1);
 		return  true;
+	}
+	
+	// Decide if we should call OnClick*I( if we are clicked on with the selectd prefab
+	public virtual bool ShouldClick(GameObject selectionPrefab){
+		// IF a different kind of prefab - then don;t click
+		if (GetComponent<SerializationID>().id != selectionPrefab.GetComponent<SerializationID>().id){
+			return false;
+		}
+		// if it is the same kind of prefab, but a different oreientation then don't click
+		if (selectionPrefab.GetComponent<CircuitElement>().orient != orient){
+			return false;
+		}
+		return true;
+		
 	}
 	
 	public virtual float GetVoltageDrop(int dir){
