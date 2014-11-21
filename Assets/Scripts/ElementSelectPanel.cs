@@ -7,6 +7,7 @@ public class ElementSelectPanel : MonoBehaviour {
 	public CircuitElement.UIType 	uiTypeFilter;
 	public float					xCount;		// Number of buttons in a row
 	public float					yCount;		// Number of buttons in a column
+	public string					defaultSelectionId;
 	
 	
 	public void ClearSelection(){
@@ -25,8 +26,10 @@ public class ElementSelectPanel : MonoBehaviour {
 			GameObject newButton = Instantiate(leccyButtonPrefab) as GameObject;
 			newButton.transform.SetParent(transform, false);
 			
-			// Set which circuie element we are referencing
-			newButton.GetComponent<LeccyUIButton>().circuitElementPrefab = factory.GetPrefab(uiTypeFilter, i);
+			// Set which circuit element we are referencing
+			GameObject prefab = factory.GetPrefab(uiTypeFilter, i);
+			newButton.GetComponent<LeccyUIButton>().circuitElementPrefab = prefab;
+			if (prefab.GetComponent<SerializationID>().id == defaultSelectionId) newButton.GetComponent<LeccyUIButton>().isSelected = true;
 			
 			// Set the transform
 			RectTransform rectTransform = newButton.GetComponent<RectTransform>();
@@ -41,11 +44,14 @@ public class ElementSelectPanel : MonoBehaviour {
 			rectTransform.offsetMax = new Vector2(0, 0);
 			rectTransform.offsetMin = new Vector2(0, 0);
 		}
+		
+		
 	
 	
 	}
 	
-	
+	void Update(){
+	}
 	
 
 	

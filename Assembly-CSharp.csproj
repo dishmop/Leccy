@@ -63,6 +63,8 @@
      <Compile Include="Assets\Scripts\LeccyUIButton.cs" />
      <Compile Include="Assets\Scripts\LevelSerializer.cs" />
      <Compile Include="Assets\Scripts\MathUtils.cs" />
+     <Compile Include="Assets\Scripts\ObjectTracker.cs" />
+     <Compile Include="Assets\Scripts\OldUI.cs" />
      <Compile Include="Assets\Scripts\PrefabListener.cs" />
      <Compile Include="Assets\Scripts\PrefabManager.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />

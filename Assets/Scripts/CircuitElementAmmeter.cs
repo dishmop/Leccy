@@ -16,7 +16,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	public Color 		signColorTarget;
 	
 	
-	GameObject			displayMesh;
+
 	bool				wasOnTarget = false;
 	
 	float pulse = 0;
@@ -27,7 +27,13 @@ public class CircuitElementAmmeter : CircuitElement {
 
 	public void Start(){
 		Debug.Log ("CircuitElementAmpMeter:Start()");
+		CreateDisplayMesh();	
 	}
+	
+	// Call this if instantiating an inactive version
+	public override void InactveStart(){
+		CreateDisplayMesh();	
+	}	
 	
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
@@ -43,10 +49,6 @@ public class CircuitElementAmmeter : CircuitElement {
 		hasTarget = br.ReadBoolean();
 	}	
 	
-	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public  override GameObject GetDisplayMesh(){
-		return displayMesh;
-	}	
 	
 	public override string GetUIString(){
 		return "Ammeter";
@@ -108,7 +110,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
-		displayMesh.transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 	}	
 	
 	public override float GetResistance(int dir){
@@ -116,17 +118,16 @@ public class CircuitElementAmmeter : CircuitElement {
 		return 0.00001f;
 	}	
 	
-	// Use this for initialization
-	void Awake () {
-		displayMesh = Instantiate(ammeterPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+	void CreateDisplayMesh(){
+		Destroy(GetDisplayMesh ());
+		GameObject displayMesh = Instantiate(ammeterPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
 		RebuildMesh();
-		
 	}
 	
 	void OnDestroy(){
-		GameObject.Destroy (displayMesh);
-		if (hasTarget) UI.singleton.UnregisterLevelTrigger();
+		if (hasTarget) OldUI.singleton.UnregisterLevelTrigger();
 	}
 	
 	bool IsOnTarget(){
@@ -135,7 +136,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	
 	void TriggerTargetEffect(){
-		Transform actualText = displayMesh.transform.FindChild ("ActualText");
+		Transform actualText = GetDisplayMesh().transform.FindChild ("ActualText");
 		GameObject effect = GameObject.Instantiate(triggerEffect, actualText.position, actualText.rotation) as GameObject;
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetMaxCurrent();
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().color = actualText.gameObject.GetComponent<FractionCalc>().color;
@@ -147,6 +148,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleAlpha();
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		
 		if (wasOnTarget != IsOnTarget() && IsOnTarget()){
@@ -158,15 +160,15 @@ public class CircuitElementAmmeter : CircuitElement {
 		if (hasTarget != prevHasTarget){
 			prevHasTarget = hasTarget;
 			if (hasTarget){
-				UI.singleton.RegisterLevelTrigger();
+				OldUI.singleton.RegisterLevelTrigger();
 			}
 			else{
-				UI.singleton.UnregisterLevelTrigger();
+				OldUI.singleton.UnregisterLevelTrigger();
 			}
 		}
 		
 		
-		foreach (Transform child in displayMesh.transform){
+		foreach (Transform child in GetDisplayMesh().transform){
 			if (child.name == "TargetText"){
 				child.gameObject.GetComponent<FractionCalc>().value = targetAmp;
 				child.gameObject.GetComponent<FractionCalc>().color = textColorTarget;
@@ -224,7 +226,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		
 		// Let the UI know if we have been succesfully acitavted
 		if (IsOnTarget()){
-			UI.singleton.TriggerComplete();
+			OldUI.singleton.TriggerComplete();
 		}
 		
 		

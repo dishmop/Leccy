@@ -1,29 +1,30 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LeccyUIButton.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI.cs">
     <Files>
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="148" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="193" Column="1" />
+      <File FileName="Assets/Scripts/OldUI.cs" Line="145" Column="22" />
       <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="20" Column="34" />
-      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="60" Column="34" />
-      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="23" Column="1" />
+      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="7" Column="40" />
       <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PrefabManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="125" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="133" Column="41" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="385" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="1960" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="1965" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/ElementSelectButton.cs" line="7" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/CircuitElementWire.cs" line="22" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="131" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/CircuitElementWire.cs" line="131" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

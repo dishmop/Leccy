@@ -167,9 +167,13 @@ public class ElementFactory : MonoBehaviour {
 			stock[i].stockRemaining = initialStock[i].initialStockCount;
 			stock[i].typeIndex = typeCount[uiType]++;
 			stock[i].index = i;
-			stock[i].factoryPrefab = Instantiate(initialStock[i].prefab, transform.position, transform.rotation) as GameObject;
+			Vector3 pos = new Vector3(transform.position.x, transform.position.y, initialStock[i].prefab.transform.position.z);
+			stock[i].factoryPrefab = Instantiate(initialStock[i].prefab, pos, transform.rotation) as GameObject;
 			stock[i].factoryPrefab.transform.parent = transform;
 			stock[i].factoryPrefab.SetActive(false);
+			
+			// Since this is not active, Start will not get called - this means we must call this
+			stock[i].factoryPrefab.GetComponent<CircuitElement>().InactveStart();
 			
 		}
 		

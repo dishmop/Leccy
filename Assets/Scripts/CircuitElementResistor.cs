@@ -8,12 +8,11 @@ using System.IO;
 public class CircuitElementResistor : CircuitElement {
 	public GameObject 	resistorPrefab;
 	public float		resistance = 1;
-	
-	GameObject	displayMesh;
-	
+		
 
 	public void Start(){
 		Debug.Log ("CircuitElementResistor:Start()");
+		CreateDisplayMesh();	
 	}
 	
 	override public void Save(BinaryWriter bw){
@@ -84,7 +83,7 @@ public class CircuitElementResistor : CircuitElement {
 	
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
-		displayMesh.transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+		GetDisplayMesh ().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 	}	
 	
 	public override float GetResistance(int dir){
@@ -92,38 +91,42 @@ public class CircuitElementResistor : CircuitElement {
 		return resistance;
 	}	
 	
-	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public  override GameObject GetDisplayMesh(){
-		return displayMesh;
-	}		
 	
 	public override string GetUIString(){
 		return "Resistor";
 	}
 		
 	
-	// Use this for initialization
-	void Awake () {
-		displayMesh = Instantiate(resistorPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+
+	
+	// Call this if instantiating an inactive version
+	public override void InactveStart(){
+		CreateDisplayMesh();	
+	}	
+	
+	void CreateDisplayMesh(){
+		Destroy(GetDisplayMesh ());
+		GameObject displayMesh = Instantiate(resistorPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
 		RebuildMesh ();
-		
-	}
+	}	
 	
 	void OnDestroy(){
-		GameObject.Destroy (displayMesh);
 	}
 	
 	
 	float GetAbsCurrentFlow(){
-		if (thisPoint == null) return 0f;
+		if (!IsOnCircuit()) return 0f;
 		return  Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
 	}
 	
 	
 	// Update is called once per frame
 	void Update () {
-		displayMesh.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
+		HandleAlpha();
+
+				GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
 		
 		VisualiseTemperature();
 		

@@ -73,7 +73,7 @@ Material:
       data:
         first:
           name: _Voltage0
-        second: -2.1500001
+        second: .589999974
       data:
         first:
           name: _Voltage1
@@ -87,6 +87,10 @@ Material:
           name: _Voltage3
         second: 0
     m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _CentreColor0
@@ -139,3 +143,7 @@ Material:
         first:
           name: _Col2
         second: {r: .227941155, g: .710810721, b: 1, a: 1}
+      data:
+        first:
+          name: _Colour
+        second: {r: 1, g: 1, b: 1, a: 1}

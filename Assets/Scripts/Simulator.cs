@@ -125,6 +125,11 @@ public class Simulator : MonoBehaviour {
 	}
 	
 	BranchData GetBranchData(BranchAddress address){
+		if (address.x < 0 || address.x > branchData.GetLength(0) ||
+		    address.y < 0 || address.y > branchData.GetLength(1) ||
+		    address.dir < 0 || address.dir > branchData.GetLength(2)){
+			Debug.LogError ("Requesting out of range branch data");    
+		}
 		return branchData[address.x, address.y, address.dir];
 	}
 	

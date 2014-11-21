@@ -13,6 +13,10 @@ public class CircuitElement : MonoBehaviour {
 	public GameObject	anchorPrefab;
 	public float		temperature = 0;
 	
+	// For setting alpha values
+	float 	alpha = 1f;
+	bool 	dirtyAlpha = false;
+	
 	
 	// What is the best UI scheme to use when placing these elents
 	public enum UIType{
@@ -24,27 +28,60 @@ public class CircuitElement : MonoBehaviour {
 	
 	public UIType uiType = UIType.kNone;
 	
+	protected string	displayMeshName = "DisplayMesh";
+//
+//	
+//	public Copy(CircuitElement other){
+//		this.orient = 		other.orient;
+//		this.anchorPrefab = other.anchorPrefab;
+//		this.temperature = 	other.temperature;
+//	}	
+//	
+//	// Default constructo
+//	public CircuitElement(){
+//	}
+//	
+//	// Copy constructor
+//	public CircuitElement(CircuitElement other){
+//		this.orient = 		other.orient;
+//		this.anchorPrefab = other.anchorPrefab;
+//		this.temperature = 	other.temperature;
+//	}
+
+	public void SetAlpha(float a){
+		dirtyAlpha = true;
+		alpha = a;
+	}
 	
 	// These enums describe the connection situation in a given direction
-	public enum ConnectionStatus{ 
-		kUnreceptive,   // there is no connection, and if invited to make one, I will say no
-		kReceptive,		// There is no connection but if invited to make one, I wil say yes
-		kSocialble,		// There is no connection, but I will invite anyone to connect here
-		kConnected,		// There is a connection
+	public enum ConnectionBehaviour{ 
+		kUnreceptive,   // If invited to make a connection, I will say no
+		kReceptive,		// If invited to make one, I wil say yes
+		kSocialble,		// I will invite anyone to connect here
 	};
+	
+	protected void HandleAlpha(){
+		if (dirtyAlpha){
+			dirtyAlpha = false;
+			ImplementAlpha(gameObject, alpha);
+		}
+	}
+	
 	
 	// 0 - up
 	// 1 - right
 	// 2 - down
 	// 3  - left 
-	public ConnectionStatus[] connectionStatus = new ConnectionStatus[4];
+	public ConnectionBehaviour[] connectionBehaviour = new ConnectionBehaviour[4];
 	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
-
+	public bool[] isConnected = new bool[4];
+	
 	
 	protected float 	maxTemp = 45f;
 	protected GridPoint	thisPoint;
 
 	GameObject[]	anchors = new GameObject[4];
+	
 	
 	
 	// Generally is any of our connections are baked, then the component itself is also baked
@@ -61,10 +98,13 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	
+	
+	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public virtual GameObject   GetDisplayMesh(){
-		return null;
-	}
+	public  GameObject GetDisplayMesh(){
+		Transform dispTrans = transform.FindChild(displayMeshName);
+		return dispTrans ? dispTrans.gameObject : null;
+	}	
 	
 	public virtual string GetUIString(){
 		return "None";
@@ -73,13 +113,14 @@ public class CircuitElement : MonoBehaviour {
 	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
+		RebuildMesh();
 	}
 	
 	public virtual void Save(BinaryWriter bw){
 		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
 		////		bw.Write (orient);
 		for (int i = 0; i < 4; ++i){
-			bw.Write ((int)connectionStatus[i]);
+			bw.Write ((int)connectionBehaviour[i]);
 			bw.Write(isBaked[i]);
 		}
 		bw.Write (temperature);
@@ -89,7 +130,7 @@ public class CircuitElement : MonoBehaviour {
 		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
 		//		orient = br.ReadInt32();
 		for (int i = 0; i < 4; ++i){
-			connectionStatus[i] = (ConnectionStatus)br.ReadInt32();
+			connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
 			isBaked[i] = br.ReadBoolean();
 		}
 		temperature = br.ReadSingle();
@@ -99,13 +140,21 @@ public class CircuitElement : MonoBehaviour {
 		RebuildMesh ();
 	}
 	
+	// Call this if instantiating an inactive version
+	public virtual void InactveStart(){
+	
+	}
+	
+	
 // 	int CalcBakedHash(){
 //		return (isBaked[0] ? 1 : 0) + (isBaked[1]  ? 2 : 0) + (isBaked[2] ? 4 : 0) + (isBaked[3] ? 8 : 0);
 //	}
 
 	public bool IsConnected(int dir){
-		return connectionStatus[dir] == ConnectionStatus.kConnected;
+		return isConnected[dir];
 	}
+	
+		
 	
 	void RebuildAnchorMeshes(){
 		// Destory all the existing Anchor meshes
@@ -143,13 +192,7 @@ public class CircuitElement : MonoBehaviour {
 		
 
 
-	public void CopyConnectionsFrom(CircuitElement other){
-		if (!other) return;	
-		for (int i = 0; i < 4; ++i){
-			connectionStatus[i] = other.connectionStatus[i];
-		}
-	}
-	
+
 		
 //	// Return true if it is ok to set this connection on this element
 //	public virtual bool CanSetConnection(int dir, bool value){
@@ -216,7 +259,8 @@ public class CircuitElement : MonoBehaviour {
 		RebuildAnchorMeshes();
 	}
 	
-	protected void VisualiseTemperature(){
+
+		protected void VisualiseTemperature(){
 //		foreach (Transform child in transform.GetChild(0)){
 //			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
 //			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
@@ -234,9 +278,14 @@ public class CircuitElement : MonoBehaviour {
 	
 	}
 	
+	protected bool IsOnCircuit(){
+		return thisPoint != null;
+	}
+	
+	
 	// Return the maximum voltage difference accross all connections
 	public float GetMaxVoltage(){
-		if (thisPoint == null) return 0f;
+		if (!IsOnCircuit()) return 0f;
 		return Mathf.Max(
 			Mathf.Max(
 				Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, 0)), 
@@ -248,7 +297,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 	public float GetMaxCurrent(){
-		if (thisPoint == null) return 0f;
+		if (!IsOnCircuit()) return 0f;
 		return Mathf.Max(
 			Mathf.Max(
 				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0)), 
@@ -257,6 +306,21 @@ public class CircuitElement : MonoBehaviour {
 				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 2)), 
 				Mathf.Abs(Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 3))));	
 	}	
+	
+	protected void ImplementAlpha(GameObject obj, float alpha){
+		Renderer rend = obj.renderer;
+		if (rend){
+			Color col = rend.materials[0].GetColor("_Color");
+			col.a = alpha;
+			rend.materials[0].SetColor("_Color", col);
+		}
+		
+		// Now do the same to all the children
+		foreach (Transform child in obj.transform){
+			ImplementAlpha(child.gameObject, alpha);
+		}
+	}
+	
 
 	
 }

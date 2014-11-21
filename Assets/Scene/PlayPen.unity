@@ -319,6 +319,7 @@ MonoBehaviour:
   uiTypeFilter: 0
   xCount: 3
   yCount: 4
+  defaultSelectionId: Wire
 --- !u!1 &419512104
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +465,10 @@ Prefab:
     - target: {fileID: 400002, guid: 52e7b44d77972412fbcfd5a913387fbf, type: 2}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400008, guid: 52e7b44d77972412fbcfd5a913387fbf, type: 2}
+      propertyPath: defaultSelectionId
+      value: Wire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52e7b44d77972412fbcfd5a913387fbf, type: 2}
@@ -983,6 +988,7 @@ GameObject:
   - 223: {fileID: 1326901385}
   - 114: {fileID: 1326901384}
   - 114: {fileID: 1326901383}
+  - 114: {fileID: 1326901386}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1067,6 +1073,54 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!114 &1326901386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1326901381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1842844726}
+          m_MethodName: OnEnterUI
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1842844726}
+          m_MethodName: OnExitUI
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1367980439
 Prefab:
   m_ObjectHideFlags: 0
@@ -1471,8 +1525,6 @@ MonoBehaviour:
   squareWidth: 1
   squareHeight: 1
   gridSquarePrefab: {fileID: 100000, guid: 34a4a2f260e084a7599b96e0e82bc680, type: 2}
-  highlightPrefab: {fileID: 100000, guid: f4d8124c55f4f45eda1a55893bd4e5c6, type: 2}
-  eraseHighlightPrefab: {fileID: 100000, guid: 122603335007e4373a129e9c16ebe65d, type: 2}
 --- !u!4 &1697485507
 Transform:
   m_ObjectHideFlags: 0
@@ -1541,6 +1593,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1842844725}
+  - 114: {fileID: 1842844726}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -1562,6 +1615,17 @@ Transform:
   - {fileID: 1326901382}
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!114 &1842844726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1842844724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e043329a95d824f10a5a1ed06f63c037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1966212117
 GameObject:
   m_ObjectHideFlags: 0

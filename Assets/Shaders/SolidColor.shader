@@ -6,8 +6,10 @@
 	}
 
 	SubShader {
-        ZTest Always
-        
+		ZTest Always
+		Blend SrcAlpha OneMinusSrcAlpha
+		Tags {"Queue"="Transparent"}
+			        
         Color[_Color]
 		Pass{
 

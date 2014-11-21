@@ -14,18 +14,22 @@ public class CircuitElementWire : CircuitElement {
 	public GameObject wireTJuncFromTopPrefab;
 		
 	GameObject 	currentPrefab;
-	GameObject	displayMesh;
+	//GameObject	displayMesh;
 	
-	
-	// Se this up so that the UI mesh is reasonable
-	void Awake(){
-		connectionStatus[0] = ConnectionStatus.kConnected;
-		connectionStatus[2] = ConnectionStatus.kConnected;
-		RebuildMesh();
+
+	public void Awake(){
+		
 	}
 	
 	public void Start(){
 		Debug.Log ("CircuitElementWire:Start()");
+		RebuildMesh();
+		
+	}
+	
+	// Call this if instantiating an inactive version
+	public override void InactveStart(){
+		RebuildMesh();	
 	}
 	
 	
@@ -45,8 +49,13 @@ public class CircuitElementWire : CircuitElement {
 		GameObject newPrefab;
 		int newOrient = -1;
 		
+		// if we are in the UI
+		if (!IsOnCircuit()){
+			newPrefab = wireStraightDownPrefab;
+			newOrient = 0;
+		}			
 		// No connections
-		if (HasConnections(false, false, false, false)){
+		else if (HasConnections(false, false, false, false)){
 			newPrefab = wirePointPrefab;
 			newOrient = 0;
 		}
@@ -113,31 +122,31 @@ public class CircuitElementWire : CircuitElement {
 		else if (HasConnections(true, true, true, true)){
 			newPrefab = wireCrossPrefab;
 			newOrient = 0;
-		}														
+		}															
 		else{
 			Debug.LogError ("Unknown junction type");
 			// But set up something to draw anyway
 			newPrefab = wirePointPrefab;
 			newOrient = 0;
-		}	
+		}		
 		
 		
 		if (newPrefab != currentPrefab){
-			GameObject.Destroy(displayMesh);
+			GameObject dispMesh = GetDisplayMesh();
+			GameObject.Destroy(dispMesh);
 			currentPrefab = newPrefab;
-			displayMesh = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
+			GameObject displayMesh = Instantiate(currentPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, newOrient * 90)) as GameObject;
+			displayMesh.name = displayMeshName;
 			displayMesh.transform.parent = transform;
 		}
 		else if (newOrient != orient){
 			orient = newOrient;
-			displayMesh.transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
+			GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
+
 	}	
 	
-	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
-	public  override GameObject GetDisplayMesh(){
-		return displayMesh;
-	}		
+	
 	
 	public override string GetUIString(){
 		return "Wire";
@@ -149,7 +158,8 @@ public class CircuitElementWire : CircuitElement {
 	}			
 	
 	
-	void Update(){
+	void Update () {
+		HandleAlpha();
 		VisualiseTemperature();
 	}
 	

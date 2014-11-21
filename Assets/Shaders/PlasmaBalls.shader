@@ -1,5 +1,6 @@
 ﻿Shader "Custom/PlasmaBalls" {
 	Properties {
+		_Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
 		_Col0 ("Col0", Color) = (0.0, 0.0, 0.0)
 		_Col1 ("Col1", Color) = (0.0, 0.0, 0.0)
 		_Col2 ("Col2", Color) = (0.0, 0.0, 0.0)
@@ -32,7 +33,10 @@
 	//	_Voltae	("Voltage0", Float) = 0;				
 	}
 	SubShader {
-        ZTest Always
+		ZTest Always
+		Blend SrcAlpha OneMinusSrcAlpha
+		Tags {"Queue"="Transparent"}
+		
 	Pass {
 		//Tags { "RenderType" = "Transparent" }
 		CGPROGRAM
@@ -50,6 +54,7 @@
 			float4 uv : TEXCOORD0;
 		};
 		
+		uniform float4 _Color;
 		uniform float4 _Col0;
 		uniform float4 _Col1;
 		uniform float4 _Col2;
@@ -371,6 +376,7 @@
 ///				col1 =  CalcCol( -.50 + 0.5 * (TriangleFunc(scaledUV.x * multVertical) * (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y)) / distDelta), outerCol);
 			// Voltage 0 ->1
 			float epsilon = 0.0001;
+			float4 retCol;
 			if (voltage < 1-epsilon){
 				float xOffset = 0.1;
 				
@@ -380,10 +386,10 @@
 				col0 = CalcCol(amp * val0, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));
 				col1 = CalcCol(amp * val3, _Col0);
 				
-				return col1+ col0;
+				retCol =  col1+ col0;
 			}
 			// Voltage 1 -> 2
-			 if (voltage < 2-epsilon){
+			else if (voltage < 2-epsilon){
 			 
 				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x , lastScaledUV.y, power))/ distDelta;
 				val3 = -0.5 + 0.5* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
@@ -397,7 +403,7 @@
 				col1 = CalcCol(amp * val3, _Col0);
 				col2 =  CalcCol(amp * (val4 + val5), lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));				
 				
-				return col0 + col1 + col2;
+				retCol =  col0 + col1 + col2;
 			}
 			else if (voltage < 3-epsilon){
 			
@@ -412,7 +418,7 @@
 				col2 =  CalcCol(amp * val4, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col0, frac(voltage)));
 
 				
-				return col0 + col1 + col2;
+				retCol =  col0 + col1 + col2;
 			}
 			else if (voltage < 4-epsilon){
 				float xOffset1 = 0.2;		
@@ -431,7 +437,7 @@
 				col3 =  CalcCol(amp * val2, _Col2);	
 				col4 =  CalcCol(amp * (val5 + val6), lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col2, frac(voltage)));					
 				
-				return col0 + col1 + col2 + col3 + col4;
+				retCol =  col0 + col1 + col2 + col3 + col4;
 			}
 			else if (voltage < 5-epsilon){
 				float xOffset0 = 0.1;		
@@ -446,7 +452,7 @@
 				col2 = CalcCol(amp * val4, _Col2);
 				col3 = CalcCol(amp * val4, lerp(float4(-.25, -.25, -.25, 1), 0.85 * _Col2, frac(voltage)));
 
-				return col0 + col1 + col2 + col3;
+				retCol =  col0 + col1 + col2 + col3;
 				
 			}
 			else {//if (voltage < 6-epsilon){
@@ -461,11 +467,11 @@
 				
 				col0 = CalcCol(amp * (val0 + val1 + val2 + val3 + val4), _Col1);
 				col2 = CalcCol(amp * val5, _Col2);
-				return col0 + col2;
+				retCol =  col0 + col2;
 			}									
 			
 
-			return 0;
+			return retCol * _Color;
 			
 			
 		}

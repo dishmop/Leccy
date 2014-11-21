@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -43,13 +43,14 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 			transform.parent.GetComponent<ElementSelectPanel>().ClearSelection();
 			isSelected = true;
 		}
+		UI.singleton.SetSelectedPrefabId(circuitElementPrefab.GetComponent<SerializationID>().id);
 	}	
 		
 
 	// Use this for initialization
 	void Start () {
 		ConfigureButton();
-		
+		if (isSelected) UI.singleton.SetSelectedPrefabId(circuitElementPrefab.GetComponent<SerializationID>().id);
 	}
 	
 	void Update(){
@@ -59,7 +60,9 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 		cols.highlightedColor = isSelected ? selectHighlightColor : normalHighlightColor;	
 		cols.pressedColor = pressColor;
 		buttonT.GetComponent<Button>().colors = cols;
+		
 	}
 	
+
 
 }
