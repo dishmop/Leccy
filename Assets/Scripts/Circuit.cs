@@ -68,10 +68,24 @@ public class Circuit : MonoBehaviour {
 		return true; 
 	}
 	
-	public void AddElement(GridPoint point, GameObject circuitElementGO){
+	
+	
+//	public void AddElement(GridPoint point, GameObject circuitElementGO){
+//	}
+//	
+	public void RemoveElement(GridPoint point){
+		elements[point.x, point.y] = null;
 	}
 	
-	public void RemoveElement(GridPoint point){
+	
+	public void PlaceElement(GameObject newElement, GridPoint point){
+		if (GetElement (point) != null){
+			Debug.LogError ("Attempting to place an element where one already exists");
+		}
+		newElement.transform.parent = transform;
+		elements[point.x, point.y] = newElement;
+		GetElement(point).SetGridPoint(point);
+		
 	}
 	
 	public 	void Load(BinaryReader br){
@@ -92,7 +106,7 @@ public class Circuit : MonoBehaviour {
 		// Go through each entry adding a crcuit element to the circuit
 		for (int i = 0; i < numElements; ++i){
 			ElementSerializationData data = dataList[i];
-			AddElement (new GridPoint(data.x, data.y), ElementFactory.singleton.InstantiateElement(data.id));
+			PlaceElement(ElementFactory.singleton.InstantiateElement(data.id), new GridPoint(data.x, data.y));
 //			if (data.id == wireElementPrefab.GetComponent<SerializationID>().id){
 //				RawAddElement(new GridPoint(data.x, data.y), wireElementPrefab);
 //			}

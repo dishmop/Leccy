@@ -113,6 +113,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
+		transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
 		RebuildMesh();
 	}
 	
@@ -275,6 +276,7 @@ public class CircuitElement : MonoBehaviour {
 		isBaked[3] = false;
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);
+		Destroy (this);
 	
 	}
 	
