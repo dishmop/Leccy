@@ -87,6 +87,8 @@ public class CircuitElementResistor : CircuitElement {
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
 		GetDisplayMesh ().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+		
+		SetupStraightConnectionBehaviour(true);
 	}	
 	
 	public override float GetResistance(int dir){
@@ -126,6 +128,7 @@ public class CircuitElementResistor : CircuitElement {
 	void Update () {
 		HandleDisplayMeshChlid();	
 		HandleAlpha();
+		
 
 		GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = resistance;
 		

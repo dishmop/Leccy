@@ -122,6 +122,8 @@ public class CircuitElementCell : CircuitElement {
 	public override void RebuildMesh(){
 		base.RebuildMesh();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+
+		SetupStraightConnectionBehaviour(false);
 	}	
 	
 

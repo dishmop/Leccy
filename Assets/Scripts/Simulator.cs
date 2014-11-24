@@ -201,10 +201,10 @@ public class Simulator : MonoBehaviour {
 	
 	// This method will only work if there are no wires crossing over each other
 	// It does it in a slightly odd way because it needs to also group the loops by disjoint circuit
-	void FindLoops(){
+	bool FindLoops(){
 		if (!Circuit.singleton.Validate()){
 			Debug.Log("Circuit is invalid and cannot be simulated");
-			return;
+			return false;
 		}
 		int groupId = 0;		
 		// Can the grid until we find a connector which has not yet  been traversed
@@ -253,6 +253,8 @@ public class Simulator : MonoBehaviour {
 			}
 		}
 		numGroups = groupId;
+		
+		return true;
 	}
 	
 	// ALl loops that simply tracing the outline of a disjoint Circuit.singleton 
@@ -860,7 +862,9 @@ public class Simulator : MonoBehaviour {
 				BranchData thisData = GetBranchData (thisAddress);
 				
 				// Our data loopID should be the same as i
-				if (thisData.loopId != i) Debug.LogError ("LoopId/i missmatch!@");
+				if (thisData.loopId != i){
+					Debug.LogError ("LoopId/i missmatch!@");
+				}
 				
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
@@ -1292,12 +1296,14 @@ public class Simulator : MonoBehaviour {
 	
 	bool Simulate(){
 		// Find all the loops
-		FindLoops();
+		bool ok1 = FindLoops();
+		if (!ok1) return false;
 		// Flag the ones going round the outside of disjoint Circuit.singletons as 0 (so we can ignore them)
 		FlagOuterLoops();
 		// Go through each loop and remove any elements which are from a "Spoke" - i.e., not a loop
 		//TrimSpokes();
-		// Set up equations and solve them (repeat if failed the first time as the failure situation triggers emergency measures which should make it ok)
+
+				// Set up equations and solve them (repeat if failed the first time as the failure situation triggers emergency measures which should make it ok)
 		bool ok = false;
 		switch (minMode){
 			case MinMode.kLoops:
@@ -1358,6 +1364,25 @@ public class Simulator : MonoBehaviour {
 		ClearLoopCurrentVis();		
 		ClearCurrentVis();
 		ClearVoltageVis();
+		// Are these two necessary?
+		ClearLoops();
+		ClearBranchData();
+		
+	}
+	
+	void ClearLoops(){
+		loops = new List<List<BranchAddress>>();
+	}
+	
+	void ClearBranchData(){
+		for (int x = 0; x < width; ++x){
+			for (int y = 0; y < height; ++y){
+				for (int i = 0; i < 4; ++i){
+					branchData[x,y,i] = new BranchData();
+				}
+				
+			}
+		}	
 	}
 	
 	// Not really unique, but does an OK job
@@ -1678,8 +1703,7 @@ public class Simulator : MonoBehaviour {
 
 		// Update is called once per frame
 	void FixedUpdate () {
-	
-		return;
+	return ;
 	
 		bool finished = false;
 		int attempts = 3;
@@ -1689,7 +1713,7 @@ public class Simulator : MonoBehaviour {
 			attempts--;
 		}
 		if (attempts == 0){
-			Debug.LogError ("Failed to solve Circuit.singleton equations");
+			Debug.LogError ("Failed to solve circuit equations");
 		}
 		
 		if (visMode == VisMode.kGroups || visMode == VisMode.kLoops){

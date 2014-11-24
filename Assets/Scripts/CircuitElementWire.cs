@@ -26,14 +26,26 @@ public class CircuitElementWire : CircuitElement {
 	
 	public void Awake(){
 		RebuildMesh();
+		connectionBehaviour[0] = ConnectionBehaviour.kReceptive;
+		connectionBehaviour[1] = ConnectionBehaviour.kReceptive;
+		connectionBehaviour[2] = ConnectionBehaviour.kReceptive;
+		connectionBehaviour[3] = ConnectionBehaviour.kReceptive;
+		
 	}
 	
 	public override bool SuggestInvite(CircuitElement otherElement){
 		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
-		isConnected[dir] = true;
-		RebuildMesh();
+		
+		connectionBehaviour[dir]= ConnectionBehaviour.kSociable;
 		return true;
 	}
+	
+	public override bool SuggestUninvite(CircuitElement otherElement){
+		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
+		
+		connectionBehaviour[dir]= ConnectionBehaviour.kReceptive;
+		return true;
+	}	
 	
 	
 	
@@ -144,7 +156,7 @@ public class CircuitElementWire : CircuitElement {
 			displayMesh.transform.parent = transform;
 			
 		}
-		else if (newOrient != orient){
+		if (newOrient != orient){
 			orient = newOrient;
 			GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
@@ -166,13 +178,30 @@ public class CircuitElementWire : CircuitElement {
 	void Update () {
 		HandleAlpha();
 		HandleDisplayMeshChlid();	
+		
 
 		VisualiseTemperature();
+	}
+
+	// Call this before erasing an element	
+	public override void RemoveConnections(){
+		// Suggest to any elements around us that they may want to cancel their invite to us
+		// Really only applicable to other wires
+		if (IsOnCircuit()){
+			for (int dir = 0; dir < 4; ++dir){
+				GridPoint otherPoint = thisPoint + Circuit.singleton.offsets[dir];
+				CircuitElement otherElement = Circuit.singleton.GetElement(otherPoint);
+				if (otherElement){
+					otherElement.SuggestUninvite(this);
+				}
+			}
+		}
 	}
 	
 	void OnDestroy() {
 		// When the object is destoryed, we must make sure to dispose of any meshes we may have
 		Debug.Log ("OnDestroy");
+		
 		
 	}	
 	

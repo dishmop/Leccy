@@ -17,6 +17,7 @@ public class CircuitElement : MonoBehaviour {
 	float 	alpha = 1f;
 	bool 	dirtyAlpha = false;
 	
+	// Setting the position
 	protected GameObject	displayMesh;
 	
 	
@@ -31,24 +32,7 @@ public class CircuitElement : MonoBehaviour {
 	public UIType uiType = UIType.kNone;
 	
 	protected string	displayMeshName = "DisplayMesh";
-//
-//	
-//	public Copy(CircuitElement other){
-//		this.orient = 		other.orient;
-//		this.anchorPrefab = other.anchorPrefab;
-//		this.temperature = 	other.temperature;
-//	}	
-//	
-//	// Default constructo
-//	public CircuitElement(){
-//	}
-//	
-//	// Copy constructor
-//	public CircuitElement(CircuitElement other){
-//		this.orient = 		other.orient;
-//		this.anchorPrefab = other.anchorPrefab;
-//		this.temperature = 	other.temperature;
-//	}
+
 
 	public void SetAlpha(float a){
 		dirtyAlpha = true;
@@ -59,7 +43,7 @@ public class CircuitElement : MonoBehaviour {
 	public enum ConnectionBehaviour{ 
 		kUnreceptive,   // If invited to make a connection, I will say no
 		kReceptive,		// If invited to make one, I wil say yes
-		kSocialble,		// I will invite anyone to connect here
+		kSociable,		// I will invite anyone to connect here
 	};
 	
 	protected void HandleAlpha(){
@@ -68,6 +52,7 @@ public class CircuitElement : MonoBehaviour {
 			ImplementAlpha(gameObject, alpha);
 		}
 	}
+	
 	
 	
 	// 0 - up
@@ -79,8 +64,10 @@ public class CircuitElement : MonoBehaviour {
 	public bool[] isConnected = new bool[4];
 	
 	
-	protected float 	maxTemp = 45f;
+
 	protected GridPoint	thisPoint;
+
+	protected float 	maxTemp = 45f;
 
 	GameObject[]	anchors = new GameObject[4];
 	
@@ -120,7 +107,14 @@ public class CircuitElement : MonoBehaviour {
 		if (thisPoint != null){
 			transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
 		}
-		RebuildMesh();
+	}
+	
+	// can override the z position
+	public void SetGridPoint(GridPoint thisPoint, float z){
+		this.thisPoint = thisPoint;
+		if (thisPoint != null){
+			transform.position = new Vector3(thisPoint.x, thisPoint.y, z);
+		}
 	}
 	
 	public GridPoint GetGridPoint(){
@@ -166,6 +160,23 @@ public class CircuitElement : MonoBehaviour {
 	
 	public virtual bool SuggestInvite(CircuitElement otherElement){
 		return false;
+	}
+	
+	
+	public virtual bool SuggestUninvite(CircuitElement otherElement){
+		return false;
+	}		
+	
+	public virtual int CalcHash(){
+		return  (isBaked[0] ? 1 << 0 : 0) + 
+			   	(isBaked[1] ? 1 << 1 : 0) + 
+				(isBaked[2] ? 1 << 2 : 0) + 
+				(isBaked[3] ? 1 << 3 : 0) + 
+				(isConnected[0] ?  1 << 4 : 0) + 
+				(isConnected[1] ?  1 << 5 : 0) + 
+				(isConnected[2] ?  1 << 6 : 0) + 
+				(isConnected[3] ?  1 << 7 : 0) + 
+				orient * 1 << 8;
 	}
 	
 	
@@ -293,6 +304,7 @@ public class CircuitElement : MonoBehaviour {
 //	}
 //	
 	public virtual void RebuildMesh(){
+		HandleDisplayMeshChlid();
 		RebuildAnchorMeshes();
 	}
 	
@@ -357,6 +369,21 @@ public class CircuitElement : MonoBehaviour {
 		foreach (Transform child in obj.transform){
 			ImplementAlpha(child.gameObject, alpha);
 		}
+	}
+	
+	public virtual void RemoveConnections(){
+	}
+	
+	// Call to set up the connection behaviours for striaght component that can be connected at either end
+	// This is a utility function as there are quite a few components like this - best to call this from the
+	// RebuildMesh function
+	protected void SetupStraightConnectionBehaviour(bool vertical){
+		int addOrient = vertical ? 0 : 1;
+		connectionBehaviour[(0 + orient + addOrient) % 4] = ConnectionBehaviour.kSociable;
+		connectionBehaviour[(1 + orient + addOrient) % 4] = ConnectionBehaviour.kUnreceptive;
+		connectionBehaviour[(2 + orient + addOrient) % 4] = ConnectionBehaviour.kSociable;
+		connectionBehaviour[(3 + orient + addOrient) % 4] = ConnectionBehaviour.kUnreceptive;		
+		
 	}
 	
 

@@ -110,6 +110,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+		SetupStraightConnectionBehaviour(true);
 	}	
 	
 	public override float GetResistance(int dir){
@@ -149,6 +150,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	void Update () {
 		HandleDisplayMeshChlid();	
 		HandleAlpha();
+		
 		
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		

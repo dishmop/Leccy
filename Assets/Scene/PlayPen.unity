@@ -1436,6 +1436,15 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  offsets:
+  - x: -1
+    y: -1
+  - x: -1
+    y: -1
+  - x: -1
+    y: -1
+  - x: -1
+    y: -1
 --- !u!4 &1643868794
 Transform:
   m_ObjectHideFlags: 0

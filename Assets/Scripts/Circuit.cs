@@ -22,10 +22,11 @@ public class Circuit : MonoBehaviour {
 	public const int kLeft = 	3;
 
 	// Useful array of offsets
-	GridPoint[] offsets = new GridPoint[4];
+	public GridPoint[] offsets = new GridPoint[4];
 	
 	
 	public GameObject[,] 	elements;
+	int[,] 					elementHash;
 	
 	[Serializable]
 	class ElementSerializationData{
@@ -65,6 +66,34 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	public bool Validate(){
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x,y);
+				CircuitElement thisElement = GetElement(thisPoint);
+				if (thisElement){
+					for (int dir = 0; dir < 4; ++dir){
+						if (thisElement.isConnected[dir]){
+							GridPoint otherPoint = thisPoint + offsets[dir];
+							CircuitElement otherElement = GetElement (otherPoint);
+							// If we are connected, then there must be another element there
+							if (otherElement == null){
+								return false;
+							}
+							
+							// Futhermore, that element should be connected back to us
+							int otherDir = CircuitElement.CalcInvDir(dir);
+							if (!otherElement.isConnected[otherDir]){
+								return false;
+							}
+							
+						}
+						
+					}
+				}
+				
+			}
+		}
+		// Otherwise, if we got through all that - then we are ok
 		return true; 
 	}
 	
@@ -85,6 +114,7 @@ public class Circuit : MonoBehaviour {
 		newElement.transform.parent = transform;
 		elements[point.x, point.y] = newElement;
 		GetElement(point).SetGridPoint(point);
+		GetElement(point).RebuildMesh();
 		
 	}
 	
@@ -208,53 +238,7 @@ public class Circuit : MonoBehaviour {
 		return (Grid.singleton.IsPointInGrid(point) &&  elements[point.x, point.y] != null);
 	}
 	
-	GridPoint[] CalcGridPath(GridPoint prevPoint, GridPoint nextPoint){
-		
-		if (prevPoint.IsEqual(nextPoint)){
-			Debug.LogError("Trying to dsraw from and to the same point!");
-			return null;
-		}
-	
-		int xDiff = nextPoint.x - prevPoint.x;
-		int yDiff = nextPoint.y - prevPoint.y;
-		
-		// Work out how many elements the array should have
-		int size = Mathf.Abs(xDiff) + Mathf.Abs(yDiff) + 1;
-		GridPoint[] result = new GridPoint[size];
-		
-		// If we are not moving in x at all...
-		int i = 0;
-		if (Mathf.Abs(xDiff) > Mathf.Abs(yDiff)){
-			int xInc = xDiff / Mathf.Abs (xDiff);
-			int lastY = prevPoint.y;
-			float grad = (float)yDiff/(float)xDiff;
-			for (int x = prevPoint.x; x != nextPoint.x + xInc; x += xInc){
-				int thisY = prevPoint.y + Mathf.RoundToInt((x-prevPoint.x) * grad);
-				if (thisY != lastY){
-					result[i++] = new GridPoint(x, lastY);
-					lastY = thisY;
-				}
-				result[i++] = new GridPoint(x, thisY);	
-			}
-				                            
-		}
-		else{
-			int yInc = yDiff / Mathf.Abs (yDiff);
-			int lastX = prevPoint.x;
-			float grad = (float)xDiff/(float)yDiff;
-			for (int y = prevPoint.y; y != nextPoint.y + yInc; y += yInc){
-				int thisX = prevPoint.x + Mathf.RoundToInt((y-prevPoint.y) * grad);
-				if (thisX != lastX){
-					result[i++] = new GridPoint(lastX, y);
-					lastX = thisX;
-				}					
-				result[i++] = new GridPoint(thisX, y);
-			}
-		}
-		
-		return result;
-		
-	}
+
 	
 			
 	// Assumed that the element exists
@@ -302,6 +286,7 @@ public class Circuit : MonoBehaviour {
 			}
 		}
 		elements = new GameObject[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
+		elementHash = new int[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
 		
 	}
 
@@ -328,8 +313,81 @@ public class Circuit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 		CalcBounds();
+		MakeConnections();
+	}
+	
+	void MakeConnections(){
+		// Create a hash key for each element so we know if it has changed
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				CircuitElement thisElement = GetElement(new GridPoint(x, y));
+				if (thisElement){
+					elementHash[x,y] = thisElement.CalcHash();
+				}
+			}
+		}
+			
+				
+		// Clear all connections in the circuit
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				CircuitElement thisElement = GetElement(thisPoint);
+				for (int dir = 0; dir < 4; ++dir){
+					if (thisElement) thisElement.isConnected[dir] = false;
+				}
+			}
+		}
+				     
+		// Go through making connections where invites have been made and accepted
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				CircuitElement thisElement = GetElement(thisPoint);
+				if (thisElement){
+					for (int dir = 0; dir < 4; ++dir){
+						GridPoint otherPoint = thisPoint + offsets[dir];
+						int otherDir = CircuitElement.CalcInvDir(dir);
+						CircuitElement otherElement = GetElement (otherPoint);
+						if (otherElement){
+							bool makeConnection = false;
+		
+							// If both are inviting					
+							if (thisElement.connectionBehaviour[dir] == CircuitElement.ConnectionBehaviour.kSociable && 
+							    otherElement.connectionBehaviour[otherDir] == CircuitElement.ConnectionBehaviour.kSociable){
+								makeConnection = true;
+							 }
+							if (thisElement.connectionBehaviour[dir] == CircuitElement.ConnectionBehaviour.kSociable && 
+							    otherElement.connectionBehaviour[otherDir] == CircuitElement.ConnectionBehaviour.kReceptive){
+								makeConnection = true;
+							}
+							if (otherElement.connectionBehaviour[otherDir] == CircuitElement.ConnectionBehaviour.kSociable && 
+							    thisElement.connectionBehaviour[dir] == CircuitElement.ConnectionBehaviour.kReceptive){
+								makeConnection = true;
+							}
+							if (makeConnection){
+								thisElement.isConnected[dir] = true;
+								otherElement.isConnected[otherDir] =true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// Rebiuld any meshes that need rebuilding
+		
+		// Create a hash key for each element so we know if it has changed
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				CircuitElement thisElement = GetElement(new GridPoint(x, y));
+				if (thisElement && elementHash[x,y] != thisElement.CalcHash()){
+					thisElement.RebuildMesh();
+				}
+			}
+		}		
+			
 		
 	}
 }

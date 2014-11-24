@@ -404,7 +404,7 @@ public class OldUI : MonoBehaviour {
 			}
 			
 			InputMode oldInputMode = inputMode;
-			inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, useStrings);
+		//	inputMode = (InputMode)GUI.Toolbar (toolbarRect, (int)inputMode, useStrings);
 			if (inputMode == InputMode.kClearAll){
 				Application.LoadLevel(Application.loadedLevel);
 				inputMode = oldInputMode;
