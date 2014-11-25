@@ -67,6 +67,8 @@ public class UI : MonoBehaviour {
 	
 		thisPoint = CalcCurrentGridPoint();
 		
+		if (ghostElement == null) Debug.LogError ("Ghost is null!?!");
+		
 		
 		// Deal with the ghost element
 		ghostElement.SetActive(thisPoint != null);

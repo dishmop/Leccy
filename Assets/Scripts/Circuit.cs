@@ -103,6 +103,7 @@ public class Circuit : MonoBehaviour {
 //	}
 //	
 	public void RemoveElement(GridPoint point){
+		GetElement(point).SetIsOnCircuit(false);
 		elements[point.x, point.y] = null;
 	}
 	
@@ -114,6 +115,7 @@ public class Circuit : MonoBehaviour {
 		newElement.transform.parent = transform;
 		elements[point.x, point.y] = newElement;
 		GetElement(point).SetGridPoint(point);
+		GetElement(point).SetIsOnCircuit(true);
 		GetElement(point).RebuildMesh();
 		
 	}
@@ -311,8 +313,8 @@ public class Circuit : MonoBehaviour {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// GameUpdate is called once per frame in a specific order
+	public void GameUpdate () {
 		CalcBounds();
 		MakeConnections();
 	}

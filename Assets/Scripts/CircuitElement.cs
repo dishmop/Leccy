@@ -19,6 +19,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	// Setting the position
 	protected GameObject	displayMesh;
+	protected bool			isOnCircuit = false;
 	
 	
 	// What is the best UI scheme to use when placing these elents
@@ -318,18 +319,24 @@ public class CircuitElement : MonoBehaviour {
 	}	
 	
 	protected void DestorySelf(){
+		Debug.Log("Destroy self : " + GetComponent<SerializationID>().id);
 		isBaked[0] = false;
 		isBaked[1] = false;
 		isBaked[2] = false;
 		isBaked[3] = false;
+		RemoveConnections();
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);
-		Destroy (this);
+		Destroy (gameObject);
+	}
 	
+	
+	public void SetIsOnCircuit(bool isOn){
+		isOnCircuit = isOn;
 	}
 	
 	protected bool IsOnCircuit(){
-		return thisPoint != null;
+		return isOnCircuit;
 	}
 	
 	

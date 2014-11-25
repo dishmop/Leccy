@@ -1701,9 +1701,8 @@ public class Simulator : MonoBehaviour {
 		}
 	}
 
-		// Update is called once per frame
-	void FixedUpdate () {
-	return ;
+		// GameUpdate is called once per frame in a specific order
+	public void GameUpdate () {
 	
 		bool finished = false;
 		int attempts = 3;

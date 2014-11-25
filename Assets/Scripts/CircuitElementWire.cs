@@ -66,7 +66,7 @@ public class CircuitElementWire : CircuitElement {
 		int newOrient = -1;
 		
 		// if we are in the UI
-		if (!IsOnCircuit()){
+		if (thisPoint == null){
 			newPrefab = wireStraightDownPrefab;
 			newOrient = 0;
 		}			
