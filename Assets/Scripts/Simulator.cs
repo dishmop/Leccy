@@ -141,6 +141,7 @@ public class Simulator : MonoBehaviour {
 			case Circuit.kRight: return new BranchAddress(address.x + 1, address.y, Circuit.kLeft);
 			case Circuit.kDown: return new BranchAddress(address.x, address.y - 1, Circuit.kUp);
 			case Circuit.kLeft: return new BranchAddress(address.x - 1, address.y, Circuit.kRight);
+
 		}
 		return new BranchAddress();
 	}
@@ -173,6 +174,7 @@ public class Simulator : MonoBehaviour {
 	}
 	
 	void AddLoopElement(BranchAddress addr, int loopId, int groupId){
+
 		BranchData data = GetBranchData (addr);
 		data.traversed = true;
 		data.loopId = loopId;
@@ -253,6 +255,7 @@ public class Simulator : MonoBehaviour {
 			}
 		}
 		numGroups = groupId;
+		
 		
 		return true;
 	}
@@ -444,6 +447,7 @@ public class Simulator : MonoBehaviour {
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 				BranchData oppData	= GetBranchData (oppAddress);
+				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
 				// We build up the resistance matrix 
@@ -451,7 +455,8 @@ public class Simulator : MonoBehaviour {
 				if (!oppData.isOuterLoop){
 					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
 				}
-				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
+				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 				
 				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
 				/*
@@ -559,10 +564,16 @@ public class Simulator : MonoBehaviour {
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
 					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir, true)) > epsilon){
 						thisElement.TriggerEmergency();
 						failed = true;
 					}
+					BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+					CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+					if (Mathf.Abs (oppElement.GetVoltageDrop(oppAddr.dir, false)) > epsilon){
+						oppElement.TriggerEmergency();
+						failed = true;
+					}				
 				}
 			}
 		}
@@ -667,6 +678,7 @@ public class Simulator : MonoBehaviour {
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 				BranchData oppData	= GetBranchData (oppAddress);
+				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
 				// We build up the resistance matrix 
@@ -674,7 +686,8 @@ public class Simulator : MonoBehaviour {
 				if (!oppData.isOuterLoop){
 					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
 				}
-				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
+				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 				
 				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
 				
@@ -758,8 +771,14 @@ public class Simulator : MonoBehaviour {
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
 					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir, true)) > epsilon){
 						thisElement.TriggerEmergency();
+						failed = true;
+					}
+					BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+					CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+					if (Mathf.Abs (oppElement.GetVoltageDrop(oppAddr.dir, false)) > epsilon){
+						oppElement.TriggerEmergency();
 						failed = true;
 					}
 				}
@@ -869,6 +888,7 @@ public class Simulator : MonoBehaviour {
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 				BranchData oppData	= GetBranchData (oppAddress);
+				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
 				// We build up the resistance matrix 
@@ -876,7 +896,8 @@ public class Simulator : MonoBehaviour {
 				if (!oppData.isOuterLoop){
 					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
 				}
-				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
+				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 				
 				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
 				
@@ -978,8 +999,14 @@ public class Simulator : MonoBehaviour {
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
 					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir, true)) > epsilon){
 						thisElement.TriggerEmergency();
+						failed = true;
+					}
+					BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+					CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+					if (Mathf.Abs (oppElement.GetVoltageDrop(oppAddr.dir, false)) > epsilon){
+						oppElement.TriggerEmergency();
 						failed = true;
 					}
 				}
@@ -1085,11 +1112,13 @@ public class Simulator : MonoBehaviour {
 				// Get current ID for current travelling in the opposite direction
 				BranchAddress oppAddress = GetOppositeAddress(thisAddress);
 				BranchData oppData	= GetBranchData (oppAddress);
-					
+				CircuitElement  oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
+				
 				
 				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
 				if (!oppData.isOuterLoop) R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
-				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir);
+				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
+				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 			}
 		}  
 
@@ -1163,8 +1192,14 @@ public class Simulator : MonoBehaviour {
 				for (int j = 0; j < loops[i].Count; ++j){
 					BranchAddress thisAddr = loops[i][j];
 					CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
-					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir)) > epsilon){
+					if (Mathf.Abs (thisElement.GetVoltageDrop(thisAddr.dir, true)) > epsilon){
 						thisElement.TriggerEmergency();
+						failed = true;
+					}
+					BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+					CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+					if (Mathf.Abs (oppElement.GetVoltageDrop(oppAddr.dir, false)) > epsilon){
+						oppElement.TriggerEmergency();
 						failed = true;
 					}
 				}
@@ -1230,7 +1265,13 @@ public class Simulator : MonoBehaviour {
 						CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 						BranchData thisData = GetBranchData(thisAddr);
 					
-						currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+						currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir, true) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
+		
+						BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+						CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+						
+						// Hmm resistance isn't handled in the same way - this is all a bit inconsistant
+						currentVoltage += oppElement.GetVoltageDrop(oppAddr.dir, false);
 						
 						SetInitVoltage(thisAddr, currentVoltage);
 		
@@ -1705,7 +1746,7 @@ public class Simulator : MonoBehaviour {
 	public void GameUpdate () {
 	
 		bool finished = false;
-		int attempts = 10;
+		int attempts = 3;
 		while (!finished && attempts > 0){
 			ClearSimulation();
 			finished = Simulate();

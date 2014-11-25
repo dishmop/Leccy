@@ -5,6 +5,8 @@
         }
         SubShader {
          	ZTest Always
+			Blend SrcAlpha OneMinusSrcAlpha
+			Tags {"Queue"="Transparent"}
            Pass {
 
 		        CGPROGRAM

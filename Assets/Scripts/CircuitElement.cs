@@ -11,23 +11,25 @@ public class CircuitElement : MonoBehaviour {
 	
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public GameObject	anchorPrefab;
-	public float		temperature = 0;
-	
-	// For setting alpha values
-	float 	alpha = 1f;
-	bool 	dirtyAlpha = false;
 	
 	// Setting the position
 	protected GameObject	displayMesh;
 	protected bool			isOnCircuit = false;
 	
 	
-	// What is the best UI scheme to use when placing these elents
+	protected float			temperature = 0;
+	// For setting alpha values
+	float 	alpha = 1f;
+	bool 	dirtyAlpha = false;
+	
+
+		// What is the best UI scheme to use when placing these elents
 	public enum UIType{
 		kNone,
 		kDraw,			// Lay them out in lines like drawing with a pen
 		kPlace,			// Place sinlge elements down one at a time
-		kNumTypes		// Useufl for iterating over the,
+		kErase,			// The eraser is different enough to warrent its own code
+		kNumTypes   	// Useufl for iterating over the,
 	};
 	
 	public UIType uiType = UIType.kNone;
@@ -46,6 +48,7 @@ public class CircuitElement : MonoBehaviour {
 		kReceptive,		// If invited to make one, I wil say yes
 		kSociable,		// I will invite anyone to connect here
 	};
+	
 	
 	protected void HandleAlpha(){
 		if (dirtyAlpha){
@@ -87,6 +90,11 @@ public class CircuitElement : MonoBehaviour {
 		
 	}
 	
+	// Return true of this element is one which is attached to wires (most are)
+	public virtual bool IsWired(){
+		return true;
+	}
+	
 	
 	
 	
@@ -102,6 +110,9 @@ public class CircuitElement : MonoBehaviour {
 		return "None";
 	}
 	
+	// Some elements have the notion of another grid point which they use for UI purposes
+	public virtual void SetOtherGridPoint(GridPoint otherPoint){
+	}
 	
 	public void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
@@ -241,21 +252,7 @@ public class CircuitElement : MonoBehaviour {
 				IsConnected(2) == down &&
 				IsConnected(3) == left;
 	}
-//	
-//	public bool HasAnyConnections(bool up, bool right, bool down, bool left){
-//		return 	isConnected[0] == up ||
-//				isConnected[1] == right ||
-//				isConnected[2] == down ||
-//				isConnected[3] == left;
-//	}	
-//	
-//	public int CountNumConnections(){
-//		int count = 0;
-//		for (int i = 0; i < 4; ++i){
-//			if (isConnected[i]) ++count;
-//		}
-//		return count; 
-//	}
+
 
 	public void Rotate(int stepsCW){
 		orient = (4 + orient + stepsCW) % 4;
@@ -288,22 +285,18 @@ public class CircuitElement : MonoBehaviour {
 		
 	}
 	
-	public virtual float GetVoltageDrop(int dir){
-		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
+	public virtual float GetVoltageDrop(int dir, bool fw){
+		if (!IsConnected(dir)){
+			Debug.LogError("Being asked about a nonexistanct connection");
+		}
 		return 0f;
 	}
 	
  	public static int CalcInvDir(int dir){
 		return (dir + 2) % 4;
 	}
-//	
-//	public void ClearConnections(){
-//		isConnected[0]  = false;
-//		isConnected[1]  = false;
-//		isConnected[2]  = false;
-//		isConnected[3]  = false;
-//	}
-//	
+
+
 	public virtual void RebuildMesh(){
 		HandleDisplayMeshChlid();
 		RebuildAnchorMeshes();
@@ -311,10 +304,10 @@ public class CircuitElement : MonoBehaviour {
 	
 
 		protected void VisualiseTemperature(){
-//		foreach (Transform child in transform.GetChild(0)){
-//			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
-//			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
-//		}		
+		foreach (Transform child in transform.GetChild(0)){
+			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
+			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );
+		}		
 		
 	}	
 	

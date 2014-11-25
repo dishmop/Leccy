@@ -45,79 +45,20 @@ public class CircuitElementCell : CircuitElement {
 		return "Cell";
 	}	
 
-//	public override void OnClick(){
-//		invertOrient = !invertOrient;
-//	}
-//	
-//	// Analyse current connections and ensure they are valid for this object
-//	// If not, then change them
-//	// It is then up to the caller to bring them into line with the neighbouring connections
-//	public override void ValidateConnections(){
-//		
-//		// No connections
-//		int numConnections = CountNumConnections();
-//		switch (numConnections)
-//		{
-//		case 0:
-//			isConnected[0] = true;
-//			isConnected[2] = true;
-//			break;
-//		case 1:
-//			// enabled the opposing one
-//			for (int i = 0; i < 4; ++i){
-//				if (isConnected[i]) isConnected[CalcInvDir(i)] = true;
-//			}
-//			break;
-//		case 2: 
-//			// Find the first one and set the opposing one
-//			for (int i = 0; i < 4; ++i){
-//				if (isConnected[i]){
-//					ClearConnections();
-//					isConnected[i] = true;
-//					isConnected[CalcInvDir(i)] = true;
-//					break;
-//				}
-//			}
-//			break;
-//		case 3:
-//			// Fine the one without the opposing side and remove it
-//			for (int i = 0; i < 4; ++i){
-//				if (!isConnected[i]){
-//					isConnected[CalcInvDir(i)] = false;
-//					break;
-//				}
-//			}	
-//			break;
-//		case 4:
-//			ClearConnections();
-//			isConnected[0] = true;
-//			isConnected[2] = true;
-//			break;					
-//		}
-//	}
-	
-//	// Return true if it is ok to set this connection on this element
-//	// For cells, it is only ok if this is what has been set already
-//	public override bool CanSetConnection(int dir, bool value){
-//		return isConnected[dir] == value;
-//	}	
 	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
 		return isInEmergency ? 0.001f : resistance;
 	}
 	
-	public override float GetVoltageDrop(int dir){
+	public override float GetVoltageDrop(int dir, bool fwd){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
-		float mul = 1f;
 		
-		if ((dir == Circuit.kUp && orient == 0)  ||
-			(dir == Circuit.kDown && orient == 2)  ||
-			(dir == Circuit.kRight && orient == 3)  ||
-			(dir == Circuit.kLeft && orient == 1))  mul = -1f;
-		
-
-		return voltage * mul;
+		// Which connection is the voltage drop on? - the same as orient + some fudge factor
+		if (dir == (4-orient) % 4){
+			return fwd ? -voltage : voltage;
+		}
+		return 0f;
 	}	
 	
 	public override void RebuildMesh(){

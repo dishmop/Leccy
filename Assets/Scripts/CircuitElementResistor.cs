@@ -30,60 +30,7 @@ public class CircuitElementResistor : CircuitElement {
 		resistance = br.ReadSingle();
 	}	
 	
-//	
-//	// Analyse current connections and ensure they are valid for this object
-//	// If not, then change them
-//	// It is then up to the caller to bring them into line with the neighbouring connections
-//	public override void ValidateConnections(){
-//	
-//		// No connections
-//		int numConnections = CountNumConnections();
-//		switch (numConnections)
-//		{
-//			case 0:
-//				isConnected[0] = true;
-//				isConnected[2] = true;
-//				break;
-//			case 1:
-//				// enabled the opposing one
-//				for (int i = 0; i < 4; ++i){
-//					if (isConnected[i]) isConnected[CalcInvDir(i)] = true;
-//				}
-//				break;
-//			case 2: 
-//				// Find the first one and set the opposing one
-//				for (int i = 0; i < 4; ++i){
-//					if (isConnected[i]){
-//						ClearConnections();
-//						isConnected[i] = true;
-//						isConnected[CalcInvDir(i)] = true;
-//						break;
-//					}
-//				}
-//				break;
-//			case 3:
-//				// Fine the one without the opposing side and remove it
-//				for (int i = 0; i < 4; ++i){
-//					if (!isConnected[i]){
-//						isConnected[CalcInvDir(i)] = false;
-//						break;
-//					}
-//				}	
-//				break;
-//			case 4:
-//				ClearConnections();
-//				isConnected[0] = true;
-//				isConnected[2] = true;
-//				break;					
-//		}
-//	}
-//	
-//	// Return true if it is ok to set this connection on this element
-//	// For resistors, it is only ok if this is what has been set already
-//	public override bool CanSetConnection(int dir, bool value){
-//		return isConnected[dir] == value;
-//	}	
-	
+
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
 		GetDisplayMesh ().transform.rotation = Quaternion.Euler(0, 0, orient * 90);

@@ -30,19 +30,24 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	
 	void ConfigureButton(){
 		if (circuitElementPrefab){
-			transform.FindChild ("TextFrame").FindChild("Text").GetComponent<Text>().text = circuitElementPrefab.GetComponent<CircuitElement>().GetUIString();
+			CircuitElement element = circuitElementPrefab.GetComponent<CircuitElement>();
+			transform.FindChild ("TextFrame").FindChild("Text").GetComponent<Text>().text = element.GetUIString();
 			
 			// make a copy so that we can modify it for display
-			GameObject mainMeshPrefab = Instantiate(circuitElementPrefab.GetComponent<CircuitElement>().GetDisplayMesh()) as GameObject;
-			GameObject wire1 = Instantiate (wireMeshPrefab) as GameObject;
-			GameObject wire2 = Instantiate (wireMeshPrefab) as GameObject;
-			wire1.transform.parent = mainMeshPrefab.transform;
-			wire2.transform.parent = mainMeshPrefab.transform;
+			GameObject mainMeshPrefab = Instantiate(element.GetDisplayMesh()) as GameObject;
 			
-			wire1.transform.localPosition = new Vector3(0, 1, 0);
-			wire1.transform.localRotation = Quaternion.Euler(0, 0, 180);
-			wire2.transform.localPosition = new Vector3(0, -1, 0);
-			wire2.transform.localRotation = Quaternion.Euler(0, 0, 0);
+			if (element.IsWired()){
+				GameObject wire1 = Instantiate (wireMeshPrefab) as GameObject;
+				GameObject wire2 = Instantiate (wireMeshPrefab) as GameObject;
+				wire1.transform.parent = mainMeshPrefab.transform;
+				wire2.transform.parent = mainMeshPrefab.transform;
+				
+				wire1.transform.localPosition = new Vector3(0, 1, 0);
+				wire1.transform.localRotation = Quaternion.Euler(0, 0, 180);
+				wire2.transform.localPosition = new Vector3(0, -1, 0);
+				wire2.transform.localRotation = Quaternion.Euler(0, 0, 0);
+			}
+			mainMeshPrefab.transform.parent = transform;
 
 			
 			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().SetPrefabMesh(mainMeshPrefab);

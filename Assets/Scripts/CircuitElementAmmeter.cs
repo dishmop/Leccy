@@ -177,10 +177,7 @@ public class CircuitElementAmmeter : CircuitElement {
 				child.gameObject.GetComponent<FractionCalc>().color = textColorTarget;
 				child.gameObject.SetActive(hasTarget);
 							
-//				TextMesh textMesh = child.gameObject.GetComponent<TextMesh>();
-//				textMesh.text = targetAmp.ToString("0.00") + "A";
-//				textMesh.color = textColorTarget;
-//				child.gameObject.SetActive(hasTarget);
+
 			}
 			if (child.name == "Bomb"){
 				// Don;t draw the bomb for the moment
@@ -190,18 +187,7 @@ public class CircuitElementAmmeter : CircuitElement {
 				child.gameObject.GetComponent<FractionCalc>().value = GetMaxCurrent ();
 				child.gameObject.GetComponent<FractionCalc>().color = IsOnTarget() ? textColorTarget : textColorNorm;
 				
-				/*
-				TextMesh textMesh = child.gameObject.GetComponent<TextMesh>();
-				if (GetMaxCurrent() < 100){
-					textMesh.text = GetMaxCurrent().ToString("0.00");
-					textMesh.fontSize = 24;
-				}
-				else{
-					textMesh.text = "∞";
-					textMesh.fontSize = 48;
-				}
-				textMesh.color = IsOnTarget() ? textColorTarget : textColorNorm;
-				*/
+
 				
 			}		
 			if (child.name == "SignPanel"){
@@ -215,13 +201,6 @@ public class CircuitElementAmmeter : CircuitElement {
 				
 			}						
 			
-//				
-//				float current = Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0) + Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1));
-//				Color useCol = offCol;
-//				if (current > 0.1f) useCol = halfOnCol;
-//				if (current >= thresholdCurrent) useCol = onCol;
-//				mesh.materials[0].SetColor ("_Color", useCol);
-
 		}
 	
 		

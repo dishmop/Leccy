@@ -9,8 +9,11 @@ public class UI : MonoBehaviour {
 	string 		selectedPrefabId;
 	GameObject	ghostElement;
 	GridPoint	thisPoint;
+	GridPoint	otherPoint;
+	Vector3		worldPos;
 	bool		buttonIsHeld;
 	GridPoint	lastPoint;
+	GridPoint	lastOtherPoint;
 	
 	bool		isInUI;
 	
@@ -50,30 +53,61 @@ public class UI : MonoBehaviour {
 	}
 	
 	
-	GridPoint CalcCurrentGridPoint(){
+	void CalcCurrentGridPoints(){
 		// Get mouse pointer position in world and circuite space
 		Vector3 mousePos = Input.mousePosition;
 		mousePos.z = transform.position.z - Camera.main.transform.position.z;
-		Vector3 worldPos = Camera.main.ScreenToWorldPoint( mousePos);
-		GridPoint point = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
-		if (!Grid.singleton.IsPointInGrid(point) || isInUI){
-			point = null;
+		worldPos = Camera.main.ScreenToWorldPoint( mousePos);
+		thisPoint = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
+		if (!Grid.singleton.IsPointInGrid(thisPoint) || isInUI){
+			thisPoint = null;
 		}
-		return point;
+		if (thisPoint == null) return;		
+		
+		// Test to see if we are nearly eleecting another point (i.e. we asre selecting a connection). 
+		float distThreshold = 0.15f;
+		
+		otherPoint = null;
+		float xDiff = thisPoint.x - worldPos.x;
+		float yDiff = thisPoint.y - worldPos.y;
+		if (Mathf.Abs (xDiff) < distThreshold && Mathf.Abs (yDiff) > distThreshold){
+			if (yDiff > 0){
+				otherPoint = new GridPoint(thisPoint.x, thisPoint.y - 1);
+			}
+			else{
+				otherPoint = new GridPoint(thisPoint.x, thisPoint.y + 1);
+			}
+		}
+		else if (Mathf.Abs (xDiff) > distThreshold && Mathf.Abs (yDiff) < distThreshold){
+			if (xDiff > 0){
+				otherPoint = new GridPoint(thisPoint.x - 1, thisPoint.y );
+			}
+			else{
+				otherPoint = new GridPoint(thisPoint.x + 1, thisPoint.y);
+			}
+		}
+				
+
+		if (otherPoint == null ||!Grid.singleton.IsPointInGrid(otherPoint) || isInUI){
+			otherPoint = null;
+		}		
 	}
 
 	
 	void Update(){
 	
-		thisPoint = CalcCurrentGridPoint();
+		CalcCurrentGridPoints();
 		
 		if (ghostElement == null) Debug.LogError ("Ghost is null!?!");
 		
 		
 		// Deal with the ghost element
 		ghostElement.SetActive(thisPoint != null);
-		ghostElement.GetComponent<CircuitElement>().SetGridPoint(thisPoint, -5);
-		ghostElement.GetComponent<CircuitElement>().RebuildMesh();
+		CircuitElement ghostElementComp = ghostElement.GetComponent<CircuitElement>();
+		ghostElementComp.SetGridPoint(thisPoint, -5);
+		ghostElementComp.RebuildMesh();
+		ghostElementComp.SetOtherGridPoint(otherPoint);		
+		
 		
 		
 		// Placed elements are dealt with differntly than drawn ones
@@ -84,8 +118,12 @@ public class UI : MonoBehaviour {
 			case CircuitElement.UIType.kDraw:
 				HandleDrawnElementInput();
 				break;
+			case CircuitElement.UIType.kErase:
+				HandleEraserElementInput();
+				break;
 		}
 		lastPoint = thisPoint;
+		lastOtherPoint = otherPoint;
 					
 	}
 	
@@ -121,7 +159,7 @@ public class UI : MonoBehaviour {
 			return;
 		}
 		
-		// Check if we should be placing a wire in the new position
+		// Check if we have only just pressed it down
 		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
 		
 		GridPoint[] gridPath = null;
@@ -130,7 +168,7 @@ public class UI : MonoBehaviour {
 			gridPath = new GridPoint[1];
 			gridPath[0] = thisPoint;
 		 }
-		 else if (!thisPoint.IsEqual(lastPoint)){
+		else if (lastPoint != null && !thisPoint.IsEqual(lastPoint)){
 			gridPath = CalcGridPath(thisPoint, lastPoint);
 		 }
 		
@@ -146,7 +184,7 @@ public class UI : MonoBehaviour {
 				if (existingElement != null){
 					oldConnections = SaveOldConnections(existingElement.GetComponent<CircuitElement>());
 					
-					// If this is not the same kind of element - then replaces it
+					// If this is not the same kind of element - then replace it
 					if (existingElement.GetComponent<SerializationID>().id != selectedPrefabId){
 						existingElement.GetComponent<CircuitElement>().RemoveConnections();
 						Destroy (Circuit.singleton.GetGameObject(gridPath[i]));
@@ -219,12 +257,91 @@ public class UI : MonoBehaviour {
 		}
 	}
 	
+	void HandleEraserElementInput(){
+	
+		
+		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+		
+		// If the buttons is not down, there is nothing to do
+		if (thisPoint == null || !buttonIsHeld){
+			return;
+		}
+	
+				
+		
+		// Check if we have only just pressed it down
+		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
+		
+		GridPoint[] gridPath = null;
+		
+		// If clicking a connection - then simple request that the connection be removed
+		if (buttonIsClicked && otherPoint != null){
+			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
+			CircuitElement otherElement = Circuit.singleton.GetElement(otherPoint);
+			
+			if (thisElement != null && otherElement != null){
+				thisElement.SuggestUninvite(otherElement);
+				otherElement.SuggestUninvite(thisElement);
+			}
+			
+		}
+		// Otherwise, remove the component itself
+		else if (buttonIsClicked){
+			gridPath = new GridPoint[1];
+			gridPath[0] = thisPoint;
+		}
+		// If dragging from one point to the next
+		else if (lastPoint != null && !thisPoint.IsEqual(lastPoint)){
+			gridPath = CalcGridPath(lastPoint, thisPoint);
+			
+			// If our last thing was to delete a connection, then check fi the first two
+			// elements of this list are that connection - if they are then don;t delete the first one
+			if (lastOtherPoint != null && lastOtherPoint.IsEqual(gridPath[1]) && lastPoint.IsEqual(gridPath[0])){
+				int numElements = gridPath.GetLength(0);
+				GridPoint[] newPath = new GridPoint[numElements-1];
+				for (int i = 0; i < numElements-1; ++i){
+					newPath[i] = gridPath[i+1];
+				}
+				gridPath = newPath;
+				
+			}
+			
+		}
+		// If we were deleting a connection and how now moved to the point itself, then delete the point
+		else if (lastOtherPoint != null && otherPoint == null && thisPoint.IsEqual(lastPoint)){
+			gridPath = new GridPoint[1];
+			gridPath[0] = thisPoint;
+		}
+		
+		
+		if (gridPath != null)
+		{
+			for (int i = 0; i < gridPath.GetLength(0); ++i){
+				GameObject existingElement = Circuit.singleton.GetGameObject(gridPath[i]);
+								
+				// If there is one there already
+				if (existingElement != null){
+					existingElement.GetComponent<CircuitElement>().RemoveConnections();
+					Destroy (Circuit.singleton.GetGameObject(gridPath[i]));
+					Circuit.singleton.RemoveElement(gridPath[i]);
+				}
+			}
+			
+		}
+		
+		
+	}	
+	
 	GridPoint[] CalcGridPath(GridPoint prevPoint, GridPoint nextPoint){
 		
 		if (prevPoint.IsEqual(nextPoint)){
 			Debug.LogError("Trying to draw from and to the same point!");
 			return null;
 		}
+		if (prevPoint == null || nextPoint == null){
+			Debug.LogError("Trying to draw from or to a null point!");
+			return null;
+		}		
 		
 		int xDiff = nextPoint.x - prevPoint.x;
 		int yDiff = nextPoint.y - prevPoint.y;
