@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Highlight
-  m_Shader: {fileID: 10753, guid: 0000000000000000e000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: d2d2e12bfdc2e444a8a9201abded43cd, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -72,6 +72,10 @@ Material:
         first:
           name: _Parallax
         second: .0199999996
+      data:
+        first:
+          name: _Number
+        second: 1
     m_Colors:
       data:
         first:
