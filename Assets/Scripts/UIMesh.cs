@@ -18,6 +18,7 @@ public class UIMesh : MonoBehaviour {
 	
 	public void SetPrefabMesh(GameObject prefab){
 		prefabMesh = prefab;
+		prefabMesh.transform.localPosition = new Vector3(0, 0, 0);
 		OnChange ();
 		
 	}
@@ -30,7 +31,8 @@ public class UIMesh : MonoBehaviour {
 	
 		// Enusre the scale etc. are set up correctly
 		thisObj.transform.localScale = refMesh.transform.localScale;
-		thisObj.transform.localRotation = refMesh.transform.localRotation;;
+		thisObj.transform.localRotation = refMesh.transform.localRotation;
+		thisObj.transform.localPosition = refMesh.transform.localPosition;;
 		//thisObj.transform.localPosition = refMesh.transform.localPosition;;
 		
 		MeshFilter meshFilter = refMesh.GetComponent<MeshFilter>();
@@ -65,7 +67,9 @@ public class UIMesh : MonoBehaviour {
 				if (meshFilter.mesh.uv1.Length  == numVerts) 		newVerts[i].uv1 = 		meshFilter.mesh.uv2[vertIndex];
 				if (meshFilter.mesh.tangents.Length  == numVerts) 	newVerts[i].tangent = 	meshFilter.mesh.tangents[vertIndex];
 				
-				bounds.Encapsulate(newVerts[i].position);
+				// Transform the point to where it will be and then add it to thebounds
+				Vector3 worldPos = thisObj.transform.TransformPoint(newVerts[i].position);
+				bounds.Encapsulate(worldPos);
 				
 				if (i % 4 != 2) j++;				
 			}
@@ -100,9 +104,14 @@ public class UIMesh : MonoBehaviour {
 		// otherwise we end up destroying the prefab (from some reason).
 		GameObject mesh = Instantiate(prefabMesh) as GameObject;
 		mesh.transform.parent = transform;
-		
+		mesh.transform.localPosition = new Vector3(0, 0, 0);
+				
 		GameObject scalingChild = InstantiateEmptyChild(gameObject);
 		scalingChild.name = "scalingObj";
+		// Set up the bounds around the scalingChild (rather than the origin)
+		bounds.min = scalingChild.transform.position;
+		bounds.max = scalingChild.transform.position;
+		
 		ConstructCanvasRenderer(scalingChild, mesh);
 		
 		GameObject.Destroy(mesh);

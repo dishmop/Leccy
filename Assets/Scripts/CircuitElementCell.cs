@@ -123,7 +123,7 @@ public class CircuitElementCell : CircuitElement {
 		base.RebuildMesh();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 
-		SetupStraightConnectionBehaviour(false);
+		SetupStraightConnectionBehaviour(true);
 	}	
 	
 

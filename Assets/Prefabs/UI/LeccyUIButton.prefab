@@ -295,6 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circuitElementPrefab: {fileID: 0}
+  wireMeshPrefab: {fileID: 100004, guid: 018c466a9f2794ae8b834ac70ac2457d, type: 2}
   isSelected: 0
   selectColor: {r: .555381238, g: .573529422, b: .244593427, a: 1}
   normalColor: {r: 0, g: 0, b: 0, a: 1}
