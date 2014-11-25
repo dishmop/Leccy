@@ -39,21 +39,10 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 			wire1.transform.parent = mainMeshPrefab.transform;
 			wire2.transform.parent = mainMeshPrefab.transform;
 			
-			// are we horizontal?
-			bool isHorizontal = false;//circuitElementPrefab.GetComponent<CircuitElement>().connectionBehaviour[1] == CircuitElement.ConnectionBehaviour.kSociable;
-			if (isHorizontal){
-				wire1.transform.localPosition = new Vector3(1, 0, 0);
-				wire1.transform.localRotation = Quaternion.Euler(0, 0, 90);
-				wire2.transform.localPosition = new Vector3(-1, 0, 0);
-				wire2.transform.localRotation = Quaternion.Euler(0, 0, -90);
-			}
-			else{
-				wire1.transform.localPosition = new Vector3(0, 1, 0);
-				wire1.transform.localRotation = Quaternion.Euler(0, 0, 180);
-				wire2.transform.localPosition = new Vector3(0, -1, 0);
-				wire2.transform.localRotation = Quaternion.Euler(0, 0, 0);
-			}
-			
+			wire1.transform.localPosition = new Vector3(0, 1, 0);
+			wire1.transform.localRotation = Quaternion.Euler(0, 0, 180);
+			wire2.transform.localPosition = new Vector3(0, -1, 0);
+			wire2.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
 			
 			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().SetPrefabMesh(mainMeshPrefab);

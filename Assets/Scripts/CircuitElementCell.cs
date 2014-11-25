@@ -8,7 +8,7 @@ public class CircuitElementCell : CircuitElement {
 
 	public GameObject 	cellPrefab;
 	public float		voltage = 12f;
-	public float		resistance = 0.06f;
+	float				resistance = 0f;
 	float				maxCurrent = 100f;
 	bool				isInEmergency = false;
 	
@@ -109,14 +109,15 @@ public class CircuitElementCell : CircuitElement {
 	
 	public override float GetVoltageDrop(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
+		float mul = 1f;
 		
-//		if ((dir == Circuit.kLeft || dir == Circuit.kDown) && invertOrient)
-//			return voltage;
-//		if ((dir == Circuit.kRight || dir == Circuit.kUp) && !invertOrient)
-//			return voltage;			
-//		else 
-//			return -voltage;
-		return voltage;
+		if ((dir == Circuit.kUp && orient == 0)  ||
+			(dir == Circuit.kDown && orient == 2)  ||
+			(dir == Circuit.kRight && orient == 3)  ||
+			(dir == Circuit.kLeft && orient == 1))  mul = -1f;
+		
+
+		return voltage * mul;
 	}	
 	
 	public override void RebuildMesh(){

@@ -1705,7 +1705,7 @@ public class Simulator : MonoBehaviour {
 	public void GameUpdate () {
 	
 		bool finished = false;
-		int attempts = 3;
+		int attempts = 10;
 		while (!finished && attempts > 0){
 			ClearSimulation();
 			finished = Simulate();
