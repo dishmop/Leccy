@@ -17,6 +17,10 @@ public class UI : MonoBehaviour {
 	
 	bool		isInUI;
 	
+	// Temporary debug thing
+	GUITextDisplay	guiTextDisplay;
+	
+	
 	public void SetSelectedPrefabId(string id){
 		selectedPrefabId = id; 
 		GameObject.Destroy (ghostElement);
@@ -45,6 +49,11 @@ public class UI : MonoBehaviour {
 		if (singleton != null) Debug.LogError ("Error assigning singleton");
 		singleton = this;
 		
+	}
+	
+	
+	void Start(){
+		guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
 	}
 	
 	void OnDestroy () {
@@ -382,4 +391,22 @@ public class UI : MonoBehaviour {
 		
 		return result;
 	}	
+	
+	
+	// Temprary debug stuff
+	void OnGUI(){
+		guiTextDisplay.GUIResetTextLayout();
+		if (thisPoint != null){
+			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);
+			float selVolt = 0f;
+			float selAmp = 0f;
+			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
+			if (thisElement){
+				selVolt = thisElement.GetMaxVoltage();
+				selAmp = thisElement.GetMaxCurrent();
+					
+			}
+			guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
+		}
+	}
 }

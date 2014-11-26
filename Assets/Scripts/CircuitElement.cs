@@ -11,6 +11,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public GameObject	anchorPrefab;
+	public GameObject	capPrefab;
 	
 	// Setting the position
 	protected GameObject	displayMesh;
@@ -21,6 +22,10 @@ public class CircuitElement : MonoBehaviour {
 	// For setting alpha values
 	float 	alpha = 1f;
 	bool 	dirtyAlpha = false;
+	
+	// Used to put caps on sriaght components
+	bool				hasCapTop = false;
+	bool				hasCapBottom = false;	
 	
 
 		// What is the best UI scheme to use when placing these elents
@@ -157,6 +162,10 @@ public class CircuitElement : MonoBehaviour {
 		RebuildMesh ();
 	}
 	
+	// called on each element once we have established which elements are connected to which other ones
+	public virtual void PostConnectionAdjstments(){
+	}
+	
 	protected void HandleDisplayMeshChlid()
 	{
 	
@@ -166,6 +175,10 @@ public class CircuitElement : MonoBehaviour {
 			}
 			
 		}
+	}
+	
+	protected int ModelDir2WorldDir(int modelDir){
+		return (modelDir + 6-orient) % 4;
 	}
 	
 	
@@ -246,6 +259,40 @@ public class CircuitElement : MonoBehaviour {
 //	}
 	
 //	
+
+	protected void DoStraightConnectionAdjustments(){
+		bool needCapTop = !isConnected[ModelDir2WorldDir(Circuit.kDown)];
+		if (needCapTop && !hasCapTop){
+			GameObject topCap = Instantiate(capPrefab) as GameObject;
+			topCap.transform.parent = GetDisplayMesh().transform;
+			topCap.transform.localPosition = Vector3.zero;
+			topCap.transform.localRotation = Quaternion.identity;
+			topCap.name = "TopCap";
+			hasCapTop = true;
+		}
+		else if (!needCapTop && hasCapTop){
+			GameObject topCap = GetDisplayMesh().transform.FindChild("TopCap").gameObject;
+			Destroy (topCap);
+			hasCapTop = false;
+		}
+		
+		
+		bool needCapBottom = !isConnected[ModelDir2WorldDir(Circuit.kUp)];
+		if (needCapBottom && !hasCapBottom){
+			GameObject bottomCap = Instantiate(capPrefab) as GameObject;
+			bottomCap.transform.parent = GetDisplayMesh().transform;
+			bottomCap.transform.localPosition = Vector3.zero;
+			bottomCap.transform.localRotation = Quaternion.Euler(0, 0, 180);
+			bottomCap.name = "BottomCap";
+			hasCapBottom = true;
+		}
+		else if (!needCapBottom && hasCapBottom){
+			GameObject bottomCap = GetDisplayMesh().transform.FindChild("BottomCap").gameObject;
+			Destroy (bottomCap);
+			hasCapBottom = false;
+		}
+		
+	}	
 	public bool HasConnections(bool up, bool right, bool down, bool left){
 		return 	IsConnected(0) == up &&
 		        IsConnected(1) == right &&
@@ -285,14 +332,16 @@ public class CircuitElement : MonoBehaviour {
 		
 	}
 	
+	// Voltage drop when solving for currents (Terrible hack!)
 	public virtual float GetVoltageDrop(int dir, bool fw){
 		if (!IsConnected(dir)){
 			Debug.LogError("Being asked about a nonexistanct connection");
 		}
 		return 0f;
 	}
+
 	
- 	public static int CalcInvDir(int dir){
+	public static int CalcInvDir(int dir){
 		return (dir + 2) % 4;
 	}
 

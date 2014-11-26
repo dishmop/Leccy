@@ -40,7 +40,12 @@ public class CircuitElementResistor : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
-		return resistance;
+		
+		// Only return a resistance if we are being asked about the spoke that the resistance is on
+		if (dir == ModelDir2WorldDir(Circuit.kUp)){
+			return resistance;
+		}
+		return 0f;
 	}	
 	
 	
@@ -49,7 +54,12 @@ public class CircuitElementResistor : CircuitElement {
 	}
 		
 	
-
+	// called on each element once we have established which elements are connected to which other ones
+	// Add Caps on the end if not connected
+	public override void PostConnectionAdjstments(){
+		DoStraightConnectionAdjustments();
+	}
+	
 	
 	
 	void CreateDisplayMesh(){

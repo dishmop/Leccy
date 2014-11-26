@@ -14,6 +14,7 @@ public class CircuitElementWire : CircuitElement {
 	public GameObject wireTJuncFromTopPrefab;
 		
 	GameObject 	currentPrefab;
+	
 
 
 	

@@ -20,6 +20,7 @@ public class Circuit : MonoBehaviour {
 	public const int kRight = 	1;
 	public const int kDown = 	2;
 	public const int kLeft = 	3;
+	public const int kCentre =  4;
 
 	// Useful array of offsets
 	public GridPoint[] offsets = new GridPoint[4];
@@ -317,6 +318,21 @@ public class Circuit : MonoBehaviour {
 	public void GameUpdate () {
 		CalcBounds();
 		MakeConnections();
+		PostConnectionUpdate();
+	}
+	
+	
+	void PostConnectionUpdate(){
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				CircuitElement element = GetElement(new GridPoint(x, y));
+				if (element != null){
+					element.PostConnectionAdjstments();
+					
+				}
+				
+			}
+		}
 	}
 	
 	void MakeConnections(){

@@ -11,8 +11,8 @@ public class CircuitElementCell : CircuitElement {
 	float				resistance = 0f;
 	float				maxCurrent = 100f;
 	bool				isInEmergency = false;
-	
 
+	
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
 	}
@@ -54,13 +54,15 @@ public class CircuitElementCell : CircuitElement {
 	public override float GetVoltageDrop(int dir, bool fwd){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
 		
-		// Which connection is the voltage drop on? - the same as orient + some fudge factor
-		if (dir == (4-orient) % 4){
-			return fwd ? -voltage : voltage;
+		// Ony return a value if we are being asked about the spoke that the voltage drop is on
+		if (dir == ModelDir2WorldDir(Circuit.kUp)){
+			return fwd ? voltage : -voltage;
 		}
 		return 0f;
 	}	
 	
+	
+
 	public override void RebuildMesh(){
 		base.RebuildMesh();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
@@ -70,7 +72,13 @@ public class CircuitElementCell : CircuitElement {
 	
 
 
+	// called on each element once we have established which elements are connected to which other ones
+	// Add Caps on the end if not connected
+	public override void PostConnectionAdjstments(){
+		DoStraightConnectionAdjustments();
+	}
 	
+
 
 	
 	void CreateDisplayMesh(){

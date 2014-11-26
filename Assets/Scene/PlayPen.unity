@@ -1853,6 +1853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orient: 0
   anchorPrefab: {fileID: 0}
+  capPrefab: {fileID: 0}
   uiType: 3
   connectionBehaviour: 00000000000000000000000000000000
   isBaked: 00000000

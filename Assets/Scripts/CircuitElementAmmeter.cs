@@ -144,6 +144,13 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	}
 	
+	// called on each element once we have established which elements are connected to which other ones
+	// Add Caps on the end if not connected
+	public override void PostConnectionAdjstments(){
+		DoStraightConnectionAdjustments();
+	}
+	
+	
 
 	
 	// Update is called once per frame

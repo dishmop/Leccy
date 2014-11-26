@@ -101,13 +101,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orient: 0
   anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
-  temperature: 0
+  capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
   uiType: 2
-  connectionStatus: 00000000000000000000000000000000
+  connectionBehaviour: 00000000000000000000000000000000
   isBaked: 00000000
+  isConnected: 00000000
   cellPrefab: {fileID: 100006, guid: b8b4f099dd0854ca18774cc31fc5b5c8, type: 2}
   voltage: 1
-  resistance: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -8,10 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
+  - 33: {fileID: 3300000}
+  - 23: {fileID: 2300000}
+  - 95: {fileID: 9500000}
   m_Layer: 0
-  m_Name: AmmeterElement
+  m_Name: Top_Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,49 +25,53 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 1.89321935, y: -.692437112, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11400000
-MonoBehaviour:
+--- !u!23 &2300000
+Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9ca33ba8d28149d1b0f3936f4447dac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: Ammeter
---- !u!114 &11400002
-MonoBehaviour:
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 3c6039747faad455e94685ec1ecdc88e, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3300000
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Mesh: {fileID: 4300000, guid: ed1e44c6cf1d74600a7c7e1fc33dc708, type: 3}
+--- !u!95 &9500000
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc53d93266b24ffa9382f7f7b241486, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orient: 0
-  anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
-  capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
-  uiType: 2
-  connectionBehaviour: 00000000000000000000000000000000
-  isBaked: 00000000
-  isConnected: 00000000
-  ammeterPrefab: {fileID: 100008, guid: 5c48c6770043a460981604685285b7de, type: 2}
-  triggerEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
-  targetAmp: 1
-  hasTarget: 1
-  textColorNorm: {r: .41911763, g: .807707787, b: 1, a: 1}
-  textColorTarget: {r: 1, g: 1, b: 1, a: 1}
-  signColorNorm: {r: .367647052, g: .502839684, b: 1, a: 0}
-  signColorTarget: {r: .911764681, g: .974442184, b: 1, a: 0}
+  m_Avatar: {fileID: 9000000, guid: ed1e44c6cf1d74600a7c7e1fc33dc708, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

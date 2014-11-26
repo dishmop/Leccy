@@ -26,9 +26,9 @@ public class Simulator : MonoBehaviour {
 	public MinMode minMode = MinMode.kLoops;
 	
 	public Color[]	voltageColors = new Color[7];
-	public float maxVoltVis = 		50f;
-	public float currentMulVis = 	0.1f;
-	public bool enableVoltsgeAsHeight = true;
+	public float 	maxVoltVis = 		50f;
+	public float 	currentMulVis = 	0.1f;
+	public bool 	enableVoltsgeAsHeight = true;
 
 	public bool solveVoltges = false;
 	
@@ -434,7 +434,7 @@ public class Simulator : MonoBehaviour {
 		// run through each loop in ruen (for each row in the matrices)
 		for (int i = 0; i < numValidLoops; ++i){
 			// For each connection in the loop, check the resistance and any voltage drop
-			// We do this by considering the properties of the node we are leaving
+			// We do this by considering the properties of the node we are leaving and each one that we arrive at
 			for (int j = 0; j < loops[i].Count; ++j){
 				// This connection
 				BranchAddress thisAddress = loops[i][j];
@@ -449,37 +449,18 @@ public class Simulator : MonoBehaviour {
 				BranchData oppData	= GetBranchData (oppAddress);
 				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
+				// Work out the resistance in this branch
+				float resistance = thisElement.GetResistance(thisAddress.dir) + oppElement.GetResistance(oppAddress.dir);
+				
 				
 				// We build up the resistance matrix 
-				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
+				R[i, thisData.loopId] += resistance;
 				if (!oppData.isOuterLoop){
-					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+					R[i, oppData.loopId] -= resistance;
 				}
 				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
 				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
-				
-				// Use for dictionary version  (for non dictionary version we don;t get them from this loop)
-				/*
-				// Also build a list of unique combinations of loops which corresponds to wires which 
-				// sit on those loops as we want to spread the current out euqally amonst these combinations
-				int val0 = thisData.isOuterLoop ? -1 : thisData.loopId;
-				int val1 = oppData.isOuterLoop ? -1 : oppData.loopId;
-				
-				if (val0 > val1){
-					int temp = val0;
-					val0 = val1;
-					val1 = temp;
-				}
-				
-				
-				
-				Eppy.Tuple<int, int> key = new Eppy.Tuple<int, int>(val0, val1);
-				
-				
-				if (!loopCombinations.ContainsKey(key)){
-					loopCombinations.Add (key, true);
-				}
-				*/
+
 			}
 		}  
 		
@@ -681,11 +662,16 @@ public class Simulator : MonoBehaviour {
 				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
+				// Work out the resistance in this branch
+				float resistance = thisElement.GetResistance(thisAddress.dir) + oppElement.GetResistance(oppAddress.dir);
+				
+				
 				// We build up the resistance matrix 
-				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
+				R[i, thisData.loopId] += resistance;
 				if (!oppData.isOuterLoop){
-					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+					R[i, oppData.loopId] -= resistance;
 				}
+				
 				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
 				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 				
@@ -891,11 +877,16 @@ public class Simulator : MonoBehaviour {
 				CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
+				// Work out the resistance in this branch
+				float resistance = thisElement.GetResistance(thisAddress.dir) + oppElement.GetResistance(oppAddress.dir);
+				
+				
 				// We build up the resistance matrix 
-				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
+				R[i, thisData.loopId] += resistance;
 				if (!oppData.isOuterLoop){
-					R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+					R[i, oppData.loopId] -= resistance;
 				}
+				
 				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
 				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 				
@@ -1115,8 +1106,16 @@ public class Simulator : MonoBehaviour {
 				CircuitElement  oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddress.x, oppAddress.y));
 				
 				
-				R[i, thisData.loopId] += thisElement.GetResistance(thisAddress.dir);
-				if (!oppData.isOuterLoop) R[i, oppData.loopId] -= thisElement.GetResistance(thisAddress.dir);
+				// Work out the resistance in this branch
+				float resistance = thisElement.GetResistance(thisAddress.dir) + oppElement.GetResistance(oppAddress.dir);
+				
+				
+				// We build up the resistance matrix 
+				R[i, thisData.loopId] += resistance;
+				if (!oppData.isOuterLoop){
+					R[i, oppData.loopId] -= resistance;
+				}
+				
 				V[i, 0] += thisElement.GetVoltageDrop(thisAddress.dir, true);
 				V[i, 0] += oppElement.GetVoltageDrop(oppAddress.dir, false);
 			}
@@ -1225,6 +1224,11 @@ public class Simulator : MonoBehaviour {
 		
 	}
 	
+	// Given some address this returns the central address corresponding to it
+	BranchAddress GetCentreAddress(BranchAddress addr){
+		return new BranchAddress(addr.x, addr.y, Circuit.kCentre);
+	}
+	
 	
 	// Assuming we have the currents sorted, this find the voltages at each node
 	void SolveForVoltages(){
@@ -1238,21 +1242,22 @@ public class Simulator : MonoBehaviour {
 			int loopIdIndex = 0;
 			while (!MathUtils.FP.Feq (minGroupVoltage, 0f)){
 				minGroupVoltage = 0;
+				
 				// We always need to seed a group  with a known voltge (as we don't have a "ground")
 				// Just do this with the first node that we have
 				loopIdIndex = groupLoopIdIndex;
 				int loopId = voltageLoopOrder[loopIdIndex];
 				int groupStartId = GetBranchData(loops[loopId][0]).groupId;
 				
-				SetInitVoltage(loops[loopId][0], initialVoltage);
+				SetInitVoltage(GetCentreAddress(loops[loopId][0]), initialVoltage);
 		
 		
-				// For voltages, we also invlue the non-valid loops (such as the outer one) as it may include spokes which need 
+				// For voltages, we also include the non-valid loops (such as the outer one) as it may include spokes which need 
 				// traversing
 				while (loopIdIndex < loops.Count && GetBranchData(loops[loopId][0]).groupId == groupStartId){
 					
 					
-					BranchData startData = GetBranchData(loops[loopId][0]);
+					BranchData startData = GetBranchData(GetCentreAddress(loops[loopId][0]));
 					if (startData.initialVolt == false){
 						Debug.LogError ("No initial voltage");
 					}
@@ -1260,22 +1265,44 @@ public class Simulator : MonoBehaviour {
 					// Get data from the initial node in the group
 					float currentVoltage = startData.totalVoltage;
 					
-					for (int i = 1; i < loops[loopId].Count; ++i){
+					// Each connection consits of two spokes - one exiting the first node, the next entering the next
+					// I have assumed that the opposite branch for each node in the loop is centred at the next node in the loop
+					for (int i = 0; i < loops[loopId].Count; ++i){
+						// Current Voltage is set to the centre point of the current node in the loop
+						
+						// Get the voltage for the voltage at the end of the spoke
 						BranchAddress thisAddr = loops[loopId][i];
 						CircuitElement thisElement = Circuit.singleton.GetElement(new GridPoint(thisAddr.x, thisAddr.y));
 						BranchData thisData = GetBranchData(thisAddr);
 					
-						currentVoltage += (thisElement.GetVoltageDrop(thisAddr.dir, true) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir));
-		
-						BranchAddress oppAddr = GetOppositeAddress(thisAddr);
-						CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
-						
-						// Hmm resistance isn't handled in the same way - this is all a bit inconsistant
-						currentVoltage += oppElement.GetVoltageDrop(oppAddr.dir, false);
+						currentVoltage += thisElement.GetVoltageDrop(thisAddr.dir, true) - thisData.totalCurrent * thisElement.GetResistance(thisAddr.dir);
 						
 						SetInitVoltage(thisAddr, currentVoltage);
+						
+						if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+
+												// Now we can set this to be the voltage at the end of the opposing spoke
+						BranchAddress oppAddr = GetOppositeAddress(thisAddr);
+						SetInitVoltage(oppAddr, currentVoltage);
+						
+						// Now traverse the other spoke to the centre of the next node
+						CircuitElement oppElement = Circuit.singleton.GetElement(new GridPoint(oppAddr.x, oppAddr.y));
+						BranchData oppData = GetBranchData(oppAddr);
+						// Note to change signs on current as we are going agsint the flow
+						currentVoltage += oppElement.GetVoltageDrop(oppAddr.dir, false) + oppData.totalCurrent * oppElement.GetResistance(oppAddr.dir);
+						
+						SetInitVoltage(GetCentreAddress(oppAddr), currentVoltage);
+						
 		
 						if (currentVoltage < minGroupVoltage) minGroupVoltage = currentVoltage;
+						
+						// Check my assumptions about the opposite branch being the next node
+						// DEBUG only
+						BranchAddress testAddr = loops[loopId][(i+1) % loops[loopId].Count];
+						CircuitElement testElement = Circuit.singleton.GetElement(new GridPoint(testAddr.x, testAddr.y));
+						if (testElement != oppElement){
+							Debug.LogError ("Assumptions about opposite branches in the loops as failed");
+						}
 					}
 					++loopIdIndex;
 					// %Length just to stop it over flowing
@@ -1296,8 +1323,14 @@ public class Simulator : MonoBehaviour {
 		
 	}
 	
-	// This is pretty hacky - we shouldn't have to check if this is a wire or not
 	void SetInitVoltage(BranchAddress addr, float currentVoltage){
+		GetBranchData(addr).initialVolt = true;
+		GetBranchData(addr).totalVoltage = currentVoltage;
+	}
+	
+	
+	// This is pretty hacky - we shouldn't have to check if this is a wire or not
+	void SetInitVoltageOld(BranchAddress addr, float currentVoltage){
 		CircuitElement element = Circuit.singleton.GetElement(new GridPoint(addr.x, addr.y));
 		
 		// Check if this is a wire (because then the voltage is the same accross all its connections)
@@ -1386,11 +1419,12 @@ public class Simulator : MonoBehaviour {
 		height = Grid.singleton.gridHeight;
 		
 		loops = new List<List<BranchAddress>>();
-		branchData = new BranchData[width, height, 4];
+		// We have branch data for each direction from a node and its centre (even though the centre only really contains a voltage)
+		branchData = new BranchData[width, height, 5];
 		
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
-				for (int i = 0; i < 4; ++i){
+				for (int i = 0; i < 5; ++i){
 					branchData[x,y,i] = new BranchData();
 				}
 				
@@ -1452,7 +1486,7 @@ public class Simulator : MonoBehaviour {
 	} 
 	
 	void DebugRenderLoops(){
-		float offsetSize = 0.2f;
+		float offsetSize = 0.3f;
 		Vector3[] offsets = new Vector3[4];
 		offsets[Circuit.kUp] = new Vector3(-offsetSize, 0f, 0f);
 		offsets[Circuit.kRight] = new Vector3(0f, offsetSize, 0f);
