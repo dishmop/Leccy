@@ -84,6 +84,7 @@ public class CircuitElementResistor : CircuitElement {
 	
 	// Update is called once per frame
 	void Update () {
+		
 		HandleDisplayMeshChlid();	
 		HandleColorChange();
 		
@@ -105,3 +106,4 @@ public class CircuitElementResistor : CircuitElement {
 		
 	}
 }
+	

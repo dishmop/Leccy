@@ -10,7 +10,8 @@ using System.IO;
 public class CircuitElement : MonoBehaviour {
 	
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
-	public GameObject	anchorPrefab;
+	public GameObject	anchorCentralPrefab;
+	public GameObject	anchorBranchPrefab;
 	public GameObject	capPrefab;
 	
 	public Color		normalColor;
@@ -87,7 +88,7 @@ public class CircuitElement : MonoBehaviour {
 	// 2 - down
 	// 3  - left 
 	public ConnectionBehaviour[] connectionBehaviour = new ConnectionBehaviour[4];
-	public bool[] isBaked = new bool[4];	// if true, then cannot be changed in the editor
+	public bool[] isAnchored = new bool[5];	// if true, then cannot be changed in the editor
 	public bool[] isConnected = new bool[4];
 	
 	
@@ -97,7 +98,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected float 		maxTemp = 45f;
 
-	GameObject[]			anchors = new GameObject[4];
+	GameObject[]			anchors = new GameObject[5];
 	
 	
 	
@@ -108,13 +109,13 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	
-	// Generally is any of our connections are baked, then the component itself is also baked
-	public bool IsComponentBaked(){
-		for (int i = 0; i < 4; ++i){
-			if (isBaked[i]) return true;
-		}
-		return false;
-	}
+//	// Generally is any of our connections are baked, then the component itself is also baked
+//	public bool IsComponentBaked(){
+//		for (int i = 0; i < 4; ++i){
+//			if (isAnchored[i]) return true;
+//		}
+//		return false;
+//	}
 	
 	public virtual void TriggerEmergency(){
 		
@@ -169,7 +170,9 @@ public class CircuitElement : MonoBehaviour {
 		////		bw.Write (orient);
 		for (int i = 0; i < 4; ++i){
 			bw.Write ((int)connectionBehaviour[i]);
-			bw.Write(isBaked[i]);
+		}
+		for (int i = 0; i < 5; ++i){
+			bw.Write(isAnchored[i]);
 		}
 		bw.Write (temperature);
 	}
@@ -179,7 +182,9 @@ public class CircuitElement : MonoBehaviour {
 		//		orient = br.ReadInt32();
 		for (int i = 0; i < 4; ++i){
 			connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
-			isBaked[i] = br.ReadBoolean();
+		}
+		for (int i = 0; i < 5; ++i){
+			isAnchored[i] = br.ReadBoolean();
 		}
 		temperature = br.ReadSingle();
 	}
@@ -224,15 +229,16 @@ public class CircuitElement : MonoBehaviour {
 		
 	
 	public virtual int CalcHash(){
-		return  (isBaked[0] ? 1 << 0 : 0) + 
-			   	(isBaked[1] ? 1 << 1 : 0) + 
-				(isBaked[2] ? 1 << 2 : 0) + 
-				(isBaked[3] ? 1 << 3 : 0) + 
-				(isConnected[0] ?  1 << 4 : 0) + 
-				(isConnected[1] ?  1 << 5 : 0) + 
-				(isConnected[2] ?  1 << 6 : 0) + 
-				(isConnected[3] ?  1 << 7 : 0) + 
-				orient * 1 << 8;
+		return  (isAnchored[0] ? 1 << 0 : 0) + 
+			   	(isAnchored[1] ? 1 << 1 : 0) + 
+				(isAnchored[2] ? 1 << 2 : 0) + 
+				(isAnchored[3] ? 1 << 3 : 0) + 
+				(isAnchored[4] ? 1 << 4 : 0) + 
+				(isConnected[0] ?  1 << 5 : 0) + 
+				(isConnected[1] ?  1 << 6 : 0) + 
+				(isConnected[2] ?  1 << 7 : 0) + 
+				(isConnected[3] ?  1 << 8 : 0) + 
+				orient * 1 << 9;
 	}
 	
 	
@@ -248,35 +254,61 @@ public class CircuitElement : MonoBehaviour {
 	
 	void RebuildAnchorMeshes(){
 		// Destory all the existing Anchor meshes
-		for (int i = 0; i < 4; ++i){
+		for (int i = 0; i < 5; ++i){
 			GameObject.Destroy(anchors[i]);
 		}
-		// Create new ones as needed
-		Vector3[] positions = new Vector3[4];
-		positions[0] = IsConnected(0) ? new Vector3(-0.5f, 0.5f, 0f) : new Vector3(0f, 0.5f, 0f);
-		positions[1] = IsConnected(1) ? new Vector3(0.5f, 0.5f, 0f) : new Vector3(0.5f, 0f, 0f);
-		positions[2] = IsConnected(2) ? new Vector3(0.5f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
-		positions[3] = IsConnected(3) ? new Vector3(-0.5f, -0.5f, 0f) : new Vector3(-0.5f, 0f, 0f);
 		
-		Quaternion[] orientations = new Quaternion[4];
-		orientations[0] = IsConnected(0)  ? Quaternion.Euler(0, 0, 270) : Quaternion.Euler(0, 0, 180);
-		orientations[1] = IsConnected(1)  ? Quaternion.Euler(0, 0, 180) : Quaternion.Euler(0, 0, 90);
-		orientations[2] = IsConnected(2)  ? Quaternion.Euler(0, 0, 90) : Quaternion.Euler(0, 0, 0);
-		orientations[3] = IsConnected(3)  ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 0, 270);
-		
+		if (isAnchored[Circuit.kCentre]){
+			anchors[Circuit.kCentre] = Instantiate(
+			anchorCentralPrefab, 
+			new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
+			Quaternion.identity) as GameObject;
+			anchors[Circuit.kCentre].transform.parent = transform;
+			
+		}
+		float[] angles = new float[4];
+		angles[0] = 0;
+		angles[1] = -90;
+		angles[2] = 180;
+		angles[3] = 90;
 		for (int i = 0; i < 4; ++i){
-			if (isBaked[i]){
+			if (isAnchored[i]){
+				anchors[i] = Instantiate(
+					anchorBranchPrefab, 
+					new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
+					Quaternion.Euler(0, 0, angles[i])) as GameObject;
+				anchors[i].transform.parent = transform;
 				
-				GameObject newElement = Instantiate(
-					anchorPrefab, 
-					new Vector3(transform.position.x + positions[i].x, transform.position.y + positions[i].y, anchorPrefab.transform.position.z), 
-					orientations[i])
-					as GameObject;
-				newElement.transform.parent = transform;	
-				anchors[i] = newElement;
 			}
 		}
 			
+		return;
+//		// Create new ones as needed
+//		Vector3[] positions = new Vector3[4];
+//		positions[0] = IsConnected(0) ? new Vector3(-0.5f, 0.5f, 0f) : new Vector3(0f, 0.5f, 0f);
+//		positions[1] = IsConnected(1) ? new Vector3(0.5f, 0.5f, 0f) : new Vector3(0.5f, 0f, 0f);
+//		positions[2] = IsConnected(2) ? new Vector3(0.5f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
+//		positions[3] = IsConnected(3) ? new Vector3(-0.5f, -0.5f, 0f) : new Vector3(-0.5f, 0f, 0f);
+//		
+//		Quaternion[] orientations = new Quaternion[4];
+//		orientations[0] = IsConnected(0)  ? Quaternion.Euler(0, 0, 270) : Quaternion.Euler(0, 0, 180);
+//		orientations[1] = IsConnected(1)  ? Quaternion.Euler(0, 0, 180) : Quaternion.Euler(0, 0, 90);
+//		orientations[2] = IsConnected(2)  ? Quaternion.Euler(0, 0, 90) : Quaternion.Euler(0, 0, 0);
+//		orientations[3] = IsConnected(3)  ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 0, 270);
+//		
+//		for (int i = 0; i < 4; ++i){
+//			if (isAnchored[i]){
+//				
+//				GameObject newElement = Instantiate(
+//					anchorPrefab, 
+//					new Vector3(transform.position.x + positions[i].x, transform.position.y + positions[i].y, anchorPrefab.transform.position.z), 
+//					orientations[i])
+//					as GameObject;
+//				newElement.transform.parent = transform;	
+//				anchors[i] = newElement;
+//			}
+//		}
+//			
 	}
 		
 		
@@ -397,10 +429,10 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected void DestorySelf(){
 		Debug.Log("Destroy self : " + GetComponent<SerializationID>().id);
-		isBaked[0] = false;
-		isBaked[1] = false;
-		isBaked[2] = false;
-		isBaked[3] = false;
+		isAnchored[0] = false;
+		isAnchored[1] = false;
+		isAnchored[2] = false;
+		isAnchored[3] = false;
 		RemoveConnections();
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);

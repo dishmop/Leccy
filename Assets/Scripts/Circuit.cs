@@ -165,7 +165,7 @@ public class Circuit : MonoBehaviour {
 					GridPoint thisPoint = new GridPoint(x,y);
 					if (ElementExists(thisPoint)){
 						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isBaked[i] = GetElement(thisPoint).IsConnected(i);
+							GetElement(thisPoint).isAnchored[i] = GetElement(thisPoint).IsConnected(i);
 						}
 					}
 					
@@ -182,7 +182,7 @@ public class Circuit : MonoBehaviour {
 					// If we have an element here, then bake all connections
 					if (ElementExists(thisPoint)){
 						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isBaked[i] = true;
+							GetElement(thisPoint).isAnchored[i] = true;
 						}
 					}
 					
@@ -198,7 +198,7 @@ public class Circuit : MonoBehaviour {
 					GridPoint thisPoint = new GridPoint(x,y);
 					if (ElementExists(thisPoint)){
 						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isBaked[i] = false;
+							GetElement(thisPoint).isAnchored[i] = false;
 							
 						}
 					}
