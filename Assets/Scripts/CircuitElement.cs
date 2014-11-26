@@ -339,6 +339,10 @@ public class CircuitElement : MonoBehaviour {
 		}
 		return 0f;
 	}
+	
+	public virtual float GetUnconnectedVoltage(int dir){
+		return 0f;
+	}
 
 	
 	public static int CalcInvDir(int dir){

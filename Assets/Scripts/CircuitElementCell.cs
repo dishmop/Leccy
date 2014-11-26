@@ -61,6 +61,15 @@ public class CircuitElementCell : CircuitElement {
 		return 0f;
 	}	
 	
+	public override float GetUnconnectedVoltage(int dir){
+		// Ony return a value if we are being asked about the spoke that the voltage drop is on
+		if (dir == ModelDir2WorldDir(Circuit.kUp)){
+			return voltage;
+		}
+		return 0f;
+	}
+	
+	
 	
 
 	public override void RebuildMesh(){

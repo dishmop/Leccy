@@ -1804,7 +1804,8 @@ public class Simulator : MonoBehaviour {
 		for (int x = 0; x < width; ++x){
 			for (int y = 0; y < height; ++y){
 				GridPoint thisPoint = new GridPoint(x, y);
-				if (Circuit.singleton.ElementExists(thisPoint)){
+				CircuitElement element = Circuit.singleton.GetElement(thisPoint);
+				if (element != null){
 					// Get the 
 					List<MeshRenderer> meshes = new List<MeshRenderer>();
 					FindMeshRenderers(Circuit.singleton.GetGameObject (thisPoint), meshes);
@@ -1813,32 +1814,25 @@ public class Simulator : MonoBehaviour {
 						float componentVolage = 0f;
 						for (int i = 0; i < 4; ++i){
 							BranchData data = GetBranchData(new BranchAddress(x, y, i));
+							float thisVoltage = 0;
+							float thisCurrent = 0;
+							int orient = Circuit.singleton.GetElement(thisPoint).orient;
 							if (data.traversed){
-								int orient = Circuit.singleton.GetElement(thisPoint).orient;
-								mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * data.totalCurrent);
-								mesh.materials[0].SetFloat ("_StaticSpeed" + ((i+ orient) % 4), 0.3f + 0.8f * Mathf.Abs(currentMulVis * data.totalCurrent));
-								
-								//
-								float index = 0f;
-								if (!float.IsNaN(data.totalVoltage)){
-									index = (voltageColors.Length - 2f) * data.totalVoltage / maxVoltVis;
-								}
-								
-								// clamp to our range
-								if (index > voltageColors.Length-2.001f) index = voltageColors.Length-2.001f;
-//								int indexInt = (int)index;
-//								float frac = index - indexInt;
-//								Color useColOuter = Color.Lerp (voltageColors[indexInt], voltageColors[indexInt+1], frac);
-//								Color boosterCol = new Color(1.2f, 1.2f, 1.2f, 1f);
-//								Color useColCentre = boosterCol * Color.Lerp (voltageColors[indexInt+1], voltageColors[indexInt+2], frac);
-								//mesh.materials[0].SetFloat ("_Seperation" + ((i+ orient) % 4),-currentMulVis * data.totalCurrent);
-								//mesh.materials[0].SetColor ("_CentreColor" + ((i+ orient) % 4), useColCentre);
-								//mesh.materials[0].SetColor ("_OuterColor" + ((i+ orient) % 4),  useColOuter);
-								mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  data.totalVoltage);
-								
-								// For testing 3D visualisation
-								componentVolage = data.totalVoltage;
+								thisVoltage = data.totalVoltage;
+								thisCurrent = data.totalCurrent;
 							}
+							// If this branch has not been traversed, but there is an element here, then this element is
+							// not connected to antthing via this branch - so we ask the element what the numbers should be
+							else{
+								thisVoltage = element.GetUnconnectedVoltage(i);
+								thisCurrent = 0;
+							}
+							// Now set up the material to visualise thse numbers
+							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * thisCurrent);
+							mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  thisVoltage);
+							
+							// For testing 3D visualisation
+							componentVolage = data.totalVoltage;
 							if (enableVoltsgeAsHeight){
 								if (float.IsNaN(componentVolage) || float.IsInfinity(componentVolage)) componentVolage = 0f;
 								

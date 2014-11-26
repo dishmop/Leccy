@@ -73,7 +73,7 @@ Material:
       data:
         first:
           name: _Voltage0
-        second: .589999974
+        second: 0
       data:
         first:
           name: _Voltage1
