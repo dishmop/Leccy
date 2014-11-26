@@ -8,11 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  - 82: {fileID: 8200000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: ResistorElement
+  m_Name: AnchorElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,89 +29,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!82 &8200000
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 0e9f3c5d1c9f345638822713a3e924e4, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: .25
-  m_Pitch: 0
-  Loop: 1
-  Mute: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
 --- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afd705d6f32d44f06a1205883041cbbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orient: 0
-  anchorCentralPrefab: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907, type: 2}
-  anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
-  capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
-  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  errorColor: {r: 1, g: 0, b: 0, a: 1}
-  uiType: 2
-  connectionBehaviour: 00000000000000000000000000000000
-  isAnchored: 0000000000
-  isConnected: 00000000
-  resistorPrefab: {fileID: 100008, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
-  resistance: 1
---- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -123,7 +40,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ca33ba8d28149d1b0f3936f4447dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Resistor
+  id: Anchor
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e77d094670f41cfacbae662f02dcfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orient: 0
+  anchorCentralPrefab: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907, type: 2}
+  anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
+  capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
+  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
+  normalColor: {r: 1, g: 1, b: 1, a: 0}
+  errorColor: {r: 1, g: 0, b: 0, a: 0}
+  uiType: 3
+  connectionBehaviour: 00000000000000000000000000000000
+  isAnchored: 0000000000
+  isConnected: 00000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -131,8 +131,8 @@ public class UI : MonoBehaviour {
 			case CircuitElement.UIType.kDraw:
 				HandleDrawnElementInput();
 				break;
-			case CircuitElement.UIType.kErase:
-				HandleEraserElementInput();
+			case CircuitElement.UIType.kModify:
+				HandleModifyElementInput();
 				break;
 		}
 		lastPoint = thisPoint;
@@ -296,14 +296,14 @@ public class UI : MonoBehaviour {
 		}
 	}
 	
-	void PlaceElement(GameObject newElement, GridPoint thisPoint){
+	public void PlaceElement(GameObject newElement, GridPoint thisPoint){
 		Circuit.singleton.PlaceElement(newElement, thisPoint);
 		placeElementSound.Play ();
 		ElementFactory.singleton.DecrementStock(newElement);
 	
 	}
 	
-	void RemoveElement(GameObject existingElement){
+	public void RemoveElement(GameObject existingElement){
 		ElementFactory.singleton.IncrementStock(existingElement);
 		GridPoint point = existingElement.GetComponent<CircuitElement>().GetGridPoint();
 		existingElement.GetComponent<CircuitElement>().RemoveConnections();
@@ -311,23 +311,11 @@ public class UI : MonoBehaviour {
 		Circuit.singleton.RemoveElement(point);
 	}
 	
-	void HandleEraserElementInput(){
+	void HandleModifyElementInput(){
 	
-		// Test if we are able to erasing the thing if we were t press the button
-		CircuitElement thisElement = null;
-		CircuitElement otherElement = null;
-		
-		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPoint);
-		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPoint);
-
-		if (thisElement != null && otherElement != null){
-			bool ok1 = thisElement.IsAmenableToSuggestion(otherElement);
-			bool ok2 = otherElement.IsAmenableToSuggestion(thisElement);
-			ghostElement.GetComponent<CircuitElement>().SetErrorState(!ok1 || !ok2);
-		}
-		else{
-			ghostElement.GetComponent<CircuitElement>().SetErrorState(false);
-		}
+		CircuitElement ghostCircEl = ghostElement.GetComponent<CircuitElement>();
+		bool error = !ghostCircEl.CanModify(thisPoint, otherPoint);
+		ghostCircEl.SetErrorState(error);
 		
 		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
 		
@@ -344,14 +332,11 @@ public class UI : MonoBehaviour {
 		
 		// If clicking a connection - then simple request that the connection be removed
 		if (buttonIsClicked && otherPoint != null){
-			if (thisElement != null && otherElement != null){
-				bool ok1 = thisElement.SuggestUninvite(otherElement);
-				bool ok2 = otherElement.SuggestUninvite(thisElement);
-				if (ok1 && ok2)
-					removeElementSound.Play ();
-				else
-					failSound.Play ();
-			}
+			bool ok = ghostCircEl.Modify(thisPoint, otherPoint);
+			if (ok)
+				removeElementSound.Play ();
+			else
+				failSound.Play ();
 			
 		}
 		// Otherwise, remove the component itself
@@ -386,12 +371,8 @@ public class UI : MonoBehaviour {
 		if (gridPath != null)
 		{
 			for (int i = 0; i < gridPath.GetLength(0); ++i){
-				GameObject existingElement = Circuit.singleton.GetGameObject(gridPath[i]);
-								
-				// If there is one there already
-				if (existingElement != null){
-					RemoveElement(existingElement);
-				}
+				ghostCircEl.Modify (gridPath[i]);
+
 			}
 			removeElementSound.Play ();
 			

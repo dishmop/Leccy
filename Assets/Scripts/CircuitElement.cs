@@ -13,16 +13,19 @@ public class CircuitElement : MonoBehaviour {
 	public GameObject	anchorCentralPrefab;
 	public GameObject	anchorBranchPrefab;
 	public GameObject	capPrefab;
+	public GameObject	emptyGO;
 	
 	public Color		normalColor;
 	public Color		errorColor;
 	
-	// Setting the position
 	protected GameObject	displayMesh;
-	protected bool			isOnCircuit = false;
+	protected GameObject	anchorMesh;
 	
 	
 	protected float			temperature = 0;
+	
+	bool			isOnCircuit = false;
+	
 	// For setting alpha and color values
 	float 	alpha = 1f;
 	bool 	dirtyAlpha = false;
@@ -39,7 +42,7 @@ public class CircuitElement : MonoBehaviour {
 		kNone,
 		kDraw,			// Lay them out in lines like drawing with a pen
 		kPlace,			// Place sinlge elements down one at a time
-		kErase,			// The eraser is different enough to warrent its own code
+		kModify,		// Change the elements which are there (e.g. remove them or add anchors)
 		kNumTypes   	// Useufl for iterating over the,
 	};
 	
@@ -127,9 +130,26 @@ public class CircuitElement : MonoBehaviour {
 		return true;
 	}
 	
+	// Return true if we are a modifying circuit element (like anchors or eraser)
+	// and we are able t modidify in our current state
+	public virtual bool CanModify(GridPoint thisPt, GridPoint otherPt){
+		return false;
+	}
 	
 	
+	// Return true if we are a modifying circuit element (like anchors or eraser)
+	// and we are able t modidify in our current state
+	// Ths function actually does the modifying though
+	public virtual bool Modify(GridPoint thisPt, GridPoint otherPt){
+		return false;
+	}	
 	
+	// Return true if we are a modifying circuit element (like anchors or eraser)
+	// and we are able t modidify in our current state
+	// Ths function actually does the modifying though
+	public virtual bool Modify(GridPoint thisPt){
+		return false;
+	}		
 	
 	// The prefab to use in the UI (each element may have several meshes - need to just show one in the UI)
 	public  GameObject GetDisplayMesh(){
@@ -257,13 +277,17 @@ public class CircuitElement : MonoBehaviour {
 		for (int i = 0; i < 5; ++i){
 			GameObject.Destroy(anchors[i]);
 		}
+		GameObject.Destroy(anchorMesh);
+		
+		anchorMesh = GameObject.Instantiate(emptyGO, transform.position, transform.rotation) as GameObject;
+		anchorMesh.transform.parent = transform;
 		
 		if (isAnchored[Circuit.kCentre]){
 			anchors[Circuit.kCentre] = Instantiate(
 			anchorCentralPrefab, 
 			new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
 			Quaternion.identity) as GameObject;
-			anchors[Circuit.kCentre].transform.parent = transform;
+			anchors[Circuit.kCentre].transform.parent = anchorMesh.transform;
 			
 		}
 		float[] angles = new float[4];
@@ -277,38 +301,13 @@ public class CircuitElement : MonoBehaviour {
 					anchorBranchPrefab, 
 					new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
 					Quaternion.Euler(0, 0, angles[i])) as GameObject;
-				anchors[i].transform.parent = transform;
+				anchors[i].transform.parent = anchorMesh.transform;
 				
 			}
 		}
 			
 		return;
-//		// Create new ones as needed
-//		Vector3[] positions = new Vector3[4];
-//		positions[0] = IsConnected(0) ? new Vector3(-0.5f, 0.5f, 0f) : new Vector3(0f, 0.5f, 0f);
-//		positions[1] = IsConnected(1) ? new Vector3(0.5f, 0.5f, 0f) : new Vector3(0.5f, 0f, 0f);
-//		positions[2] = IsConnected(2) ? new Vector3(0.5f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
-//		positions[3] = IsConnected(3) ? new Vector3(-0.5f, -0.5f, 0f) : new Vector3(-0.5f, 0f, 0f);
-//		
-//		Quaternion[] orientations = new Quaternion[4];
-//		orientations[0] = IsConnected(0)  ? Quaternion.Euler(0, 0, 270) : Quaternion.Euler(0, 0, 180);
-//		orientations[1] = IsConnected(1)  ? Quaternion.Euler(0, 0, 180) : Quaternion.Euler(0, 0, 90);
-//		orientations[2] = IsConnected(2)  ? Quaternion.Euler(0, 0, 90) : Quaternion.Euler(0, 0, 0);
-//		orientations[3] = IsConnected(3)  ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 0, 270);
-//		
-//		for (int i = 0; i < 4; ++i){
-//			if (isAnchored[i]){
-//				
-//				GameObject newElement = Instantiate(
-//					anchorPrefab, 
-//					new Vector3(transform.position.x + positions[i].x, transform.position.y + positions[i].y, anchorPrefab.transform.position.z), 
-//					orientations[i])
-//					as GameObject;
-//				newElement.transform.parent = transform;	
-//				anchors[i] = newElement;
-//			}
-//		}
-//			
+	
 	}
 		
 		
@@ -416,6 +415,10 @@ public class CircuitElement : MonoBehaviour {
 	public virtual void RebuildMesh(){
 		HandleDisplayMeshChlid();
 		RebuildAnchorMeshes();
+		
+		// Ensure any colours get applied correctly afterwards
+		dirtyAlpha = true;
+		dirtyColor = true;
 	}
 	
 

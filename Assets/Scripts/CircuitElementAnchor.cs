@@ -1,41 +1,38 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class CircuitElementEraser : CircuitElement {
-
-	public GameObject 	eraserPrefab;
-
+public class CircuitElementAnchor : CircuitElement {
 	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
 	
 	
 	
-
+	
 	public void Start(){
-		Debug.Log ("CircuitElementEraser:Start()");
+		Debug.Log ("CircuitElementAnchor:Start()");
 	}
 	
 	public void Awake(){
-		CreateDisplayMesh();	
+		RebuildMesh();
 	}
-
-
+	
+	
 	public override string GetUIString(){
-		return "Eraser";
+		return "Anchor";
 	}	
-
 	
 	
-
+	
+	
 	public override bool IsWired(){
 		return false;
 	}
 	
-
+	
 	// Some elements have the notion of another grid point which they use for UI purposes
 	public override void SetOtherGridPoint(GridPoint otherPoint){
 		if (lastOtherPoint == null || !lastOtherPoint.IsEqual(otherPoint)){
@@ -46,44 +43,54 @@ public class CircuitElementEraser : CircuitElement {
 			else{
 				this.otherPoint = null;
 			}
-				
+			
 			RebuildMesh();
 		}
 	}	
-
 	
-	void CreateDisplayMesh(){
-		Destroy(GetDisplayMesh ());
-		displayMesh = Instantiate(eraserPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
-		displayMesh.name = displayMeshName;
-		displayMesh.transform.parent = transform;
+	
 
-		
-		RebuildMesh();	
-	}
 	
 	public override void RebuildMesh(){
-		base.RebuildMesh();
-		
-		
-		if (thisPoint != null && otherPoint != null){
-			Vector3 newLocalPos = new Vector3((otherPoint.x - thisPoint.x) * 0.5f, (otherPoint.y - thisPoint.y) * 0.5f, 0f);
-			displayMesh.transform.localPosition = newLocalPos;
-			
-			// Squish it a bit
-			if (MathUtils.FP.Feq(thisPoint.x, otherPoint.x)){
-				displayMesh.transform.localScale = new Vector3(0.5f, 1f, 1f);
+	
+		// Set up the Anchors as they should be
+		if (thisPoint == null){
+			for (int i = 0; i < 5; ++i){
+				isAnchored[i] = true;
+			}
+		}
+		else{
+			for (int i = 0; i < 5; ++i){
+				isAnchored[i] = false;
+			}	
+			if (otherPoint == null){
+				isAnchored[Circuit.kCentre] = true;
+				
 			}
 			else{
-				displayMesh.transform.localScale = new Vector3(1f, 0.5f, 1f);
+				// Get which direction the other point is in
+				int dir = Circuit.CalcNeighbourDir(thisPoint, otherPoint);
+				// This is a hack - it should never be -1
+				if (dir != -1){
+					isAnchored[dir] = true;
+				}
 			}
-		}		
-		else{
-			displayMesh.transform.localPosition = new Vector3(0, 0, 0);
-			displayMesh.transform.localScale = new Vector3(1f, 1f, 1f);
 		}
-		SetColor (isInErrorState ? errorColor : normalColor);
-	
+		base.RebuildMesh();
+		
+		// Copy the mesh t the diusplay mesh (so it can be alphed out)
+		Destroy (displayMesh);
+		displayMesh = Instantiate(anchorMesh, transform.position, transform.rotation) as GameObject;
+		displayMesh.transform.parent = transform;
+		displayMesh.name = displayMeshName;
+		
+		// Now remove the anchors again
+		for (int i = 0; i < 5; ++i){
+			isAnchored[i] = false;
+		}	
+		
+		base.RebuildMesh();	
+		
 	}
 	
 	
@@ -92,18 +99,6 @@ public class CircuitElementEraser : CircuitElement {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	public override bool CanModify(GridPoint thisPt, GridPoint otherPt){
-		// Test if we are able to erasing the thing if we were t press the button
-		CircuitElement thisElement = null;
-		CircuitElement otherElement = null;
-		
-		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPt);
-		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
-		
-		if (thisElement != null && otherElement != null){
-			bool ok1 = thisElement.IsAmenableToSuggestion(otherElement);
-			bool ok2 = otherElement.IsAmenableToSuggestion(thisElement);
-			return (ok1 && ok2);
-		}
 		return true;
 	}
 	
@@ -112,16 +107,25 @@ public class CircuitElementEraser : CircuitElement {
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
 	public override bool Modify(GridPoint thisPt, GridPoint otherPt){
+	
+		// Work out which direction the other point is in
+		int thisDir = Circuit.CalcNeighbourDir(thisPt, otherPt);
+		int otherDir = CalcInvDir(thisDir);
+		
 		CircuitElement thisElement = null;
 		CircuitElement otherElement = null;
 		
 		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPt);
 		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
-
-		if (thisElement != null && otherElement != null){
-			bool ok1 = thisElement.SuggestUninvite(otherElement);
-			bool ok2 = otherElement.SuggestUninvite(thisElement);
-			return (ok1 && ok2);
+		
+		if (thisElement){
+			thisElement.isAnchored[thisDir] = true;
+			thisElement.RebuildMesh();
+		}
+		if (otherElement){
+			otherElement.isAnchored[otherDir] = true;
+			otherElement.RebuildMesh();
+			
 		}
 		return true;
 	}	
@@ -130,15 +134,17 @@ public class CircuitElementEraser : CircuitElement {
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
 	public override bool Modify(GridPoint thisPt){
-		GameObject existingElement = Circuit.singleton.GetGameObject(thisPt);
+		CircuitElement existingElement = Circuit.singleton.GetElement(thisPt);
 		
 		// If there is one there already
 		if (existingElement != null){
 			
-			UI.singleton.RemoveElement(existingElement);
+			existingElement.isAnchored[Circuit.kCentre] = true;
+			existingElement.RebuildMesh();
 		}
 		return true;
-	}
+	}	
+	
 	
 	
 	// Update is called once per frame
@@ -146,7 +152,7 @@ public class CircuitElementEraser : CircuitElement {
 		HandleDisplayMeshChlid();
 		HandleColorChange();
 		
-
+		
 		
 	}
 }

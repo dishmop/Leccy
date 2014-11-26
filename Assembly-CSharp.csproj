@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Circuit.cs" />
      <Compile Include="Assets\Scripts\CircuitElement.cs" />
      <Compile Include="Assets\Scripts\CircuitElementAmmeter.cs" />
+     <Compile Include="Assets\Scripts\CircuitElementAnchor.cs" />
      <Compile Include="Assets\Scripts\CircuitElementCell.cs" />
      <Compile Include="Assets\Scripts\CircuitElementEraser.cs" />
      <Compile Include="Assets\Scripts\CircuitElementResistor.cs" />
