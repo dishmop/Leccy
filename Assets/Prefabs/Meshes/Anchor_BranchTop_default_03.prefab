@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 95: {fileID: 9500000}
   m_Layer: 0
-  m_Name: Anchor_BranchTop_03
+  m_Name: Anchor_BranchTop_default_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +56,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: dfb3b60a4efa94852aba633f3b8d771c, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 1e29b0d36e2b443c8a006512465a9e45, type: 3}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 3
@@ -65,7 +65,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: dfb3b60a4efa94852aba633f3b8d771c, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 1e29b0d36e2b443c8a006512465a9e45, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
