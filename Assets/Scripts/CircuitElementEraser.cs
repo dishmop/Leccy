@@ -7,6 +7,8 @@ using System.IO;
 public class CircuitElementEraser : CircuitElement {
 
 	public GameObject 	eraserPrefab;
+	public Color		normalColor;
+	public Color		errorColor;
 	
 	
 	GridPoint			otherPoint;
@@ -69,10 +71,20 @@ public class CircuitElementEraser : CircuitElement {
 		if (thisPoint != null && otherPoint != null){
 			Vector3 newLocalPos = new Vector3((otherPoint.x - thisPoint.x) * 0.5f, (otherPoint.y - thisPoint.y) * 0.5f, 0f);
 			displayMesh.transform.localPosition = newLocalPos;
+			
+			// Squish it a bit
+			if (MathUtils.FP.Feq(thisPoint.x, otherPoint.x)){
+				displayMesh.transform.localScale = new Vector3(0.5f, 1f, 1f);
+			}
+			else{
+				displayMesh.transform.localScale = new Vector3(1f, 0.5f, 1f);
+			}
 		}		
 		else{
 			displayMesh.transform.localPosition = new Vector3(0, 0, 0);
+			displayMesh.transform.localScale = new Vector3(1f, 1f, 1f);
 		}
+		displayMesh.renderer.material.color = isInErrorState ? errorColor : normalColor;
 		
 	}
 	

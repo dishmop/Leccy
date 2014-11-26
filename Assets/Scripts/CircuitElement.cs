@@ -74,12 +74,22 @@ public class CircuitElement : MonoBehaviour {
 	
 	
 
-	protected GridPoint	thisPoint;
-
-	protected float 	maxTemp = 45f;
-
-	GameObject[]	anchors = new GameObject[4];
+	protected GridPoint		thisPoint;
+	protected bool 			isInErrorState = false;
 	
+	protected float 		maxTemp = 45f;
+
+	GameObject[]			anchors = new GameObject[4];
+	
+	
+	
+	public void SetErrorState(bool isError){
+		isInErrorState = isError;
+		if (isError){
+			Debug.Log("UP");
+		}
+		RebuildMesh();
+	}
 	
 	
 	// Generally is any of our connections are baked, then the component itself is also baked
@@ -181,8 +191,6 @@ public class CircuitElement : MonoBehaviour {
 		return (modelDir + 6-orient) % 4;
 	}
 	
-	
-	
 	public virtual bool SuggestInvite(CircuitElement otherElement){
 		return false;
 	}
@@ -190,7 +198,14 @@ public class CircuitElement : MonoBehaviour {
 	
 	public virtual bool SuggestUninvite(CircuitElement otherElement){
 		return false;
-	}		
+	}
+	
+	
+	// Whether the previous two functions would return true if called
+	public virtual bool IsAmenableToSuggestion(CircuitElement otherElement){
+		return false;
+	}
+		
 	
 	public virtual int CalcHash(){
 		return  (isBaked[0] ? 1 << 0 : 0) + 

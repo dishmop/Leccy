@@ -46,6 +46,10 @@ public class CircuitElementWire : CircuitElement {
 		return true;
 	}	
 	
+	// Whether the previous two functions would return true if called
+	public override bool IsAmenableToSuggestion(CircuitElement otherElement){
+		return true;
+	}
 	
 	
 	override public void Save(BinaryWriter bw){

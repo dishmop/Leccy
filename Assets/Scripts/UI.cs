@@ -5,6 +5,10 @@ using System.Collections;
 public class UI : MonoBehaviour {
 
 	public static UI singleton;
+	
+	public AudioSource placeElementSound;
+	public AudioSource removeElementSound;
+	public AudioSource failSound;
 
 	string 		selectedPrefabId;
 	GameObject	ghostElement;
@@ -199,12 +203,12 @@ public class UI : MonoBehaviour {
 						Destroy (Circuit.singleton.GetGameObject(gridPath[i]));
 						Circuit.singleton.RemoveElement(gridPath[i]);
 						GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
-						Circuit.singleton.PlaceElement(newElement, gridPath[i]);
+						PlaceElement(newElement, gridPath[i]);
 					}
 				}
 				else{
 					GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
-					Circuit.singleton.PlaceElement(newElement, gridPath[i]);
+					PlaceElement(newElement, gridPath[i]);
 				}
 				CircuitElement thisElement = Circuit.singleton.GetElement(gridPath[i]);
 				AttemptToReestablishConnections(thisElement, oldConnections);
@@ -253,30 +257,50 @@ public class UI : MonoBehaviour {
 					Destroy (Circuit.singleton.GetGameObject(thisPoint));
 					Circuit.singleton.RemoveElement(thisPoint);
 					GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
-					Circuit.singleton.PlaceElement(newElement, thisPoint);
+					PlaceElement(newElement, thisPoint);
 					AttemptToReestablishConnections(newElement.GetComponent<CircuitElement>(), oldConnections);
 					
 				}
 			}
 			else{
 				GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
-				Circuit.singleton.PlaceElement(newElement, thisPoint);
+				PlaceElement(newElement, thisPoint);
 			}
 			
 		}
 	}
 	
+	void PlaceElement(GameObject newElement, GridPoint thisPoint){
+		Circuit.singleton.PlaceElement(newElement, thisPoint);
+		placeElementSound.Play ();
+	
+	}
+	
 	void HandleEraserElementInput(){
 	
+		// Test if we are able to erasing the thing if we were t press the button
+		CircuitElement thisElement = null;
+		CircuitElement otherElement = null;
+		
+		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPoint);
+		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPoint);
+
+		if (thisElement != null && otherElement != null){
+			bool ok1 = thisElement.IsAmenableToSuggestion(otherElement);
+			bool ok2 = otherElement.IsAmenableToSuggestion(thisElement);
+			ghostElement.GetComponent<CircuitElement>().SetErrorState(!ok1 || !ok2);
+		}
+		else{
+			ghostElement.GetComponent<CircuitElement>().SetErrorState(false);
+		}
 		
 		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
 		
-		// If the buttons is not down, there is nothing to do
+		// If the buttons is not down, there is nothing more to do
 		if (thisPoint == null || !buttonIsHeld){
 			return;
 		}
 	
-				
 		
 		// Check if we have only just pressed it down
 		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
@@ -285,12 +309,13 @@ public class UI : MonoBehaviour {
 		
 		// If clicking a connection - then simple request that the connection be removed
 		if (buttonIsClicked && otherPoint != null){
-			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
-			CircuitElement otherElement = Circuit.singleton.GetElement(otherPoint);
-			
 			if (thisElement != null && otherElement != null){
-				thisElement.SuggestUninvite(otherElement);
-				otherElement.SuggestUninvite(thisElement);
+				bool ok1 = thisElement.SuggestUninvite(otherElement);
+				bool ok2 = otherElement.SuggestUninvite(thisElement);
+				if (ok1 && ok2)
+					removeElementSound.Play ();
+				else
+					failSound.Play ();
 			}
 			
 		}
@@ -335,6 +360,7 @@ public class UI : MonoBehaviour {
 					Circuit.singleton.RemoveElement(gridPath[i]);
 				}
 			}
+			removeElementSound.Play ();
 			
 		}
 		

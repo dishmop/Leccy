@@ -42,11 +42,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orient: 0
   anchorPrefab: {fileID: 0}
+  capPrefab: {fileID: 0}
   uiType: 3
   connectionBehaviour: 00000000000000000000000000000000
   isBaked: 00000000
   isConnected: 00000000
   eraserPrefab: {fileID: 100000, guid: bc03769f2c7374c5893f65b8e0d89798, type: 2}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  errorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

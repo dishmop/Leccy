@@ -132,7 +132,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 5bab749b9e92c46e3b687061cc91910b, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: .25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -190,8 +190,8 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 3ed93d7d1a92b4a4f908af05a7ba875c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: .25
+  m_Pitch: .5
   Loop: 0
   Mute: 0
   Priority: 128
