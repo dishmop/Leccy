@@ -117,7 +117,7 @@ public class UI : MonoBehaviour {
 		// Deal with the ghost element
 		ghostElement.SetActive(thisPoint != null);
 		CircuitElement ghostElementComp = ghostElement.GetComponent<CircuitElement>();
-		ghostElementComp.SetGridPoint(thisPoint, -5);
+		ghostElementComp.SetGridPoint(thisPoint, -3);
 		ghostElementComp.RebuildMesh();
 		ghostElementComp.SetOtherGridPoint(otherPoint);		
 		
@@ -329,6 +329,7 @@ public class UI : MonoBehaviour {
 		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
 		
 		GridPoint[] gridPath = null;
+		bool ignoreFirst = false;
 		
 		// If clicking a connection - then simple request that the connection be removed
 		if (buttonIsClicked && otherPoint != null){
@@ -351,12 +352,7 @@ public class UI : MonoBehaviour {
 			// If our last thing was to delete a connection, then check fi the first two
 			// elements of this list are that connection - if they are then don;t delete the first one
 			if (lastOtherPoint != null && lastOtherPoint.IsEqual(gridPath[1]) && lastPoint.IsEqual(gridPath[0])){
-				int numElements = gridPath.GetLength(0);
-				GridPoint[] newPath = new GridPoint[numElements-1];
-				for (int i = 0; i < numElements-1; ++i){
-					newPath[i] = gridPath[i+1];
-				}
-				gridPath = newPath;
+				ignoreFirst = true;
 				
 			}
 			
@@ -370,8 +366,16 @@ public class UI : MonoBehaviour {
 		
 		if (gridPath != null)
 		{
-			for (int i = 0; i < gridPath.GetLength(0); ++i){
-				ghostCircEl.Modify (gridPath[i]);
+			int pathLength = gridPath.GetLength(0);
+			for (int i = 0; i < pathLength; ++i){
+				bool ignoreThis = (i == 0 && ignoreFirst);
+				if (!ignoreThis){
+					ghostCircEl.Modify (gridPath[i]);
+				}
+				// Show do the connections in the path too 
+				if (i < pathLength-1){
+					ghostCircEl.Modify (gridPath[i], gridPath[i+1]);
+				}
 
 			}
 			removeElementSound.Play ();

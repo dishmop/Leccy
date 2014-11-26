@@ -6,8 +6,14 @@ using System.IO;
 
 public class CircuitElementAnchor : CircuitElement {
 	
+	// The ones to use for the UI button
+	public GameObject	anchorCentralPrefabUI;
+	public GameObject	anchorBranchPrefabUI;
+	public GameObject	emptyGO;
+	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
+	Circuit.AnchorData	anchorData;
 	
 	
 	
@@ -17,7 +23,11 @@ public class CircuitElementAnchor : CircuitElement {
 	}
 	
 	public void Awake(){
+		anchorData = new Circuit.AnchorData();
+		
 		RebuildMesh();
+		
+
 	}
 	
 	
@@ -49,47 +59,69 @@ public class CircuitElementAnchor : CircuitElement {
 	}	
 	
 	
-
+	public override void SetGridPoint(GridPoint thisPoint){
+		base.SetGridPoint(thisPoint);
+		RebuildMesh();
+	}
 	
 	public override void RebuildMesh(){
 	
-		// Set up the Anchors as they should be
+		// Is in the UI
 		if (thisPoint == null){
 			for (int i = 0; i < 5; ++i){
-				isAnchored[i] = true;
+				anchorData.isAnchored[i] = true;
 			}
 		}
+		// Otherwise
 		else{
 			for (int i = 0; i < 5; ++i){
-				isAnchored[i] = false;
-			}	
+				anchorData.isAnchored[i] = false;
+			}
+			// Is cirectly on a node	
 			if (otherPoint == null){
-				isAnchored[Circuit.kCentre] = true;
+				anchorData.isAnchored[Circuit.kCentre] = true;
 				
 			}
+			// If on a branch
 			else{
 				// Get which direction the other point is in
 				int dir = Circuit.CalcNeighbourDir(thisPoint, otherPoint);
 				// This is a hack - it should never be -1
 				if (dir != -1){
-					isAnchored[dir] = true;
+					anchorData.isAnchored[dir] = true;
 				}
 			}
 		}
-		base.RebuildMesh();
 		
-		// Copy the mesh t the diusplay mesh (so it can be alphed out)
-		Destroy (displayMesh);
-		displayMesh = Instantiate(anchorMesh, transform.position, transform.rotation) as GameObject;
-		displayMesh.transform.parent = transform;
+		// Figure out what prefabs to use
+		GameObject centrePrefab = anchorCentralPrefabUI;
+		GameObject branchPrefab = anchorBranchPrefabUI;
+		
+		// Get the correct anchore pregfabs
+		CircuitElement existingElement = null;
+		
+		if (thisPoint != null){
+			existingElement = Circuit.singleton.GetElement(thisPoint);
+			if (existingElement){
+				centrePrefab = existingElement.anchorCentralPrefab;
+				branchPrefab = existingElement.anchorBranchPrefab;
+			}
+			else{
+				centrePrefab = Circuit.singleton.anchorCentralPrefabDefault;
+				branchPrefab = Circuit.singleton.anchorBranchPrefabDefault;
+			}
+		}
+		
+		Destroy(anchorData.anchorMesh);
+		Destroy(displayMesh);
+		
+		
+		Circuit.RebuildAnchorMesh(anchorData, centrePrefab, branchPrefab, emptyGO);
+		anchorData.anchorMesh.transform.parent = transform;
+		anchorData.anchorMesh.transform.localPosition = new Vector3(0f, 0f, 3);
+		
+		displayMesh = anchorData.anchorMesh;
 		displayMesh.name = displayMeshName;
-		
-		// Now remove the anchors again
-		for (int i = 0; i < 5; ++i){
-			isAnchored[i] = false;
-		}	
-		
-		base.RebuildMesh();	
 		
 	}
 	
@@ -112,21 +144,15 @@ public class CircuitElementAnchor : CircuitElement {
 		int thisDir = Circuit.CalcNeighbourDir(thisPt, otherPt);
 		int otherDir = CalcInvDir(thisDir);
 		
-		CircuitElement thisElement = null;
-		CircuitElement otherElement = null;
+		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
+		Circuit.AnchorData otherData = Circuit.singleton.GetAnchors(otherPt);
 		
-		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPt);
-		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
+		thisData.isAnchored[thisDir] = true;
+		otherData.isAnchored[otherDir] = true;
+		thisData.isDirty = true;
+		otherData.isDirty = true;
 		
-		if (thisElement){
-			thisElement.isAnchored[thisDir] = true;
-			thisElement.RebuildMesh();
-		}
-		if (otherElement){
-			otherElement.isAnchored[otherDir] = true;
-			otherElement.RebuildMesh();
-			
-		}
+		
 		return true;
 	}	
 	
@@ -134,14 +160,12 @@ public class CircuitElementAnchor : CircuitElement {
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
 	public override bool Modify(GridPoint thisPt){
-		CircuitElement existingElement = Circuit.singleton.GetElement(thisPt);
+	
+		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
 		
-		// If there is one there already
-		if (existingElement != null){
-			
-			existingElement.isAnchored[Circuit.kCentre] = true;
-			existingElement.RebuildMesh();
-		}
+		thisData.isAnchored[Circuit.kCentre] = true;
+		thisData.isDirty = true;
+		
 		return true;
 	}	
 	

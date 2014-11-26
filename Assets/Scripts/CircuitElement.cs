@@ -13,13 +13,11 @@ public class CircuitElement : MonoBehaviour {
 	public GameObject	anchorCentralPrefab;
 	public GameObject	anchorBranchPrefab;
 	public GameObject	capPrefab;
-	public GameObject	emptyGO;
 	
 	public Color		normalColor;
 	public Color		errorColor;
 	
 	protected GameObject	displayMesh;
-	protected GameObject	anchorMesh;
 	
 	
 	protected float			temperature = 0;
@@ -91,7 +89,6 @@ public class CircuitElement : MonoBehaviour {
 	// 2 - down
 	// 3  - left 
 	public ConnectionBehaviour[] connectionBehaviour = new ConnectionBehaviour[4];
-	public bool[] isAnchored = new bool[5];	// if true, then cannot be changed in the editor
 	public bool[] isConnected = new bool[4];
 	
 	
@@ -100,8 +97,6 @@ public class CircuitElement : MonoBehaviour {
 	protected bool 			isInErrorState = false;
 	
 	protected float 		maxTemp = 45f;
-
-	GameObject[]			anchors = new GameObject[5];
 	
 	
 	
@@ -112,13 +107,6 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	
-//	// Generally is any of our connections are baked, then the component itself is also baked
-//	public bool IsComponentBaked(){
-//		for (int i = 0; i < 4; ++i){
-//			if (isAnchored[i]) return true;
-//		}
-//		return false;
-//	}
 	
 	public virtual void TriggerEmergency(){
 		
@@ -166,7 +154,7 @@ public class CircuitElement : MonoBehaviour {
 	public virtual void SetOtherGridPoint(GridPoint otherPoint){
 	}
 	
-	public void SetGridPoint(GridPoint thisPoint){
+	public virtual void SetGridPoint(GridPoint thisPoint){
 		this.thisPoint = thisPoint;
 		if (thisPoint != null){
 			transform.position = new Vector3(thisPoint.x, thisPoint.y, transform.position.z);
@@ -174,7 +162,7 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	// can override the z position
-	public void SetGridPoint(GridPoint thisPoint, float z){
+	public virtual void SetGridPoint(GridPoint thisPoint, float z){
 		this.thisPoint = thisPoint;
 		if (thisPoint != null){
 			transform.position = new Vector3(thisPoint.x, thisPoint.y, z);
@@ -191,9 +179,6 @@ public class CircuitElement : MonoBehaviour {
 		for (int i = 0; i < 4; ++i){
 			bw.Write ((int)connectionBehaviour[i]);
 		}
-		for (int i = 0; i < 5; ++i){
-			bw.Write(isAnchored[i]);
-		}
 		bw.Write (temperature);
 	}
 	
@@ -202,9 +187,6 @@ public class CircuitElement : MonoBehaviour {
 		//		orient = br.ReadInt32();
 		for (int i = 0; i < 4; ++i){
 			connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
-		}
-		for (int i = 0; i < 5; ++i){
-			isAnchored[i] = br.ReadBoolean();
 		}
 		temperature = br.ReadSingle();
 	}
@@ -249,16 +231,11 @@ public class CircuitElement : MonoBehaviour {
 		
 	
 	public virtual int CalcHash(){
-		return  (isAnchored[0] ? 1 << 0 : 0) + 
-			   	(isAnchored[1] ? 1 << 1 : 0) + 
-				(isAnchored[2] ? 1 << 2 : 0) + 
-				(isAnchored[3] ? 1 << 3 : 0) + 
-				(isAnchored[4] ? 1 << 4 : 0) + 
-				(isConnected[0] ?  1 << 5 : 0) + 
-				(isConnected[1] ?  1 << 6 : 0) + 
-				(isConnected[2] ?  1 << 7 : 0) + 
-				(isConnected[3] ?  1 << 8 : 0) + 
-				orient * 1 << 9;
+		return  (isConnected[0] ?  1 << 0 : 0) + 
+				(isConnected[1] ?  1 << 1 : 0) + 
+				(isConnected[2] ?  1 << 2 : 0) + 
+				(isConnected[3] ?  1 << 3 : 0) + 
+				orient * 1 << 4;
 	}
 	
 	
@@ -272,43 +249,6 @@ public class CircuitElement : MonoBehaviour {
 	
 		
 	
-	void RebuildAnchorMeshes(){
-		// Destory all the existing Anchor meshes
-		for (int i = 0; i < 5; ++i){
-			GameObject.Destroy(anchors[i]);
-		}
-		GameObject.Destroy(anchorMesh);
-		
-		anchorMesh = GameObject.Instantiate(emptyGO, transform.position, transform.rotation) as GameObject;
-		anchorMesh.transform.parent = transform;
-		
-		if (isAnchored[Circuit.kCentre]){
-			anchors[Circuit.kCentre] = Instantiate(
-			anchorCentralPrefab, 
-			new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
-			Quaternion.identity) as GameObject;
-			anchors[Circuit.kCentre].transform.parent = anchorMesh.transform;
-			
-		}
-		float[] angles = new float[4];
-		angles[0] = 0;
-		angles[1] = -90;
-		angles[2] = 180;
-		angles[3] = 90;
-		for (int i = 0; i < 4; ++i){
-			if (isAnchored[i]){
-				anchors[i] = Instantiate(
-					anchorBranchPrefab, 
-					new Vector3(transform.position.x, transform.position.y, anchorCentralPrefab.transform.position.z),
-					Quaternion.Euler(0, 0, angles[i])) as GameObject;
-				anchors[i].transform.parent = anchorMesh.transform;
-				
-			}
-		}
-			
-		return;
-	
-	}
 		
 		
 
@@ -414,7 +354,6 @@ public class CircuitElement : MonoBehaviour {
 
 	public virtual void RebuildMesh(){
 		HandleDisplayMeshChlid();
-		RebuildAnchorMeshes();
 		
 		// Ensure any colours get applied correctly afterwards
 		dirtyAlpha = true;
@@ -432,10 +371,6 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected void DestorySelf(){
 		Debug.Log("Destroy self : " + GetComponent<SerializationID>().id);
-		isAnchored[0] = false;
-		isAnchored[1] = false;
-		isAnchored[2] = false;
-		isAnchored[3] = false;
 		RemoveConnections();
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);

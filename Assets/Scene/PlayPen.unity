@@ -117,6 +117,18 @@ Prefab:
       propertyPath: gridGO
       value: 
       objectReference: {fileID: 1697485505}
+    - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
+      propertyPath: anchorCentralPrefabDefault
+      value: 
+      objectReference: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907, type: 2}
+    - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
+      propertyPath: anchorBranchPrefabDefault
+      value: 
+      objectReference: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
+    - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
+      propertyPath: emptyGO
+      value: 
+      objectReference: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
   m_RootGameObject: {fileID: 1643868792}
@@ -482,13 +494,15 @@ MonoBehaviour:
   anchorCentralPrefab: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907, type: 2}
   anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
   capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
-  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
   normalColor: {r: 1, g: 1, b: 1, a: 0}
   errorColor: {r: 1, g: 0, b: 0, a: 0}
   uiType: 3
   connectionBehaviour: 00000000000000000000000000000000
-  isAnchored: 0000000000
   isConnected: 00000000
+  anchorCentralPrefabUI: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907,
+    type: 2}
+  anchorBranchPrefabUI: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
+  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
 --- !u!4 &392676661
 Transform:
   m_ObjectHideFlags: 0
@@ -1694,6 +1708,11 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  anchorCentralPrefabDefault: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907,
+    type: 2}
+  anchorBranchPrefabDefault: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816,
+    type: 2}
+  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
   offsets:
   - x: -1
     y: -1

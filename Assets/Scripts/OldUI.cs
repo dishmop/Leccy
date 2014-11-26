@@ -418,18 +418,18 @@ public class OldUI : MonoBehaviour {
 				LevelSerializer.singleton.SaveLevel(levelToSave + ".bytes");
 				inputMode = oldInputMode;
 			}
-			else if (inputMode == InputMode.kBakeConnect){
-				Circuit.singleton.BakeConnect();
-				inputMode = oldInputMode;
-			}	
-			else if (inputMode == InputMode.kBakeAll){
-				Circuit.singleton.BakeAll();
-				inputMode = oldInputMode;
-			}						
-			else if (inputMode == InputMode.kUnbake){
-				Circuit.singleton.Unbake();
-				inputMode = oldInputMode;
-			}				
+//			else if (inputMode == InputMode.kBakeConnect){
+//				Circuit.singleton.BakeConnect();
+//				inputMode = oldInputMode;
+//			}	
+//			else if (inputMode == InputMode.kBakeAll){
+//				Circuit.singleton.BakeAll();
+//				inputMode = oldInputMode;
+//			}						
+//			else if (inputMode == InputMode.kUnbake){
+//				Circuit.singleton.Unbake();
+//				inputMode = oldInputMode;
+//			}				
 			else if (inputMode == InputMode.kToggleEdit){
 				enableEditor = !enableEditor;
 				gameMode = enableEditor ? GameMode.kEditMode : GameMode.kPlayGame;

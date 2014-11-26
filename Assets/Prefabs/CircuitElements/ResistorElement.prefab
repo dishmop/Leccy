@@ -100,15 +100,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orient: 0
-  anchorCentralPrefab: {fileID: 100000, guid: 5a43b88857a4f498886f5a022f225907, type: 2}
+  anchorCentralPrefab: {fileID: 100000, guid: 08c1230f63ca64fda80309379fb7a549, type: 2}
   anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
   capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
-  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}
   uiType: 2
   connectionBehaviour: 00000000000000000000000000000000
-  isAnchored: 0000000000
   isConnected: 00000000
   resistorPrefab: {fileID: 100008, guid: b89d05dada9a54607a29be6ac73feed3, type: 2}
   resistance: 1

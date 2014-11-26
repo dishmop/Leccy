@@ -12,7 +12,11 @@ public class Circuit : MonoBehaviour {
 	public GameObject particleExplosionPrefab;
 	
 	public Rect bounds;
-
+	
+	public GameObject	anchorCentralPrefabDefault;
+	public GameObject	anchorBranchPrefabDefault;	
+	public GameObject	emptyGO;
+	
 		
 	// Useful consts
 	public const int kErr = 	-1;
@@ -27,7 +31,18 @@ public class Circuit : MonoBehaviour {
 	
 	
 	public GameObject[,] 	elements;
+
+	public class AnchorData{
+		public bool[] 		isAnchored = new bool[5];
+		public GameObject 	anchorMesh = null;
+		public bool			isDirty = false;
+	}
+	
+	public AnchorData[,]	anchors;
+		
+		
 	int[,] 					elementHash;
+	
 	
 	[Serializable]
 	class ElementSerializationData{
@@ -106,6 +121,7 @@ public class Circuit : MonoBehaviour {
 	public void RemoveElement(GridPoint point){
 		GetElement(point).SetIsOnCircuit(false);
 		elements[point.x, point.y] = null;
+		GetAnchors(point).isDirty = true;
 	}
 	
 	
@@ -118,6 +134,7 @@ public class Circuit : MonoBehaviour {
 		GetElement(point).SetGridPoint(point);
 		GetElement(point).SetIsOnCircuit(true);
 		GetElement(point).RebuildMesh();
+		GetAnchors(point).isDirty = true;
 		
 	}
 	
@@ -158,54 +175,54 @@ public class Circuit : MonoBehaviour {
 		}
 	}
 	
-	public void BakeConnect(){
-		if (elements != null){
-			for (int x = 0; x < elements.GetLength (0); ++x){
-				for (int y = 0; y < elements.GetLength(1); ++y){
-					GridPoint thisPoint = new GridPoint(x,y);
-					if (ElementExists(thisPoint)){
-						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isAnchored[i] = GetElement(thisPoint).IsConnected(i);
-						}
-					}
-					
-				}
-			}
-		}
-	}
+//	public void BakeConnect(){
+//		if (elements != null){
+//			for (int x = 0; x < elements.GetLength (0); ++x){
+//				for (int y = 0; y < elements.GetLength(1); ++y){
+//					GridPoint thisPoint = new GridPoint(x,y);
+//					if (ElementExists(thisPoint)){
+//						for (int i = 0; i < 4; ++i){
+//							GetElement(thisPoint).isAnchored[i] = GetElement(thisPoint).IsConnected(i);
+//						}
+//					}
+//					
+//				}
+//			}
+//		}
+//	}
+//	
+//	public void BakeAll(){
+//		if (elements != null){
+//			for (int x = 0; x < elements.GetLength (0); ++x){
+//				for (int y = 0; y < elements.GetLength(1); ++y){
+//					GridPoint thisPoint = new GridPoint(x,y);
+//					// If we have an element here, then bake all connections
+//					if (ElementExists(thisPoint)){
+//						for (int i = 0; i < 4; ++i){
+//							GetElement(thisPoint).isAnchored[i] = true;
+//						}
+//					}
+//					
+//				}
+//			}
+//		}
+//	}	
 	
-	public void BakeAll(){
-		if (elements != null){
-			for (int x = 0; x < elements.GetLength (0); ++x){
-				for (int y = 0; y < elements.GetLength(1); ++y){
-					GridPoint thisPoint = new GridPoint(x,y);
-					// If we have an element here, then bake all connections
-					if (ElementExists(thisPoint)){
-						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isAnchored[i] = true;
-						}
-					}
-					
-				}
-			}
-		}
-	}	
-	
-	public void Unbake(){
-		if (elements != null){
-			for (int x = 0; x < elements.GetLength (0); ++x){
-				for (int y = 0; y < elements.GetLength(1); ++y){
-					GridPoint thisPoint = new GridPoint(x,y);
-					if (ElementExists(thisPoint)){
-						for (int i = 0; i < 4; ++i){
-							GetElement(thisPoint).isAnchored[i] = false;
-							
-						}
-					}
-				}
-			}
-		}
-	}
+//	public void Unbake(){
+//		if (elements != null){
+//			for (int x = 0; x < elements.GetLength (0); ++x){
+//				for (int y = 0; y < elements.GetLength(1); ++y){
+//					GridPoint thisPoint = new GridPoint(x,y);
+//					if (ElementExists(thisPoint)){
+//						for (int i = 0; i < 4; ++i){
+//							GetElement(thisPoint).isAnchored[i] = false;
+//							
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	public void TriggerExplosion(GridPoint point){
 		GameObject newElement = Instantiate(
@@ -250,6 +267,10 @@ public class Circuit : MonoBehaviour {
 		return elements[point.x, point.y].GetComponent<CircuitElement>();
 	}
 	
+	public AnchorData GetAnchors(GridPoint point){
+		return anchors[point.x, point.y];
+	}
+	
 	public GameObject GetGameObject(GridPoint point){
 		if (!ElementExists(point)) return null;
 		return elements[point.x, point.y];
@@ -290,6 +311,12 @@ public class Circuit : MonoBehaviour {
 		}
 		elements = new GameObject[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
 		elementHash = new int[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
+		anchors = new AnchorData[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				anchors[x,y] = new AnchorData();
+			}
+		}
 		
 	}
 
@@ -319,6 +346,7 @@ public class Circuit : MonoBehaviour {
 		CalcBounds();
 		MakeConnections();
 		PostConnectionUpdate();
+		UpdateAnchorMeshes();		
 	}
 	
 	
@@ -405,7 +433,70 @@ public class Circuit : MonoBehaviour {
 				}
 			}
 		}		
+	}
+	
+	void UpdateAnchorMeshes(){
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				AnchorData data = GetAnchors(thisPoint);
+				// If something has changed
+				if (data.isDirty){
+					GameObject centrePrefab = anchorCentralPrefabDefault;
+					GameObject branchPrefab = anchorBranchPrefabDefault;
+					
+					// If there is an element here, ask it what prefabs to use
+					// otherwise, use the defaults
+					CircuitElement element = GetElement(thisPoint);
+					if (element){
+						centrePrefab = element.anchorCentralPrefab;
+						branchPrefab = element.anchorBranchPrefab;
+					}
+					RebuildAnchorMesh(data, centrePrefab, branchPrefab, emptyGO);
+					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 0);
+					data.anchorMesh.transform.parent = transform;
+				
+				}
+			}
+		}	
+	}
+	
+
+	public static void RebuildAnchorMesh(AnchorData data, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyGO){
+		// Destory the previous one
+		Destroy (data.anchorMesh);
+		
+		data.anchorMesh = GameObject.Instantiate(emptyGO) as GameObject;
+		
+		// Do the central anchor
+		if (data.isAnchored[Circuit.kCentre]){
+			GameObject centreAnchor =  Instantiate(
+				centrePrefab, 
+				new Vector3(data.anchorMesh.transform.position.x, data.anchorMesh.transform.position.y, centrePrefab.transform.position.z),
+				Quaternion.identity) as GameObject;
+			centreAnchor.transform.parent = data.anchorMesh.transform;
 			
+		}
+		
+		// Do the branch anchors
+		float[] angles = new float[4];
+		angles[0] = 0;
+		angles[1] = -90;
+		angles[2] = 180;
+		angles[3] = 90;
+		for (int i = 0; i < 4; ++i){
+			if (data.isAnchored[i]){
+				GameObject branchAnchor = Instantiate(
+					branchPrefab, 
+					new Vector3(data.anchorMesh.transform.position.x, data.anchorMesh.transform.position.y, branchPrefab.transform.position.z),
+					Quaternion.Euler(0, 0, angles[i])) as GameObject;
+				branchAnchor.transform.parent = data.anchorMesh.transform;
+				
+			}
+		}
+		
+		data.isDirty = false;
 		
 	}
+	
 }
