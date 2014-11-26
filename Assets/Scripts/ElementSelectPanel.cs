@@ -9,6 +9,8 @@ public class ElementSelectPanel : MonoBehaviour {
 	public float					yCount;		// Number of buttons in a column
 	public string					defaultSelectionId;
 	
+	public AudioSource				pressSound;
+	
 	
 	public void ClearSelection(){
 		foreach (Transform child in transform){
@@ -50,8 +52,10 @@ public class ElementSelectPanel : MonoBehaviour {
 	
 	}
 	
-	void Update(){
-	}
+	public void OnClick(){
+		pressSound.Play();
+		
+	}	
 	
 
 	

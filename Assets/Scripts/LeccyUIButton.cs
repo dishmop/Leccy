@@ -13,6 +13,9 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	public Color normalHighlightColor;	
 	public Color pressColor;	
 	
+	public AudioSource okPress;
+	public AudioSource notOkPress;
+	
 	void Awake(){
 		PrefabManager.AddListener(this);
 	}
@@ -55,6 +58,8 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	}
 	
 	public void OnClick(){
+		okPress.Play();
+		
 		if (isSelected){
 			bool changed = circuitElementPrefab.GetComponent<CircuitElement>().OnClick();
 			if (changed) PrefabManager.OnChangePrefab(circuitElementPrefab);
