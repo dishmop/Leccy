@@ -35,7 +35,11 @@ public class ElementFactory : MonoBehaviour {
 	
 	// Call if you make any changes to the prefab
 	public void OnChangePrefab(){
+		// this does't seem to make any sense!
+		Debug.LogError ("Does this ever get called?");
 	}
+	
+	
 	
 	
 	//----------------------------------------------
@@ -61,6 +65,19 @@ public class ElementFactory : MonoBehaviour {
 			return typeIndex;
 	}	
 	
+	
+	//----------------------------------------------
+	public void IncrementStock(GameObject obj){
+		FactoryData data = FindStockData(obj.GetComponent<SerializationID>().id);
+		data.stockRemaining++;
+		PrefabManager.OnChangePrefab(data.factoryPrefab);
+	}
+	
+	public void DecrementStock(GameObject obj){
+		FactoryData data = FindStockData(obj.GetComponent<SerializationID>().id);
+		data.stockRemaining--;
+		PrefabManager.OnChangePrefab(data.factoryPrefab);
+	}
 	
 
 	//----------------------------------------------

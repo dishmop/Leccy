@@ -163,7 +163,7 @@ public class CircuitElementWire : CircuitElement {
 			orient = newOrient;
 			GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, newOrient * 90);
 		}
-
+		SetColor (isInErrorState ? errorColor : normalColor);
 	}	
 	
 	
@@ -179,7 +179,7 @@ public class CircuitElementWire : CircuitElement {
 	
 	
 	void Update () {
-		HandleAlpha();
+		HandleColorChange();
 		HandleDisplayMeshChlid();	
 		
 

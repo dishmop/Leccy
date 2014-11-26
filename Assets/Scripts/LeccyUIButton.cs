@@ -54,6 +54,8 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 
 			
 			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().SetPrefabMesh(mainMeshPrefab);
+			int stockNum = ElementFactory.singleton.GetStockRemaining(circuitElementPrefab.GetComponent<SerializationID>().id);
+			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("StockLeft").GetComponent<Text>().text =(stockNum >= 0) ? stockNum.ToString() : "";
 		}
 	}
 	

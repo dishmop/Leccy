@@ -77,6 +77,7 @@ public class CircuitElementCell : CircuitElement {
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 
 		SetupStraightConnectionBehaviour(true);
+		SetColor (isInErrorState ? errorColor : normalColor);		
 	}	
 	
 
@@ -109,7 +110,7 @@ public class CircuitElementCell : CircuitElement {
 	// Update is called once per frame
 	void Update () {
 		HandleDisplayMeshChlid();
-		HandleAlpha();
+		HandleColorChange();
 		
 		GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = voltage;
 		

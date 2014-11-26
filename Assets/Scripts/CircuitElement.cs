@@ -13,15 +13,20 @@ public class CircuitElement : MonoBehaviour {
 	public GameObject	anchorPrefab;
 	public GameObject	capPrefab;
 	
+	public Color		normalColor;
+	public Color		errorColor;
+	
 	// Setting the position
 	protected GameObject	displayMesh;
 	protected bool			isOnCircuit = false;
 	
 	
 	protected float			temperature = 0;
-	// For setting alpha values
+	// For setting alpha and color values
 	float 	alpha = 1f;
 	bool 	dirtyAlpha = false;
+	Color 	color = new Color(1f, 1f, 1f);
+	bool 	dirtyColor = false;	
 	
 	// Used to put caps on sriaght components
 	bool				hasCapTop = false;
@@ -47,7 +52,13 @@ public class CircuitElement : MonoBehaviour {
 		alpha = a;
 	}
 	
-	// These enums describe the connection situation in a given direction
+	public void SetColor(Color col){
+		dirtyColor = true;
+		color = col;
+	}
+
+	
+			// These enums describe the connection situation in a given direction
 	public enum ConnectionBehaviour{ 
 		kUnreceptive,   // If invited to make a connection, I will say no
 		kReceptive,		// If invited to make one, I wil say yes
@@ -55,12 +66,19 @@ public class CircuitElement : MonoBehaviour {
 	};
 	
 	
-	protected void HandleAlpha(){
+	protected void HandleColorChange(){
+	
 		if (dirtyAlpha){
 			dirtyAlpha = false;
 			ImplementAlpha(gameObject, alpha);
 		}
-	}
+		if (dirtyColor){
+			dirtyColor = false;
+			Color thisCol = color;
+			thisCol.a = alpha;
+			ImplementColor(gameObject, thisCol);
+		}
+	}	
 	
 	
 	
@@ -85,9 +103,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	public void SetErrorState(bool isError){
 		isInErrorState = isError;
-		if (isError){
-			Debug.Log("UP");
-		}
+
 		RebuildMesh();
 	}
 	
@@ -438,6 +454,18 @@ public class CircuitElement : MonoBehaviour {
 			ImplementAlpha(child.gameObject, alpha);
 		}
 	}
+	
+	protected void ImplementColor(GameObject obj, Color col){
+		Renderer rend = obj.renderer;
+		if (rend){
+			rend.materials[0].SetColor("_Color", col);
+		}
+		
+		// Now do the same to all the children
+		foreach (Transform child in obj.transform){
+			ImplementColor(child.gameObject, col);
+		}
+	}	
 	
 	public virtual void RemoveConnections(){
 	}

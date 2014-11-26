@@ -7,9 +7,7 @@ using System.IO;
 public class CircuitElementEraser : CircuitElement {
 
 	public GameObject 	eraserPrefab;
-	public Color		normalColor;
-	public Color		errorColor;
-	
+
 	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
@@ -84,8 +82,8 @@ public class CircuitElementEraser : CircuitElement {
 			displayMesh.transform.localPosition = new Vector3(0, 0, 0);
 			displayMesh.transform.localScale = new Vector3(1f, 1f, 1f);
 		}
-		displayMesh.renderer.material.color = isInErrorState ? errorColor : normalColor;
-		
+		SetColor (isInErrorState ? errorColor : normalColor);
+	
 	}
 	
 	
@@ -97,7 +95,7 @@ public class CircuitElementEraser : CircuitElement {
 	// Update is called once per frame
 	void Update () {
 		HandleDisplayMeshChlid();
-		HandleAlpha();
+		HandleColorChange();
 		
 
 		

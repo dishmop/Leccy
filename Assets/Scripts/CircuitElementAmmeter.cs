@@ -111,6 +111,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		base.RebuildMesh ();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 		SetupStraightConnectionBehaviour(true);
+		SetColor (isInErrorState ? errorColor : normalColor);		
 	}	
 	
 	public override float GetResistance(int dir){
@@ -156,7 +157,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	// Update is called once per frame
 	void Update () {
 		HandleDisplayMeshChlid();	
-		HandleAlpha();
+		HandleColorChange();
 		
 		
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);

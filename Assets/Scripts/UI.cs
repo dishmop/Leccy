@@ -165,15 +165,28 @@ public class UI : MonoBehaviour {
 
 	void HandleDrawnElementInput(){
 	
+		// Check if it is held down
 		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+		
+		// Check if (in addition) we have only just pressed it down
+		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
+		
+		
+		// If we don't have any elements left to place, then we are in an error state
+		bool error = (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0);		
+		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
+		
+		if (error){
+			if (buttonIsClicked) failSound.Play ();
+			return;
+		}
+
 		
 		// If the buttons is not down, there is nothing to do
 		if (thisPoint == null || !buttonIsHeld){
 			return;
 		}
 		
-		// Check if we have only just pressed it down
-		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
 		
 		GridPoint[] gridPath = null;
 		
@@ -199,9 +212,7 @@ public class UI : MonoBehaviour {
 					
 					// If this is not the same kind of element - then replace it
 					if (existingElement.GetComponent<SerializationID>().id != selectedPrefabId){
-						existingElement.GetComponent<CircuitElement>().RemoveConnections();
-						Destroy (Circuit.singleton.GetGameObject(gridPath[i]));
-						Circuit.singleton.RemoveElement(gridPath[i]);
+						RemoveElement(existingElement);
 						GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
 						PlaceElement(newElement, gridPath[i]);
 					}
@@ -218,6 +229,7 @@ public class UI : MonoBehaviour {
 					CircuitElement lastElement =  Circuit.singleton.GetElement(gridPath[i-1]);
 					thisElement.SuggestInvite(lastElement);
 					lastElement.SuggestInvite(thisElement);
+					placeElementSound.Play ();
 
 				}
 			}
@@ -232,8 +244,23 @@ public class UI : MonoBehaviour {
 		// If not on the grid, then nothing to do
 		if (thisPoint == null) return;
 		
+		GameObject existingElement = Circuit.singleton.GetGameObject(thisPoint);
+		
+		// If we don't have any elements left to place, then perhaps we should be in an error state?
+		// if we are over an element like this, then we can "place" this one as it will replace
+		// (or change) the one that is already there
+		bool error = (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0) && 
+					(existingElement == null || (existingElement.GetComponent<SerializationID>().id != selectedPrefabId));
+
+		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
+		
+		
 		if (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl)){
-			GameObject existingElement = Circuit.singleton.GetGameObject(thisPoint);
+			// If in an error state, do nothing other than thud if we press the mouse button
+			if (error){
+				failSound.Play ();
+				return;
+			}
 			
 			// If there is one there already
 			if (existingElement){
@@ -248,14 +275,13 @@ public class UI : MonoBehaviour {
 					prefab.GetComponent<CircuitElement>().OnClick();
 					PrefabManager.OnChangePrefab(prefab);
 					SetSelectedPrefabId(selectedPrefabId);
+					placeElementSound.Play();
 					
 				}
 				// Othewise, remove it and add a new one
 				else{
 					oldConnections = SaveOldConnections(existingElement.GetComponent<CircuitElement>());
-					existingElement.GetComponent<CircuitElement>().RemoveConnections();
-					Destroy (Circuit.singleton.GetGameObject(thisPoint));
-					Circuit.singleton.RemoveElement(thisPoint);
+					RemoveElement(existingElement);
 					GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
 					PlaceElement(newElement, thisPoint);
 					AttemptToReestablishConnections(newElement.GetComponent<CircuitElement>(), oldConnections);
@@ -273,7 +299,16 @@ public class UI : MonoBehaviour {
 	void PlaceElement(GameObject newElement, GridPoint thisPoint){
 		Circuit.singleton.PlaceElement(newElement, thisPoint);
 		placeElementSound.Play ();
+		ElementFactory.singleton.DecrementStock(newElement);
 	
+	}
+	
+	void RemoveElement(GameObject existingElement){
+		ElementFactory.singleton.IncrementStock(existingElement);
+		GridPoint point = existingElement.GetComponent<CircuitElement>().GetGridPoint();
+		existingElement.GetComponent<CircuitElement>().RemoveConnections();
+		Destroy (Circuit.singleton.GetGameObject(point));
+		Circuit.singleton.RemoveElement(point);
 	}
 	
 	void HandleEraserElementInput(){
@@ -355,9 +390,7 @@ public class UI : MonoBehaviour {
 								
 				// If there is one there already
 				if (existingElement != null){
-					existingElement.GetComponent<CircuitElement>().RemoveConnections();
-					Destroy (Circuit.singleton.GetGameObject(gridPath[i]));
-					Circuit.singleton.RemoveElement(gridPath[i]);
+					RemoveElement(existingElement);
 				}
 			}
 			removeElementSound.Play ();

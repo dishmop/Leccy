@@ -55,6 +55,8 @@ MonoBehaviour:
   orient: 0
   anchorPrefab: {fileID: 100000, guid: 3877eb5e2341e486ba4973a84f2eff21, type: 2}
   capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  errorColor: {r: 1, g: 0, b: 0, a: 1}
   uiType: 2
   connectionBehaviour: 00000000000000000000000000000000
   isBaked: 00000000

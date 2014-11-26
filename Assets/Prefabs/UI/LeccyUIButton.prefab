@@ -191,7 +191,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 3ed93d7d1a92b4a4f908af05a7ba875c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: .25
-  m_Pitch: .5
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Priority: 128
@@ -330,7 +330,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 6
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 5
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -615,10 +615,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22400004}
   m_RootOrder: 1
-  m_AnchorMin: {x: .754717886, y: .724000037}
+  m_AnchorMin: {x: 0, y: .724000037}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.90734863e-05, y: 1.14440918e-05}
-  m_SizeDelta: {x: 5.91280004e-05, y: 1.33510002e-05}
+  m_AnchoredPosition: {x: -1.79999995, y: 1.14439999e-05}
+  m_SizeDelta: {x: -3.5, y: 1.33510002e-05}
   m_Pivot: {x: .5, y: .5}
 --- !u!1001 &100100000
 Prefab:

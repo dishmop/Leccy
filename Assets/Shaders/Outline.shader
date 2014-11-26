@@ -1,5 +1,6 @@
 ﻿Shader "Custom/Outline" {
        Properties {
+            _BaseColor ("BaseColor", Color) = (1,1,1,1)
             _Color ("Color", Color) = (1,1,1,1)
             _Temperature ("Temperature", Range(0, 1)) = 0
             _Temperature ("Temperature", Float) = 0
@@ -18,6 +19,7 @@
 		        #include "UnityCG.cginc"
 		        
 		
+		        float4 _BaseColor;
 		        float4 _Color;
 		        float _Temperature;
 		    
@@ -40,7 +42,7 @@
 		        {
 		        	float4 heatCol =  float4( _Temperature, pow(_Temperature, 20), pow(_Temperature, 40), 0);
 
-		        	return _Color +  heatCol;
+		        	return (_BaseColor * _Color) +  heatCol;
 		        }
 		        ENDCG
 
