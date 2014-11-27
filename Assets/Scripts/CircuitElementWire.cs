@@ -32,22 +32,14 @@ public class CircuitElementWire : CircuitElement {
 		
 	}
 	
-	public override bool SuggestInvite(CircuitElement otherElement){
-		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
-		
-		connectionBehaviour[dir]= ConnectionBehaviour.kSociable;
+	public override bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour){
+		connectionBehaviour[dir]= behaviour;
 		return true;
 	}
+
 	
-	public override bool SuggestUninvite(CircuitElement otherElement){
-		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
-		
-		connectionBehaviour[dir]= ConnectionBehaviour.kReceptive;
-		return true;
-	}	
-	
-	// Whether the previous two functions would return true if called
-	public override bool IsAmenableToSuggestion(CircuitElement otherElement){
+	// Are we able to set these behaviours?
+	public override bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour){
 		return true;
 	}
 	
@@ -189,13 +181,13 @@ public class CircuitElementWire : CircuitElement {
 	// Call this before erasing an element	
 	public override void RemoveConnections(){
 		// Suggest to any elements around us that they may want to cancel their invite to us
-		// Really only applicable to other wires
+		// Really only applicable to other wires (we are basically just talking to other wires!)
 		if (IsOnCircuit()){
 			for (int dir = 0; dir < 4; ++dir){
 				GridPoint otherPoint = thisPoint + Circuit.singleton.offsets[dir];
 				CircuitElement otherElement = Circuit.singleton.GetElement(otherPoint);
 				if (otherElement){
-					otherElement.SuggestUninvite(this);
+					otherElement.SuggestBehaviour(this, ConnectionBehaviour.kReceptive);
 				}
 			}
 		}

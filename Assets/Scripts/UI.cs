@@ -9,6 +9,8 @@ public class UI : MonoBehaviour {
 	public AudioSource placeElementSound;
 	public AudioSource removeElementSound;
 	public AudioSource failSound;
+	
+	public bool	honourAnchors = false;
 
 	string 		selectedPrefabId;
 	GameObject	ghostElement;
@@ -33,7 +35,7 @@ public class UI : MonoBehaviour {
 		GameObject prefab = ElementFactory.singleton.GetPrefab(selectedPrefabId);
 		ghostElement = Instantiate(prefab) as GameObject;
 		ghostElement.transform.parent = transform;
-		ghostElement.GetComponent<CircuitElement>().SetAlpha(0.35f);
+		ghostElement.GetComponent<CircuitElement>().SetAlpha(0.5f);
 		ghostElement.SetActive(true);	
 	}
 	
@@ -140,26 +142,16 @@ public class UI : MonoBehaviour {
 					
 	}
 	
-	bool[] SaveOldConnections(CircuitElement existingElement){
-		bool[] oldConnections = new bool[4];
-		Array.Copy(existingElement.isConnected, oldConnections, 4);
+	CircuitElement.ConnectionBehaviour[] SaveOldConnections(CircuitElement existingElement){
+		CircuitElement.ConnectionBehaviour[] oldConnections = new CircuitElement.ConnectionBehaviour[4];
+		Array.Copy(existingElement.connectionBehaviour, oldConnections, 4);
 		return oldConnections;
 	}
 	
-	void AttemptToReestablishConnections(CircuitElement thisElement, bool[] oldConnections){
+	void AttemptToReestablishConnections(CircuitElement thisElement, CircuitElement.ConnectionBehaviour[] oldConnections){
 		// If there were connections before, try and set them up again
 		if (oldConnections != null){
-			for (int dir = 0; dir < 4; ++dir){
-				if (oldConnections[dir]){
-					CircuitElement otherElement = Circuit.singleton.GetElement(thisElement.GetGridPoint() + Circuit.singleton.offsets[dir]);
-					if (otherElement){
-						// We only want to do this if our new element is partial to it
-						bool ok = thisElement.SuggestInvite(otherElement);
-						if (ok) otherElement.SuggestInvite(thisElement);
-						
-					}
-				}
-			}
+			Array.Copy(oldConnections, thisElement.connectionBehaviour, 4);
 		}
 	}
 
@@ -168,34 +160,53 @@ public class UI : MonoBehaviour {
 		// Check if it is held down
 		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
 		
+		// If not on the grid, then nothing to do
+		if (thisPoint == null) return;
+
 		// Check if (in addition) we have only just pressed it down
 		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
 		
 		
 		// If we don't have any elements left to place, then we are in an error state
-		bool error = (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0);		
-		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
+		bool error = (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0);	
 		
+		// In this case there is very little else to do
+		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
 		if (error){
 			if (buttonIsClicked) failSound.Play ();
+			return;
+		}	
+		
+		// We are also in an error state if we are over a component that is anchored
+		if (honourAnchors){
+			if (Circuit.singleton.GetAnchors(thisPoint).isAnchored[Circuit.kCentre]){
+				error = true;
+			}
+		}
+			
+		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
+		
+		// Howeer, in this case, we only leave if we are clicked here (if we are dragging here then we stil have stuff to do)
+		if (error && buttonIsClicked){
+			failSound.Play ();
 			return;
 		}
 
 		
 		// If the buttons is not down, there is nothing to do
-		if (thisPoint == null || !buttonIsHeld){
+		if (!buttonIsHeld){
 			return;
 		}
 		
 		
+		// Get the path
 		GridPoint[] gridPath = null;
-		
 		 if (buttonIsClicked){
 			gridPath = new GridPoint[1];
 			gridPath[0] = thisPoint;
 		 }
 		else if (lastPoint != null && !thisPoint.IsEqual(lastPoint)){
-			gridPath = CalcGridPath(thisPoint, lastPoint);
+			gridPath = CalcGridPath(lastPoint, thisPoint);
 		 }
 		
 
@@ -204,7 +215,7 @@ public class UI : MonoBehaviour {
 			for (int i = 0; i < gridPath.GetLength(0); ++i){
 				GameObject existingElement = Circuit.singleton.GetGameObject(gridPath[i]);
 				
-				bool[] oldConnections = null;
+				CircuitElement.ConnectionBehaviour[] oldConnections = null;
 				
 				// If there is one there already
 				if (existingElement != null){
@@ -212,23 +223,39 @@ public class UI : MonoBehaviour {
 					
 					// If this is not the same kind of element - then replace it
 					if (existingElement.GetComponent<SerializationID>().id != selectedPrefabId){
-						RemoveElement(existingElement);
+						// But only if it is not anchored
+						if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[Circuit.kCentre]){
+							RemoveElement(existingElement);
+							GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
+							PlaceElement(newElement, gridPath[i]);
+						}
+					}
+				}
+				else{
+					// Check for anchors
+					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[Circuit.kCentre]){
 						GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
 						PlaceElement(newElement, gridPath[i]);
 					}
 				}
-				else{
-					GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
-					PlaceElement(newElement, gridPath[i]);
-				}
 				CircuitElement thisElement = Circuit.singleton.GetElement(gridPath[i]);
 				AttemptToReestablishConnections(thisElement, oldConnections);
 				
-				// If we have a next one, make a connection
+				// If we have a previous one, make a connection
 				if (i > 0){
 					CircuitElement lastElement =  Circuit.singleton.GetElement(gridPath[i-1]);
-					thisElement.SuggestInvite(lastElement);
-					lastElement.SuggestInvite(thisElement);
+					int lastDir = Circuit.CalcNeighbourDir(gridPath[i-1], gridPath[i]);
+					int thisDir = Circuit.CalcNeighbourDir(gridPath[i], gridPath[i-1]);
+					
+					// But only if anchors allow
+					// Also note that the elemtents may not be there (if we could not draw them due to machors (Really?)
+					
+					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i-1]).isAnchored[lastDir]){
+					    if (lastElement != null) lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable);
+					}
+					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[thisDir]){
+						if (thisElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable);
+					}
 					placeElementSound.Play ();
 
 				}
@@ -245,12 +272,46 @@ public class UI : MonoBehaviour {
 		if (thisPoint == null) return;
 		
 		GameObject existingElement = Circuit.singleton.GetGameObject(thisPoint);
+		CircuitElement existingCirEl = (existingElement != null) ? existingElement.GetComponent<CircuitElement>() : null;
+		GameObject prefab = ElementFactory.singleton.GetPrefab(selectedPrefabId);		
+		
 		
 		// If we don't have any elements left to place, then perhaps we should be in an error state?
 		// if we are over an element like this, then we can "place" this one as it will replace
 		// (or change) the one that is already there
-		bool error = (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0) && 
-					(existingElement == null || (existingElement.GetComponent<SerializationID>().id != selectedPrefabId));
+		bool error = false;
+		if (ElementFactory.singleton.GetStockRemaining(selectedPrefabId) == 0){
+			if (existingElement == null || (existingElement.GetComponent<SerializationID>().id != selectedPrefabId)){
+				error = true;
+			}
+		}
+		if (honourAnchors){
+			// It is also an error if we are trying to place an element when the node is anchored
+			Circuit.AnchorData anchorData = Circuit.singleton.GetAnchors(thisPoint);
+			if (anchorData.isAnchored[Circuit.kCentre]){
+				error = true;
+			}
+			// It is also an error if trying to place an element that is not amenable to setting up connections in the same
+			// way as the previous one
+			CircuitElement.ConnectionBehaviour[] connectionBehaviour = new CircuitElement.ConnectionBehaviour[4];			
+			if (existingCirEl != null){
+				connectionBehaviour = existingCirEl.connectionBehaviour;
+			}
+			for (int i = 0; i < 4; ++i){
+				if (anchorData.isAnchored[i]){
+					if (!ghostElement.GetComponent<CircuitElement>().IsAmenableToBehaviour(i, connectionBehaviour[i])) error = true;
+					
+				}
+				
+			}
+			// IF we would be clicking the element, but are unable to, then error
+			if (existingCirEl != null && existingCirEl.ShouldClick(prefab) && !existingCirEl.CanClick()){
+				error = true;
+			}			
+			
+		}
+		
+
 
 		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
 		
@@ -264,12 +325,11 @@ public class UI : MonoBehaviour {
 			
 			// If there is one there already
 			if (existingElement){
-				bool[] oldConnections = null;
-				
+				CircuitElement.ConnectionBehaviour[] oldConnections = null;
+
 				// Check if we should simply OnClick() the element which is there
-				GameObject prefab = ElementFactory.singleton.GetPrefab(selectedPrefabId);
-				if (existingElement.GetComponent<CircuitElement>().ShouldClick(prefab)){
-					existingElement.GetComponent<CircuitElement>().OnClick();
+				if (existingCirEl.ShouldClick(prefab)){
+					existingCirEl.OnClick();
 					
 					// Change the prefab too
 					prefab.GetComponent<CircuitElement>().OnClick();

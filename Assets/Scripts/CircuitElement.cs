@@ -216,21 +216,28 @@ public class CircuitElement : MonoBehaviour {
 		return (modelDir + 6-orient) % 4;
 	}
 	
-	public virtual bool SuggestInvite(CircuitElement otherElement){
-		return false;
+	public bool SuggestBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour){
+		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
+		return SuggestBehaviour(dir, behaviour);
 	}
 	
+
 	
-	public virtual bool SuggestUninvite(CircuitElement otherElement){
-		return false;
+	// Whether the   functions would return true if called
+	public bool IsAmenableToBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour){
+		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
+		return IsAmenableToBehaviour(dir, behaviour);
 	}
 	
-	
-	// Whether the previous two functions would return true if called
-	public virtual bool IsAmenableToSuggestion(CircuitElement otherElement){
-		return false;
+	// By default we are only amenable to things which we are already
+	public virtual bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour){
+		return connectionBehaviour[dir] == behaviour;
 	}
-		
+	
+	// If a behaviour is suggested we simply do nothing and return true if this is compatible with the reques
+	public virtual bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour){
+		return IsAmenableToBehaviour(dir, behaviour);
+	}	
 	
 	public virtual int CalcHash(){
 		return  (isConnected[0] ?  1 << 0 : 0) + 
@@ -297,6 +304,10 @@ public class CircuitElement : MonoBehaviour {
 		}
 		
 	}	
+	
+
+	
+	
 	public bool HasConnections(bool up, bool right, bool down, bool left){
 		return 	IsConnected(0) == up &&
 		        IsConnected(1) == right &&
@@ -325,7 +336,7 @@ public class CircuitElement : MonoBehaviour {
 		return  true;
 	}
 	
-	// Decide if we should call OnClick*I( if we are clicked on with the selectd prefab
+	// Decide if we should call OnClick() if we are clicked on with the selectd prefab
 	public virtual bool ShouldClick(GameObject selectionPrefab){
 		// IF a different kind of prefab - then don;t click
 		if (GetComponent<SerializationID>().id != selectionPrefab.GetComponent<SerializationID>().id){
@@ -339,10 +350,21 @@ public class CircuitElement : MonoBehaviour {
 		
 	}
 	
+	// Given that we should click - are we actually able to (regarding machors etc.)
+	// Be default, if any of our connections, or the node itself are anchored, then we cannot
+	public virtual bool CanClick(){
+		Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
+		for (int i = 0; i < 5; ++i){
+			if (data.isAnchored[i]) return false;
+		}
+		return true;
+	}
+	
+	
 	// Voltage drop when solving for currents (Terrible hack!)
 	public virtual float GetVoltageDrop(int dir, bool fw){
 		if (!IsConnected(dir)){
-			Debug.LogError("Being asked about a nonexistanct connection");
+			Debug.LogError("Being asked about a nonexistant connection");
 		}
 		return 0f;
 	}
@@ -380,6 +402,14 @@ public class CircuitElement : MonoBehaviour {
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);
 		Destroy (gameObject);
+		
+		// Also remove any anchors this object may have had - this may not be the correction thing to do, but it is better than keeping them there
+		// as it looks odd
+		Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
+		for (int i = 0; i < 5; ++i){
+			data.isAnchored[i] = false;
+		}
+		data.isDirty = true;
 	}
 	
 	

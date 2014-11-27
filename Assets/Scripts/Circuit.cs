@@ -16,7 +16,7 @@ public class Circuit : MonoBehaviour {
 	public GameObject	anchorCentralPrefabDefault;
 	public GameObject	anchorBranchPrefabDefault;	
 	public GameObject	emptyGO;
-	
+
 		
 	// Useful consts
 	public const int kErr = 	-1;

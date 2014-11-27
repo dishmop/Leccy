@@ -60,8 +60,7 @@ public class CircuitElementResistor : CircuitElement {
 	public override void PostConnectionAdjstments(){
 		DoStraightConnectionAdjustments();
 	}
-	
-	
+
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());

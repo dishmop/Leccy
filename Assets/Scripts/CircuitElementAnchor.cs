@@ -152,15 +152,20 @@ public class CircuitElementAnchor : CircuitElement {
 	
 		// Work out which direction the other point is in
 		int thisDir = Circuit.CalcNeighbourDir(thisPt, otherPt);
-//		int otherDir = CalcInvDir(thisDir);
+		
+		// If there is no connection here, we should suggest that this
+		// element adopts an unreceptive attitude from now on
+		CircuitElement existingElement = Circuit.singleton.GetElement(thisPt);
+		if (existingElement != null && !existingElement.isConnected[thisDir]){
+			existingElement.SuggestBehaviour(thisDir, ConnectionBehaviour.kUnreceptive);
+		}
+
 		
 		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
-//		Circuit.AnchorData otherData = Circuit.singleton.GetAnchors(otherPt);
 		
 		thisData.isAnchored[thisDir] = true;
-//		otherData.isAnchored[otherDir] = true;
 		thisData.isDirty = true;
-//		otherData.isDirty = true;
+		
 		
 		
 		return true;

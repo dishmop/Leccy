@@ -90,7 +90,7 @@ public class CircuitElementEraser : CircuitElement {
 	
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
-	// and we are able t modidify in our current state
+	// and we are able t modidify the proposed points
 	public override bool CanModify(GridPoint thisPt, GridPoint otherPt){
 		// Test if we are able to erasing the thing if we were t press the button
 		CircuitElement thisElement = null;
@@ -100,8 +100,11 @@ public class CircuitElementEraser : CircuitElement {
 		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
 		
 		if (thisElement != null && otherElement != null){
-			bool ok1 = thisElement.IsAmenableToSuggestion(otherElement);
-			bool ok2 = otherElement.IsAmenableToSuggestion(thisElement);
+			// First make then unresponsive - if we were not able to do that, try making the unreceptive
+			bool ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kReceptive);
+			bool ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kReceptive);
+			if (!ok1) ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kUnreceptive);
+			if (!ok2) ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kUnreceptive);
 			return (ok1 && ok2);
 		}
 		return true;
@@ -119,8 +122,11 @@ public class CircuitElementEraser : CircuitElement {
 		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
 
 		if (thisElement != null && otherElement != null){
-			bool ok1 = thisElement.SuggestUninvite(otherElement);
-			bool ok2 = otherElement.SuggestUninvite(thisElement);
+			// First make then unresponsive - if we were not able to do that, try making the unreceptive
+			bool ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kReceptive);
+			bool ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kReceptive);
+			if (!ok1) ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kUnreceptive);
+			if (!ok2) ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kUnreceptive);
 			return (ok1 && ok2);
 		}
 		return true;
