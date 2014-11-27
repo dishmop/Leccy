@@ -306,16 +306,35 @@ public class CircuitElement : MonoBehaviour {
 	}	
 	
 
-	
-	
-	public bool HasConnections(bool up, bool right, bool down, bool left){
-		return 	IsConnected(0) == up &&
-		        IsConnected(1) == right &&
-				IsConnected(2) == down &&
-				IsConnected(3) == left;
+	public  bool IsSociableOrConnected(int dir, bool isConnectedOrSociable){
+		return 	((connectionBehaviour[dir] == ConnectionBehaviour.kSociable || isConnected[dir]) == isConnectedOrSociable);
 	}
 
-
+	
+	public  bool IsSociableOrConnected(bool up, bool right, bool down, bool left){
+		return IsSociableOrConnected(Circuit.kUp, up) &&
+				IsSociableOrConnected(Circuit.kRight, right) &&
+				IsSociableOrConnected(Circuit.kDown, down) &&
+				IsSociableOrConnected(Circuit.kLeft, left);
+		
+	}
+	
+	
+	
+//	public bool IsConnected(bool up, bool right, bool down, bool left){
+//		return 	(isConnected[Circuit.kUp] == up) &&
+//				(isConnected[Circuit.kRight] == right) &&
+//				(isConnected[Circuit.kDown] == down) &&
+//				(isConnected[Circuit.kLeft] == left);
+//	}	
+//
+//	public bool IsSociable(bool up, bool right, bool down, bool left){
+//		return 	((connectionBehaviour[Circuit.kUp] == ConnectionBehaviour.kSociable) == up) &&
+//				((connectionBehaviour[Circuit.kRight] == ConnectionBehaviour.kSociable) == right) &&
+//				((connectionBehaviour[Circuit.kDown] == ConnectionBehaviour.kSociable) == down) &&
+//				((connectionBehaviour[Circuit.kLeft] == ConnectionBehaviour.kSociable) == left);
+//	}
+	
 	public void Rotate(int stepsCW){
 		orient = (4 + orient + stepsCW) % 4;
 		RebuildMesh();
@@ -385,6 +404,8 @@ public class CircuitElement : MonoBehaviour {
 		// Ensure any colours get applied correctly afterwards
 		dirtyAlpha = true;
 		dirtyColor = true;
+		if (thisPoint != null) Circuit.singleton.GetAnchors(thisPoint).isDirty = true;
+		
 	}
 	
 

@@ -66,71 +66,71 @@ public class CircuitElementWire : CircuitElement {
 			newOrient = 0;
 		}			
 		// No connections
-		else if (HasConnections(false, false, false, false)){
+		else if (IsSociableOrConnected(false, false, false, false)){
 			newPrefab = wirePointPrefab;
 			newOrient = 0;
 		}
 		// 1 Connection
-		else if (HasConnections(true, false, false, false)){
+		else if (IsSociableOrConnected(true, false, false, false)){
 			newPrefab = wireDeadEndDownPrefab;
 			newOrient = 0;
 		}
-		else if (HasConnections(false, true, false, false)){
+		else if (IsSociableOrConnected(false, true, false, false)){
 			newPrefab = wireDeadEndDownPrefab;
 			newOrient = 3;
 		}
-		else if (HasConnections(false, false, true, false)){
+		else if (IsSociableOrConnected(false, false, true, false)){
 			newPrefab = wireDeadEndDownPrefab;
 			newOrient = 2;
 		}
-		else if (HasConnections(false, false, false, true)){
+		else if (IsSociableOrConnected(false, false, false, true)){
 			newPrefab = wireDeadEndDownPrefab;
 			newOrient = 1;
 		}
 		// 2 connections
-		else if (HasConnections(true, true, false, false)){
+		else if (IsSociableOrConnected(true, true, false, false)){
 			newPrefab = wireDownLeftCornerPrefab;
 			newOrient = 3;
 		}	
-		else if (HasConnections(false, true, true, false)){
+		else if (IsSociableOrConnected(false, true, true, false)){
 			newPrefab = wireDownLeftCornerPrefab;
 			newOrient = 2;
 		}
-		else if (HasConnections(false, false, true, true)){
+		else if (IsSociableOrConnected(false, false, true, true)){
 			newPrefab = wireDownLeftCornerPrefab;
 			newOrient = 1;
 		}	
-		else if (HasConnections(true, false, false, true)){
+		else if (IsSociableOrConnected(true, false, false, true)){
 			newPrefab = wireDownLeftCornerPrefab;
 			newOrient = 0;
 		}									
-		else if (HasConnections(true, false, true, false)){
+		else if (IsSociableOrConnected(true, false, true, false)){
 			newPrefab = wireStraightDownPrefab;
 			newOrient = 0;
 		}
-		else if (HasConnections(false, true, false, true)){
+		else if (IsSociableOrConnected(false, true, false, true)){
 			newPrefab = wireStraightDownPrefab;
 			newOrient = 1;
 		}	
 		// 3 connections
-		else if (HasConnections(true, true, true, false)){
+		else if (IsSociableOrConnected(true, true, true, false)){
 			newPrefab = wireTJuncFromTopPrefab;
 			newOrient = 3;
 		}		
-		else if (HasConnections(false, true, true, true)){
+		else if (IsSociableOrConnected(false, true, true, true)){
 			newPrefab = wireTJuncFromTopPrefab;
 			newOrient = 2;
 		}	
-		else if (HasConnections(true, false, true, true)){
+		else if (IsSociableOrConnected(true, false, true, true)){
 			newPrefab = wireTJuncFromTopPrefab;
 			newOrient = 1;
 		}	
-		else if (HasConnections(true, true, false, true)){
+		else if (IsSociableOrConnected(true, true, false, true)){
 			newPrefab = wireTJuncFromTopPrefab;
 			newOrient = 0;
 		}
 		// 4 connections
-		else if (HasConnections(true, true, true, true)){
+		else if (IsSociableOrConnected(true, true, true, true)){
 			newPrefab = wireCrossPrefab;
 			newOrient = 0;
 		}															

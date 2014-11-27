@@ -457,8 +457,12 @@ public class Circuit : MonoBehaviour {
 						centrePrefab = element.anchorCentralPrefab;
 						branchPrefab = element.anchorBranchPrefab;
 						emptyBranchPrefab = element.anchorEmptyBranchPrefab;
-						isConnected = element.isConnected;
 						orient = element.orient;
+						isConnected = new bool[4];
+						// for the connected array, we actually set it to whether they are connection of sociable - this is a bit of a hack
+						for (int i = 0; i < 4; ++i){
+							isConnected[i] = element.IsSociableOrConnected(i, true);	
+						}
 					}
 					RebuildAnchorMesh(data, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
 					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 0);

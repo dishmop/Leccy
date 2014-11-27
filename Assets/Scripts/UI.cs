@@ -152,6 +152,7 @@ public class UI : MonoBehaviour {
 		// If there were connections before, try and set them up again
 		if (oldConnections != null){
 			Array.Copy(oldConnections, thisElement.connectionBehaviour, 4);
+			thisElement.RebuildMesh();
 		}
 	}
 

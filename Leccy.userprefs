@@ -1,36 +1,37 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CircuitElement.cs">
     <Files>
-      <File FileName="Assets/Scripts/UpdateManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="308" Column="12" />
-      <File FileName="Assets/Scripts/UI.cs" Line="211" Column="4" />
+      <File FileName="Assets/Scripts/UI.cs" Line="147" Column="55" />
+      <File FileName="Assets/Scripts/UpdateManager.cs" Line="12" Column="3" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="312" Column="28" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="64" Column="4" />
-      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="123" Column="60" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="72" Column="4" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="131" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="107" Column="54" />
+      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="116" Column="52" />
       <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="270" Column="30" />
-      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="64" Column="1" />
-      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="66" Column="71" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="298" Column="16" />
+      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="63" Column="1" />
+      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1855" Column="1" />
       <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="43" Column="53" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="27" Column="17" />
-      <File FileName="Assets/Scripts/ElementFactory.cs" Line="183" Column="4" />
-      <File FileName="Assets/Scripts/UIMesh.cs" Line="117" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="80" Column="18" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/OldUI.cs" Line="433" Column="3" />
       <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="127" Column="60" />
+      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="159" Column="35" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>prefabMesh</Value>
+          <Value>existingElement</Value>
+          <Value>oldConnections</Value>
         </State>
       </Pad>
     </Pads>
@@ -43,7 +44,6 @@
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="131" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="9" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="13" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/UI.cs" line="211" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
