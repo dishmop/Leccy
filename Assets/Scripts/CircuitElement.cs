@@ -27,9 +27,9 @@ public class CircuitElement : MonoBehaviour {
 	bool					isOnCircuit = false;
 	
 	// For setting alpha and color values
-	protected float 	alpha = 1f;
+	protected float alpha = 1f;
 	protected bool 	dirtyAlpha = false;
-	protected Color 	color = new Color(1f, 1f, 1f);
+	protected Color color = new Color(1f, 1f, 1f);
 	protected bool 	dirtyColor = false;	
 	
 	// Used to put caps on sriaght components
@@ -319,6 +319,9 @@ public class CircuitElement : MonoBehaviour {
 	// Called when mouse is lciked on this. Return true if we changed the object in some way
 	public virtual bool OnClick(){
 		Rotate (1);
+		if (thisPoint != null){
+			Circuit.singleton.GetAnchors(thisPoint).isDirty = true;
+		}
 		return  true;
 	}
 	

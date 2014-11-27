@@ -7,13 +7,13 @@ using System.IO;
 public class CircuitElementAnchor : CircuitElement {
 	
 	// The ones to use for the UI button
-	public GameObject	anchorCentralPrefabUI;
-	public GameObject	anchorBranchPrefabUI;
 	public GameObject	emptyGO;
 	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
 	Circuit.AnchorData	anchorData;
+	GameObject			anchorCentralPrefabUI;
+	GameObject			anchorBranchPrefabUI;
 	
 	
 	
@@ -23,6 +23,8 @@ public class CircuitElementAnchor : CircuitElement {
 	}
 	
 	public void Awake(){
+		anchorCentralPrefabUI = anchorCentralPrefab;
+		anchorBranchPrefabUI = anchorBranchPrefab;
 		anchorData = new Circuit.AnchorData();
 		
 		RebuildMesh();
@@ -94,10 +96,11 @@ public class CircuitElementAnchor : CircuitElement {
 		}
 		
 		// Figure out what prefabs to use
-		GameObject centrePrefab = anchorCentralPrefabUI;
-		GameObject branchPrefab = anchorBranchPrefabUI;
-		GameObject emptyBranchPrefab = null;
+		GameObject 	centrePrefab = anchorCentralPrefabUI;
+		GameObject 	branchPrefab = anchorBranchPrefabUI;
+		GameObject 	emptyBranchPrefab = null;
 		bool[]		isConnected = null;
+		int 		orient = 0;
 		
 		// Get the correct anchore pregfabs
 		CircuitElement existingElement = null;
@@ -109,6 +112,7 @@ public class CircuitElementAnchor : CircuitElement {
 				branchPrefab = existingElement.anchorBranchPrefab;
 				emptyBranchPrefab = existingElement.anchorEmptyBranchPrefab;
 				isConnected = existingElement.isConnected;
+				orient = existingElement.orient;
 			}
 			else{
 				centrePrefab = Circuit.singleton.anchorCentralPrefabDefault;
@@ -120,7 +124,7 @@ public class CircuitElementAnchor : CircuitElement {
 		Destroy(displayMesh);
 		
 		
-		Circuit.RebuildAnchorMesh(anchorData, isConnected, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
+		Circuit.RebuildAnchorMesh(anchorData, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
 		anchorData.anchorMesh.transform.parent = transform;
 		anchorData.anchorMesh.transform.localPosition = new Vector3(0f, 0f, 3);
 		

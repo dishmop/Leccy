@@ -448,6 +448,7 @@ public class Circuit : MonoBehaviour {
 					GameObject branchPrefab = anchorBranchPrefabDefault;
 					GameObject emptyBranchPrefab = null;
 					bool[]	   isConnected = null;
+					int		   orient = 0;
 					
 					// If there is an element here, ask it what prefabs to use
 					// otherwise, use the defaults
@@ -457,8 +458,9 @@ public class Circuit : MonoBehaviour {
 						branchPrefab = element.anchorBranchPrefab;
 						emptyBranchPrefab = element.anchorEmptyBranchPrefab;
 						isConnected = element.isConnected;
+						orient = element.orient;
 					}
-					RebuildAnchorMesh(data, isConnected, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
+					RebuildAnchorMesh(data, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
 					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 0);
 					data.anchorMesh.transform.parent = transform;
 				
@@ -468,28 +470,30 @@ public class Circuit : MonoBehaviour {
 	}
 	
 
-	public static void RebuildAnchorMesh(AnchorData data, bool[] isConnected, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyBranchPrefab, GameObject emptyGO){
+	public static void RebuildAnchorMesh(AnchorData data, bool[] isConnected, int orient, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyBranchPrefab, GameObject emptyGO){
 		// Destory the previous one
 		Destroy (data.anchorMesh);
 		
 		data.anchorMesh = GameObject.Instantiate(emptyGO) as GameObject;
+		
+		float[] angles = new float[4];
+		angles[0] = 0;
+		angles[1] = -90;
+		angles[2] = 180;
+		angles[3] = 90;
+		
 		
 		// Do the central anchor
 		if (data.isAnchored[Circuit.kCentre]){
 			GameObject centreAnchor =  Instantiate(
 				centrePrefab, 
 				new Vector3(data.anchorMesh.transform.position.x, data.anchorMesh.transform.position.y, centrePrefab.transform.position.z),
-				Quaternion.identity) as GameObject;
+				Quaternion.Euler(0, 0, angles[orient])) as GameObject;
 			centreAnchor.transform.parent = data.anchorMesh.transform;
 			
 		}
 		
 		// Do the branch anchors
-		float[] angles = new float[4];
-		angles[0] = 0;
-		angles[1] = -90;
-		angles[2] = 180;
-		angles[3] = 90;
 		for (int i = 0; i < 4; ++i){
 			GameObject useBranchPrefab = (emptyBranchPrefab == null) ? branchPrefab : (isConnected[i] ? branchPrefab : emptyBranchPrefab);
 			if (data.isAnchored[i]){
