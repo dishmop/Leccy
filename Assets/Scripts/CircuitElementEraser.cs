@@ -92,6 +92,15 @@ public class CircuitElementEraser : CircuitElement {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify the proposed points
 	public override bool CanModify(GridPoint thisPt, GridPoint otherPt){
+		// First check for node anchors
+		if (thisPt != null && otherPt == null && Circuit.singleton.GetAnchors(thisPt).isAnchored[Circuit.kCentre]) return false;
+		
+		// Then check for conection anchors
+		if (thisPt != null && otherPt != null){ 
+			int dir = Circuit.CalcNeighbourDir(thisPt, otherPt);
+			if (Circuit.singleton.GetAnchors(thisPt).isAnchored[dir]) return false;
+		}
+		
 		// Test if we are able to erasing the thing if we were t press the button
 		CircuitElement thisElement = null;
 		CircuitElement otherElement = null;
@@ -115,6 +124,14 @@ public class CircuitElementEraser : CircuitElement {
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
 	public override bool Modify(GridPoint thisPt, GridPoint otherPt){
+	
+
+		// Then check for conection anchors
+		if (thisPt != null && otherPt != null){ 
+			int dir = Circuit.CalcNeighbourDir(thisPt, otherPt);
+			if (Circuit.singleton.GetAnchors(thisPt).isAnchored[dir]) return false;
+		}
+		
 		CircuitElement thisElement = null;
 		CircuitElement otherElement = null;
 		
@@ -136,6 +153,11 @@ public class CircuitElementEraser : CircuitElement {
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
 	public override bool Modify(GridPoint thisPt){
+		// First check for node anchors
+		if (thisPt != null && Circuit.singleton.GetAnchors(thisPt).isAnchored[Circuit.kCentre]){
+			return false;
+		}
+		
 		GameObject existingElement = Circuit.singleton.GetGameObject(thisPt);
 		
 		// If there is one there already

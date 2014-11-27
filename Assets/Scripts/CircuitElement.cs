@@ -126,8 +126,8 @@ public class CircuitElement : MonoBehaviour {
 	public virtual bool CanModify(GridPoint thisPt, GridPoint otherPt){
 		return false;
 	}
-	
-	
+
+		
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though

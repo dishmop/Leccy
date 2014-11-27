@@ -302,10 +302,7 @@ public class CircuitElementWire : CircuitElement {
 			Destroy (leftCap);
 			hasCapLeft = false;
 		}	
-		
-		if (needCapRight){
-			Debug.Log ("Test");
-		} 
+
 	}
 	
 	
