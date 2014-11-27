@@ -12,6 +12,8 @@ public class CircuitElement : MonoBehaviour {
 	public int			orient = 0;			// In 90 degree steps anti-clockwise
 	public GameObject	anchorCentralPrefab;
 	public GameObject	anchorBranchPrefab;
+	// only set this on eif you want a different prefab used on branches which are not connected
+	public GameObject	anchorEmptyBranchPrefab = null;
 	public GameObject	capPrefab;
 	
 	public Color		normalColor;
@@ -22,13 +24,13 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected float			temperature = 0;
 	
-	bool			isOnCircuit = false;
+	bool					isOnCircuit = false;
 	
 	// For setting alpha and color values
-	float 	alpha = 1f;
-	bool 	dirtyAlpha = false;
-	Color 	color = new Color(1f, 1f, 1f);
-	bool 	dirtyColor = false;	
+	protected float 	alpha = 1f;
+	protected bool 	dirtyAlpha = false;
+	protected Color 	color = new Color(1f, 1f, 1f);
+	protected bool 	dirtyColor = false;	
 	
 	// Used to put caps on sriaght components
 	bool				hasCapTop = false;

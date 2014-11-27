@@ -422,14 +422,16 @@ public class Circuit : MonoBehaviour {
 			}
 		}
 		
-		// Rebiuld any meshes that need rebuilding
+		// Rebiuld any meshes that need rebuilding and indorm the anchors that they need rebuilding too
 		
 		// Create a hash key for each element so we know if it has changed
 		for (int x = 0; x < elements.GetLength(0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
-				CircuitElement thisElement = GetElement(new GridPoint(x, y));
+				GridPoint thisPoint = new GridPoint(x, y);
+				CircuitElement thisElement = GetElement(thisPoint);
 				if (thisElement && elementHash[x,y] != thisElement.CalcHash()){
 					thisElement.RebuildMesh();
+					GetAnchors(thisPoint).isDirty = true;
 				}
 			}
 		}		
@@ -444,6 +446,8 @@ public class Circuit : MonoBehaviour {
 				if (data.isDirty){
 					GameObject centrePrefab = anchorCentralPrefabDefault;
 					GameObject branchPrefab = anchorBranchPrefabDefault;
+					GameObject emptyBranchPrefab = null;
+					bool[]	   isConnected = null;
 					
 					// If there is an element here, ask it what prefabs to use
 					// otherwise, use the defaults
@@ -451,8 +455,10 @@ public class Circuit : MonoBehaviour {
 					if (element){
 						centrePrefab = element.anchorCentralPrefab;
 						branchPrefab = element.anchorBranchPrefab;
+						emptyBranchPrefab = element.anchorEmptyBranchPrefab;
+						isConnected = element.isConnected;
 					}
-					RebuildAnchorMesh(data, centrePrefab, branchPrefab, emptyGO);
+					RebuildAnchorMesh(data, isConnected, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
 					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 0);
 					data.anchorMesh.transform.parent = transform;
 				
@@ -462,7 +468,7 @@ public class Circuit : MonoBehaviour {
 	}
 	
 
-	public static void RebuildAnchorMesh(AnchorData data, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyGO){
+	public static void RebuildAnchorMesh(AnchorData data, bool[] isConnected, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyBranchPrefab, GameObject emptyGO){
 		// Destory the previous one
 		Destroy (data.anchorMesh);
 		
@@ -485,10 +491,11 @@ public class Circuit : MonoBehaviour {
 		angles[2] = 180;
 		angles[3] = 90;
 		for (int i = 0; i < 4; ++i){
+			GameObject useBranchPrefab = (emptyBranchPrefab == null) ? branchPrefab : (isConnected[i] ? branchPrefab : emptyBranchPrefab);
 			if (data.isAnchored[i]){
 				GameObject branchAnchor = Instantiate(
-					branchPrefab, 
-					new Vector3(data.anchorMesh.transform.position.x, data.anchorMesh.transform.position.y, branchPrefab.transform.position.z),
+					useBranchPrefab, 
+					new Vector3(data.anchorMesh.transform.position.x, data.anchorMesh.transform.position.y, useBranchPrefab.transform.position.z),
 					Quaternion.Euler(0, 0, angles[i])) as GameObject;
 				branchAnchor.transform.parent = data.anchorMesh.transform;
 				

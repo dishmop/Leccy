@@ -328,8 +328,10 @@ public class UI : MonoBehaviour {
 		// Check if we have only just pressed it down
 		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
 		
+		
 		GridPoint[] gridPath = null;
 		bool ignoreFirst = false;
+		bool ignoreLast = false;
 		
 		// If clicking a connection - then simple request that the connection be removed
 		if (buttonIsClicked && otherPoint != null){
@@ -345,19 +347,41 @@ public class UI : MonoBehaviour {
 			gridPath = new GridPoint[1];
 			gridPath[0] = thisPoint;
 		}
-		// If dragging from one point to the next
+		// If we weren't on a connection, but are now, and have not moved base point then modify the connection only
+		else if(lastOtherPoint == null && otherPoint != null && lastPoint.IsEqual(thisPoint)){
+			bool ok = ghostCircEl.Modify(thisPoint, otherPoint);
+			if (ok)
+				removeElementSound.Play ();
+			else
+				failSound.Play ();
+		}
+		// If we were on a connection, but are not now, then modify the connection and the node
+		else if(lastOtherPoint != null && otherPoint == null && lastPoint.IsEqual(thisPoint)){
+			bool ok1 = ghostCircEl.Modify(thisPoint, lastOtherPoint);
+			bool ok2 = ghostCircEl.Modify(thisPoint);
+			if (ok1 || ok2)
+				removeElementSound.Play ();
+			else
+				failSound.Play ();
+		}		// If dragging from one point to the next
 		else if (lastPoint != null && !thisPoint.IsEqual(lastPoint)){
 			gridPath = CalcGridPath(lastPoint, thisPoint);
 			
-			// If our last thing was to delete a connection, then check fi the first two
-			// elements of this list are that connection - if they are then don;t delete the first one
+			// If our last thing was to modify a connection, then check if the first two
+			// elements of this list are that connection - if they are then don;t modify the first one node
 			if (lastOtherPoint != null && lastOtherPoint.IsEqual(gridPath[1]) && lastPoint.IsEqual(gridPath[0])){
 				ignoreFirst = true;
 				
 			}
+			// If this thing we do is modify a connection, and the last link in the list is this connection
+			// then don't modify the last node itself
+			int pathLength = gridPath.GetLength(0);
+			if (otherPoint != null && otherPoint.IsEqual (gridPath[pathLength -2]) && thisPoint.IsEqual(gridPath[pathLength-1])){
+				ignoreLast = true;
+			}
 			
 		}
-		// If we were deleting a connection and how now moved to the point itself, then delete the point
+		// If we were modifying a connection and how now moved to the point itself, then mdify the point
 		else if (lastOtherPoint != null && otherPoint == null && thisPoint.IsEqual(lastPoint)){
 			gridPath = new GridPoint[1];
 			gridPath[0] = thisPoint;
@@ -368,13 +392,14 @@ public class UI : MonoBehaviour {
 		{
 			int pathLength = gridPath.GetLength(0);
 			for (int i = 0; i < pathLength; ++i){
-				bool ignoreThis = (i == 0 && ignoreFirst);
+				bool ignoreThis = (i == 0 && ignoreFirst) || (i == pathLength-1 && ignoreLast);
 				if (!ignoreThis){
 					ghostCircEl.Modify (gridPath[i]);
 				}
 				// Show do the connections in the path too 
 				if (i < pathLength-1){
 					ghostCircEl.Modify (gridPath[i], gridPath[i+1]);
+					ghostCircEl.Modify (gridPath[i+1], gridPath[i]);
 				}
 
 			}

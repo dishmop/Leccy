@@ -96,6 +96,8 @@ public class CircuitElementAnchor : CircuitElement {
 		// Figure out what prefabs to use
 		GameObject centrePrefab = anchorCentralPrefabUI;
 		GameObject branchPrefab = anchorBranchPrefabUI;
+		GameObject emptyBranchPrefab = null;
+		bool[]		isConnected = null;
 		
 		// Get the correct anchore pregfabs
 		CircuitElement existingElement = null;
@@ -105,6 +107,8 @@ public class CircuitElementAnchor : CircuitElement {
 			if (existingElement){
 				centrePrefab = existingElement.anchorCentralPrefab;
 				branchPrefab = existingElement.anchorBranchPrefab;
+				emptyBranchPrefab = existingElement.anchorEmptyBranchPrefab;
+				isConnected = existingElement.isConnected;
 			}
 			else{
 				centrePrefab = Circuit.singleton.anchorCentralPrefabDefault;
@@ -116,13 +120,15 @@ public class CircuitElementAnchor : CircuitElement {
 		Destroy(displayMesh);
 		
 		
-		Circuit.RebuildAnchorMesh(anchorData, centrePrefab, branchPrefab, emptyGO);
+		Circuit.RebuildAnchorMesh(anchorData, isConnected, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
 		anchorData.anchorMesh.transform.parent = transform;
 		anchorData.anchorMesh.transform.localPosition = new Vector3(0f, 0f, 3);
 		
 		displayMesh = anchorData.anchorMesh;
 		displayMesh.name = displayMeshName;
 		
+		dirtyAlpha = true;
+		dirtyColor = true;
 	}
 	
 	
@@ -142,15 +148,15 @@ public class CircuitElementAnchor : CircuitElement {
 	
 		// Work out which direction the other point is in
 		int thisDir = Circuit.CalcNeighbourDir(thisPt, otherPt);
-		int otherDir = CalcInvDir(thisDir);
+//		int otherDir = CalcInvDir(thisDir);
 		
 		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
-		Circuit.AnchorData otherData = Circuit.singleton.GetAnchors(otherPt);
+//		Circuit.AnchorData otherData = Circuit.singleton.GetAnchors(otherPt);
 		
 		thisData.isAnchored[thisDir] = true;
-		otherData.isAnchored[otherDir] = true;
+//		otherData.isAnchored[otherDir] = true;
 		thisData.isDirty = true;
-		otherData.isDirty = true;
+//		otherData.isDirty = true;
 		
 		
 		return true;
