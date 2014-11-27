@@ -1,37 +1,41 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CircuitElement.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CircuitElementWire.cs">
     <Files>
-      <File FileName="Assets/Scripts/UI.cs" Line="147" Column="55" />
-      <File FileName="Assets/Scripts/UpdateManager.cs" Line="12" Column="3" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="312" Column="28" />
+      <File FileName="Assets/Scripts/UI.cs" Line="362" Column="1" />
+      <File FileName="Assets/Scripts/UpdateManager.cs" Line="10" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="37" Column="34" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="131" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="123" Column="19" />
       <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="107" Column="54" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="116" Column="52" />
       <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="298" Column="16" />
-      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="63" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="483" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="58" Column="1" />
       <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Simulator.cs" Line="1855" Column="1" />
       <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="80" Column="18" />
+      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="223" Column="65" />
       <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/OldUI.cs" Line="433" Column="3" />
+      <File FileName="Assets/Scripts/OldUI.cs" Line="88" Column="1" />
       <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="159" Column="35" />
+      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="176" Column="29" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
           <Value>existingElement</Value>
           <Value>oldConnections</Value>
+          <Value>thisElement</Value>
+          <Value>isConnected</Value>
+          <Value>connectionBehaviour</Value>
+          <Value>thisElement</Value>
         </State>
       </Pad>
     </Pads>

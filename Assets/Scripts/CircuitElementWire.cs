@@ -24,22 +24,52 @@ public class CircuitElementWire : CircuitElement {
 	}
 	
 	public void Awake(){
-		RebuildMesh();
 		connectionBehaviour[0] = ConnectionBehaviour.kReceptive;
 		connectionBehaviour[1] = ConnectionBehaviour.kReceptive;
 		connectionBehaviour[2] = ConnectionBehaviour.kReceptive;
 		connectionBehaviour[3] = ConnectionBehaviour.kReceptive;
 		
+		RebuildMesh();
 	}
 	
 	public override bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour){
+		// If trying to modify anchored data, then do nothing
+		if (thisPoint != null){
+			Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
+			if (data.isAnchored[dir]) return false;
+		}
 		connectionBehaviour[dir]= behaviour;
+		RebuildMesh();
 		return true;
 	}
+	
+	// Called after an element has been placed on the circuit
+	public override void OnPostPlace(){
+		// Make any connections we have an invite (since wires are everyone's freind)
+		for (int i = 0; i < 4; ++i){
+			if (isConnected[i]){
+				connectionBehaviour[i] = ConnectionBehaviour.kSociable;
+			}
+		}
+		// If we are not connected and the connection is anchored, then set it to unreceptive
+		Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
+		for (int i = 0; i < 4; ++i){
+			if (!isConnected[i] && data.isAnchored[i]){
+				connectionBehaviour[i] = ConnectionBehaviour.kUnreceptive;
+			}
+		}
+		
+	}
+		
 
 	
 	// Are we able to set these behaviours?
 	public override bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour){
+		// If trying to modify anchored data, then do nothing
+		if (thisPoint != null){
+			Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
+			if (data.isAnchored[dir]) return false;
+		}
 		return true;
 	}
 	
@@ -150,6 +180,12 @@ public class CircuitElementWire : CircuitElement {
 			displayMesh.name = displayMeshName;
 			displayMesh.transform.parent = transform;
 			
+			// Need to reset our capflags here too
+			hasCapTop = false;
+			hasCapRight = false;
+			hasCapBottom = false;
+			hasCapLeft = false;
+			
 		}
 		if (newOrient != orient){
 			orient = newOrient;
@@ -192,6 +228,86 @@ public class CircuitElementWire : CircuitElement {
 			}
 		}
 	}
+	
+	// called on each element once we have established which elements are connected to which other ones
+	// Add Caps on the end if not connected
+	public override void PostConnectionAdjstments(){
+	
+		float[] angles = new float[4];
+		angles[0] = 0;
+		angles[1] = -90;
+		angles[2] = 180;
+		angles[3] = 90;
+
+		// Top Cap
+		bool needCapTop = IsSociableOrConnected(Circuit.kUp, true) && !isConnected[Circuit.kUp];
+		if (needCapTop && !hasCapTop){
+			GameObject topCap = Instantiate(capPrefab) as GameObject;
+			topCap.transform.parent = GetDisplayMesh().transform;
+			topCap.transform.localPosition = Vector3.zero;
+			topCap.transform.rotation = Quaternion.identity;
+			topCap.name = "TopCap";
+			hasCapTop = true;
+		}
+		else if (!needCapTop && hasCapTop){
+			GameObject topCap = GetDisplayMesh().transform.FindChild("TopCap").gameObject;
+			Destroy (topCap);
+			hasCapTop = false;
+		}
+		
+		// Right cap
+		bool needCapRight = IsSociableOrConnected(Circuit.kRight, true) && !isConnected[Circuit.kRight];
+		if (needCapRight && !hasCapRight){
+			GameObject rightCap = Instantiate(capPrefab) as GameObject;
+			rightCap.transform.parent = GetDisplayMesh().transform;
+			rightCap.transform.localPosition = Vector3.zero;
+			rightCap.transform.rotation = Quaternion.Euler(0, 0, -90);
+			rightCap.name = "RightCap";
+			hasCapRight = true;
+		}
+		else if (!needCapRight && hasCapRight){
+			GameObject rightCap = GetDisplayMesh().transform.FindChild("RightCap").gameObject;
+			Destroy (rightCap);
+			hasCapRight = false;
+		}		
+		
+		// Bottom Cap
+		bool needCapBottom = IsSociableOrConnected(Circuit.kDown, true) && !isConnected[Circuit.kDown];
+		if (needCapBottom && !hasCapBottom){
+			GameObject bottomCap = Instantiate(capPrefab) as GameObject;
+			bottomCap.transform.parent = GetDisplayMesh().transform;
+			bottomCap.transform.localPosition = Vector3.zero;
+			bottomCap.transform.rotation = Quaternion.Euler(0, 0, 180);
+			bottomCap.name = "BottomCap";
+			hasCapBottom = true;
+		}
+		else if (!needCapBottom && hasCapBottom){
+			GameObject bottomCap = GetDisplayMesh().transform.FindChild("BottomCap").gameObject;
+			Destroy (bottomCap);
+			hasCapBottom = false;
+		}
+		
+		// Left cap
+		bool needCapLeft = IsSociableOrConnected(Circuit.kLeft, true) && !isConnected[Circuit.kLeft];
+		if (needCapLeft && !hasCapLeft){
+			GameObject leftCap = Instantiate(capPrefab) as GameObject;
+			leftCap.transform.parent = GetDisplayMesh().transform;
+			leftCap.transform.localPosition = Vector3.zero;
+			leftCap.transform.rotation = Quaternion.Euler(0, 0, 90);
+			leftCap.name = "LeftCap";
+			hasCapLeft = true;
+		}
+		else if (!needCapLeft && hasCapLeft){
+			GameObject leftCap = GetDisplayMesh().transform.FindChild("LeftCap").gameObject;
+			Destroy (leftCap);
+			hasCapLeft = false;
+		}	
+		
+		if (needCapRight){
+			Debug.Log ("Test");
+		} 
+	}
+	
 	
 	void OnDestroy() {
 		// When the object is destoryed, we must make sure to dispose of any meshes we may have

@@ -61,6 +61,19 @@ public class Circuit : MonoBehaviour {
 	};
 	
 	
+	public void DebugRefreshAll(){
+		for (int x = 0; x < elements.GetLength(0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				CircuitElement element = GetElement(thisPoint);
+				if (element){
+					element.RebuildMesh();
+				}
+				GetAnchors(thisPoint).isDirty = true;
+			}
+		}
+	}
+	
 	public 	void Save(BinaryWriter bw){
 		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
 		for (int x = 0; x < elements.GetLength(0); ++x){
@@ -131,9 +144,11 @@ public class Circuit : MonoBehaviour {
 		}
 		newElement.transform.parent = transform;
 		elements[point.x, point.y] = newElement;
-		GetElement(point).SetGridPoint(point);
-		GetElement(point).SetIsOnCircuit(true);
-		GetElement(point).RebuildMesh();
+		CircuitElement element = GetElement(point);
+		element.SetGridPoint(point);
+		element.SetIsOnCircuit(true);
+		element.OnPostPlace();
+		element.RebuildMesh();
 		GetAnchors(point).isDirty = true;
 		
 	}

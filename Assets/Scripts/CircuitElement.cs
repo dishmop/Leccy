@@ -33,9 +33,10 @@ public class CircuitElement : MonoBehaviour {
 	protected bool 	dirtyColor = false;	
 	
 	// Used to put caps on sriaght components
-	bool				hasCapTop = false;
-	bool				hasCapBottom = false;	
-	
+	protected bool		hasCapTop = 	false;
+	protected bool		hasCapBottom = 	false;	
+	protected bool		hasCapLeft = 	false;
+	protected bool		hasCapRight = 	false;		
 
 		// What is the best UI scheme to use when placing these elents
 	public enum UIType{
@@ -169,6 +170,10 @@ public class CircuitElement : MonoBehaviour {
 		if (thisPoint != null){
 			transform.position = new Vector3(thisPoint.x, thisPoint.y, z);
 		}
+	}
+	
+	// Called after an element has been placed on the circuit
+	public virtual void OnPostPlace(){
 	}
 	
 	public GridPoint GetGridPoint(){

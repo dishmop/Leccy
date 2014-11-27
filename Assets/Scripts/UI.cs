@@ -151,8 +151,9 @@ public class UI : MonoBehaviour {
 	void AttemptToReestablishConnections(CircuitElement thisElement, CircuitElement.ConnectionBehaviour[] oldConnections){
 		// If there were connections before, try and set them up again
 		if (oldConnections != null){
-			Array.Copy(oldConnections, thisElement.connectionBehaviour, 4);
-			thisElement.RebuildMesh();
+			for (int i = 0; i < 4; ++i){
+				thisElement.SuggestBehaviour(i, oldConnections[i]);
+			}
 		}
 	}
 
@@ -252,7 +253,10 @@ public class UI : MonoBehaviour {
 					// Also note that the elemtents may not be there (if we could not draw them due to machors (Really?)
 					
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i-1]).isAnchored[lastDir]){
-					    if (lastElement != null) lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable);
+					    if (lastElement != null){
+					    	lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable);
+						}
+					    
 					}
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[thisDir]){
 						if (thisElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable);
@@ -345,8 +349,7 @@ public class UI : MonoBehaviour {
 					RemoveElement(existingElement);
 					GameObject newElement = ElementFactory.singleton.InstantiateElement(selectedPrefabId);
 					PlaceElement(newElement, thisPoint);
-					AttemptToReestablishConnections(newElement.GetComponent<CircuitElement>(), oldConnections);
-					
+					AttemptToReestablishConnections(newElement.GetComponent<CircuitElement>(), oldConnections);					
 				}
 			}
 			else{
