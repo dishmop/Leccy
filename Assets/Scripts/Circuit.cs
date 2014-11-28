@@ -61,7 +61,7 @@ public class Circuit : MonoBehaviour {
 	};
 	
 	
-	public void DebugRefreshAll(){
+	public void RefreshAll(){
 		for (int x = 0; x < elements.GetLength(0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				GridPoint thisPoint = new GridPoint(x, y);
@@ -82,17 +82,65 @@ public class Circuit : MonoBehaviour {
 					dataList.Add ( new ElementSerializationData(x, y, elements[x,y].GetComponent<SerializationID>().id));					 
 				}
 			}
+
 		}	
+
 		bw.Write (dataList.Count);
+	
 		for (int i = 0; i < dataList.Count; ++i){
 			bw.Write (dataList[i].x);
-			bw.Write(dataList[i].y);
+			bw.Write (dataList[i].y);
 			bw.Write (dataList[i].id);
 		}
 		for (int i = 0; i < dataList.Count; ++i){
 			GetElement (new GridPoint(dataList[i].x, dataList[i].y)).Save(bw);
-		}
+		}			
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				for (int i = 0 ; i < 5; ++i){
+					bw.Write (anchors[x,y].isAnchored[i]);
+				}
+			}
+		}		
 	}
+
+	public 	void Load(BinaryReader br){
+		CreateBlankCircuit();
+
+		// Get the list of objects
+		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+		int numElements = br.ReadInt32();
+		
+
+		for (int i = 0; i < numElements; ++i){
+			ElementSerializationData data = new ElementSerializationData();
+			data.x = br.ReadInt32 ();
+			data.y = br.ReadInt32 ();
+			data.id = br.ReadString ();
+			dataList.Add (data);
+		}		
+		// Go through each entry adding a crcuit element to the circuit using the D and the factory
+		for (int i = 0; i < numElements; ++i){
+			ElementSerializationData data = dataList[i];
+			PlaceElement(ElementFactory.singleton.InstantiateElement(data.id), new GridPoint(data.x, data.y));
+			
+			CircuitElement newElement = GetElement (new GridPoint(data.x, data.y));
+			newElement.Load(br);
+			newElement.PostLoad();
+		}	
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				for (int i = 0 ; i < 5; ++i){
+					anchors[x,y].isAnchored[i] = br.ReadBoolean();
+				}
+			}
+		}			
+
+		RefreshAll();
+		CalcBounds();
+		
+	}
+	
 	
 	public bool Validate(){
 		for (int x = 0; x < elements.GetLength (0); ++x){
@@ -128,9 +176,6 @@ public class Circuit : MonoBehaviour {
 	
 	
 	
-//	public void AddElement(GridPoint point, GameObject circuitElementGO){
-//	}
-//	
 	public void RemoveElement(GridPoint point){
 		GetElement(point).SetIsOnCircuit(false);
 		elements[point.x, point.y] = null;
@@ -153,91 +198,6 @@ public class Circuit : MonoBehaviour {
 		
 	}
 	
-	public 	void Load(BinaryReader br){
-		CreateBlankCircuit();
-
-		// Get the list of objects
-		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
-		int numElements = br.ReadInt32();
-		
-		for (int i = 0; i < numElements; ++i){
-			ElementSerializationData data = new ElementSerializationData();
-			data.x = br.ReadInt32 ();
-			data.y = br.ReadInt32 ();
-			data.id = br.ReadString ();
-			dataList.Add (data);
-		}		
-		
-		// Go through each entry adding a crcuit element to the circuit
-		for (int i = 0; i < numElements; ++i){
-			ElementSerializationData data = dataList[i];
-			PlaceElement(ElementFactory.singleton.InstantiateElement(data.id), new GridPoint(data.x, data.y));
-//			if (data.id == wireElementPrefab.GetComponent<SerializationID>().id){
-//				RawAddElement(new GridPoint(data.x, data.y), wireElementPrefab);
-//			}
-//			else if (data.id == cellElementPrefab.GetComponent<SerializationID>().id){
-//				RawAddElement(new GridPoint(data.x, data.y), cellElementPrefab);
-//			}
-//			else if (data.id == resistorElementPrefab.GetComponent<SerializationID>().id){
-//				RawAddElement(new GridPoint(data.x, data.y), resistorElementPrefab);
-//			}
-//			else if (data.id == ameterElementPrefab.GetComponent<SerializationID>().id){
-//				RawAddElement(new GridPoint(data.x, data.y), ameterElementPrefab);
-//			}
-			CircuitElement newElement = GetElement (new GridPoint(data.x, data.y));
-			newElement.Load(br);
-			newElement.PostLoad();
-		}
-	}
-	
-//	public void BakeConnect(){
-//		if (elements != null){
-//			for (int x = 0; x < elements.GetLength (0); ++x){
-//				for (int y = 0; y < elements.GetLength(1); ++y){
-//					GridPoint thisPoint = new GridPoint(x,y);
-//					if (ElementExists(thisPoint)){
-//						for (int i = 0; i < 4; ++i){
-//							GetElement(thisPoint).isAnchored[i] = GetElement(thisPoint).IsConnected(i);
-//						}
-//					}
-//					
-//				}
-//			}
-//		}
-//	}
-//	
-//	public void BakeAll(){
-//		if (elements != null){
-//			for (int x = 0; x < elements.GetLength (0); ++x){
-//				for (int y = 0; y < elements.GetLength(1); ++y){
-//					GridPoint thisPoint = new GridPoint(x,y);
-//					// If we have an element here, then bake all connections
-//					if (ElementExists(thisPoint)){
-//						for (int i = 0; i < 4; ++i){
-//							GetElement(thisPoint).isAnchored[i] = true;
-//						}
-//					}
-//					
-//				}
-//			}
-//		}
-//	}	
-	
-//	public void Unbake(){
-//		if (elements != null){
-//			for (int x = 0; x < elements.GetLength (0); ++x){
-//				for (int y = 0; y < elements.GetLength(1); ++y){
-//					GridPoint thisPoint = new GridPoint(x,y);
-//					if (ElementExists(thisPoint)){
-//						for (int i = 0; i < 4; ++i){
-//							GetElement(thisPoint).isAnchored[i] = false;
-//							
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
 	
 	public void TriggerExplosion(GridPoint point){
 		GameObject newElement = Instantiate(
@@ -320,12 +280,21 @@ public class Circuit : MonoBehaviour {
 		if (elements != null){
 			for (int x = 0; x < elements.GetLength (0); ++x){
 				for (int y = 0; y < elements.GetLength(1); ++y){
-					GameObject.Destroy(elements[x,y]);
+					Destroy(elements[x,y]);
 				}
 			}
 		}
 		elements = new GameObject[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
 		elementHash = new int[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
+		// If we have anchors already then delete them all
+		if (anchors != null){
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					Destroy(anchors[x,y].anchorMesh);
+				}
+			}
+		}
+		// Now rebuidl the anchors
 		anchors = new AnchorData[Grid.singleton.gridWidth, Grid.singleton.gridHeight];
 		for (int x = 0; x < elements.GetLength (0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
@@ -362,6 +331,31 @@ public class Circuit : MonoBehaviour {
 		MakeConnections();
 		PostConnectionUpdate();
 		UpdateAnchorMeshes();		
+	}
+	
+	// If we have (usually wires) that are being sociable, but have no actual connection
+	// but there is no anchor holding them there, then suggest that they go back to being receptive only
+	public void TidyUpConnectionBehaviours(bool honourAnchors){
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				GridPoint thisPoint = new GridPoint(x, y);
+				CircuitElement thisElement = GetElement(thisPoint);
+				if (thisElement != null){
+					AnchorData data = GetAnchors(thisPoint);
+					for (int i = 0; i < 4; ++i){
+						if (thisElement.connectionBehaviour[i] == CircuitElement.ConnectionBehaviour.kSociable && thisElement.isConnected[i] == false){
+							// Note that this will not do anything if the anchors prevent it
+							if (data.isAnchored[i]){
+								thisElement.SuggestBehaviour(i, CircuitElement.ConnectionBehaviour.kUnreceptive, honourAnchors);
+							}
+							else{
+								thisElement.SuggestBehaviour(i, CircuitElement.ConnectionBehaviour.kReceptive, honourAnchors);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	
@@ -480,7 +474,8 @@ public class Circuit : MonoBehaviour {
 						}
 					}
 					RebuildAnchorMesh(data, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
-					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 0);
+					// want it positioned behind everyhing (note that the ghost versio of this should be in between)
+					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 1);
 					data.anchorMesh.transform.parent = transform;
 				
 				}

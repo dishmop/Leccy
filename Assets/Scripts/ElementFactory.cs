@@ -34,7 +34,7 @@ public class ElementFactory : MonoBehaviour {
 	
 	
 	// Call if you make any changes to the prefab
-	public void OnChangePrefab(){
+	public void left(){
 		// this does't seem to make any sense!
 		Debug.LogError ("Does this ever get called?");
 	}

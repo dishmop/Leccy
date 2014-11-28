@@ -123,7 +123,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
-	public virtual bool CanModify(GridPoint thisPt, GridPoint otherPt){
+	public virtual bool CanModify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
 		return false;
 	}
 
@@ -131,14 +131,14 @@ public class CircuitElement : MonoBehaviour {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public virtual bool Modify(GridPoint thisPt, GridPoint otherPt){
+	public virtual bool Modify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
 		return false;
 	}	
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public virtual bool Modify(GridPoint thisPt){
+	public virtual bool Modify(GridPoint thisPt, bool honourAnchors){
 		return false;
 	}		
 	
@@ -181,21 +181,33 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	public virtual void Save(BinaryWriter bw){
-		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
-		////		bw.Write (orient);
+			
+		bw.Write (orient);
+		bw.Write (isOnCircuit);
+		bw.Write (alpha);
+		bw.Write (color.r);
+		bw.Write (color.g);
+		bw.Write (color.b);
+		bw.Write (color.a);
+		bw.Write (temperature);
+		
 		for (int i = 0; i < 4; ++i){
 			bw.Write ((int)connectionBehaviour[i]);
 		}
-		bw.Write (temperature);
 	}
 	
 	public 	virtual void Load(BinaryReader br){
-		// This is calculated from connections and is assumed ot match up with orientation of mesh - so don't store
-		//		orient = br.ReadInt32();
+		orient = br.ReadInt32();
+		isOnCircuit = br.ReadBoolean();
+		alpha = br.ReadSingle();
+		color.r = br.ReadSingle();
+		color.g = br.ReadSingle();
+		color.b = br.ReadSingle();
+		color.a = br.ReadSingle();
+		temperature = br.ReadSingle();
 		for (int i = 0; i < 4; ++i){
 			connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
 		}
-		temperature = br.ReadSingle();
 	}
 	
 	public virtual void PostLoad(){
@@ -208,7 +220,10 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected void HandleDisplayMeshChlid()
 	{
-	
+		// WHen we copy this object, the diusplay mesh is not seralized and so will be null.
+		// However, the actial displaymesh will still be copied as a child - we need to rectify this.
+		// Make DisplayMesh serializable doesn't seem to help as it crates two versions of the mesh!
+		// Though this might be due to some other bug of mine (something to investigate)
 		foreach (Transform child in transform){
 			if (child.gameObject.name == displayMeshName && child.gameObject != displayMesh){
 				Destroy (child.gameObject);
@@ -221,27 +236,27 @@ public class CircuitElement : MonoBehaviour {
 		return (modelDir + 6-orient) % 4;
 	}
 	
-	public bool SuggestBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour){
+	public bool SuggestBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour, bool honourAnchors){
 		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
-		return SuggestBehaviour(dir, behaviour);
+		return SuggestBehaviour(dir, behaviour, honourAnchors);
 	}
 	
 
 	
 	// Whether the   functions would return true if called
-	public bool IsAmenableToBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour){
+	public bool IsAmenableToBehaviour(CircuitElement otherElement, ConnectionBehaviour behaviour, bool honourAnchors){
 		int dir = Circuit.CalcNeighbourDir(GetGridPoint(), otherElement.GetGridPoint());
-		return IsAmenableToBehaviour(dir, behaviour);
+		return IsAmenableToBehaviour(dir, behaviour, honourAnchors);
 	}
 	
 	// By default we are only amenable to things which we are already
-	public virtual bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour){
+	public virtual bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour, bool honourAnchors){
 		return connectionBehaviour[dir] == behaviour;
 	}
 	
 	// If a behaviour is suggested we simply do nothing and return true if this is compatible with the reques
-	public virtual bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour){
-		return IsAmenableToBehaviour(dir, behaviour);
+	public virtual bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour, bool honourAnchors){
+		return IsAmenableToBehaviour(dir, behaviour, honourAnchors);
 	}	
 	
 	public virtual int CalcHash(){
@@ -424,18 +439,27 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected void DestorySelf(){
 		Debug.Log("Destroy self : " + GetComponent<SerializationID>().id);
-		RemoveConnections();
+		RemoveConnections(false);
 		Circuit.singleton.RemoveElement(thisPoint);
 		Circuit.singleton.TriggerExplosion(thisPoint);
 		Destroy (gameObject);
 		
-		// Also remove any anchors this object may have had - this may not be the correction thing to do, but it is better than keeping them there
+		// Also remove any anchors this object may have had and any anchors from its neighbours to it
+		// this may not be the correction thing to do, but it is better than keeping them there
 		// as it looks odd
 		Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
 		for (int i = 0; i < 5; ++i){
 			data.isAnchored[i] = false;
 		}
 		data.isDirty = true;
+		// each of the neighbouring points
+		for (int i = 0; i < 4; ++i){
+			GridPoint otherPoint = thisPoint + Circuit.singleton.offsets[i];
+			int otherDir = CalcInvDir(i);
+			Circuit.AnchorData otherData = Circuit.singleton.GetAnchors(otherPoint);
+			otherData.isAnchored[otherDir] = false;
+			otherData.isDirty = true;
+		}
 	}
 	
 	
@@ -498,7 +522,7 @@ public class CircuitElement : MonoBehaviour {
 		}
 	}	
 	
-	public virtual void RemoveConnections(){
+	public virtual void RemoveConnections(bool honourAnchors){
 	}
 	
 	// Call to set up the connection behaviours for striaght component that can be connected at either end

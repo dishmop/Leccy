@@ -6,7 +6,7 @@ public class FractionCalc : MonoBehaviour {
 	public float value = 0f;
 	public Color color;
 	
-	float 	epsilon  = 0.0001f;
+	float 	epsilon  = 0.001f;
 	float 	lastValue = -1f;
 	int		integer = 0;
 	int		numerator = 0;

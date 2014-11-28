@@ -260,14 +260,14 @@ public class OldUI : MonoBehaviour {
 	}	
 		
 	void LoadLevel(int index){
-		if (index < levelsToLoad.Length && levelsToLoad[index] != null){
-			LevelSerializer.singleton.LoadLevel(levelsToLoad[index].name + ".bytes");
-			inputMode = InputMode.kWires;
-			levelLoadFade = 2;
-			Simulator.singleton.ClearSimulation();
-			Circuit.singleton.CalcBounds();
-			Camera.main.GetComponent<CamControl>().CentreCamera();
-		}
+//		if (index < levelsToLoad.Length && levelsToLoad[index] != null){
+//			LevelSerializer.singleton.LoadLevel(levelsToLoad[index].name + ".bytes");
+//			inputMode = InputMode.kWires;
+//			levelLoadFade = 2;
+//			Simulator.singleton.ClearSimulation();
+//			Circuit.singleton.CalcBounds();
+//			Camera.main.GetComponent<CamControl>().CentreCamera();
+//		}
 	}
 
 		
@@ -415,7 +415,7 @@ public class OldUI : MonoBehaviour {
 				inputMode = InputMode.kWires;
 			}
 			else if (inputMode == InputMode.kSaveLevel){
-				LevelSerializer.singleton.SaveLevel(levelToSave + ".bytes");
+//				LevelSerializer.singleton.SaveLevel(levelToSave + ".bytes");
 				inputMode = oldInputMode;
 			}
 //			else if (inputMode == InputMode.kBakeConnect){

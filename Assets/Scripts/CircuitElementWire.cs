@@ -32,9 +32,9 @@ public class CircuitElementWire : CircuitElement {
 		RebuildMesh();
 	}
 	
-	public override bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour){
+	public override bool SuggestBehaviour(int dir, ConnectionBehaviour behaviour, bool honourAnchors){
 		// If trying to modify anchored data, then do nothing
-		if (thisPoint != null){
+		if (thisPoint != null && honourAnchors){
 			Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
 			if (data.isAnchored[dir]) return false;
 		}
@@ -64,9 +64,9 @@ public class CircuitElementWire : CircuitElement {
 
 	
 	// Are we able to set these behaviours?
-	public override bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour){
+	public override bool IsAmenableToBehaviour(int dir, ConnectionBehaviour behaviour, bool honourAnchors){
 		// If trying to modify anchored data, then do nothing
-		if (thisPoint != null){
+		if (thisPoint != null && honourAnchors){
 			Circuit.AnchorData data = Circuit.singleton.GetAnchors(thisPoint);
 			if (data.isAnchored[dir]) return false;
 		}
@@ -215,7 +215,7 @@ public class CircuitElementWire : CircuitElement {
 	}
 
 	// Call this before erasing an element	
-	public override void RemoveConnections(){
+	public override void RemoveConnections(bool honourAnchors){
 		// Suggest to any elements around us that they may want to cancel their invite to us
 		// Really only applicable to other wires (we are basically just talking to other wires!)
 		if (IsOnCircuit()){
@@ -223,7 +223,7 @@ public class CircuitElementWire : CircuitElement {
 				GridPoint otherPoint = thisPoint + Circuit.singleton.offsets[dir];
 				CircuitElement otherElement = Circuit.singleton.GetElement(otherPoint);
 				if (otherElement){
-					otherElement.SuggestBehaviour(this, ConnectionBehaviour.kReceptive);
+					otherElement.SuggestBehaviour(this, ConnectionBehaviour.kReceptive, honourAnchors);
 				}
 			}
 		}

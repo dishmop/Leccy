@@ -91,9 +91,36 @@ public class CircuitElementEraser : CircuitElement {
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify the proposed points
-	public override bool CanModify(GridPoint thisPt, GridPoint otherPt){
-		// First check for node anchors
-		if (thisPt != null && otherPt == null && Circuit.singleton.GetAnchors(thisPt).isAnchored[Circuit.kCentre]) return false;
+	public override bool CanModify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
+		CircuitElement thisElement = null;
+		CircuitElement otherElement = null;
+		
+		if (thisPt != null) thisElement = Circuit.singleton.GetElement(thisPt);
+		if (otherPt != null) otherElement = Circuit.singleton.GetElement(otherPt);
+		
+		// Sometimes we cannot remove a connection because it is a necessary part of an element
+		if (thisElement != null && otherElement != null){
+			// First make then unresponsive - if we were not able to do that, try making the unreceptive
+			bool ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kReceptive, honourAnchors);
+			bool ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kReceptive, honourAnchors);
+			if (!ok1) ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
+			if (!ok2) ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
+			return (ok1 && ok2);
+		}
+		
+		// Other than that, the only reason is because of achors
+		if (!honourAnchors) return true;	
+		
+		// First check for anchors which stop the node being deleted
+		if (thisPt != null && otherPt == null){
+			Circuit.AnchorData anchorData = Circuit.singleton.GetAnchors(thisPt);
+			if (anchorData.isAnchored[Circuit.kCentre]) return false;
+			for (int i = 0; i < 4; ++i){
+				if (anchorData.isAnchored[i] && thisElement.IsSociableOrConnected(i, true)){
+					return false;
+				}
+			}
+		}
 		
 		// Then check for conection anchors
 		if (thisPt != null && otherPt != null){ 
@@ -101,21 +128,8 @@ public class CircuitElementEraser : CircuitElement {
 			if (Circuit.singleton.GetAnchors(thisPt).isAnchored[dir]) return false;
 		}
 		
-		// Test if we are able to erasing the thing if we were t press the button
-		CircuitElement thisElement = null;
-		CircuitElement otherElement = null;
-		
-		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPt);
-		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
-		
-		if (thisElement != null && otherElement != null){
-			// First make then unresponsive - if we were not able to do that, try making the unreceptive
-			bool ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kReceptive);
-			bool ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kReceptive);
-			if (!ok1) ok1 = thisElement.IsAmenableToBehaviour(otherElement, ConnectionBehaviour.kUnreceptive);
-			if (!ok2) ok2 = otherElement.IsAmenableToBehaviour(thisElement, ConnectionBehaviour.kUnreceptive);
-			return (ok1 && ok2);
-		}
+
+
 		return true;
 	}
 	
@@ -123,40 +137,32 @@ public class CircuitElementEraser : CircuitElement {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public override bool Modify(GridPoint thisPt, GridPoint otherPt){
-	
-
-		// Then check for conection anchors
-		if (thisPt != null && otherPt != null){ 
-			int dir = Circuit.CalcNeighbourDir(thisPt, otherPt);
-			if (Circuit.singleton.GetAnchors(thisPt).isAnchored[dir]) return false;
-		}
+	public override bool Modify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
+		if (!CanModify(thisPt, otherPt, honourAnchors)) return false;
 		
 		CircuitElement thisElement = null;
 		CircuitElement otherElement = null;
 		
-		if (thisPoint != null) thisElement = Circuit.singleton.GetElement(thisPt);
-		if (otherPoint != null) otherElement = Circuit.singleton.GetElement(otherPt);
+		if (thisPt != null) thisElement = Circuit.singleton.GetElement(thisPt);
+		if (otherPt != null) otherElement = Circuit.singleton.GetElement(otherPt);
 
 		if (thisElement != null && otherElement != null){
 			// First make then unresponsive - if we were not able to do that, try making the unreceptive
-			bool ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kReceptive);
-			bool ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kReceptive);
-			if (!ok1) ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kUnreceptive);
-			if (!ok2) ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kUnreceptive);
+			bool ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kReceptive, honourAnchors);
+			bool ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kReceptive, honourAnchors);
+			if (!ok1) ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
+			if (!ok2) ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
 			return (ok1 && ok2);
 		}
 		return true;
-	}	
+	}
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public override bool Modify(GridPoint thisPt){
-		// First check for node anchors
-		if (thisPt != null && Circuit.singleton.GetAnchors(thisPt).isAnchored[Circuit.kCentre]){
-			return false;
-		}
+	public override bool Modify(GridPoint thisPt, bool honourAnchors){
+		if (!CanModify(thisPt, null, honourAnchors)) return false;
+		
 		
 		GameObject existingElement = Circuit.singleton.GetGameObject(thisPt);
 		

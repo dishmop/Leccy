@@ -116,7 +116,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
-		return 0.00001f;
+		return 0.000001f;
 	}	
 	
 	void CreateDisplayMesh(){
@@ -159,6 +159,9 @@ public class CircuitElementAmmeter : CircuitElement {
 		HandleDisplayMeshChlid();	
 		HandleColorChange();
 		
+//		float debugCurrent = GetMaxCurrent();
+//		Debug.Log ("Current = " + debugCurrent);
+		
 		
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		
@@ -194,9 +197,6 @@ public class CircuitElementAmmeter : CircuitElement {
 			if (child.name == "ActualText"){
 				child.gameObject.GetComponent<FractionCalc>().value = GetMaxCurrent ();
 				child.gameObject.GetComponent<FractionCalc>().color = IsOnTarget() ? textColorTarget : textColorNorm;
-				
-
-				
 			}		
 			if (child.name == "SignPanel"){
 				MeshRenderer mesh = child.gameObject.GetComponent<MeshRenderer>();

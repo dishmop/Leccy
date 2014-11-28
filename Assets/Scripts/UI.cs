@@ -48,6 +48,15 @@ public class UI : MonoBehaviour {
 		Debug.Log("OnExitUI()");
 		isInUI = false;
 	}
+	
+	// GameUpdate is called once per frame in a specific order
+	public void GameUpdate () {
+		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
+		// anchors are being honored
+		Circuit.singleton.TidyUpConnectionBehaviours(honourAnchors);
+		
+		// Not to mention the fact that these changes will now not get implemented until next go
+	}	
 
 
 	// Use this for initialization
@@ -137,10 +146,12 @@ public class UI : MonoBehaviour {
 				HandleModifyElementInput();
 				break;
 		}
+
 		lastPoint = thisPoint;
 		lastOtherPoint = otherPoint;
-					
 	}
+	
+	
 	
 	CircuitElement.ConnectionBehaviour[] SaveOldConnections(CircuitElement existingElement){
 		CircuitElement.ConnectionBehaviour[] oldConnections = new CircuitElement.ConnectionBehaviour[4];
@@ -152,7 +163,8 @@ public class UI : MonoBehaviour {
 		// If there were connections before, try and set them up again
 		if (oldConnections != null){
 			for (int i = 0; i < 4; ++i){
-				thisElement.SuggestBehaviour(i, oldConnections[i]);
+				// We do this regardless of the anchor situation (seeing as we are just trying to restor what was there a second ago)
+				thisElement.SuggestBehaviour(i, oldConnections[i], false);
 			}
 		}
 	}
@@ -254,12 +266,12 @@ public class UI : MonoBehaviour {
 					
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i-1]).isAnchored[lastDir]){
 					    if (lastElement != null){
-					    	lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable);
+							lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable, honourAnchors);
 						}
 					    
 					}
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[thisDir]){
-						if (thisElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable);
+						if (thisElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable, honourAnchors);
 					}
 					placeElementSound.Play ();
 
@@ -304,7 +316,7 @@ public class UI : MonoBehaviour {
 			}
 			for (int i = 0; i < 4; ++i){
 				if (anchorData.isAnchored[i]){
-					if (!ghostElement.GetComponent<CircuitElement>().IsAmenableToBehaviour(i, connectionBehaviour[i])) error = true;
+					if (!ghostElement.GetComponent<CircuitElement>().IsAmenableToBehaviour(i, connectionBehaviour[i], honourAnchors)) error = true;
 					
 				}
 				
@@ -370,7 +382,7 @@ public class UI : MonoBehaviour {
 	public void RemoveElement(GameObject existingElement){
 		ElementFactory.singleton.IncrementStock(existingElement);
 		GridPoint point = existingElement.GetComponent<CircuitElement>().GetGridPoint();
-		existingElement.GetComponent<CircuitElement>().RemoveConnections();
+		existingElement.GetComponent<CircuitElement>().RemoveConnections(honourAnchors);
 		Destroy (Circuit.singleton.GetGameObject(point));
 		Circuit.singleton.RemoveElement(point);
 	}
@@ -378,7 +390,7 @@ public class UI : MonoBehaviour {
 	void HandleModifyElementInput(){
 	
 		CircuitElement ghostCircEl = ghostElement.GetComponent<CircuitElement>();
-		bool error = !ghostCircEl.CanModify(thisPoint, otherPoint);
+		bool error = !ghostCircEl.CanModify(thisPoint, otherPoint, honourAnchors);
 		ghostCircEl.SetErrorState(error);
 		
 		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
@@ -399,7 +411,7 @@ public class UI : MonoBehaviour {
 		
 		// If clicking a connection - then simple request that the connection be removed
 		if (buttonIsClicked && otherPoint != null){
-			bool ok = ghostCircEl.Modify(thisPoint, otherPoint);
+			bool ok = ghostCircEl.Modify(thisPoint, otherPoint, honourAnchors);
 			if (ok)
 				removeElementSound.Play ();
 			else
@@ -412,17 +424,17 @@ public class UI : MonoBehaviour {
 			gridPath[0] = thisPoint;
 		}
 		// If we weren't on a connection, but are now, and have not moved base point then modify the connection only
-		else if(lastOtherPoint == null && otherPoint != null && lastPoint.IsEqual(thisPoint)){
-			bool ok = ghostCircEl.Modify(thisPoint, otherPoint);
+		else if(lastOtherPoint == null && otherPoint != null && lastPoint != null && lastPoint.IsEqual(thisPoint)){
+			bool ok = ghostCircEl.Modify(thisPoint, otherPoint, honourAnchors);
 			if (ok)
 				removeElementSound.Play ();
 			else
 				failSound.Play ();
 		}
 		// If we were on a connection, but are not now, then modify the connection and the node
-		else if(lastOtherPoint != null && otherPoint == null && lastPoint.IsEqual(thisPoint)){
-			bool ok1 = ghostCircEl.Modify(thisPoint, lastOtherPoint);
-			bool ok2 = ghostCircEl.Modify(thisPoint);
+		else if(lastOtherPoint != null && otherPoint == null && lastPoint != null && lastPoint.IsEqual(thisPoint)){
+			bool ok1 = ghostCircEl.Modify(thisPoint, lastOtherPoint, honourAnchors);
+			bool ok2 = ghostCircEl.Modify(thisPoint, honourAnchors);
 			if (ok1 || ok2)
 				removeElementSound.Play ();
 			else
@@ -458,12 +470,12 @@ public class UI : MonoBehaviour {
 			for (int i = 0; i < pathLength; ++i){
 				bool ignoreThis = (i == 0 && ignoreFirst) || (i == pathLength-1 && ignoreLast);
 				if (!ignoreThis){
-					ghostCircEl.Modify (gridPath[i]);
+					ghostCircEl.Modify (gridPath[i], honourAnchors);
 				}
 				// Show do the connections in the path too 
 				if (i < pathLength-1){
-					ghostCircEl.Modify (gridPath[i], gridPath[i+1]);
-					ghostCircEl.Modify (gridPath[i+1], gridPath[i]);
+					ghostCircEl.Modify (gridPath[i], gridPath[i+1], honourAnchors);
+					ghostCircEl.Modify (gridPath[i+1], gridPath[i], honourAnchors);
 				}
 
 			}

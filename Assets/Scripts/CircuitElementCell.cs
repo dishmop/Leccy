@@ -7,11 +7,13 @@ using System.IO;
 public class CircuitElementCell : CircuitElement {
 
 	public GameObject 	cellPrefab;
-	public float		voltage = 12f;
-	float				resistance = 0f;
-	float				maxCurrent = 100f;
-	bool				isInEmergency = false;
+	public float		voltage = 1f;
 
+	bool				isInEmergency = false;
+	const float	normalResistance = 0f;
+	const float	emergencyResistance = 0.001f;
+	const float	maxCurrent = 100f;
+	
 	
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
@@ -25,7 +27,7 @@ public class CircuitElementCell : CircuitElement {
 		base.Save (bw);	
 		
 		bw.Write (voltage);
-		bw.Write(resistance);
+		bw.Write(isInEmergency);
 	}
 	
 	
@@ -33,7 +35,7 @@ public class CircuitElementCell : CircuitElement {
 		base.Load (br);	
 		
 		voltage = br.ReadSingle();
-		resistance = br.ReadSingle();
+		isInEmergency = br.ReadBoolean();
 	}
 	
 	public override void TriggerEmergency(){
@@ -48,7 +50,7 @@ public class CircuitElementCell : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
-		return isInEmergency ? 0.001f : resistance;
+		return isInEmergency ? emergencyResistance : normalResistance;
 	}
 	
 	public override float GetVoltageDrop(int dir, bool fwd){

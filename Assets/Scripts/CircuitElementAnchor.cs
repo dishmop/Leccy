@@ -8,6 +8,8 @@ public class CircuitElementAnchor : CircuitElement {
 	
 	// The ones to use for the UI button
 	public GameObject	emptyGO;
+	public Color		buildColor;
+	public Color 		eraseColor;
 	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
@@ -15,6 +17,11 @@ public class CircuitElementAnchor : CircuitElement {
 	GameObject			anchorCentralPrefabUI;
 	GameObject			anchorBranchPrefabUI;
 	
+	// Need this so it gets copied appropriatly
+	[SerializeField]
+	// Whether we are plaving anchors or removing them
+	bool				erase = false;
+
 	
 	
 	
@@ -130,9 +137,9 @@ public class CircuitElementAnchor : CircuitElement {
 		
 		displayMesh = anchorData.anchorMesh;
 		displayMesh.name = displayMeshName;
-		
+
+		SetupColor();		
 		dirtyAlpha = true;
-		dirtyColor = true;
 	}
 	
 	
@@ -140,7 +147,7 @@ public class CircuitElementAnchor : CircuitElement {
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
-	public override bool CanModify(GridPoint thisPt, GridPoint otherPt){
+	public override bool CanModify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
 		return true;
 	}
 	
@@ -148,7 +155,7 @@ public class CircuitElementAnchor : CircuitElement {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public override bool Modify(GridPoint thisPt, GridPoint otherPt){
+	public override bool Modify(GridPoint thisPt, GridPoint otherPt, bool honourAnchors){
 	
 		// Work out which direction the other point is in
 		int thisDir = Circuit.CalcNeighbourDir(thisPt, otherPt);
@@ -157,13 +164,13 @@ public class CircuitElementAnchor : CircuitElement {
 		// element adopts an unreceptive attitude from now on
 		CircuitElement existingElement = Circuit.singleton.GetElement(thisPt);
 		if (existingElement != null && !existingElement.isConnected[thisDir]){
-			existingElement.SuggestBehaviour(thisDir, ConnectionBehaviour.kUnreceptive);
+			existingElement.SuggestBehaviour(thisDir, ConnectionBehaviour.kUnreceptive, honourAnchors);
 		}
 
 		
 		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
 		
-		thisData.isAnchored[thisDir] = true;
+		thisData.isAnchored[thisDir] = !erase;
 		thisData.isDirty = true;
 		
 		
@@ -174,15 +181,40 @@ public class CircuitElementAnchor : CircuitElement {
 	// Return true if we are a modifying circuit element (like anchors or eraser)
 	// and we are able t modidify in our current state
 	// Ths function actually does the modifying though
-	public override bool Modify(GridPoint thisPt){
+	public override bool Modify(GridPoint thisPt, bool honourAnchors){
 	
 		Circuit.AnchorData thisData = Circuit.singleton.GetAnchors(thisPt);
 		
-		thisData.isAnchored[Circuit.kCentre] = true;
+		thisData.isAnchored[Circuit.kCentre] = !erase;
 		thisData.isDirty = true;
 		
 		return true;
 	}	
+	
+	// Called when mouse is lciked on this. Return true if we changed the object in some way
+	public override bool OnClick(){
+		erase = !erase;
+		SetupColor();
+		// need to handle the color change straigth away as we will be rebuilding the UI element asAP
+		HandleColorChange();
+		return  true;
+	}
+	
+	// Decide if we should call OnClick() if we are clicked on with the selectd prefab
+	// For us this will only happy in the UI
+	public override bool ShouldClick(GameObject selectionPrefab){
+		// IF a different kind of prefab - then don;t click
+		if (GetComponent<SerializationID>().id != selectionPrefab.GetComponent<SerializationID>().id){
+			return false;
+		}
+
+		return true;
+		
+	}
+	
+	void SetupColor(){
+		SetColor(erase ? eraseColor : buildColor);
+	}
 	
 	
 	

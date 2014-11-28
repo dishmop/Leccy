@@ -8,6 +8,7 @@ public class UpdateManager : MonoBehaviour {
 	// FixedUpdate is called once per frame
 	void FixedUpdate () {
 		Circuit.singleton.GameUpdate();
+		UI.singleton.GameUpdate();
 		Simulator.singleton.GameUpdate();
 	 
 	}
