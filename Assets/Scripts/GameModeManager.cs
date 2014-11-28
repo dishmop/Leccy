@@ -43,12 +43,18 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kStart:
 				LevelManager.singleton.currentLevelIndex = 0;
 				LevelManager.singleton.LoadLevel();
+				UI.singleton.ActivateSidePanel(false, true);
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
+				UI.singleton.ActivateSidePanel(false, true);
+				UI.singleton.ActivateSidePanel(true);
 				gameMode =GameMode.kPlayLevel;
 				break;				
 			case GameMode.kTitleScreen:
+				// Just for testing
+				UI.singleton.ActivateSidePanel(enableEditor);
+				
 				break;
 			case GameMode.kPlayLevel:
 				break;		

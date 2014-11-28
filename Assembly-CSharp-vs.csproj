@@ -73,6 +73,7 @@
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />
      <Compile Include="Assets\Scripts\Simulator.cs" />
+     <Compile Include="Assets\Scripts\SpringValue.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />

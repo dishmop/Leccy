@@ -10,6 +10,9 @@ public class UI : MonoBehaviour {
 	public AudioSource removeElementSound;
 	public AudioSource failSound;
 	
+	public GameObject sidePanel;
+	
+	
 	public bool	honourAnchors = false;
 
 	string 		selectedPrefabId;
@@ -21,9 +24,14 @@ public class UI : MonoBehaviour {
 	GridPoint	lastPoint;
 	GridPoint	lastOtherPoint;
 	
+	// Moving the side panel in and out
+	SpringValue	sidePanelPos = new SpringValue(0f);
+	
 	// For transfering mouse events between UI and fixed update
 	bool cacheMouseHeld = false;
 	bool cacheMousePressed = false;
+	
+
 	
 	
 	bool		isInUI;
@@ -53,7 +61,28 @@ public class UI : MonoBehaviour {
 		Debug.Log("OnExitUI()");
 		isInUI = false;
 	}
+	public void ActivateSidePanel(bool activate){
+		ActivateSidePanel(activate, false);
+	}
 	
+	public void ActivateSidePanel(bool activate, bool force){
+		float value = 0;
+		RectTransform rectTranform = sidePanel.GetComponent<RectTransform>();
+		if (!activate){
+			Vector3[] corners = new Vector3[4];
+			rectTranform.GetWorldCorners(corners);
+			value = Mathf.Abs (corners[0].x - corners[2].x);
+		}
+		if (force){
+			sidePanelPos.Force (value);
+		}
+		else{
+			sidePanelPos.Set (value);
+		};
+				
+	}
+	
+		
 	// GameUpdate is called once per frame in a specific order
 	public void LateGameUpdate () {
 		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
@@ -169,6 +198,18 @@ public class UI : MonoBehaviour {
 		
 		cacheMousePressed = false;
 		
+		// Do visual animations
+		UpdateSidePanel();
+		
+		
+	}
+	
+	void UpdateSidePanel(){
+		sidePanelPos.Update();
+		RectTransform rectTranform = sidePanel.GetComponent<RectTransform>();
+		rectTranform.offsetMin = new Vector2(-sidePanelPos.GetValue(), 0f);
+		rectTranform.offsetMax = new Vector2(-sidePanelPos.GetValue(), 0f);
+
 	}
 	
 	

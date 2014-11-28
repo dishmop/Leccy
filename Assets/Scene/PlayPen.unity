@@ -720,7 +720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1deaac41dc790476ba16dabd3acc7d77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableEditor: 1
+  enableEditor: 0
   gameMode: 0
 --- !u!4 &353371179
 Transform:
@@ -1326,8 +1326,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: .193747342, y: 1}
-  m_AnchoredPosition: {x: -.5, y: 0}
-  m_SizeDelta: {x: -1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1118496693
 MonoBehaviour:
@@ -1915,7 +1915,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
@@ -2169,6 +2169,7 @@ MonoBehaviour:
   placeElementSound: {fileID: 1842844728}
   removeElementSound: {fileID: 1842844727}
   failSound: {fileID: 1842844729}
+  sidePanel: {fileID: 1118496691}
   honourAnchors: 0
 --- !u!82 &1842844727
 AudioSource:

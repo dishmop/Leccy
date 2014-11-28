@@ -1,33 +1,32 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI.cs">
     <Files>
-      <File FileName="Assets/Scripts/UI.cs" Line="58" Column="91" />
-      <File FileName="Assets/Scripts/UpdateManager.cs" Line="8" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="58" Column="18" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="120" Column="34" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="164" Column="3" />
       <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="273" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="75" Column="4" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1855" Column="1" />
       <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="30" Column="9" />
+      <File FileName="Assets/Scripts/ElementFactory.cs" Line="165" Column="33" />
       <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/OldUI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="16" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="73" Column="17" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="44" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="32" Column="1" />
       <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/PrefabManager.cs" Line="1" Column="1" />
@@ -54,6 +53,7 @@
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="13" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="7" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="10" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/UI.cs" line="65" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
