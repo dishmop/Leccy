@@ -138,21 +138,19 @@ public class ElementFactory : MonoBehaviour {
 	
 
 	public 	void Save(BinaryWriter bw){
-	
-	/*
 		int numStock = stock.Length;
 		bw.Write(numStock);
 		for (int i = 0; i < numStock; ++i){
 			bw.Write (stock[i].factoryPrefab.GetComponent<SerializationID>().id);
 			bw.Write (stock[i].stockRemaining);
 		}
-		*/
+		
 	}
 	
 	public 	void Load(BinaryReader br){
-	/*
-		foreach (FactoryData data in stock){
-			data.stockRemaining = defaultStockRemaining;
+	
+		for (int i = 0; i < stock.GetLength(0); ++i){
+			stock[i].stockRemaining = initialStock[i].initialStockCount;
 		}
 
 				// We don't attmept to remake the stock list
@@ -162,7 +160,11 @@ public class ElementFactory : MonoBehaviour {
 			string id = br.ReadString();
 			FindStockData(id).stockRemaining = br.ReadInt32 ();
 		}
-		*/
+		
+		for (int i = 0; i < stock.GetLength(0); ++i){
+			PrefabManager.OnChangePrefab(stock[i].factoryPrefab);
+		}	
+		
 	}
 	
 	

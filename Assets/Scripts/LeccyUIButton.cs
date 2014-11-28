@@ -30,6 +30,16 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 		}
 	}
 	
+	public void IncStock(){
+		ElementFactory.singleton.IncrementStock(circuitElementPrefab);
+		PrefabManager.OnChangePrefab(circuitElementPrefab);
+		
+	}
+	
+	public void DecStock(){
+		ElementFactory.singleton.DecrementStock(circuitElementPrefab);
+		PrefabManager.OnChangePrefab(circuitElementPrefab);
+	}
 	
 	void ConfigureButton(){
 		if (circuitElementPrefab){
@@ -55,7 +65,17 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 			
 			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("UIMesh").GetComponent<UIMesh>().SetPrefabMesh(mainMeshPrefab);
 			int stockNum = ElementFactory.singleton.GetStockRemaining(circuitElementPrefab.GetComponent<SerializationID>().id);
-			transform.FindChild("ButtonFrame").FindChild("Button").FindChild("StockLeft").GetComponent<Text>().text =(stockNum >= 0) ? stockNum.ToString() : "";
+			GameObject stockTextBox = transform.FindChild("ButtonFrame").FindChild("Button").FindChild("StockLeft").gameObject;
+			if (element.uiType != CircuitElement.UIType.kModify){
+				stockTextBox.GetComponent<Text>().text = stockNum.ToString();
+			}
+			else{
+				stockTextBox.GetComponent<Text>().text = "";
+			}
+			
+			// we only enable the stock inc and doc buttons in editor mode
+			transform.FindChild("ButtonFrame").FindChild("StockAdjust").gameObject.SetActive(GameModeManager.singleton.enableEditor && (element.uiType != CircuitElement.UIType.kModify));
+			
 		}
 	}
 	
@@ -89,6 +109,7 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 		buttonT.GetComponent<Button>().colors = cols;
 		
 	}
+
 	
 
 

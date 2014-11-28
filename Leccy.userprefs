@@ -1,12 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LevelManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/UI.cs" Line="381" Column="16" />
-      <File FileName="Assets/Scripts/UpdateManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="58" Column="91" />
+      <File FileName="Assets/Scripts/UpdateManager.cs" Line="8" Column="1" />
       <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="164" Column="3" />
       <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
@@ -23,21 +23,23 @@
       <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/OldUI.cs" Line="262" Column="1" />
+      <File FileName="Assets/Scripts/OldUI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="18" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="16" Column="1" />
+      <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PrefabManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PrefabListener.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>existingElement</Value>
-          <Value>oldConnections</Value>
-          <Value>thisElement</Value>
-          <Value>isConnected</Value>
-          <Value>connectionBehaviour</Value>
-          <Value>thisElement</Value>
+          <Value>ghostElement</Value>
+          <Value>elememt</Value>
+          <Value>prefabElememt</Value>
+          <Value>child.gameObject.name</Value>
         </State>
       </Pad>
     </Pads>

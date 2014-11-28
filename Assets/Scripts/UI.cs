@@ -21,6 +21,11 @@ public class UI : MonoBehaviour {
 	GridPoint	lastPoint;
 	GridPoint	lastOtherPoint;
 	
+	// For transfering mouse events between UI and fixed update
+	bool cacheMouseHeld = false;
+	bool cacheMousePressed = false;
+	
+	
 	bool		isInUI;
 	
 	// Temporary debug thing
@@ -50,7 +55,7 @@ public class UI : MonoBehaviour {
 	}
 	
 	// GameUpdate is called once per frame in a specific order
-	public void GameUpdate () {
+	public void LateGameUpdate () {
 		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
 		// anchors are being honored
 		Circuit.singleton.TidyUpConnectionBehaviours(honourAnchors);
@@ -116,13 +121,25 @@ public class UI : MonoBehaviour {
 			otherPoint = null;
 		}		
 	}
+	
+	// Used to cache mouse results
+	void Update(){
+		cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+		if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
+			cacheMousePressed = true;
+		}
+	}
 
 	
-	void Update(){
+	public void GameUpdate(){
 	
+		if (ghostElement == null){
+			Debug.Log("Ghost is null!?! - NOt initialised yet?");
+			return;
+		}
+
 		CalcCurrentGridPoints();
 		
-		if (ghostElement == null) Debug.LogError ("Ghost is null!?!");
 		
 		
 		// Deal with the ghost element
@@ -149,6 +166,9 @@ public class UI : MonoBehaviour {
 
 		lastPoint = thisPoint;
 		lastOtherPoint = otherPoint;
+		
+		cacheMousePressed = false;
+		
 	}
 	
 	
@@ -172,13 +192,13 @@ public class UI : MonoBehaviour {
 	void HandleDrawnElementInput(){
 	
 		// Check if it is held down
-		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+		buttonIsHeld = cacheMouseHeld;
 		
 		// If not on the grid, then nothing to do
 		if (thisPoint == null) return;
 
 		// Check if (in addition) we have only just pressed it down
-		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
+		bool buttonIsClicked = cacheMousePressed;
 		
 		
 		// If we don't have any elements left to place, then we are in an error state
@@ -333,7 +353,7 @@ public class UI : MonoBehaviour {
 		ghostElement.GetComponent<CircuitElement>().SetErrorState(error);
 		
 		
-		if (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl)){
+		if (cacheMousePressed){
 			// If in an error state, do nothing other than thud if we press the mouse button
 			if (error){
 				failSound.Play ();
@@ -375,12 +395,12 @@ public class UI : MonoBehaviour {
 	public void PlaceElement(GameObject newElement, GridPoint thisPoint){
 		Circuit.singleton.PlaceElement(newElement, thisPoint);
 		placeElementSound.Play ();
-		ElementFactory.singleton.DecrementStock(newElement);
+		if (!GameModeManager.singleton.enableEditor) ElementFactory.singleton.DecrementStock(newElement);
 	
 	}
 	
 	public void RemoveElement(GameObject existingElement){
-		ElementFactory.singleton.IncrementStock(existingElement);
+		if (!GameModeManager.singleton.enableEditor) ElementFactory.singleton.IncrementStock(existingElement);
 		GridPoint point = existingElement.GetComponent<CircuitElement>().GetGridPoint();
 		existingElement.GetComponent<CircuitElement>().RemoveConnections(honourAnchors);
 		Destroy (Circuit.singleton.GetGameObject(point));
@@ -393,7 +413,7 @@ public class UI : MonoBehaviour {
 		bool error = !ghostCircEl.CanModify(thisPoint, otherPoint, honourAnchors);
 		ghostCircEl.SetErrorState(error);
 		
-		buttonIsHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+		buttonIsHeld = cacheMouseHeld;
 		
 		// If the buttons is not down, there is nothing more to do
 		if (thisPoint == null || !buttonIsHeld){
@@ -402,7 +422,7 @@ public class UI : MonoBehaviour {
 	
 		
 		// Check if we have only just pressed it down
-		bool buttonIsClicked = (Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl));
+		bool buttonIsClicked = cacheMousePressed;
 		
 		
 		GridPoint[] gridPath = null;

@@ -82,7 +82,6 @@
      <Compile Include="Assets\Scripts\Tuple4.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Scripts\UIMesh.cs" />
-     <Compile Include="Assets\Scripts\UpdateManager.cs" />
      <Compile Include="Assets\Scripts\alglib\src\alglibinternal.cs" />
      <Compile Include="Assets\Scripts\alglib\src\alglibmisc.cs" />
      <Compile Include="Assets\Scripts\alglib\src\ap.cs" />

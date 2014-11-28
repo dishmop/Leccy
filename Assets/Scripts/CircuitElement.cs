@@ -116,6 +116,11 @@ public class CircuitElement : MonoBehaviour {
 		
 	}
 	
+	// return true if this component is only available in the editor
+	public virtual bool IsEditorOnly(){
+		return false;
+	}
+	
 	// Return true of this element is one which is attached to wires (most are)
 	public virtual bool IsWired(){
 		return true;

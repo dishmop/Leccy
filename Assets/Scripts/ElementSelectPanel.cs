@@ -25,11 +25,15 @@ public class ElementSelectPanel : MonoBehaviour {
 		int xPos = 0;
 		int yPos = 0;
 		for (int i = 0; i < numElements; ++i){
+			GameObject prefab = factory.GetPrefab(uiTypeFilter, i);
+			
+			// If not in edtor mode and this element is only available in the editor, then skip this one
+			if (prefab.GetComponent<CircuitElement>().IsEditorOnly() && !GameModeManager.singleton.enableEditor) continue;
+			
 			GameObject newButton = Instantiate(leccyButtonPrefab) as GameObject;
 			newButton.transform.SetParent(transform, false);
 			
 			// Set which circuit element we are referencing
-			GameObject prefab = factory.GetPrefab(uiTypeFilter, i);
 			newButton.GetComponent<LeccyUIButton>().circuitElementPrefab = prefab;
 			if (prefab.GetComponent<SerializationID>().id == defaultSelectionId) newButton.GetComponent<LeccyUIButton>().isSelected = true;
 			

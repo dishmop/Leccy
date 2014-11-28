@@ -73,6 +73,11 @@ public class CircuitElementAnchor : CircuitElement {
 		RebuildMesh();
 	}
 	
+	// return true if this component is only available in the editor
+	public override bool IsEditorOnly(){
+		return true;
+	}	
+	
 	public override void RebuildMesh(){
 	
 		// Is in the UI
