@@ -82,10 +82,8 @@ public class OldUI : MonoBehaviour {
 	
 		//Camera.main.transform.FindChild("Quad").gameObject.SetActive(gameMode == GameMode.kLevelComplete || gameMode == GameMode.kGameComplete);
 		Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
-		Camera.main.transform.FindChild("StartScreen").gameObject.SetActive(gameMode == GameMode.kStartScreen );
 		
 //		Grid.singleton.gameObject.SetActive(gameMode != GameMode.kStartScreen);
-		Simulator.singleton.gameObject.SetActive(gameMode != GameMode.kStartScreen);
 		
 		// Ensure that when we do complete a level, it takes a little time before all the messages and buttons appear
 		if (gameMode == GameMode.kPlayGame) levelCompleteMsgCountdown = 60;

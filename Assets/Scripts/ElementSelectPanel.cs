@@ -9,7 +9,10 @@ public class ElementSelectPanel : MonoBehaviour {
 	public float					yCount;		// Number of buttons in a column
 	public string					defaultSelectionId;
 	
+	
 	public AudioSource				pressSound;
+	
+	GameObject						defaultSelectionButton = null;
 	
 	
 	public void ClearSelection(){
@@ -35,7 +38,10 @@ public class ElementSelectPanel : MonoBehaviour {
 			
 			// Set which circuit element we are referencing
 			newButton.GetComponent<LeccyUIButton>().circuitElementPrefab = prefab;
-			if (prefab.GetComponent<SerializationID>().id == defaultSelectionId) newButton.GetComponent<LeccyUIButton>().isSelected = true;
+			if (prefab.GetComponent<SerializationID>().id == defaultSelectionId) {
+				newButton.GetComponent<LeccyUIButton>().isSelected = true;
+				defaultSelectionButton = newButton;
+			}
 			
 			// Set the transform
 			RectTransform rectTransform = newButton.GetComponent<RectTransform>();
@@ -50,8 +56,11 @@ public class ElementSelectPanel : MonoBehaviour {
 			rectTransform.offsetMax = new Vector2(0, 0);
 			rectTransform.offsetMin = new Vector2(0, 0);
 		}
-		
-		
+	}
+	
+	public void OnLoadLevel(){
+		// Make the button which is our default select, selected again
+		defaultSelectionButton.GetComponent<LeccyUIButton>().SetSelected();
 	
 	
 	}

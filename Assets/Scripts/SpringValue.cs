@@ -1,10 +1,21 @@
 ﻿using UnityEngine;
+using System;
 
 public class SpringValue{
 
+	public enum Mode{
+		kAsymptotic,
+		kLinear
+	};
+	
 	float desValue = 0f;
 	float currentValue = 0f;
-	float speed = 0.1f;
+	float linSpeed = 500f;
+	float asSpeed = 10f;
+	
+	
+	
+	Mode mode =  Mode.kAsymptotic;
 	
 	
 	public SpringValue(float val){
@@ -12,7 +23,12 @@ public class SpringValue{
 		currentValue = val;
 	}
 
-
+	public SpringValue(float val, Mode setMode ){
+		mode = setMode;
+		desValue = val;
+		currentValue = val;
+	}
+	
 	public void Set(float newVal){
 		desValue = newVal;
 	}
@@ -26,9 +42,33 @@ public class SpringValue{
 		return currentValue;
 	}
 
-		// Update is called once per frame
+	public float GetDesValue(){
+		return desValue;
+	}
+	
+	public bool IsAtTarget(){
+		return MathUtils.FP.Feq(GetValue(), GetDesValue());
+	}
+	
+	// Update is called once per frame
 	public void Update () {
-		currentValue = Mathf.Lerp(currentValue, desValue, speed);
+		float deltatTime = Time.deltaTime;
+		switch (mode){
+			case Mode.kAsymptotic:
+				currentValue = Mathf.Lerp(currentValue, desValue, asSpeed * deltatTime);
+				break;
+			case Mode.kLinear:
+				if (!MathUtils.FP.Feq (currentValue, desValue, linSpeed * Time.fixedDeltaTime)){
+					if (currentValue > desValue)
+						currentValue -= linSpeed * deltatTime;
+					else
+						currentValue += linSpeed * deltatTime;
+				}
+				else{
+					currentValue = desValue; 
+				}
+				break;
+		}
 	
 	}
 }

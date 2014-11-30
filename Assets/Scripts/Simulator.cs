@@ -54,14 +54,14 @@ public class Simulator : MonoBehaviour {
 	// The remainder will form an indepednent set of loops
 	List<List<BranchAddress>>	loops;	
 	int							numValidLoops;
-	int							numGroups;
+//	int							numGroups;
 	float[]						loopCurrents;
 	
 	// The order in which we should traverse the loops in order to calculate the voltages
 	int[]						voltageLoopOrder;
 	
 	// GUI layout
-	GUITextDisplay				guiTextDisplay;
+//	GUITextDisplay				guiTextDisplay;     
 	
 	// Used for calculating currents. There are two of these for each connection between noses
 	// Each object stores info about the current LEAVING the node (so there is always an equivilent
@@ -113,7 +113,7 @@ public class Simulator : MonoBehaviour {
 		ClearSimulation ();
 		
 		// Sert up the text gui
-		guiTextDisplay = new GUITextDisplay(400f, 70f, 500f, 20f);
+//		guiTextDisplay = new GUITextDisplay(400f, 70f, 500f, 20f);
 	}
 	
 	public float GetVoltage(int x, int y, int dir){
@@ -254,7 +254,7 @@ public class Simulator : MonoBehaviour {
 				}
 			}
 		}
-		numGroups = groupId;
+//		numGroups = groupId;
 		
 		
 		return true;
@@ -1852,9 +1852,9 @@ public class Simulator : MonoBehaviour {
 	
 	
 	void OnGUI () {
-		guiTextDisplay.GUIResetTextLayout();
-		guiTextDisplay.GUIPrintText( "Number of disjoint Circuit.singletons: " + numGroups, Color.white);
-		guiTextDisplay.GUIPrintText( "Number of loops: " + numValidLoops, Color.white);
+//		guiTextDisplay.GUIResetTextLayout();
+//		guiTextDisplay.GUIPrintText( "Number of disjoint Circuit.singletons: " + numGroups, Color.white);
+//		guiTextDisplay.GUIPrintText( "Number of loops: " + numValidLoops, Color.white);
 		
 	}	
 }

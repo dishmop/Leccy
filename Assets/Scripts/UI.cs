@@ -9,8 +9,10 @@ public class UI : MonoBehaviour {
 	public AudioSource placeElementSound;
 	public AudioSource removeElementSound;
 	public AudioSource failSound;
+	public GameObject  elementSelectPanel;
 	
-	public GameObject sidePanel;
+
+	
 	
 	
 	public bool	honourAnchors = false;
@@ -24,9 +26,6 @@ public class UI : MonoBehaviour {
 	GridPoint	lastPoint;
 	GridPoint	lastOtherPoint;
 	
-	// Moving the side panel in and out
-	SpringValue	sidePanelPos = new SpringValue(0f);
-	
 	// For transfering mouse events between UI and fixed update
 	bool cacheMouseHeld = false;
 	bool cacheMousePressed = false;
@@ -37,7 +36,7 @@ public class UI : MonoBehaviour {
 	bool		isInUI;
 	
 	// Temporary debug thing
-	GUITextDisplay	guiTextDisplay;
+//	GUITextDisplay	guiTextDisplay;
 	
 	
 	public void SetSelectedPrefabId(string id){
@@ -61,26 +60,6 @@ public class UI : MonoBehaviour {
 		Debug.Log("OnExitUI()");
 		isInUI = false;
 	}
-	public void ActivateSidePanel(bool activate){
-		ActivateSidePanel(activate, false);
-	}
-	
-	public void ActivateSidePanel(bool activate, bool force){
-		float value = 0;
-		RectTransform rectTranform = sidePanel.GetComponent<RectTransform>();
-		if (!activate){
-			Vector3[] corners = new Vector3[4];
-			rectTranform.GetWorldCorners(corners);
-			value = Mathf.Abs (corners[0].x - corners[2].x);
-		}
-		if (force){
-			sidePanelPos.Force (value);
-		}
-		else{
-			sidePanelPos.Set (value);
-		};
-				
-	}
 	
 		
 	// GameUpdate is called once per frame in a specific order
@@ -102,7 +81,7 @@ public class UI : MonoBehaviour {
 	
 	
 	void Start(){
-		guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
+//			guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
 	}
 	
 	void OnDestroy () {
@@ -159,6 +138,10 @@ public class UI : MonoBehaviour {
 		}
 	}
 
+	public void OnLoadLevel(){
+		elementSelectPanel.GetComponent<ElementSelectPanel>().OnLoadLevel();
+	
+	}
 	
 	public void GameUpdate(){
 	
@@ -198,20 +181,7 @@ public class UI : MonoBehaviour {
 		
 		cacheMousePressed = false;
 		
-		// Do visual animations
-		UpdateSidePanel();
-		
-		
 	}
-	
-	void UpdateSidePanel(){
-		sidePanelPos.Update();
-		RectTransform rectTranform = sidePanel.GetComponent<RectTransform>();
-		rectTranform.offsetMin = new Vector2(-sidePanelPos.GetValue(), 0f);
-		rectTranform.offsetMax = new Vector2(-sidePanelPos.GetValue(), 0f);
-
-	}
-	
 	
 	
 	CircuitElement.ConnectionBehaviour[] SaveOldConnections(CircuitElement existingElement){
@@ -601,18 +571,18 @@ public class UI : MonoBehaviour {
 	
 	// Temprary debug stuff
 	void OnGUI(){
-		guiTextDisplay.GUIResetTextLayout();
-		if (thisPoint != null){
-			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);
-			float selVolt = 0f;
-			float selAmp = 0f;
-			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
-			if (thisElement){
-				selVolt = thisElement.GetMaxVoltage();
-				selAmp = thisElement.GetMaxCurrent();
-					
-			}
-			guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
-		}
+//		guiTextDisplay.GUIResetTextLayout();
+//		if (thisPoint != null){
+//			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);
+//			float selVolt = 0f;
+//			float selAmp = 0f;
+//			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
+//			if (thisElement){
+//				selVolt = thisElement.GetMaxVoltage();
+//				selAmp = thisElement.GetMaxCurrent();
+//					
+//			}
+//			guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
+//		}
 	}
 }

@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour {
 	public void SaveLevel(){
 		SaveLevel(levelToSave);	
 	}	
+
 	
 	
 	
@@ -46,6 +47,7 @@ public class LevelManager : MonoBehaviour {
 			// Ensure the meshes and all rebuilt to reflect the new level state
 			Simulator.singleton.ClearSimulation();
 			Camera.main.GetComponent<CamControl>().CentreCamera();
+			UI.singleton.OnLoadLevel();
 			
 			Resources.UnloadAsset(asset);
 		}	
@@ -71,6 +73,10 @@ public class LevelManager : MonoBehaviour {
 		UnityEditor.AssetDatabase.Refresh();
 #endif
 	}	
+	
+	public bool IsOnLastLevel(){
+		return currentLevelIndex == levelsToLoad.GetLength(0) - 1;
+	}
 	
 	// We saving using the standard file system
 	string BuildFullPath(string filename){

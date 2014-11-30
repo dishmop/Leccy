@@ -128,7 +128,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	void OnDestroy(){
-		if (hasTarget) OldUI.singleton.UnregisterLevelTrigger();
+		if (hasTarget) GameModeManager.singleton.UnregisterLevelTrigger();
 	}
 	
 	bool IsOnTarget(){
@@ -174,10 +174,10 @@ public class CircuitElementAmmeter : CircuitElement {
 		if (hasTarget != prevHasTarget){
 			prevHasTarget = hasTarget;
 			if (hasTarget){
-				OldUI.singleton.RegisterLevelTrigger();
+				GameModeManager.singleton.RegisterLevelTrigger();
 			}
 			else{
-				OldUI.singleton.UnregisterLevelTrigger();
+				GameModeManager.singleton.UnregisterLevelTrigger();
 			}
 		}
 		
@@ -216,7 +216,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		
 		// Let the UI know if we have been succesfully acitavted
 		if (IsOnTarget()){
-			OldUI.singleton.TriggerComplete();
+			GameModeManager.singleton.TriggerComplete();
 		}
 		
 		

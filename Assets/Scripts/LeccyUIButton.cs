@@ -85,13 +85,18 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 		if (isSelected){
 			bool changed = circuitElementPrefab.GetComponent<CircuitElement>().OnClick();
 			if (changed) PrefabManager.OnChangePrefab(circuitElementPrefab);
+			UI.singleton.SetSelectedPrefabId(circuitElementPrefab.GetComponent<SerializationID>().id);
 		}
 		else{
-			transform.parent.GetComponent<ElementSelectPanel>().ClearSelection();
-			isSelected = true;
+			SetSelected();
 		}
-		UI.singleton.SetSelectedPrefabId(circuitElementPrefab.GetComponent<SerializationID>().id);
 	}	
+	
+	public void SetSelected(){
+		transform.parent.GetComponent<ElementSelectPanel>().ClearSelection();
+		isSelected = true;
+		UI.singleton.SetSelectedPrefabId(circuitElementPrefab.GetComponent<SerializationID>().id);
+	}
 		
 
 	// Use this for initialization
