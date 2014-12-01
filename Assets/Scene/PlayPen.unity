@@ -571,7 +571,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 4869e4f94b4304fd6917b973ee260d5d, type: 3}
   - {fileID: 4900000, guid: f7376e4ec814744008b2dc590d178922, type: 3}
   - {fileID: 4900000, guid: 9f45afc1cfab848efaf5ca28f5183e32, type: 3}
-  currentLevelIndex: 3
+  currentLevelIndex: 0
 --- !u!4 &250961800
 Transform:
   m_ObjectHideFlags: 0
@@ -958,7 +958,7 @@ MonoBehaviour:
   levelCompleteDlg: {fileID: 1725862985}
   gameCompleteDlg: {fileID: 324333587}
   levelStartMessageDlg: {fileID: 1296393459}
-  enableEditor: 1
+  enableEditor: 0
   restartLevel: 0
   nextLevel: 0
   quitGame: 0
@@ -3376,7 +3376,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: sidePanel
@@ -4149,7 +4149,7 @@ Prefab:
       objectReference: {fileID: 4900000, guid: 9f45afc1cfab848efaf5ca28f5183e32, type: 3}
     - target: {fileID: 11400000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
       propertyPath: currentLevelIndex
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
