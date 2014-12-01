@@ -26,14 +26,15 @@ public class GameModeManager : MonoBehaviour {
 	public bool restartLevel;
 	public bool nextLevel;
 	public bool quitGame;
-			
+	public bool startGame;		
+	
 	public GameMode gameMode = GameMode.kStart;
 	
 	int 	triggersTriggered = 0;
 	int 	numLevelTriggers = 0;
 	
 	
-	bool startGame = false;
+
 	
 	void Awake(){
 		if (singleton != null) Debug.LogError ("Error assigning singleton");
@@ -177,6 +178,7 @@ public class GameModeManager : MonoBehaviour {
 		}
 		
 		// Reset the triggers
+		startGame = false;
 		restartLevel = false;
 		nextLevel = false;
 		quitGame = false;		

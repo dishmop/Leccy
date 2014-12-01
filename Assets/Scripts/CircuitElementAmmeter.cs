@@ -128,7 +128,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	void OnDestroy(){
-		if (hasTarget) GameModeManager.singleton.UnregisterLevelTrigger();
+		if (hasTarget && GameModeManager.singleton != null) GameModeManager.singleton.UnregisterLevelTrigger();
 	}
 	
 	bool IsOnTarget(){

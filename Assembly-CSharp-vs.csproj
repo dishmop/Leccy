@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
+     <Compile Include="Assets\Scripts\FlashingButton.cs" />
      <Compile Include="Assets\Scripts\FractionCalc.cs" />
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />
      <Compile Include="Assets\Scripts\GameModeManager.cs" />
