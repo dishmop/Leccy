@@ -9,12 +9,10 @@ public class FlashingButton : MonoBehaviour {
 
 	public void OnPointeEnter(){
 		isPointerInside = true;
-		Debug.Log("OnPointeEnter = " + isPointerInside);
 	}
 	
 	public void OnPointerExit(){
 		isPointerInside = false;
-		Debug.Log("OnPointerExit = " + isPointerInside);
 	}
 
 	// Use this for initialization
@@ -25,7 +23,6 @@ public class FlashingButton : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Color col = GetComponent<Text>().color;
-		Debug.Log("isPointerInside = " + isPointerInside);
 		if (isPointerInside)
 			col.a = 1f;
 		else
@@ -35,4 +32,5 @@ public class FlashingButton : MonoBehaviour {
 		
 	
 	}
+	
 }

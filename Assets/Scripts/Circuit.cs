@@ -271,7 +271,7 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	void OnDestroy(){
-		CreateBlankCircuit();
+		
 		singleton = null;
 	}
 	

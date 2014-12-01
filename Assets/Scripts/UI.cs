@@ -61,12 +61,18 @@ public class UI : MonoBehaviour {
 		isInUI = false;
 	}
 	
+	public void HideMousePointer(){
+		ghostElement.SetActive(false);
+	}
+	
 		
 	// GameUpdate is called once per frame in a specific order
 	public void LateGameUpdate () {
 		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
 		// anchors are being honored
 		Circuit.singleton.TidyUpConnectionBehaviours(honourAnchors);
+		ghostElement.SetActive(true);
+		
 		
 		// Not to mention the fact that these changes will now not get implemented until next go
 	}	

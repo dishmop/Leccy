@@ -57,7 +57,7 @@ public class CamControl : MonoBehaviour {
 	
 	public void CentreCamera(){
 		Rect bounds = Circuit.singleton.bounds;
-		if (bounds.width > 1 && bounds.height > 1){
+		if (bounds.width > 1 || bounds.height > 1){
 		
 			Vector2 centre = new Vector2((bounds.xMin + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
 			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);

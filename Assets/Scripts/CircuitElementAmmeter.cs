@@ -17,7 +17,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	
 
-	bool				wasOnTarget = false;
+	bool				buttonActivated = false;
 	
 	float pulse = 0;
 	
@@ -165,11 +165,6 @@ public class CircuitElementAmmeter : CircuitElement {
 		
 		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		
-		if (wasOnTarget != IsOnTarget() && IsOnTarget()){
-			TriggerTargetEffect();
-						
-		}
-		wasOnTarget = IsOnTarget();
 				
 		if (hasTarget != prevHasTarget){
 			prevHasTarget = hasTarget;
@@ -201,9 +196,12 @@ public class CircuitElementAmmeter : CircuitElement {
 			if (child.name == "SignPanel"){
 				MeshRenderer mesh = child.gameObject.GetComponent<MeshRenderer>();
 				Color useCol = signColorNorm;
-				if (IsOnTarget()){
+				if (IsOnTarget() && !buttonActivated){
 					useCol = Color.Lerp(signColorNorm, signColorTarget, pulse);
 				}
+				else if (IsOnTarget() && buttonActivated){
+					useCol = signColorTarget;
+				}				
 				
 				mesh.materials[0].SetColor ("_Color",  useCol);
 				
@@ -215,13 +213,26 @@ public class CircuitElementAmmeter : CircuitElement {
 		VisualiseTemperature();
 		
 		// Let the UI know if we have been succesfully acitavted
-		if (IsOnTarget()){
+		if (IsOnTarget() && buttonActivated){
 			GameModeManager.singleton.TriggerComplete();
 		}
 		
-		
-
-		
 	}
+	
+	public void OnMouseDown() {
+		if (IsOnTarget()){
+			TriggerTargetEffect();
+			buttonActivated = true;
+		}
+		Debug.Log ("OnMouseDown");
+		
+	}	
+	
+	public void OnMouseOver() {
 
+		Debug.Log("OnMouseOver");
+		UI.singleton.HideMousePointer();
+		
+	}	
+	
 }

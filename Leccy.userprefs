@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/OldUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MouseDown.cs">
     <Files>
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="131" Column="1" />
+      <File FileName="Assets/Scripts/FlashingButton.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/PanelController.cs" Line="1" Column="1" />
@@ -24,7 +25,7 @@
       <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/OldUI.cs" Line="82" Column="1" />
+      <File FileName="Assets/Scripts/OldUI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
@@ -35,15 +36,12 @@
       <File FileName="Assets/Scripts/SpringValue.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tuple4.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MouseDown.cs" Line="4" Column="23" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>ghostElement</Value>
-          <Value>elememt</Value>
-          <Value>prefabElememt</Value>
-          <Value>child.gameObject.name</Value>
-          <Value>pos</Value>
+          <Value>debugText</Value>
         </State>
       </Pad>
     </Pads>
@@ -58,6 +56,8 @@
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="13" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="7" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="10" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/OnMouseDown.cs" line="16" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MouseDown.cs" line="16" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

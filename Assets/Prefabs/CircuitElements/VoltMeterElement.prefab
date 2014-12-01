@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  m_Layer: 0
+  m_Name: VoltMeterElement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9ca33ba8d28149d1b0f3936f4447dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Voltmeter
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc53d93266b24ffa9382f7f7b241486, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orient: 0
+  anchorCentralPrefab: {fileID: 100000, guid: d10dff6ef11184084afe433afdc25cdc, type: 2}
+  anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
+  anchorEmptyBranchPrefab: {fileID: 0}
+  capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  errorColor: {r: 1, g: 0, b: 0, a: 1}
+  uiType: 2
+  connectionBehaviour: 00000000000000000000000000000000
+  isConnected: 00000000
+  ammeterPrefab: {fileID: 100000, guid: 4fdd6d9777ce64a6eb87a9873f1a9908, type: 2}
+  triggerEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
+  targetAmp: 1
+  hasTarget: 1
+  textColorNorm: {r: 0, g: .933333337, b: 0, a: 1}
+  textColorTarget: {r: 1, g: 1, b: 1, a: 1}
+  signColorNorm: {r: .0484429039, g: .823529422, b: .214151189, a: 1}
+  signColorTarget: {r: .911764681, g: 1, b: .941582143, a: 1}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1
