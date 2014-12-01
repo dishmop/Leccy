@@ -18,8 +18,8 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 
 	bool				buttonActivated = false;
+	bool 				hasTriggered = false;
 	
-	float pulse = 0;
 	
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
@@ -111,7 +111,8 @@ public class CircuitElementAmmeter : CircuitElement {
 		base.RebuildMesh ();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
 		SetupStraightConnectionBehaviour(true);
-		SetColor (isInErrorState ? errorColor : normalColor);		
+		SetColor (isInErrorState ? errorColor : normalColor);
+		SetupColorsAndText();		
 	}	
 	
 	public override float GetResistance(int dir){
@@ -128,19 +129,20 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	void OnDestroy(){
-		if (hasTarget && GameModeManager.singleton != null) GameModeManager.singleton.UnregisterLevelTrigger();
+		if (hasTarget && GameModeManager.singleton != null && IsOnCircuit()) GameModeManager.singleton.UnregisterLevelTrigger();
 	}
 	
+	
 	bool IsOnTarget(){
-		return hasTarget && MathUtils.FP.Feq(GetMaxCurrent(), targetAmp);
+		return hasTarget && MathUtils.FP.Feq(GetMaxCurrent(), targetAmp, FractionCalc.epsilon);
 	}
 	
 	
 	void TriggerTargetEffect(){
-		Transform actualText = GetDisplayMesh().transform.FindChild ("ActualText");
-		GameObject effect = GameObject.Instantiate(triggerEffect, actualText.position, actualText.rotation) as GameObject;
+		Transform targetText = GetDisplayMesh().transform.FindChild ("TargetText");
+		GameObject effect = GameObject.Instantiate(triggerEffect, targetText.position, targetText.rotation) as GameObject;
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetMaxCurrent();
-		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().color = actualText.gameObject.GetComponent<FractionCalc>().color;
+		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().color = targetText.gameObject.GetComponent<FractionCalc>().color;
 		effect.transform.parent = transform;
 	
 	}
@@ -158,14 +160,17 @@ public class CircuitElementAmmeter : CircuitElement {
 	void Update () {
 		HandleDisplayMeshChlid();	
 		HandleColorChange();
+
+			
+		SetupColorsAndText();
 		
-//		float debugCurrent = GetMaxCurrent();
-//		Debug.Log ("Current = " + debugCurrent);
 		
+
 		
-		pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
-		
-				
+	}
+	
+	
+	public override void GameUpdate(){
 		if (hasTarget != prevHasTarget){
 			prevHasTarget = hasTarget;
 			if (hasTarget){
@@ -174,21 +179,32 @@ public class CircuitElementAmmeter : CircuitElement {
 			else{
 				GameModeManager.singleton.UnregisterLevelTrigger();
 			}
+		}		
+		
+		// Let the UI know if we have been succesfully acitavted
+		if (IsOnTarget() && buttonActivated){
+			GameModeManager.singleton.TriggerComplete();
+			hasTriggered = true;
 		}
 		
+		if (!IsOnTarget()){
+			hasTriggered = false;
+		}
+	}
+	
+	
+	void SetupColorsAndText(){
+		float pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
 		
 		foreach (Transform child in GetDisplayMesh().transform){
 			if (child.name == "TargetText"){
 				child.gameObject.GetComponent<FractionCalc>().value = targetAmp;
 				child.gameObject.GetComponent<FractionCalc>().color = textColorTarget;
 				child.gameObject.SetActive(hasTarget);
-							
-
+				
+				
 			}
-			if (child.name == "Bomb"){
-				// Don;t draw the bomb for the moment
-				child.gameObject.SetActive(false);
-			}
+			
 			if (child.name == "ActualText"){
 				child.gameObject.GetComponent<FractionCalc>().value = GetMaxCurrent ();
 				child.gameObject.GetComponent<FractionCalc>().color = IsOnTarget() ? textColorTarget : textColorNorm;
@@ -208,31 +224,26 @@ public class CircuitElementAmmeter : CircuitElement {
 			}						
 			
 		}
-	
+		
 		
 		VisualiseTemperature();
-		
-		// Let the UI know if we have been succesfully acitavted
-		if (IsOnTarget() && buttonActivated){
-			GameModeManager.singleton.TriggerComplete();
-		}
-		
 	}
 	
-	public void OnMouseDown() {
+	public override   void OnMouseOver() {
+		
 		if (IsOnTarget()){
+			UI.singleton.HideMousePointer();
+		}
+		
+	}		
+	
+	public override void OnMouseDown() {
+		if (IsOnTarget() & !hasTriggered){
 			TriggerTargetEffect();
 			buttonActivated = true;
 		}
-		Debug.Log ("OnMouseDown");
 		
 	}	
 	
-	public void OnMouseOver() {
-
-		Debug.Log("OnMouseOver");
-		UI.singleton.HideMousePointer();
-		
-	}	
 	
 }

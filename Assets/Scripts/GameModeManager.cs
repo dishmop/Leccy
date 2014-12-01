@@ -18,6 +18,7 @@ public class GameModeManager : MonoBehaviour {
 		kTitleScreen,
 		kPlayLevelInit,
 		kPlayLevel,
+		kLevelCompleteWait,
 		kLevelComplete,
 		kGameComplete
 	};
@@ -32,6 +33,9 @@ public class GameModeManager : MonoBehaviour {
 	
 	int 	triggersTriggered = 0;
 	int 	numLevelTriggers = 0;
+	
+	float levelCompletewWaitStartTime;
+	float levelCompletewWaitDuration = 1f;
 	
 	
 
@@ -81,19 +85,20 @@ public class GameModeManager : MonoBehaviour {
 		singleton = null;
 	}	
 	
-	void BulkUpdate(){
+	void BulkGameUpdate(){
 		UI.singleton.GameUpdate();
 		Circuit.singleton.GameUpdate();
 		UI.singleton.LateGameUpdate();
 		Simulator.singleton.GameUpdate();
-		HandleTriggers();
+
 	}
 	
 	bool IsLevelComplete(){
+		Debug.Log("numLevelTriggers = " + numLevelTriggers + ", triggersTriggered = " + triggersTriggered);
 		return (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
 	}
 	
-	void HandleTriggers(){
+	void ResetTriggerCount(){
 		// Reset this as it must be reevaualted every frame
 		triggersTriggered = 0;
 	}	
@@ -105,6 +110,8 @@ public class GameModeManager : MonoBehaviour {
 	// FixedUpdate is called once per frame
 	void FixedUpdate () {
 	
+		BulkGameUpdate ();
+	
 		switch (gameMode){
 			case GameMode.kStart:
 				LevelManager.singleton.currentLevelIndex = 0;
@@ -115,18 +122,21 @@ public class GameModeManager : MonoBehaviour {
 				gameCompleteDlg.SetActive(false);
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
 				levelStartMessageDlg.SetActive(false);
+				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
+				Camera.main.GetComponent<AudioListener>().enabled = false;
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				sidePanel.GetComponent<PanelController>().Activate();
+				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				levelCompleteDlg.SetActive(false);
 				gameMode =GameMode.kPlayLevelInit;
 				gameCompleteDlg.SetActive(false);
 				levelStartMessageDlg.SetActive(false);
 				break;				
 			case GameMode.kTitleScreen:
-				if (startGame){		
+			if (startGame){		
 					LevelManager.singleton.currentLevelIndex++;
 					LevelManager.singleton.LoadLevel();
 					startGameDlg.SetActive(false);
@@ -139,10 +149,20 @@ public class GameModeManager : MonoBehaviour {
 				gameCompleteDlg.SetActive(false);
 				sidePanel.GetComponent<PanelController>().Activate();
 				levelStartMessageDlg.SetActive(true);	
+				Camera.main.GetComponent<AudioListener>().enabled = true;
+				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);					
 			
 				break;	
 			case GameMode.kPlayLevel:
 				if (IsLevelComplete()){
+					levelCompletewWaitStartTime = Time.fixedTime;
+					gameMode = GameMode.kLevelCompleteWait;
+				
+				}
+				break;	
+			case GameMode.kLevelCompleteWait:				
+				if (Time.fixedTime > levelCompletewWaitStartTime + levelCompletewWaitDuration){
+					Camera.main.transform.FindChild("Quad").gameObject.SetActive(true);			
 					sidePanel.GetComponent<PanelController>().Deactivate();
 					if (LevelManager.singleton.IsOnLastLevel()){
 						gameCompleteDlg.SetActive(true);
@@ -150,10 +170,10 @@ public class GameModeManager : MonoBehaviour {
 					else{
 						levelCompleteDlg.SetActive(true);
 					}
-					gameMode = GameMode.kLevelComplete;
-				
+					gameMode =  GameMode.kLevelComplete;
+					Camera.main.transform.FindChild("Quad").gameObject.SetActive(true);			
 				}
-				break;	
+				break;
 				
 			case GameMode.kLevelComplete:
 				if (restartLevel){
@@ -176,6 +196,7 @@ public class GameModeManager : MonoBehaviour {
 		if (!enableEditor){
 			UI.singleton.honourAnchors = true;
 		}
+		ResetTriggerCount();
 		
 		// Reset the triggers
 		startGame = false;
@@ -183,7 +204,7 @@ public class GameModeManager : MonoBehaviour {
 		nextLevel = false;
 		quitGame = false;		
 			
-		BulkUpdate ();
+
 		
 	}
 	

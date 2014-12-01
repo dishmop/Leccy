@@ -14,14 +14,14 @@ public class MouseDown : MonoBehaviour {
 	}
 	
 	void OnMouseDown(){
-		CircuitElementAmmeter ampScript = GetComponentInParent<CircuitElementAmmeter>();
-		if (ampScript) ampScript.OnMouseDown();
+		CircuitElement script = GetComponentInParent<CircuitElement>();
+		if (script) script.OnMouseDown();
 
 	}
 	
 	void OnMouseOver(){
-		CircuitElementAmmeter ampScript = GetComponentInParent<CircuitElementAmmeter>();
-		if (ampScript) ampScript.OnMouseOver();
+		CircuitElement script = GetComponentInParent<CircuitElement>();
+		if (script) script.OnMouseOver();
 
 	}	
 }

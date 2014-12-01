@@ -149,6 +149,11 @@ public class Simulator : MonoBehaviour {
 	
 	BranchAddress CalcNextDir(GridPoint point, int[] choices){
 		CircuitElement nextElement = Circuit.singleton.GetElement(point);
+		
+		// If we are an insulator, then we always just double back on ourselves (which is always the last option we pass in)
+		if (nextElement.IsInsulator()){
+			return new BranchAddress(point.x, point.y, choices[3]);
+		}
 		for (int i = 0;  i < 4; ++i){
 			if (nextElement.IsConnected(choices[i])) return new BranchAddress(point.x, point.y, choices[i]);
 		}

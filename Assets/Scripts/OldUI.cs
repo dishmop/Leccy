@@ -81,7 +81,7 @@ public class OldUI : MonoBehaviour {
 		buttonPulseAlpha = 0.75f + 0.25f * Mathf.Sin (10 * Time.realtimeSinceStartup);
 	
 		//Camera.main.transform.FindChild("Quad").gameObject.SetActive(gameMode == GameMode.kLevelComplete || gameMode == GameMode.kGameComplete);
-		Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
+	//	Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 		
 //		Grid.singleton.gameObject.SetActive(gameMode != GameMode.kStartScreen);
 		

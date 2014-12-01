@@ -29,6 +29,7 @@ public class UI : MonoBehaviour {
 	// For transfering mouse events between UI and fixed update
 	bool cacheMouseHeld = false;
 	bool cacheMousePressed = false;
+	bool hideMouse = false;
 	
 
 	
@@ -62,7 +63,7 @@ public class UI : MonoBehaviour {
 	}
 	
 	public void HideMousePointer(){
-		ghostElement.SetActive(false);
+		hideMouse = true;
 	}
 	
 		
@@ -71,7 +72,7 @@ public class UI : MonoBehaviour {
 		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
 		// anchors are being honored
 		Circuit.singleton.TidyUpConnectionBehaviours(honourAnchors);
-		ghostElement.SetActive(true);
+		hideMouse = false;
 		
 		
 		// Not to mention the fact that these changes will now not get implemented until next go
@@ -138,10 +139,24 @@ public class UI : MonoBehaviour {
 	
 	// Used to cache mouse results
 	void Update(){
-		cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
-		if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
-			cacheMousePressed = true;
+		if (isInUI || hideMouse){
+			ghostElement.SetActive(false);
 		}
+		else{
+			ghostElement.SetActive(true);
+		}
+		// if there is no gohst element then we should not register mous einputs
+		if (hideMouse){
+			cacheMouseHeld = false;
+			cacheMousePressed = false;
+			
+		}
+		else{
+			cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+			if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
+				cacheMousePressed = true;
+			}
+		}	
 	}
 
 	public void OnLoadLevel(){
@@ -302,13 +317,13 @@ public class UI : MonoBehaviour {
 					// Also note that the elemtents may not be there (if we could not draw them due to machors (Really?)
 					
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i-1]).isAnchored[lastDir]){
-					    if (lastElement != null){
+						if (lastElement != null && thisElement != null){
 							lastElement.SuggestBehaviour(thisElement, CircuitElement.ConnectionBehaviour.kSociable, honourAnchors);
 						}
 					    
 					}
 					if (!honourAnchors || !Circuit.singleton.GetAnchors(gridPath[i]).isAnchored[thisDir]){
-						if (thisElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable, honourAnchors);
+						if (thisElement != null && lastElement != null) thisElement.SuggestBehaviour(lastElement, CircuitElement.ConnectionBehaviour.kSociable, honourAnchors);
 					}
 					placeElementSound.Play ();
 

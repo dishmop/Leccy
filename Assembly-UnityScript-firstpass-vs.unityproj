@@ -52,6 +52,7 @@
      <None Include="Assets\Tutorial_1\Combiner.shader" />
      <None Include="Assets\Scripts\alglib\gpl2.txt" />
      <None Include="Assets\Tutorial_2\2_Lambert.shader" />
+     <None Include="Assets\Shaders\SolidColor_FG.shader" />
      <None Include="Assets\Shaders\noise-simplex.shader" />
      <None Include="Assets\Fonts\scified.txt" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />

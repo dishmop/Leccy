@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: VoltMeterElement
   m_TagString: Untagged
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: Voltmeter
---- !u!114 &11400002
+--- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc53d93266b24ffa9382f7f7b241486, type: 3}
+  m_Script: {fileID: 11500000, guid: 5091bc14f0fcc4764b468544dc86c738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   orient: 0
@@ -57,19 +57,19 @@ MonoBehaviour:
   anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
   anchorEmptyBranchPrefab: {fileID: 0}
   capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  errorColor: {r: 1, g: 0, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 0}
+  errorColor: {r: 1, g: 0, b: 0, a: 0}
   uiType: 2
   connectionBehaviour: 00000000000000000000000000000000
   isConnected: 00000000
-  ammeterPrefab: {fileID: 100000, guid: 4fdd6d9777ce64a6eb87a9873f1a9908, type: 2}
+  voltmeterPrefab: {fileID: 100000, guid: 4fdd6d9777ce64a6eb87a9873f1a9908, type: 2}
   triggerEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
-  targetAmp: 1
+  targetVolts: 1
   hasTarget: 1
-  textColorNorm: {r: 0, g: .933333337, b: 0, a: 1}
+  textColorNorm: {r: 0, g: .941176474, b: 0, a: 1}
   textColorTarget: {r: 1, g: 1, b: 1, a: 1}
-  signColorNorm: {r: .0484429039, g: .823529422, b: .214151189, a: 1}
-  signColorTarget: {r: .911764681, g: 1, b: .941582143, a: 1}
+  signColorNorm: {r: 0, g: .529411793, b: 0, a: 1}
+  signColorTarget: {r: .297160238, g: 1, b: .272058845, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

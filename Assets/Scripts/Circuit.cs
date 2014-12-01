@@ -177,7 +177,6 @@ public class Circuit : MonoBehaviour {
 	
 	
 	public void RemoveElement(GridPoint point){
-		GetElement(point).SetIsOnCircuit(false);
 		elements[point.x, point.y] = null;
 		GetAnchors(point).isDirty = true;
 	}
@@ -329,9 +328,24 @@ public class Circuit : MonoBehaviour {
 	// GameUpdate is called once per frame in a specific order
 	public void GameUpdate () {
 		CalcBounds();
+		CircuitElementGameUpdate();
 		MakeConnections();
 		PostConnectionUpdate();
-		UpdateAnchorMeshes();		
+		UpdateAnchorMeshes();	
+		
+		
+	}
+	
+	void CircuitElementGameUpdate(){
+		for (int x = 0; x < elements.GetLength (0); ++x){
+			for (int y = 0; y < elements.GetLength(1); ++y){
+				CircuitElement element = GetElement(new GridPoint(x, y));
+				if (element){
+					element.GameUpdate();
+				}
+				
+			}
+		}
 	}
 	
 	// If we have (usually wires) that are being sociable, but have no actual connection
@@ -475,10 +489,12 @@ public class Circuit : MonoBehaviour {
 						}
 					}
 					RebuildAnchorMesh(data, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
-					// want it positioned behind everyhing (note that the ghost versio of this should be in between)
-					data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 1);
-					data.anchorMesh.transform.parent = transform;
+					if (data.anchorMesh){
+						// want it positioned behind everyhing (note that the ghost versio of this should be in between)
+						data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 1);
+						data.anchorMesh.transform.parent = transform;
 				
+					}
 				}
 			}
 		}	
@@ -488,6 +504,15 @@ public class Circuit : MonoBehaviour {
 	public static void RebuildAnchorMesh(AnchorData data, bool[] isConnected, int orient, GameObject centrePrefab, GameObject branchPrefab, GameObject emptyBranchPrefab, GameObject emptyGO){
 		// Destory the previous one
 		Destroy (data.anchorMesh);
+		data.anchorMesh = null;
+		
+		// If there are no anchors, then do not build a mesh
+		int count = 0;
+		for (int i = 0; i < 5; ++i){
+			if (data.isAnchored[i]) ++count;
+			
+		}
+		if (count == 0) return;
 		
 		data.anchorMesh = GameObject.Instantiate(emptyGO) as GameObject;
 		

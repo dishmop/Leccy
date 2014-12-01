@@ -92,17 +92,20 @@ public class CircuitElementResistor : CircuitElement {
 		
 		VisualiseTemperature();
 		
+
+	}
+	
+	
+	public override void GameUpdate(){
 		// If our current is not huge then we are probably in a zero resistance loop
 		// and we should stay in out state of emergency. However, if we are not, then the player 
 		// has got in quickly enough so can reset our emegency flag
 		float currentFlow = GetAbsCurrentFlow();
-
+		
 		
 		// Set up the audio
 		AudioSource source = gameObject.GetComponent<AudioSource>();
 		source.pitch = currentFlow * 0.1f;		
-		
-		
-	}
+	}	
 }
 	

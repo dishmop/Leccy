@@ -26,6 +26,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	bool					isOnCircuit = false;
 	
+	
 	// For setting alpha and color values
 	protected float alpha = 1f;
 	protected bool 	dirtyAlpha = false;
@@ -124,6 +125,11 @@ public class CircuitElement : MonoBehaviour {
 	// Return true of this element is one which is attached to wires (most are)
 	public virtual bool IsWired(){
 		return true;
+	}
+	
+	// Only return true if this component cannot actualy conduct electiricty at all
+	public virtual bool IsInsulator(){
+		return false;
 	}
 	
 	// Return true if we are a modifying circuit element (like anchors or eraser)
@@ -541,6 +547,21 @@ public class CircuitElement : MonoBehaviour {
 		connectionBehaviour[(3 + orient + addOrient) % 4] = ConnectionBehaviour.kUnreceptive;		
 		
 	}
+	
+	
+	public virtual  void OnMouseDown() {
+
+		
+	}	
+	
+	public virtual   void OnMouseOver() {
+
+		
+	}	
+
+	// Do all game logic in here	
+	public virtual void GameUpdate(){
+	}	
 	
 
 	

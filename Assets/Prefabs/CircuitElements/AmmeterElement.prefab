@@ -68,8 +68,8 @@ MonoBehaviour:
   hasTarget: 1
   textColorNorm: {r: .41911763, g: .807707787, b: 1, a: 1}
   textColorTarget: {r: 1, g: 1, b: 1, a: 1}
-  signColorNorm: {r: 0, g: .273109287, b: .764705896, a: 1}
-  signColorTarget: {r: 1, g: 1, b: 1, a: 1}
+  signColorNorm: {r: 0, g: .152310953, b: .426470578, a: 1}
+  signColorTarget: {r: .5, g: .60689652, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

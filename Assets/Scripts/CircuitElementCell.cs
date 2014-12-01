@@ -117,13 +117,19 @@ public class CircuitElementCell : CircuitElement {
 		
 		GetDisplayMesh().transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = voltage;
 		
+		VisualiseTemperature();
+		
+	}
+	
+	
+	public override void GameUpdate(){
 		
 		// If our current is not huge then we are probably in a zero resistance loop
 		// and we should stay in out state of emergency. However, if we are not, then the player 
 		// has got in quickly enough so can reset our emegency flag
 		float currentFlow = GetAbsCurrentFlow();
 		if (isInEmergency && currentFlow < maxCurrent){
-			Debug.Log ("Resetting emergency staste");
+			Debug.Log ("Resetting emergency state");
 			isInEmergency = false;
 		}
 		if (GetAbsCurrentFlow() > maxCurrent && temperature < maxTemp){
@@ -136,13 +142,11 @@ public class CircuitElementCell : CircuitElement {
 		if (temperature == maxTemp){
 			DestorySelf();
 		}
-		VisualiseTemperature();
-		
+
 		// Set up the audio
 		AudioSource source = gameObject.GetComponent<AudioSource>();
 		source.pitch = currentFlow * 0.1f;
 		
-
-		
 	}
 }
+	
