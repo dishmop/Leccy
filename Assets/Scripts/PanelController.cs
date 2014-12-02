@@ -5,12 +5,14 @@ using System.Collections;
 public class PanelController : MonoBehaviour {
 
 	// Moving the side panel in and out
-	public SpringValue	pos = null;
+	public SpringValue			pos = null;
 	public SpringValue.Mode 	mode = SpringValue.Mode.kAsymptotic;
+	public GameObject			adjustCamera;
 	
 	
 	public void Activate(){
 		pos.Set (0f);
+		if (adjustCamera != null) adjustCamera.GetComponent<CamControl>().ignoreSide = false;
 	}
 	
 	public void Deactivate(){
@@ -19,12 +21,14 @@ public class PanelController : MonoBehaviour {
 		rectTranform.GetWorldCorners(corners);
 		float value = Mathf.Abs (corners[0].x - corners[2].x);
 		
+		if (adjustCamera != null) adjustCamera.GetComponent<CamControl>().ignoreSide = true;
 		pos.Set (value);
 	}
 	
 	
 	public void ForceActivate(){
 		pos.Force (0f);
+		if (adjustCamera != null) adjustCamera.GetComponent<CamControl>().ignoreSide = false;
 	}
 	
 	public void ForceDeactivate(){
@@ -32,7 +36,8 @@ public class PanelController : MonoBehaviour {
 		Vector3[] corners = new Vector3[4];
 		rectTranform.GetWorldCorners(corners);
 		float value = Mathf.Abs (corners[0].x - corners[2].x);
-
+		if (adjustCamera != null) adjustCamera.GetComponent<CamControl>().ignoreSide = true;
+		
 		pos.Force (value);
 	}
 

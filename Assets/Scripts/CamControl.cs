@@ -4,8 +4,10 @@ using System.Collections;
 public class CamControl : MonoBehaviour {
 
 
-	public float 	zoomSpeed;
-	Vector3			prevMousePos = new Vector3();
+	public GameObject		sidePanel;
+	public float 			zoomSpeed;
+	public bool				ignoreSide = false;
+	Vector3					prevMousePos = new Vector3();
 	
 	// Use this for initialization
 	void Start () {
@@ -57,15 +59,30 @@ public class CamControl : MonoBehaviour {
 	
 	public void CentreCamera(){
 		Rect bounds = Circuit.singleton.bounds;
-		if (bounds.width > 1 || bounds.height > 1){
+		if (bounds.width >= 1 || bounds.height >= 1){
 		
-			Vector2 centre = new Vector2((bounds.xMin + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
+			// What proportion of the screen is taken up with the side panel
+			float hPropSide  = 0f;
+			if (!ignoreSide){
+				hPropSide = sidePanel.GetComponent<RectTransform>().anchorMax.x;
+			}
+			float propScreen = (1f-hPropSide);
+			
+			// This means that the screen's width is actuall 1-that
+			float adjustedAspect = propScreen * Camera.main.aspect;
+		
+			// Get range and work out orthographic size			
+			float border = 1;
+			float vRange = Mathf.Max (bounds.height + 2 * border, (bounds.width + 2 * border) / adjustedAspect);
+			transform.GetComponent<Camera>().orthographicSize = vRange * 0.5f;
+			
+			// calc how much extra of the scene to add on to the left to ensure we are looking in the middle
+			float extraX = (bounds.width + 2 * border) *(1f/propScreen - 1);
+			
+			Vector2 centre = new Vector2(((bounds.xMin - extraX) + bounds.xMax) / 2f, (bounds.yMin + bounds.yMax) / 2f);
 			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
 			transform.position = newCamPos;
 			
-			float range = Mathf.Max (bounds.height, bounds.width) + 2;
-	
-			transform.GetComponent<Camera>().orthographicSize = range * 0.55f;
 		}
 	}
 }

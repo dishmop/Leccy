@@ -113,7 +113,6 @@ public class GameModeManager : MonoBehaviour {
 	
 		switch (gameMode){
 			case GameMode.kStart:
-				LevelManager.singleton.LoadLevel(0);
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				startGameDlg.SetActive(true);
 				levelCompleteDlg.SetActive(false);
@@ -121,6 +120,7 @@ public class GameModeManager : MonoBehaviour {
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
+				LevelManager.singleton.LoadLevel(0);
 				Camera.main.GetComponent<AudioListener>().enabled = false;
 				gameMode =GameMode.kTitleScreen;
 				break;
@@ -134,8 +134,7 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(false);
 				break;				
 			case GameMode.kTitleScreen:
-			if (startGame){		
-					LevelManager.singleton.LoadLevel();
+				if (startGame){		
 					startGameDlg.SetActive(false);
 					gameMode = GameMode.kPlayLevelInit;
 				}
@@ -146,8 +145,9 @@ public class GameModeManager : MonoBehaviour {
 				gameCompleteDlg.SetActive(false);
 				sidePanel.GetComponent<PanelController>().Activate();
 				levelStartMessageDlg.SetActive(true);	
-				Camera.main.GetComponent<AudioListener>().enabled = true;
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);					
+				LevelManager.singleton.LoadLevel();
+				Camera.main.GetComponent<AudioListener>().enabled = true;
 			
 				break;	
 			case GameMode.kPlayLevel:
@@ -174,13 +174,11 @@ public class GameModeManager : MonoBehaviour {
 				
 			case GameMode.kLevelComplete:
 				if (restartLevel){
-					LevelManager.singleton.LoadLevel();
 					restartLevel = false;
 					gameMode = GameMode.kPlayLevelInit;
 				}
 				if (nextLevel){
 					LevelManager.singleton.currentLevelIndex++;
-					LevelManager.singleton.LoadLevel();
 					gameMode = GameMode.kPlayLevelInit;
 				}
 			   if (quitGame){

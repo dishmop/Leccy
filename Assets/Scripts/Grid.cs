@@ -116,6 +116,7 @@ public class Grid : MonoBehaviour {
 			GameObject newCentre = Instantiate(gridCentrePrefab, new Vector3((float)point.x, (float) point.y, 0f), Quaternion.identity) as GameObject;
 			newCentre.transform.parent = bespokeGridObj.transform;
 		}
+		bespokeGridObj.name = "BespokeGridObj";
 		return bespokeGridObj;
 	}
 	

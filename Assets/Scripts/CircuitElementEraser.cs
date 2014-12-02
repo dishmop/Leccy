@@ -112,7 +112,7 @@ public class CircuitElementEraser : CircuitElement {
 		if (!honourAnchors) return true;	
 		
 		// First check for anchors which stop the node being deleted
-		if (thisPt != null && otherPt == null){
+		if (thisElement != null && otherElement == null){
 			Circuit.AnchorData anchorData = Circuit.singleton.GetAnchors(thisPt);
 			if (anchorData.isAnchored[Circuit.kCentre]) return false;
 			for (int i = 0; i < 4; ++i){

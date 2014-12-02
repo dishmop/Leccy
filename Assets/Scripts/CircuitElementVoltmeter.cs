@@ -55,16 +55,16 @@ public class CircuitElementVoltmeter : CircuitElement {
 	// Only return true if this component cannot actualy conduct electiricty at all
 	
 	// Hmm this doesn't work because we need the voltage to leak over to the other connection if it is not connected to anything sink
-//	public override bool IsInsulator(){
-//		return true;
-//	}	
-//	
+	public override bool IsInsulator(){
+		return true;
+	}	
+	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
 		
 		// Only return a resistance if we are being asked about the spoke that the resistance is on
 		if (dir == ModelDir2WorldDir(Circuit.kUp)){
-			return 10000f;
+			return 100000f;
 		}
 		return 0f;
 	}
