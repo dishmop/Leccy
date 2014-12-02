@@ -278,7 +278,7 @@ public class Circuit : MonoBehaviour {
 	}
 	
 
-	 void CreateBlankCircuit(){	
+	 public void CreateBlankCircuit(){	
 		// If there is a load of circuit elemnts here already, go through and destroy them all
 		if (elements != null){
 			for (int x = 0; x < elements.GetLength (0); ++x){

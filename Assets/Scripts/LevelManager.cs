@@ -23,6 +23,11 @@ public class LevelManager : MonoBehaviour {
 		SaveLevel(levelToSave);	
 	}	
 
+	public void ClearLevel(){
+		Circuit.singleton.CreateBlankCircuit();
+		Circuit.singleton.RefreshAll();
+		
+	}
 	
 	
 	

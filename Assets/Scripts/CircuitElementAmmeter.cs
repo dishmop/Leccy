@@ -215,7 +215,7 @@ public class CircuitElementAmmeter : CircuitElement {
 				if (IsOnTarget() && !buttonActivated){
 					useCol = Color.Lerp(signColorNorm, signColorTarget, pulse);
 				}
-				else if (IsOnTarget() && buttonActivated){
+				else if (IsOnTarget() && buttonActivated || !hasTarget){
 					useCol = signColorTarget;
 				}				
 				
