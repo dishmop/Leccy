@@ -531,7 +531,7 @@ Prefab:
     - target: {fileID: 11400000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
       propertyPath: emptyGO
       value: 
-      objectReference: {fileID: 100000, guid: c4d8874a3bde7439ca60d7aede6246a9, type: 2}
+      objectReference: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 549f55f0ddaf94ed7b2494dd99827631, type: 2}
   m_RootGameObject: {fileID: 1643868792}
@@ -958,7 +958,7 @@ MonoBehaviour:
   levelCompleteDlg: {fileID: 1725862985}
   gameCompleteDlg: {fileID: 324333587}
   levelStartMessageDlg: {fileID: 1296393459}
-  enableEditor: 0
+  enableEditor: 1
   restartLevel: 0
   nextLevel: 0
   quitGame: 0
@@ -1832,7 +1832,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
       propertyPath: initialStock.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1922,6 +1922,14 @@ Prefab:
       propertyPath: initialStock.Array.data[3].prefab
       value: 
       objectReference: {fileID: 100000, guid: 038924efb4d3b43068969ab6913df1e0, type: 2}
+    - target: {fileID: 11400000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
+      propertyPath: initialStock.Array.data[7].prefab
+      value: 
+      objectReference: {fileID: 100000, guid: f33f1557e30c0444d9748940e24485cd, type: 2}
+    - target: {fileID: 11400000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
+      propertyPath: initialStock.Array.data[7].initialStockCount
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c3fb6e393b664fa8ae4c8a52cc275ba, type: 2}
   m_RootGameObject: {fileID: 1966212117}
@@ -3148,6 +3156,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
+      propertyPath: gridCentrePrefab
+      value: 
+      objectReference: {fileID: 100000, guid: 7a206167a82644bb79d349dae218e324, type: 2}
+    - target: {fileID: 11400000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
+      propertyPath: gridSpokePrefab
+      value: 
+      objectReference: {fileID: 100000, guid: 3834e2b9f831741a6bf565c5cf38318e, type: 2}
+    - target: {fileID: 11400000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
+      propertyPath: emptyGO
+      value: 
+      objectReference: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8b597c27eda6645c18c1e2642a25d4e9, type: 2}
   m_RootGameObject: {fileID: 1697485505}
@@ -3376,7 +3396,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: sidePanel
@@ -3512,7 +3532,7 @@ MonoBehaviour:
     type: 2}
   anchorBranchPrefabDefault: {fileID: 100000, guid: 7dd1ff29bb8634899990037c7a054daa,
     type: 2}
-  emptyGO: {fileID: 100000, guid: c4d8874a3bde7439ca60d7aede6246a9, type: 2}
+  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
   offsets:
   - x: -1
     y: -1
@@ -3608,9 +3628,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridWidth: 20
   gridHeight: 20
-  squareWidth: 1
-  squareHeight: 1
   gridSquarePrefab: {fileID: 100000, guid: 34a4a2f260e084a7599b96e0e82bc680, type: 2}
+  gridCentrePrefab: {fileID: 100000, guid: 7a206167a82644bb79d349dae218e324, type: 2}
+  gridSpokePrefab: {fileID: 100000, guid: 3834e2b9f831741a6bf565c5cf38318e, type: 2}
+  emptyGO: {fileID: 100000, guid: bd226a48fb1364b58b687071285df01d, type: 2}
 --- !u!4 &1697485507
 Transform:
   m_ObjectHideFlags: 0
@@ -4083,6 +4104,8 @@ MonoBehaviour:
   - prefab: {fileID: 100000, guid: 72fbe5fe83edc41bbbb0367301112555, type: 2}
     initialStockCount: -1
   - prefab: {fileID: 100000, guid: e7fbf7eae48954e118b7a42e5950a76b, type: 2}
+    initialStockCount: -1
+  - prefab: {fileID: 100000, guid: f33f1557e30c0444d9748940e24485cd, type: 2}
     initialStockCount: -1
 --- !u!1001 &2035404770
 Prefab:

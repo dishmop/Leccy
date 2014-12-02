@@ -170,12 +170,14 @@ public class CircuitElementVoltmeter : CircuitElement {
 			int upDir =  ModelDir2WorldDir(Circuit.kUp);
 			int downDir =  ModelDir2WorldDir(Circuit.kDown);
 			
-			return Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, upDir) - 
-			                 Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, downDir));
+			// only return a difference if both branches hav bee traversed
+			if (Simulator.singleton.IsTraversed(thisPoint.x, thisPoint.y, upDir) && Simulator.singleton.IsTraversed(thisPoint.x, thisPoint.y, downDir)){
+			
+				return Mathf.Abs(Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, upDir) - 
+				                 Simulator.singleton.GetVoltage(thisPoint.x, thisPoint.y, downDir));
+			}
 		}
-		else
-			return 0f;
-		
+		return 0f;
 	
 	}
 	

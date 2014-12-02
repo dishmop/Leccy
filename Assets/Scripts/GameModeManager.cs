@@ -94,7 +94,6 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	bool IsLevelComplete(){
-		Debug.Log("numLevelTriggers = " + numLevelTriggers + ", triggersTriggered = " + triggersTriggered);
 		return (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
 	}
 	
@@ -154,7 +153,7 @@ public class GameModeManager : MonoBehaviour {
 			
 				break;	
 			case GameMode.kPlayLevel:
-				if (IsLevelComplete()){
+				if (IsLevelComplete() && !enableEditor){
 					levelCompletewWaitStartTime = Time.fixedTime;
 					gameMode = GameMode.kLevelCompleteWait;
 				

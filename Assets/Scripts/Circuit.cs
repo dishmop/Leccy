@@ -35,6 +35,7 @@ public class Circuit : MonoBehaviour {
 	public class AnchorData{
 		public bool[] 		isAnchored = new bool[5];
 		public GameObject 	anchorMesh = null;
+		public bool			disableGrid = false;
 		public bool			isDirty = false;
 	}
 	
@@ -98,7 +99,8 @@ public class Circuit : MonoBehaviour {
 		for (int x = 0; x < elements.GetLength (0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				for (int i = 0 ; i < 5; ++i){
-					bw.Write (anchors[x,y].isAnchored[i]);
+					bw.Write(anchors[x,y].isAnchored[i]);
+					bw.Write(anchors[x,y].disableGrid);
 				}
 			}
 		}		
@@ -132,6 +134,7 @@ public class Circuit : MonoBehaviour {
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				for (int i = 0 ; i < 5; ++i){
 					anchors[x,y].isAnchored[i] = br.ReadBoolean();
+					anchors[x,y].disableGrid = br.ReadBoolean();
 				}
 			}
 		}			
@@ -328,11 +331,27 @@ public class Circuit : MonoBehaviour {
 	// GameUpdate is called once per frame in a specific order
 	public void GameUpdate () {
 		CalcBounds();
+		UpdateGrid();
 		CircuitElementGameUpdate();
 		MakeConnections();
 		PostConnectionUpdate();
 		UpdateAnchorMeshes();	
 		
+		
+	}
+	
+	void UpdateGrid(){
+//		int width = Grid.singleton.gridWidth;
+//		int height = Grid.singleton.gridHeight;
+//		for (int x = 0; x < width; ++x){
+//			for (int y = 0; y < height; ++y){
+//				AnchorData data = GetAnchors(new GridPoint(x,y));
+//				Grid.singleton.gridObjects[x,y].SetActive(!data.disableGrid);
+//				data.anchorMesh.SetActive(!data.disableGrid);
+//				
+//				
+//			}
+//		}
 		
 	}
 	
@@ -462,6 +481,7 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	void UpdateAnchorMeshes(){
+		List<GridPoint> changedGridPoints = new List<GridPoint>();
 		for (int x = 0; x < elements.GetLength(0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				GridPoint thisPoint = new GridPoint(x, y);
@@ -489,15 +509,20 @@ public class Circuit : MonoBehaviour {
 						}
 					}
 					RebuildAnchorMesh(data, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
+					data.isDirty = false;
 					if (data.anchorMesh){
 						// want it positioned behind everyhing (note that the ghost versio of this should be in between)
 						data.anchorMesh.transform.position = new Vector3(thisPoint.x, thisPoint.y, 1);
 						data.anchorMesh.transform.parent = transform;
-				
+						data.anchorMesh.SetActive(!data.disableGrid);
+						
 					}
+					changedGridPoints.Add(thisPoint);
+					
 				}
 			}
 		}	
+		Grid.singleton.RebuildGridPoints(changedGridPoints);
 	}
 	
 
@@ -545,8 +570,6 @@ public class Circuit : MonoBehaviour {
 				
 			}
 		}
-		
-		data.isDirty = false;
 		
 	}
 	

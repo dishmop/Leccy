@@ -435,7 +435,7 @@ public class CircuitElement : MonoBehaviour {
 		// Ensure any colours get applied correctly afterwards
 		dirtyAlpha = true;
 		dirtyColor = true;
-		if (thisPoint != null) Circuit.singleton.GetAnchors(thisPoint).isDirty = true;
+		if (thisPoint != null && IsOnCircuit()) Circuit.singleton.GetAnchors(thisPoint).isDirty = true;
 		
 	}
 	
@@ -478,7 +478,7 @@ public class CircuitElement : MonoBehaviour {
 		isOnCircuit = isOn;
 	}
 	
-	protected bool IsOnCircuit(){
+	public bool IsOnCircuit(){
 		return isOnCircuit;
 	}
 	

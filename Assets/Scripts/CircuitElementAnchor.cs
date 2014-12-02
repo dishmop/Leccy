@@ -137,6 +137,7 @@ public class CircuitElementAnchor : CircuitElement {
 		
 		
 		Circuit.RebuildAnchorMesh(anchorData, isConnected, orient, centrePrefab, branchPrefab, emptyBranchPrefab, emptyGO);
+		anchorData.isDirty = false;
 		if (anchorData.anchorMesh){
 			anchorData.anchorMesh.transform.parent = transform;
 			anchorData.anchorMesh.transform.localPosition = new Vector3(0f, 0f, 3);

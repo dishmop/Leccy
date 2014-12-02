@@ -124,6 +124,10 @@ public class Simulator : MonoBehaviour {
 		return GetBranchData(new BranchAddress(x, y, dir)).totalCurrent;
 	}
 	
+	public bool IsTraversed(int x, int y, int dir){
+		return GetBranchData(new BranchAddress(x, y, dir)).traversed;
+	}
+	
 	BranchData GetBranchData(BranchAddress address){
 		if (address.x < 0 || address.x > branchData.GetLength(0) ||
 		    address.y < 0 || address.y > branchData.GetLength(1) ||
