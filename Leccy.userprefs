@@ -1,23 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Circuit.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
     <Files>
       <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/FlashingButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="248" Column="61" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="138" Column="1" />
-      <File FileName="Assets/Scripts/PanelController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="74" Column="21" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="62" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="92" Column="36" />
+      <File FileName="Assets/Scripts/PanelController.cs" Line="39" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="472" Column="1" />
       <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="395" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="327" Column="49" />
       <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="91" Column="4" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="119" Column="42" />
       <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
@@ -26,19 +26,19 @@
       <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
       <File FileName="Assets/Shaders/SolidColor_FG.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/OldUI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CamControl.cs" Line="66" Column="4" />
       <File FileName="Assets/Scripts/CircuitElementGridHider.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="24" Column="32" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="42" Column="1" />
       <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/PrefabManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/PrefabListener.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/SpringValue.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tuple4.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="7" Column="26" />
       <File FileName="Assets/Scripts/MouseDown.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/AmmeterEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="218" Column="61" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
     </Files>
     <Pads>
@@ -60,8 +60,6 @@
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="7" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="10" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/OnMouseDown.cs" line="16" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/CircuitElement.cs" line="465" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/CircuitElement.cs" line="472" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
