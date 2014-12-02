@@ -113,8 +113,7 @@ public class GameModeManager : MonoBehaviour {
 	
 		switch (gameMode){
 			case GameMode.kStart:
-				LevelManager.singleton.currentLevelIndex = 0;
-				LevelManager.singleton.LoadLevel();
+				LevelManager.singleton.LoadLevel(0);
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				startGameDlg.SetActive(true);
 				levelCompleteDlg.SetActive(false);
@@ -136,7 +135,6 @@ public class GameModeManager : MonoBehaviour {
 				break;				
 			case GameMode.kTitleScreen:
 			if (startGame){		
-					LevelManager.singleton.currentLevelIndex++;
 					LevelManager.singleton.LoadLevel();
 					startGameDlg.SetActive(false);
 					gameMode = GameMode.kPlayLevelInit;

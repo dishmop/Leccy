@@ -386,6 +386,14 @@ public class Circuit : MonoBehaviour {
 								thisElement.SuggestBehaviour(i, CircuitElement.ConnectionBehaviour.kReceptive, honourAnchors);
 							}
 						}
+						// If connections are unreceptive - generally try making them more receptive (anchors allowing)
+						if (thisElement.connectionBehaviour[i] == CircuitElement.ConnectionBehaviour.kUnreceptive){
+							// Note that this will not do anything if the anchors prevent it
+							if (!data.isAnchored[i]){
+								thisElement.SuggestBehaviour(i, CircuitElement.ConnectionBehaviour.kReceptive, honourAnchors);
+							}
+						}
+						
 					}
 				}
 			}

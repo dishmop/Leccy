@@ -19,6 +19,12 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 	
+	public void LoadLevel(int index){
+		if (index >=0 && index < levelsToLoad.Length && levelsToLoad[index] != null){
+			LoadLevel(levelsToLoad[index].name);
+		}
+	}
+	
 	public void SaveLevel(){
 		SaveLevel(levelToSave);	
 	}	
