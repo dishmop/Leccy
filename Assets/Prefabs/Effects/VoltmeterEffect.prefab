@@ -110,7 +110,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 82: {fileID: 8200000}
   m_Layer: 0
-  m_Name: AmmeterEffect
+  m_Name: VoltmeterEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 744.808167, y: 324.22937, z: -3}
+  m_LocalPosition: {x: 744.875122, y: 324.527832, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -249,13 +249,13 @@ ParticleAnimator:
     rgba: 184549375
   colorAnimation[1]:
     serializedVersion: 2
-    rgba: 2533336466
+    rgba: 2526871442
   colorAnimation[2]:
     serializedVersion: 2
-    rgba: 1778345801
+    rgba: 1766457182
   colorAnimation[3]:
     serializedVersion: 2
-    rgba: 1174349056
+    rgba: 1157693186
   colorAnimation[4]:
     serializedVersion: 2
     rgba: 0
@@ -415,7 +415,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: ec0dda555bb6c4c34bdb7e8b1e27b80d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: .649999976
-  m_Pitch: 1
+  m_Pitch: .800000012
   Loop: 0
   Mute: 0
   Priority: 128

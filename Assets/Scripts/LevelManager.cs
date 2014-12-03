@@ -36,6 +36,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	
+	public void PreviousLevel(){
+		currentLevelIndex--;
+		LoadLevel();
+		
+	}
+	
 	
 	// Does the actual serialising
 	public void LoadLevel(string filename){

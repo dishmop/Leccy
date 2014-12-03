@@ -150,9 +150,9 @@ public class CircuitElementVoltmeter : CircuitElement {
 	
 	
 	void TriggerTargetEffect(){
-		Transform actualText = GetDisplayMesh().transform.FindChild ("ActualText");
+		Transform actualText = GetDisplayMesh().transform.FindChild ("TargetText");
 		GameObject effect = GameObject.Instantiate(triggerEffect, actualText.position, actualText.rotation) as GameObject;
-		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetMaxCurrent();
+		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetVoltageDiff();
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().color = actualText.gameObject.GetComponent<FractionCalc>().color;
 		effect.transform.parent = transform;
 	
@@ -188,14 +188,28 @@ public class CircuitElementVoltmeter : CircuitElement {
 		HandleDisplayMeshChlid();	
 		HandleColorChange();
 		
-		
-				
+		HandleAudio();
 		SetupColorsAndText();
-		
-
-		
 	}
 	
+	
+	
+	void HandleAudio(){
+		bool shouldPlay = (IsOnTarget() && !buttonActivated);
+		// The audio should be playing all the time and we should start it on a whole number of seconds
+		if (shouldPlay != GetComponent<AudioSource>().isPlaying){
+			if (shouldPlay){
+				float time = Time.realtimeSinceStartup;
+				int lastWhole = Mathf.FloorToInt(time);
+				float timeToNextWhole = lastWhole + 1 - time;
+				GetComponent<AudioSource>().PlayDelayed(timeToNextWhole);
+			}
+			else{
+				GetComponent<AudioSource>().Stop();
+			}
+		}
+	}
+		
 	public override void GameUpdate(){
 		if (hasTarget != prevHasTarget){
 			prevHasTarget = hasTarget;
@@ -217,15 +231,17 @@ public class CircuitElementVoltmeter : CircuitElement {
 			GameModeManager.singleton.TriggerComplete();
 			hasTriggered = true;
 		}
+
 		
 		if (!IsOnTarget()){
 			hasTriggered = false;
+			buttonActivated = false;
 		}
 	}
 	
 	void SetupColorsAndText(){
-		float pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
-
+		float pulse = 0.5f + 0.5f *  Mathf.Cos (2 * 3.14159265f * (Time.realtimeSinceStartup - 0.2f));
+		
 		foreach (Transform child in GetDisplayMesh().transform){
 			if (child.name == "TargetText"){
 				child.gameObject.GetComponent<FractionCalc>().value = targetVolts;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GameModeManager : MonoBehaviour {
 	public static GameModeManager singleton = null;
@@ -93,6 +94,13 @@ public class GameModeManager : MonoBehaviour {
 
 	}
 	
+	void HandleSideButtons(){
+		Transform panelTranform = sidePanel.transform.FindChild("BottomPanel");
+		panelTranform.FindChild ("PreviousLevelButton").GetComponent<Button>().interactable = (LevelManager.singleton.currentLevelIndex > 1);
+		panelTranform.FindChild ("SaveLevelButton").gameObject.SetActive(enableEditor);
+		panelTranform.FindChild ("ClearLevelButton").gameObject.SetActive(enableEditor);
+	}
+	
 	bool IsLevelComplete(){
 		return (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
 	}
@@ -121,7 +129,7 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				LevelManager.singleton.LoadLevel(0);
-				Camera.main.GetComponent<AudioListener>().enabled = false;
+				AudioListener.pause = true;
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
@@ -146,8 +154,8 @@ public class GameModeManager : MonoBehaviour {
 				sidePanel.GetComponent<PanelController>().Activate();
 				levelStartMessageDlg.SetActive(true);	
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);					
-				LevelManager.singleton.LoadLevel();
-				Camera.main.GetComponent<AudioListener>().enabled = true;
+				if (!enableEditor) LevelManager.singleton.LoadLevel();
+				AudioListener.pause = false;
 			
 				break;	
 			case GameMode.kPlayLevel:
@@ -156,7 +164,10 @@ public class GameModeManager : MonoBehaviour {
 					gameMode = GameMode.kLevelCompleteWait;
 				
 				}
-				break;	
+				if (quitGame){
+					gameMode = GameMode.kStart;
+				}				
+			break;	
 			case GameMode.kLevelCompleteWait:				
 				if (Time.fixedTime > levelCompletewWaitStartTime + levelCompletewWaitDuration){
 					Camera.main.transform.FindChild("Quad").gameObject.SetActive(true);			
@@ -186,6 +197,8 @@ public class GameModeManager : MonoBehaviour {
 				}
 				break;	
 		}
+		
+		HandleSideButtons();
 		
 		// If we are not in editor mode, then we should honour the anchors
 		if (!enableEditor){

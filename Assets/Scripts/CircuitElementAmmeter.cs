@@ -16,7 +16,6 @@ public class CircuitElementAmmeter : CircuitElement {
 	public Color 		signColorTarget;
 	
 	
-
 	bool				buttonActivated = false;
 	bool 				hasTriggered = false;
 	
@@ -154,19 +153,39 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	
+	
+	
 
 	
 	// Update is called once per frame
 	void Update () {
 		HandleDisplayMeshChlid();	
 		HandleColorChange();
+		
+		HandleAudio();
 
 			
 		SetupColorsAndText();
 		
-		
+	
 
 		
+	}
+	
+	void HandleAudio(){
+		bool shouldPlay = (IsOnTarget() && !buttonActivated);
+		// The audio should be playing all the time and we should start it on a whole number of seconds
+		if (shouldPlay != GetComponent<AudioSource>().isPlaying){
+			if (shouldPlay){
+				float time = Time.realtimeSinceStartup;
+				int lastWhole = Mathf.FloorToInt(time);
+				float timeToNextWhole = lastWhole + 1 - time;
+				GetComponent<AudioSource>().PlayDelayed(timeToNextWhole);
+			}
+			else{
+				GetComponent<AudioSource>().Stop();
+			}
+		}
 	}
 	
 	
@@ -189,12 +208,15 @@ public class CircuitElementAmmeter : CircuitElement {
 		
 		if (!IsOnTarget()){
 			hasTriggered = false;
+			buttonActivated = false;
 		}
+		
+		
 	}
 	
 	
 	void SetupColorsAndText(){
-		float pulse = 0.5f + 0.5f *  Mathf.Sin (10 * Time.realtimeSinceStartup);
+		float pulse = 0.5f + 0.5f *  Mathf.Cos (2 * 3.14159265f * (Time.realtimeSinceStartup - 0.2f));
 		
 		foreach (Transform child in GetDisplayMesh().transform){
 			if (child.name == "TargetText"){
