@@ -6,7 +6,7 @@
       <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/FlashingButton.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="62" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="92" Column="36" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="81" Column="2" />
       <File FileName="Assets/Scripts/PanelController.cs" Line="39" Column="1" />
       <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CircuitElement.cs" Line="472" Column="1" />

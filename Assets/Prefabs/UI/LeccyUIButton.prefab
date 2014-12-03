@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 3
-  m_AspectRatio: 5.11962032
+  m_AspectRatio: 3.93921041
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -453,10 +453,10 @@ MonoBehaviour:
     m_MaxSize: 40
     m_Alignment: 4
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ammeter
+  m_Text: Voltmeter
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -837,8 +837,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: .0554531552}
   m_AnchorMax: {x: 1, y: .223000005}
-  m_AnchoredPosition: {x: 0, y: 4.44793701}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 8.89999962}
+  m_SizeDelta: {x: 0, y: 8.89999962}
   m_Pivot: {x: .5, y: 1.00000048}
 --- !u!224 &22400012
 RectTransform:
