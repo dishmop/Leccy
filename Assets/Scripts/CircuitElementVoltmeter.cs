@@ -275,6 +275,11 @@ public class CircuitElementVoltmeter : CircuitElement {
 		VisualiseTemperature();
 	}
 	
+	// return true if this component is only available in the editor
+	public override bool IsEditorOnly(){
+		return true;
+	}	
+	
 	
 	public override   void OnMouseOver() {
 		

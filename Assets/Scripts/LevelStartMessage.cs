@@ -4,14 +4,13 @@ using UnityEngine.UI;
 
 public class LevelStartMessage : MonoBehaviour {
 
-	const float lifeTime = 2;
+	const float lifeTime = 5;
 	const float fadeTime = 1;
 	float birthTime;
 		
 	// Use this for initialization
 	void OnEnable () {
-		int currentIndex = 	 LevelManager.singleton.currentLevelIndex;
-		transform.FindChild("Text").GetComponent<Text>().text = "Level: " + currentIndex  + " - " + LevelManager.singleton.levelsToLoad[currentIndex].name.Substring(3);
+		transform.FindChild("Text").GetComponent<Text>().text = LevelManager.singleton.GetCurrentLevelName();
 		birthTime = Time.fixedTime;
 	
 	}

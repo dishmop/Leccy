@@ -35,6 +35,10 @@ public class LevelManager : MonoBehaviour {
 		
 	}
 	
+	public string GetCurrentLevelName(){
+		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
+	}
+	
 	
 	public void PreviousLevel(){
 		currentLevelIndex--;

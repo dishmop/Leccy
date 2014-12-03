@@ -7,6 +7,7 @@ public class GameModeManager : MonoBehaviour {
 	public static GameModeManager singleton = null;
 	
 	public GameObject sidePanel;
+	public GameObject levelInfo;
 	public GameObject startGameDlg;
 	public GameObject levelCompleteDlg;
 	public GameObject gameCompleteDlg;
@@ -110,6 +111,23 @@ public class GameModeManager : MonoBehaviour {
 		triggersTriggered = 0;
 	}	
 	
+	void HandleLevelInfo(){
+		if (gameMode != GameMode.kTitleScreen){
+			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + LevelManager.singleton.levelsToLoad.GetLength(0)-1;
+			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + numLevelTriggers + " / " + triggersTriggered;
+		}
+		else{
+			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "";
+			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "";
+		}
+		
+		Vector2 offsetMin = levelInfo.transform.FindChild("CurrentLevel").GetComponent<RectTransform>().offsetMin;
+		offsetMin.x = sidePanel.GetComponent<RectTransform>().offsetMin.x;
+		levelInfo.transform.FindChild("CurrentLevel").GetComponent<RectTransform>().offsetMin= offsetMin;
+		
+		
+	}
+	
 	
 	
 	
@@ -142,6 +160,7 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(false);
 				break;				
 			case GameMode.kTitleScreen:
+				UI.singleton.HideMousePointer();
 				if (startGame){		
 					startGameDlg.SetActive(false);
 					gameMode = GameMode.kPlayLevelInit;
@@ -199,6 +218,7 @@ public class GameModeManager : MonoBehaviour {
 		}
 		
 		HandleSideButtons();
+		HandleLevelInfo();
 		
 		// If we are not in editor mode, then we should honour the anchors
 		if (!enableEditor){

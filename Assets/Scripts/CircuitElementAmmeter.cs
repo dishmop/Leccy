@@ -251,13 +251,20 @@ public class CircuitElementAmmeter : CircuitElement {
 		VisualiseTemperature();
 	}
 	
+	// return true if this component is only available in the editor
+	public override bool IsEditorOnly(){
+		return true;
+	}
+	
 	public override   void OnMouseOver() {
 		
 		if (IsOnTarget()){
 			UI.singleton.HideMousePointer();
 		}
 		
-	}		
+	}	
+	
+			
 	
 	public override void OnMouseDown() {
 		if (IsOnTarget() & !hasTriggered){
