@@ -22,7 +22,7 @@ public class ElementSelectPanel : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		ElementFactory factory = ElementFactory.singleton;
 		int numElements = factory.GetNumElements(uiTypeFilter);
 		int xPos = 0;
@@ -32,6 +32,9 @@ public class ElementSelectPanel : MonoBehaviour {
 			
 			// If not in edtor mode and this element is only available in the editor, then skip this one
 			if (prefab.GetComponent<CircuitElement>().IsEditorOnly() && !GameModeManager.singleton.enableEditor) continue;
+			
+			// If non to pick from, then don;t show it (unless in editor mode)
+			if (factory.GetStockRemaining(prefab.GetComponent<SerializationID>().id) == 0 && !GameModeManager.singleton.enableEditor) continue;
 			
 			GameObject newButton = Instantiate(leccyButtonPrefab) as GameObject;
 			newButton.transform.SetParent(transform, false);
@@ -69,6 +72,13 @@ public class ElementSelectPanel : MonoBehaviour {
 		pressSound.Play();
 		
 	}	
+	
+	public void Cleanup(){
+		//Remove all the buttons
+		foreach (Transform child in transform){
+			Destroy (child.gameObject);
+		}
+	}
 	
 
 	

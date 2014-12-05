@@ -8,6 +8,7 @@ public class UI : MonoBehaviour {
 	
 	public AudioSource placeElementSound;
 	public AudioSource removeElementSound;
+	public AudioSource buttonClickSound;
 	public AudioSource failSound;
 	public GameObject  elementSelectPanel;
 	
@@ -64,6 +65,10 @@ public class UI : MonoBehaviour {
 	
 	public void HideMousePointer(){
 		hideMouse = true;
+	}
+	
+	public void PlayButtonClickSound(){
+		buttonClickSound.Play();
 	}
 	
 		

@@ -16,6 +16,9 @@ public class FractionCalc : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Transform recentreT = transform.FindChild ("Recentre").transform;
+		recentreT.gameObject.SetActive(false);
+		
 	
 	}
 	
@@ -23,6 +26,8 @@ public class FractionCalc : MonoBehaviour {
 	void Update () {
 	
 		Transform recentreT = transform.FindChild ("Recentre").transform;
+		
+		recentreT.gameObject.SetActive(true);
 		
 		// Ensure the text always points upwards
 		recentreT.rotation = Quaternion.identity;

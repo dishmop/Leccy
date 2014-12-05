@@ -12,6 +12,11 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject levelCompleteDlg;
 	public GameObject gameCompleteDlg;
 	public GameObject levelStartMessageDlg;
+	public GameObject ammeterEffect;
+	public GameObject voltMeterEffect;
+	
+	float endOfGameTime = -100f;
+	float endOfGameLifeTime = 3f;
 	
 	
 	public enum GameMode{
@@ -113,8 +118,8 @@ public class GameModeManager : MonoBehaviour {
 	
 	void HandleLevelInfo(){
 		if (gameMode != GameMode.kTitleScreen){
-			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + LevelManager.singleton.levelsToLoad.GetLength(0)-1;
-			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + numLevelTriggers + " / " + triggersTriggered;
+			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-1);
+			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + triggersTriggered + " / " + numLevelTriggers;
 		}
 		else{
 			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "";
@@ -128,7 +133,11 @@ public class GameModeManager : MonoBehaviour {
 		
 	}
 	
-	
+	void ResetSidePanel(){
+		sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>().Cleanup();
+		sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>().Start();
+
+	}
 	
 	
 
@@ -147,7 +156,6 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				LevelManager.singleton.LoadLevel(0);
-				AudioListener.pause = true;
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
@@ -174,7 +182,8 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(true);	
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);					
 				if (!enableEditor) LevelManager.singleton.LoadLevel();
-				AudioListener.pause = false;
+				ResetSidePanel();
+				AudioListener.volume = 1f;
 			
 				break;	
 			case GameMode.kPlayLevel:
@@ -193,6 +202,8 @@ public class GameModeManager : MonoBehaviour {
 					sidePanel.GetComponent<PanelController>().Deactivate();
 					if (LevelManager.singleton.IsOnLastLevel()){
 						gameCompleteDlg.SetActive(true);
+						TriggerEndOfGameEffects();
+						
 					}
 					else{
 						levelCompleteDlg.SetActive(true);
@@ -203,6 +214,10 @@ public class GameModeManager : MonoBehaviour {
 				break;
 				
 			case GameMode.kLevelComplete:
+			Camera.main.transform.FindChild("Quad").gameObject.SetActive(!ShouldPlayEndOfGameEffects());	
+			if (!ShouldPlayEndOfGameEffects() && AudioListener.volume > 0){
+					AudioListener.volume = AudioListener.volume - 0.01f;
+				}
 				if (restartLevel){
 					restartLevel = false;
 					gameMode = GameMode.kPlayLevelInit;
@@ -219,6 +234,7 @@ public class GameModeManager : MonoBehaviour {
 		
 		HandleSideButtons();
 		HandleLevelInfo();
+		UpdateEndOfGameEffects();
 		
 		// If we are not in editor mode, then we should honour the anchors
 		if (!enableEditor){
@@ -233,6 +249,37 @@ public class GameModeManager : MonoBehaviour {
 		quitGame = false;		
 			
 
+		
+	}
+	
+	bool ShouldPlayEndOfGameEffects(){
+		return Time.realtimeSinceStartup < endOfGameTime + endOfGameLifeTime;
+	}
+	
+	
+	void UpdateEndOfGameEffects(){
+		if (ShouldPlayEndOfGameEffects()){
+			Rect bounds = Circuit.singleton.bounds;
+			Vector3 randPos = new Vector3(Random.Range (bounds.min.x, bounds.max.x), Random.Range (bounds.min.y, bounds.max.y), 0f);
+			int val = (int)(Random.Range (0, 5));
+			switch(val){
+				case 0: 
+					Instantiate(ammeterEffect, randPos, Quaternion.identity);
+					break;
+				case 1: 
+					Instantiate(voltMeterEffect, randPos, Quaternion.identity);
+					break;
+					
+			}
+			
+		}
+	}
+	
+	
+	void TriggerEndOfGameEffects(){
+		Camera.main.GetComponent<CamControl>().CentreCamera();
+		endOfGameTime = Time.realtimeSinceStartup;
+		
 		
 	}
 	

@@ -33,4 +33,9 @@ public class FlashingButton : MonoBehaviour {
 	
 	}
 	
+	void OnEnable(){
+		isPointerInside = false;
+	
+	}
+	
 }
