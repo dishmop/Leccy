@@ -22,6 +22,8 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
+
+	const int		kLoadSaveVersion = 1;	
 	
 
 	public void Start(){
@@ -35,6 +37,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
+		bw.Write (kLoadSaveVersion);		
 		bw.Write (targetAmp);
 		bw.Write (hasTarget);
 		

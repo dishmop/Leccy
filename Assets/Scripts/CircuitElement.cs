@@ -24,8 +24,6 @@ public class CircuitElement : MonoBehaviour {
 	
 	protected float			temperature = 0;
 	
-	bool					isOnCircuit = false;
-	
 	
 	// For setting alpha and color values
 	protected float alpha = 1f;
@@ -51,6 +49,10 @@ public class CircuitElement : MonoBehaviour {
 	public UIType uiType = UIType.kNone;
 	
 	protected string	displayMeshName = "DisplayMesh";
+	
+	bool					isOnCircuit = false;
+	
+	const int		kLoadSaveVersion = 1;	
 
 
 	public void SetAlpha(float a){
@@ -192,7 +194,7 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	public virtual void Save(BinaryWriter bw){
-			
+		bw.Write (kLoadSaveVersion);
 		bw.Write (orient);
 		bw.Write (isOnCircuit);
 		bw.Write (alpha);

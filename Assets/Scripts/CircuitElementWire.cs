@@ -15,7 +15,7 @@ public class CircuitElementWire : CircuitElement {
 		
 	GameObject 	currentPrefab;
 	
-
+	const int		kLoadSaveVersion = 1;	
 
 	
 	public void Start(){
@@ -76,6 +76,7 @@ public class CircuitElementWire : CircuitElement {
 	
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
+		bw.Write (kLoadSaveVersion);
 	}
 	
 	

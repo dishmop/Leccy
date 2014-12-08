@@ -9,7 +9,8 @@ public class CircuitElementResistor : CircuitElement {
 	public GameObject 	resistorPrefab;
 	public float		resistance = 1;
 		
-
+	const int		kLoadSaveVersion = 1;	
+	
 	public void Start(){
 		Debug.Log ("CircuitElementResistor:Start()");
 	}
@@ -20,6 +21,7 @@ public class CircuitElementResistor : CircuitElement {
 
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
+		bw.Write (kLoadSaveVersion);
 		bw.Write(resistance);
 	}
 	

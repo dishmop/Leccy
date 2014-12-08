@@ -22,8 +22,7 @@ public class CircuitElementAnchor : CircuitElement {
 	// Whether we are plaving anchors or removing them
 	bool				erase = false;
 
-	
-	
+		
 	
 	public void Start(){
 		Debug.Log ("CircuitElementAnchor:Start()");

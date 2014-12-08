@@ -23,7 +23,8 @@ public class CircuitElementVoltmeter : CircuitElement {
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
 	
-
+	const int		kLoadSaveVersion = 1;	
+	
 	public void Start(){
 		Debug.Log ("CircuitElementAmpMeter:Start()");
 	}
@@ -35,6 +36,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
+		bw.Write (kLoadSaveVersion);
 		bw.Write (targetVolts);
 		bw.Write (hasTarget);
 		

@@ -44,7 +44,8 @@ public class Circuit : MonoBehaviour {
 		
 	int[,] 					elementHash;
 	
-	
+	const int		kLoadSaveVersion = 1;	
+		
 	[Serializable]
 	class ElementSerializationData{
 		public int x;
@@ -75,7 +76,10 @@ public class Circuit : MonoBehaviour {
 		}
 	}
 	
+	
 	public 	void Save(BinaryWriter bw){
+		bw.Write (kLoadSaveVersion);
+
 		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
 		for (int x = 0; x < elements.GetLength(0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){

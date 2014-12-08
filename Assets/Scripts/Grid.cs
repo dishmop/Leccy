@@ -17,10 +17,11 @@ public class Grid : MonoBehaviour {
 	public GameObject emptyGO;
 	public GameObject[,] gridObjects = null;
 	
-	
+	const int		kLoadSaveVersion = 1;		
 
 
 	public 	void Save(BinaryWriter bw){
+		bw.Write (kLoadSaveVersion);
 		bw.Write (gridWidth);
 		bw.Write (gridHeight);
 	}

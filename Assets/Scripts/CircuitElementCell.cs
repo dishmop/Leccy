@@ -13,7 +13,8 @@ public class CircuitElementCell : CircuitElement {
 	const float	normalResistance = 0f;
 	const float	emergencyResistance = 0.001f;
 	const float	maxCurrent = 100f;
-	
+
+	const int		kLoadSaveVersion = 1;		
 	
 	public void Start(){
 		Debug.Log ("CircuitElementCell:Start()");
@@ -26,6 +27,7 @@ public class CircuitElementCell : CircuitElement {
 	public override void Save(BinaryWriter bw){
 		base.Save (bw);	
 		
+		bw.Write (kLoadSaveVersion);
 		bw.Write (voltage);
 		bw.Write(isInEmergency);
 	}

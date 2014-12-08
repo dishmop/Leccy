@@ -8,6 +8,8 @@ public class ElementFactory : MonoBehaviour {
 	public static ElementFactory singleton = null;
 	
 	int[]	typeCount;
+	
+	const int		kLoadSaveVersion = 1;		
 
 	//----------------------------------------------
 	[Serializable]
@@ -138,6 +140,7 @@ public class ElementFactory : MonoBehaviour {
 	
 
 	public 	void Save(BinaryWriter bw){
+		bw.Write (kLoadSaveVersion);	
 		int numStock = stock.Length;
 		bw.Write(numStock);
 		for (int i = 0; i < numStock; ++i){

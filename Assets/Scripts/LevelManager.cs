@@ -11,23 +11,41 @@ public class LevelManager : MonoBehaviour {
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 0;
 	
-	
+	const int		kLoadSaveVersion = 1;	
+		
 	// Manage which level to load and then pass the file name to the loading function that does the work
 	public void LoadLevel(){
-		if (currentLevelIndex < levelsToLoad.Length && levelsToLoad[currentLevelIndex] != null){
-			LoadLevel(levelsToLoad[currentLevelIndex].name);
-		}
+		LoadLevel (currentLevelIndex);
 	}
 	
-	public void LoadLevel(int index){
+	public bool LoadLevel(int index){
 		if (index >=0 && index < levelsToLoad.Length && levelsToLoad[index] != null){
-			LoadLevel(levelsToLoad[index].name);
+			return LoadLevel(levelsToLoad[index].name);
 		}
+		return false;
 	}
+	
+
 	
 	public void SaveLevel(){
 		SaveLevel(levelToSave);	
 	}	
+	
+	public void SaveLevel(int index){
+		if (index >=0 && index < levelsToLoad.Length && levelsToLoad[index] != null){
+			SaveLevel(levelsToLoad[index].name);
+		}
+	}	
+	
+	public void ResaveAllLevels(){
+		for (int i = 0; i < levelsToLoad.GetLength(0); ++i){
+			bool ok = LoadLevel (i);
+			if (ok){
+				SaveLevel (i);
+				Debug.Log("Level " + i + ": " + levelsToLoad[i].name + " resaved");
+			}
+		}
+	}
 
 	public void ClearLevel(){
 		Circuit.singleton.CreateBlankCircuit();
@@ -48,10 +66,10 @@ public class LevelManager : MonoBehaviour {
 	
 	
 	// Does the actual serialising
-	public void LoadLevel(string filename){
+	public bool LoadLevel(string filename){
 		if (filename == null){
 			Debug.Log ("Attempting to load null level");
-			return;
+			return false;
 		}
 		String path = BuildResourcePath(filename);
 		Debug.Log("LoadLevel: " + path);
@@ -74,7 +92,9 @@ public class LevelManager : MonoBehaviour {
 		}	
 		else{
 			Debug.Log ("Failed to load asset");
+			return false;
 		}
+		return true;
 	}
 	
 	// Does the actual serialising
@@ -84,6 +104,7 @@ public class LevelManager : MonoBehaviour {
 		
 		BinaryWriter bw = new BinaryWriter(file);
 		
+		bw.Write (kLoadSaveVersion);					
 		Grid.singleton.Save(bw);
 		Circuit.singleton.Save(bw);
 		ElementFactory.singleton.Save(bw);

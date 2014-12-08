@@ -11,8 +11,7 @@ public class CircuitElementEraser : CircuitElement {
 	
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
-	
-	
+
 	
 
 	public void Start(){
