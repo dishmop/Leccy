@@ -573,7 +573,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: c0e46338d07414a48bf8c297601ee342, type: 3}
   - {fileID: 4900000, guid: 85a5ccace2b6046af875c6089ea1348c, type: 3}
   - {fileID: 4900000, guid: 4669bded6c0534dc2aacde77326724e1, type: 3}
-  currentLevelIndex: 13
+  currentLevelIndex: 1
 --- !u!4 &250961800
 Transform:
   m_ObjectHideFlags: 0
@@ -3167,6 +3167,22 @@ Prefab:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
+      propertyPath: gameVersion
+      value: 00-01
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
+      propertyPath: enable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
+      propertyPath: gameName
+      value: Leccy
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
+      propertyPath: playbackFilename
+      value: Leccy_00-01_20141210_203824_0358fb1c-94f2-4156-8c1a-61467582f9a2_c2208f12-d201-4641-8704-0fb4dc5a39b1.telemetry
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
   m_RootGameObject: {fileID: 1498330767}
@@ -3914,6 +3930,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3be47047794f44faabc01f6793489ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enable: 0
+  gameName: Leccy
+  playbackFilename: Leccy_00-01_20141210_203824_0358fb1c-94f2-4156-8c1a-61467582f9a2_c2208f12-d201-4641-8704-0fb4dc5a39b1.telemetry
+  gameVersion: 00-01
 --- !u!4 &1498330769
 Transform:
   m_ObjectHideFlags: 0
@@ -4005,6 +4025,10 @@ Prefab:
       propertyPath: voltMeterEffect
       value: 
       objectReference: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
+    - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
+      propertyPath: enableTelemetry
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
   m_RootGameObject: {fileID: 353371177}
@@ -5145,7 +5169,7 @@ Prefab:
       objectReference: {fileID: 4900000, guid: 83ee8c233a55646abb836d63ea55e497, type: 3}
     - target: {fileID: 11400000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
       propertyPath: currentLevelIndex
-      value: 13
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
       propertyPath: levelsToLoad.Array.data[4]

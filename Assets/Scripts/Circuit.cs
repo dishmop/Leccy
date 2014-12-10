@@ -44,10 +44,13 @@ public class Circuit : MonoBehaviour {
 		
 	int[,] 					elementHash;
 	
+	// This can be used to identify a level that has been saved
+	String					currentGuid = Guid.NewGuid().ToString();
+	
 	// Whether the circuit has changed since we last reset the dirt flag
 	bool					isDirty = true;
 	
-	const int		kLoadSaveVersion = 1;	
+	const int		kLoadSaveVersion = 2;	
 		
 	[Serializable]
 	class ElementSerializationData{
@@ -92,7 +95,8 @@ public class Circuit : MonoBehaviour {
 	
 	public 	void Save(BinaryWriter bw){
 		bw.Write (kLoadSaveVersion);
-
+		bw.Write (currentGuid);
+	
 		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
 		for (int x = 0; x < elements.GetLength(0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
@@ -127,87 +131,163 @@ public class Circuit : MonoBehaviour {
 
 		int version = br.ReadInt32();
 		switch (version){
-			case kLoadSaveVersion:{
-				
-				// Get the list of objects
-				List<ElementSerializationData> dataList = new List<ElementSerializationData>();
-				int numElements = br.ReadInt32();
-				
-		
-				for (int i = 0; i < numElements; ++i){
-					ElementSerializationData data = new ElementSerializationData();
-					data.x = br.ReadInt32 ();
-					data.y = br.ReadInt32 ();
-					data.id = br.ReadString ();
-					dataList.Add (data);
-				}
-				// Go through each position on the grid in the same oreder which which we wrote them
-				int index = 0;
-				ElementSerializationData nextData = dataList[index];
-				for (int x = 0; x < elements.GetLength(0); ++x){
-					for (int y = 0; y < elements.GetLength(1); ++y){
-						GridPoint thisPoint = new GridPoint(x, y);
-						// If this element position is the next one in our list, then compare it
-						if (nextData != null && nextData.x == x && nextData.y == y){
-							// If it is a different ID, then we destroy it and make an element of the correct type
-							GameObject thisObj = GetGameObject(thisPoint);
-							string thisId = thisObj != null ? thisObj.GetComponent<SerializationID>().id : "NULL";
-							if (thisObj == null || nextData.id != thisId){
-								Destroy(thisObj);
-								RemoveElement(thisPoint);
-								PlaceElement(ElementFactory.singleton.InstantiateElement(nextData.id), thisPoint);
-							}
-							
-							// Get a pointer to the CircuitElement bit of the component which is there
-							CircuitElement newElement = GetElement (thisPoint);
-							newElement.Load(br);
-							newElement.PostLoad();
-							
-							// Advance our list element
-							index++;
-							if (index < dataList.Count){
-								nextData = dataList[index];
-							}
-							else{
-								nextData = null;
-							}
-						}
-						// otherwise, this should be null
-						else if (elements[x,y] != null){
-							Destroy(elements[x,y]);
-							RemoveElement(thisPoint);
-						}
-						// otherwise it should be null and it is null 
-						else{
-							//- so do nothing
-						}
-					}
-					
-				}					
-	
-				for (int x = 0; x < elements.GetLength (0); ++x){
-					for (int y = 0; y < elements.GetLength(1); ++y){
-						AnchorData data = anchors[x, y];
-						int hash = CalcAnchorHash(data);
-						for (int i = 0 ; i < 5; ++i){
-							data.isAnchored[i] = br.ReadBoolean();
-							data.disableGrid = br.ReadBoolean();
-						}
-						int newHash = CalcAnchorHash(data);
-						if (newHash != hash){
-							data.isDirty = true;
-						}
-					}
-				}			
-				CalcBounds();
-				break;
+		case kLoadSaveVersion:{
+			currentGuid = br.ReadString();
+			
+			// Get the list of objects
+			List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+			int numElements = br.ReadInt32();
+			
+			
+			for (int i = 0; i < numElements; ++i){
+				ElementSerializationData data = new ElementSerializationData();
+				data.x = br.ReadInt32 ();
+				data.y = br.ReadInt32 ();
+				data.id = br.ReadString ();
+				dataList.Add (data);
 			}
+			// Go through each position on the grid in the same oreder which which we wrote them
+			int index = 0;
+			ElementSerializationData nextData = dataList[index];
+			for (int x = 0; x < elements.GetLength(0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					GridPoint thisPoint = new GridPoint(x, y);
+					// If this element position is the next one in our list, then compare it
+					if (nextData != null && nextData.x == x && nextData.y == y){
+						// If it is a different ID, then we destroy it and make an element of the correct type
+						GameObject thisObj = GetGameObject(thisPoint);
+						string thisId = thisObj != null ? thisObj.GetComponent<SerializationID>().id : "NULL";
+						if (thisObj == null || nextData.id != thisId){
+							Destroy(thisObj);
+							RemoveElement(thisPoint);
+							PlaceElement(ElementFactory.singleton.InstantiateElement(nextData.id), thisPoint);
+						}
+						
+						// Get a pointer to the CircuitElement bit of the component which is there
+						CircuitElement newElement = GetElement (thisPoint);
+						newElement.Load(br);
+						newElement.PostLoad();
+						
+						// Advance our list element
+						index++;
+						if (index < dataList.Count){
+							nextData = dataList[index];
+						}
+						else{
+							nextData = null;
+						}
+					}
+					// otherwise, this should be null
+					else if (elements[x,y] != null){
+						Destroy(elements[x,y]);
+						RemoveElement(thisPoint);
+					}
+					// otherwise it should be null and it is null 
+					else{
+						//- so do nothing
+					}
+				}
+				
+			}					
+			
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					AnchorData data = anchors[x, y];
+					int hash = CalcAnchorHash(data);
+					for (int i = 0 ; i < 5; ++i){
+						data.isAnchored[i] = br.ReadBoolean();
+						data.disableGrid = br.ReadBoolean();
+					}
+					int newHash = CalcAnchorHash(data);
+					if (newHash != hash){
+						data.isDirty = true;
+					}
+				}
+			}			
+			CalcBounds();
+			break;
+		}
+		case 1:{
+			
+			// Get the list of objects
+			List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+			int numElements = br.ReadInt32();
+			
+			
+			for (int i = 0; i < numElements; ++i){
+				ElementSerializationData data = new ElementSerializationData();
+				data.x = br.ReadInt32 ();
+				data.y = br.ReadInt32 ();
+				data.id = br.ReadString ();
+				dataList.Add (data);
+			}
+			// Go through each position on the grid in the same oreder which which we wrote them
+			int index = 0;
+			ElementSerializationData nextData = dataList[index];
+			for (int x = 0; x < elements.GetLength(0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					GridPoint thisPoint = new GridPoint(x, y);
+					// If this element position is the next one in our list, then compare it
+					if (nextData != null && nextData.x == x && nextData.y == y){
+						// If it is a different ID, then we destroy it and make an element of the correct type
+						GameObject thisObj = GetGameObject(thisPoint);
+						string thisId = thisObj != null ? thisObj.GetComponent<SerializationID>().id : "NULL";
+						if (thisObj == null || nextData.id != thisId){
+							Destroy(thisObj);
+							RemoveElement(thisPoint);
+							PlaceElement(ElementFactory.singleton.InstantiateElement(nextData.id), thisPoint);
+						}
+						
+						// Get a pointer to the CircuitElement bit of the component which is there
+						CircuitElement newElement = GetElement (thisPoint);
+						newElement.Load(br);
+						newElement.PostLoad();
+						
+						// Advance our list element
+						index++;
+						if (index < dataList.Count){
+							nextData = dataList[index];
+						}
+						else{
+							nextData = null;
+						}
+					}
+					// otherwise, this should be null
+					else if (elements[x,y] != null){
+						Destroy(elements[x,y]);
+						RemoveElement(thisPoint);
+					}
+					// otherwise it should be null and it is null 
+					else{
+						//- so do nothing
+					}
+				}
+				
+			}					
+			
+			for (int x = 0; x < elements.GetLength (0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					AnchorData data = anchors[x, y];
+					int hash = CalcAnchorHash(data);
+					for (int i = 0 ; i < 5; ++i){
+						data.isAnchored[i] = br.ReadBoolean();
+						data.disableGrid = br.ReadBoolean();
+					}
+					int newHash = CalcAnchorHash(data);
+					if (newHash != hash){
+						data.isDirty = true;
+					}
+				}
+			}			
+			CalcBounds();
+			break;
+		}		
 		}
 		
 	}
 	
 	int CalcAnchorHash(AnchorData data){
-
+		
 		return  (data.isAnchored[0] ?  1 << 0 : 0) + 
 				(data.isAnchored[1] ?  1 << 1 : 0) + 
 				(data.isAnchored[2] ?  1 << 2 : 0) + 
@@ -276,6 +356,7 @@ public class Circuit : MonoBehaviour {
 	
 	public void OnCircutChange(){
 		isDirty = true;
+		currentGuid = Guid.NewGuid().ToString();
 	}
 	
 	
