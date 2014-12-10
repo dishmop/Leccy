@@ -9,7 +9,7 @@ public class Telemetry : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public void GameUpdate () {
 	
 	}
 }

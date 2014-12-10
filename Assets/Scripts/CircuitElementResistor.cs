@@ -29,7 +29,13 @@ public class CircuitElementResistor : CircuitElement {
 	override public void Load(BinaryReader br){
 		base.Load (br);	
 		
-		resistance = br.ReadSingle();
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+			SerializationUtils.UpdateIfChanged(ref resistance, br.ReadSingle(), ref loadChangedSomething);
+				break;
+			}
+		}
 	}	
 	
 

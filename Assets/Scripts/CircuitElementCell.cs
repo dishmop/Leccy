@@ -36,12 +36,19 @@ public class CircuitElementCell : CircuitElement {
 	public override void Load(BinaryReader br){
 		base.Load (br);	
 		
-		voltage = br.ReadSingle();
-		isInEmergency = br.ReadBoolean();
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+			SerializationUtils.UpdateIfChanged(ref voltage, br.ReadSingle(), ref loadChangedSomething);
+			SerializationUtils.UpdateIfChanged(ref isInEmergency, br.ReadBoolean(), ref loadChangedSomething);
+				break;
+			}
+		}
 	}
 	
 	public override void TriggerEmergency(){
 		isInEmergency = true;
+		Circuit.singleton.OnCircutChange();
 	}	
 	
 	

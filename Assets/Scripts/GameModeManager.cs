@@ -92,11 +92,15 @@ public class GameModeManager : MonoBehaviour {
 		singleton = null;
 	}	
 	
-	void BulkGameUpdate(){
+	public void BulkGameUpdate(){
 		UI.singleton.GameUpdate();
 		Circuit.singleton.GameUpdate();
 		UI.singleton.LateGameUpdate();
-		Simulator.singleton.GameUpdate();
+		// Only rerun the simulation if the circuit has changed since last time
+		if (Circuit.singleton.IsDirty()){
+			Simulator.singleton.GameUpdate();
+			Circuit.singleton.ResetDirty();
+		}
 
 	}
 	
@@ -105,6 +109,8 @@ public class GameModeManager : MonoBehaviour {
 		panelTranform.FindChild ("PreviousLevelButton").GetComponent<Button>().interactable = (LevelManager.singleton.currentLevelIndex > 1);
 		panelTranform.FindChild ("SaveLevelButton").gameObject.SetActive(enableEditor);
 		panelTranform.FindChild ("ClearLevelButton").gameObject.SetActive(enableEditor);
+		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor);
+		panelTranform.FindChild ("RefreshAllButton").gameObject.SetActive(enableEditor);
 	}
 	
 	bool IsLevelComplete(){
@@ -142,7 +148,7 @@ public class GameModeManager : MonoBehaviour {
 	
 
 	// FixedUpdate is called once per frame
-	void FixedUpdate () {
+	public void FixedUpdate () {
 	
 		BulkGameUpdate ();
 	

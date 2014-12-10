@@ -27,10 +27,21 @@ public class Grid : MonoBehaviour {
 	}
 	
 	public 	void Load(BinaryReader br){
-		gridWidth = br.ReadInt32();	
-		gridHeight = br.ReadInt32();	
+		int oldGridWidth = gridWidth;
+		int oldGridHeight = gridHeight;
 		
-		CreateGrid();
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+				gridWidth = br.ReadInt32();	
+				gridHeight = br.ReadInt32();	
+				break;
+			}
+		}
+		// If things have chnaged since we last made the grid, remake it
+		if (oldGridWidth != gridWidth || oldGridHeight != gridHeight){
+			CreateGrid();
+		}
 	}
 	
 

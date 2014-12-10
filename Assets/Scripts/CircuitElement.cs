@@ -36,6 +36,8 @@ public class CircuitElement : MonoBehaviour {
 	protected bool		hasCapBottom = 	false;	
 	protected bool		hasCapLeft = 	false;
 	protected bool		hasCapRight = 	false;		
+	
+	protected bool 		loadChangedSomething = false;
 
 		// What is the best UI scheme to use when placing these elents
 	public enum UIType{
@@ -52,7 +54,7 @@ public class CircuitElement : MonoBehaviour {
 	
 	bool					isOnCircuit = false;
 	
-	const int		kLoadSaveVersion = 1;	
+	const int		kLoadSaveVersion = 2;	
 
 
 	public void SetAlpha(float a){
@@ -197,11 +199,6 @@ public class CircuitElement : MonoBehaviour {
 		bw.Write (kLoadSaveVersion);
 		bw.Write (orient);
 		bw.Write (isOnCircuit);
-		bw.Write (alpha);
-		bw.Write (color.r);
-		bw.Write (color.g);
-		bw.Write (color.b);
-		bw.Write (color.a);
 		bw.Write (temperature);
 		
 		for (int i = 0; i < 4; ++i){
@@ -210,21 +207,46 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 	public 	virtual void Load(BinaryReader br){
-		orient = br.ReadInt32();
-		isOnCircuit = br.ReadBoolean();
-		alpha = br.ReadSingle();
-		color.r = br.ReadSingle();
-		color.g = br.ReadSingle();
-		color.b = br.ReadSingle();
-		color.a = br.ReadSingle();
-		temperature = br.ReadSingle();
-		for (int i = 0; i < 4; ++i){
-			connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+				// read all the new values
+				SerializationUtils.UpdateIfChanged(ref orient, br.ReadInt32(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref isOnCircuit, br.ReadBoolean(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref temperature, br.ReadSingle(), ref loadChangedSomething);
+
+				for (int i = 0; i < 4; ++i){
+					SerializationUtils.UpdateIfChanged(ref connectionBehaviour[i], (ConnectionBehaviour)br.ReadInt32(), ref loadChangedSomething);
+				}
+				break;
+			}		
+			// For some reason seralising out color and alpha	
+			case 1:{
+				Debug.Log("Warning - loading in old version of CircuitElement");
+				orient = br.ReadInt32();
+				isOnCircuit = br.ReadBoolean();
+				alpha = br.ReadSingle();
+				color.r = br.ReadSingle();
+				color.g = br.ReadSingle();
+				color.b = br.ReadSingle();
+				color.a = br.ReadSingle();
+				temperature = br.ReadSingle();
+				for (int i = 0; i < 4; ++i){
+					connectionBehaviour[i] = (ConnectionBehaviour)br.ReadInt32();
+				}
+				loadChangedSomething = true;
+				break;
+			}
 		}
+		        
 	}
 	
 	public virtual void PostLoad(){
-		RebuildMesh ();
+		if (loadChangedSomething){
+			Circuit.singleton.OnCircutChange();
+			RebuildMesh ();
+		}
+		loadChangedSomething = false;
 	}
 	
 	// called on each element once we have established which elements are connected to which other ones
@@ -385,6 +407,7 @@ public class CircuitElement : MonoBehaviour {
 		if (thisPoint != null){
 			Circuit.singleton.GetAnchors(thisPoint).isDirty = true;
 		}
+		Circuit.singleton.OnCircutChange();
 		return  true;
 	}
 	

@@ -77,18 +77,11 @@ public class LevelManager : MonoBehaviour {
 		if (asset != null){
 			Debug.Log ("Loading asset");
 			Stream s = new MemoryStream(asset.bytes);
-			BinaryReader br = new BinaryReader(s);
-						
-			Grid.singleton.Load(br);
-			Circuit.singleton.Load(br);
-			ElementFactory.singleton.Load(br);
-			
-			// Ensure the meshes and all rebuilt to reflect the new level state
-			Simulator.singleton.ClearSimulation();
-			Camera.main.GetComponent<CamControl>().CentreCamera();
-			UI.singleton.OnLoadLevel();
-			
+			DeserializeLevel(s);
 			Resources.UnloadAsset(asset);
+			
+			// After loading a level, call an update to ensure we don't get a frame rendered befroe the simulation has calculated
+			GameModeManager.singleton.BulkGameUpdate();
 		}	
 		else{
 			Debug.Log ("Failed to load asset");
@@ -102,12 +95,8 @@ public class LevelManager : MonoBehaviour {
 #if UNITY_EDITOR		
 		FileStream file = File.Create(BuildFullPath(filename));
 		
-		BinaryWriter bw = new BinaryWriter(file);
-		
-		bw.Write (kLoadSaveVersion);					
-		Grid.singleton.Save(bw);
-		Circuit.singleton.Save(bw);
-		ElementFactory.singleton.Save(bw);
+		SerializeLevel(file);
+
 		
 		file.Close();
 		
@@ -115,6 +104,36 @@ public class LevelManager : MonoBehaviour {
 		UnityEditor.AssetDatabase.Refresh();
 #endif
 	}	
+	
+	public void SerializeLevel(Stream stream){
+		BinaryWriter bw = new BinaryWriter(stream);
+		
+		bw.Write (kLoadSaveVersion);					
+		Grid.singleton.Save(bw);
+		Circuit.singleton.Save(bw);
+		ElementFactory.singleton.Save(bw);
+	}
+
+	public void DeserializeLevel(Stream stream){
+		BinaryReader br = new BinaryReader(stream);
+		
+		int version = br.ReadInt32();
+		switch (version){
+		case kLoadSaveVersion:{
+			Grid.singleton.Load(br);
+			Circuit.singleton.Load(br);
+			ElementFactory.singleton.Load(br);
+			
+			// Ensure the meshes and all rebuilt to reflect the new level state
+			Simulator.singleton.ClearSimulation();
+			Camera.main.GetComponent<CamControl>().CentreCamera();
+			UI.singleton.OnLoadLevel();
+			break;
+		}
+	}
+		
+	}
+	
 	
 	public bool IsOnLastLevel(){
 		return currentLevelIndex == levelsToLoad.GetLength(0) - 1;

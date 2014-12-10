@@ -40,6 +40,7 @@ public class CircuitElementWire : CircuitElement {
 		}
 		connectionBehaviour[dir]= behaviour;
 		RebuildMesh();
+		Circuit.singleton.OnCircutChange();
 		return true;
 	}
 	
@@ -82,6 +83,13 @@ public class CircuitElementWire : CircuitElement {
 	
 	override public void Load(BinaryReader br){
 		base.Load (br);	
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+				// nothing to dp
+				break;
+			}
+		}
 	}
 		
 	public override void RebuildMesh(){

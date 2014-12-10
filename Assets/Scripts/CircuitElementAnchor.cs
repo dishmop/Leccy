@@ -179,6 +179,7 @@ public class CircuitElementAnchor : CircuitElement {
 		
 		thisData.isAnchored[thisDir] = !erase;
 		thisData.isDirty = true;
+		Circuit.singleton.OnCircutChange();
 		
 		
 		

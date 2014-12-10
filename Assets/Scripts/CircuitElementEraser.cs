@@ -151,6 +151,7 @@ public class CircuitElementEraser : CircuitElement {
 			bool ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kReceptive, honourAnchors);
 			if (!ok1) ok1 = thisElement.SuggestBehaviour(otherElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
 			if (!ok2) ok2 = otherElement.SuggestBehaviour(thisElement, ConnectionBehaviour.kUnreceptive, honourAnchors);
+			Circuit.singleton.OnCircutChange();
 			return (ok1 && ok2);
 		}
 		return true;
@@ -169,6 +170,7 @@ public class CircuitElementEraser : CircuitElement {
 		if (existingElement != null){
 			
 			UI.singleton.RemoveElement(existingElement);
+			Circuit.singleton.OnCircutChange();
 		}
 		return true;
 	}

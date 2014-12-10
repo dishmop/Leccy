@@ -78,8 +78,10 @@
      <Compile Include="Assets\Scripts\PrefabManager.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />
+     <Compile Include="Assets\Scripts\SerializationUtils.cs" />
      <Compile Include="Assets\Scripts\Simulator.cs" />
      <Compile Include="Assets\Scripts\SpringValue.cs" />
+     <Compile Include="Assets\Scripts\Telemetry.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
@@ -102,7 +104,6 @@
      <Compile Include="Assets\Scripts\alglib\src\solvers.cs" />
      <Compile Include="Assets\Scripts\alglib\src\specialfunctions.cs" />
      <Compile Include="Assets\Scripts\alglib\src\statistics.cs" />
-     <Compile Include="Assets\Telemetry.cs" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />

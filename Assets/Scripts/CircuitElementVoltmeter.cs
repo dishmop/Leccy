@@ -45,8 +45,14 @@ public class CircuitElementVoltmeter : CircuitElement {
 	
 	public override void Load(BinaryReader br){
 		base.Load (br);	
-		targetVolts = br.ReadSingle ();
-		hasTarget = br.ReadBoolean();
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+			SerializationUtils.UpdateIfChanged(ref targetVolts, br.ReadSingle (), ref loadChangedSomething);
+			SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean(), ref loadChangedSomething);
+				break;
+			}
+		}
 	}	
 	
 	
