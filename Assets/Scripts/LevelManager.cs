@@ -125,7 +125,6 @@ public class LevelManager : MonoBehaviour {
 			ElementFactory.singleton.Load(br);
 			
 			// Ensure the meshes and all rebuilt to reflect the new level state
-			Simulator.singleton.ClearSimulation();
 			Camera.main.GetComponent<CamControl>().CentreCamera();
 			UI.singleton.OnLoadLevel();
 			break;

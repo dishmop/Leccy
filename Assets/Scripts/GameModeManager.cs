@@ -184,7 +184,6 @@ public class GameModeManager : MonoBehaviour {
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				LevelManager.singleton.LoadLevel(0);
-				LevelManager.singleton.currentLevelIndex = 1;
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
@@ -267,6 +266,7 @@ public class GameModeManager : MonoBehaviour {
 				break;	
 			case GameMode.kQuitGame:
 				Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kGameFinished);	
+				LevelManager.singleton.currentLevelIndex = 1;
 				if (enableEditor)
 					gameMode = GameMode.kStartEditor;
 				else

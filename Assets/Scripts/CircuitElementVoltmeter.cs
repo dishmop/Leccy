@@ -190,8 +190,11 @@ public class CircuitElementVoltmeter : CircuitElement {
 		// Let the UI know if we have been succesfully acitavted and fire the effect
 		if (!hasTriggered && IsOnTarget() && buttonActivated){
 			TriggerTargetEffect();
-			GameModeManager.singleton.TriggerComplete();
 			hasTriggered = true;
+		}
+		
+		if (IsOnTarget() && buttonActivated){
+			GameModeManager.singleton.TriggerComplete();
 		}
 
 		

@@ -23,7 +23,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
 
-	const int		kLoadSaveVersion = 1;	
+	const int		kLoadSaveVersion = 2;	
 	
 
 	public void Start(){
@@ -40,6 +40,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		bw.Write (kLoadSaveVersion);		
 		bw.Write (targetAmp);
 		bw.Write (hasTarget);
+		bw.Write (buttonActivated);		
 		
 	}
 	
@@ -51,9 +52,16 @@ public class CircuitElementAmmeter : CircuitElement {
 			case kLoadSaveVersion:{
 				SerializationUtils.UpdateIfChanged(ref targetAmp, br.ReadSingle (), ref loadChangedSomething);
 				SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean (), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref buttonActivated, br.ReadBoolean(), ref loadChangedSomething);
 				break;
 			}
-		}	
+			case 1:{
+				SerializationUtils.UpdateIfChanged(ref targetAmp, br.ReadSingle (), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean (), ref loadChangedSomething);
+				break;
+			}	
+			
+		}
 	}	
 	
 	
@@ -212,10 +220,12 @@ public class CircuitElementAmmeter : CircuitElement {
 		// Let the UI know if we have been succesfully acitavted and fire the effect
 		if (!hasTriggered && IsOnTarget() && buttonActivated){
 			TriggerTargetEffect();
-			GameModeManager.singleton.TriggerComplete();
 			hasTriggered = true;
 		}
 		
+		if (IsOnTarget() && buttonActivated){
+			GameModeManager.singleton.TriggerComplete();
+		}
 		
 		if (!IsOnTarget()){
 			hasTriggered = false;
@@ -280,6 +290,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	public override void OnMouseDown() {
 		if (IsOnTarget() && !hasTriggered){
 			buttonActivated = true;
+			Circuit.singleton.OnCircutChange();
 		}
 		
 	}	
