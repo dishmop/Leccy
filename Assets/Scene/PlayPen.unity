@@ -1372,7 +1372,7 @@ MonoBehaviour:
   levelStartMessageDlg: {fileID: 1296393459}
   ammeterEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
   voltMeterEffect: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
-  enableEditor: 1
+  enableEditor: 0
   restartLevel: 0
   nextLevel: 0
   quitGame: 0
@@ -4746,7 +4746,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackFilename
-      value: Leccy_00-01_20141211_173405_0358fb1c-94f2-4156-8c1a-61467582f9a2_0c578da0-7311-483d-aa2b-4be8fb02786c.telemetry
+      value: Leccy_00-01_20141211_225841_0358fb1c-94f2-4156-8c1a-61467582f9a2_61433beb-9500-4c54-81a8-83b34308bdf9.telemetry
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: mode
@@ -4758,7 +4758,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackSpeed
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
@@ -5829,8 +5829,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTelemetry: 1
   gameName: Leccy
-  playbackFilename: Leccy_00-01_20141211_173405_0358fb1c-94f2-4156-8c1a-61467582f9a2_0c578da0-7311-483d-aa2b-4be8fb02786c.telemetry
-  playbackSpeed: 1
+  playbackFilename: Leccy_00-01_20141211_225841_0358fb1c-94f2-4156-8c1a-61467582f9a2_61433beb-9500-4c54-81a8-83b34308bdf9.telemetry
+  playbackSpeed: 10
   gameVersion: 00-01
   mode: 1
 --- !u!4 &1498330769
@@ -5886,7 +5886,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: sidePanel

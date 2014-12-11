@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Generic;
-using System.IO.Compression;
+//using System.IO.Compression;
 
 
 public class Telemetry : MonoBehaviour {
@@ -87,7 +88,13 @@ public class Telemetry : MonoBehaviour {
 	const int		kLoadSaveVersion = 1;		
 	
 	
-	Stream	ioStream = null;
+	// The file we open
+	FileStream	fileStream = null;
+	// The compressed stream
+	ICSharpCode.SharpZipLib.GZip.GZipInputStream  gZipInStream = null;
+	ICSharpCode.SharpZipLib.GZip.GZipOutputStream  gZipOutStream = null;
+	// The one we use
+	Stream		useStream = null;
 	
 	public void SetMode(Mode m){
 		mode = m;
@@ -158,12 +165,12 @@ public class Telemetry : MonoBehaviour {
 		}
 		
 		// If we don't have a file, then just ignore any events we may be getting because we cannot be recording them
-		if (ioStream == null){
+		if (useStream == null){
 			frameEvents.Clear();
 			return;
 		}
 		
-		BinaryWriter bw = new BinaryWriter(ioStream);
+		BinaryWriter bw = new BinaryWriter(useStream);
 		// Always write the time of the event (from game start time).
 		float gameTime = GameModeManager.singleton.GetGameTime();
 		bw.Write (gameTime);
@@ -188,7 +195,7 @@ public class Telemetry : MonoBehaviour {
 		
 		switch(e){
 			case TelemetryEvent.kCircuitChanged:{
-				LevelManager.singleton.SerializeLevel(ioStream);
+				LevelManager.singleton.SerializeLevel(useStream);
 				break;
 			}
 			case TelemetryEvent.kNewGameStarted:{
@@ -206,7 +213,7 @@ public class Telemetry : MonoBehaviour {
 				bw.Write (LevelManager.singleton.GetCurrentLevelName());
 				
 				// Serialise out the level too (as it includes the all-important circuit GUID)
-				LevelManager.singleton.SerializeLevel(ioStream);
+				LevelManager.singleton.SerializeLevel(useStream);
 				
 				
 				break;
@@ -237,20 +244,36 @@ public class Telemetry : MonoBehaviour {
 		if (!Directory.Exists(BuildPathName())){
 			Directory.CreateDirectory(BuildPathName());
 		}
+			
 		string fullFilename = BuildPathName() + BuildFileName();
-		ioStream = File.Create(fullFilename);
+		
+		fileStream = File.Create(fullFilename);
+		// The compressed stream
+		gZipOutStream = new ICSharpCode.SharpZipLib.GZip.GZipOutputStream(fileStream, 65536);
+		// The one we use
+		useStream = gZipOutStream;
 	}
 	
 	void CloseFile(){
-		ioStream.Close();
-		ioStream = null;
+		if (gZipOutStream != null) gZipOutStream.Close ();
+		if (gZipInStream != null) gZipOutStream.Close ();
+		if (fileStream != null) fileStream.Close();
+		fileStream  = null;
+		gZipOutStream  = null;
+		gZipInStream  = null;
+		useStream = null;
 	}
 	
+
 	void OpenFileForReading(){
-		ioStream = File.Open(BuildPathName() + playbackFilename, FileMode.Open);
-		if (ioStream == null){
+		fileStream = File.Open(BuildPathName() + playbackFilename, FileMode.Open);
+		if (fileStream == null){
 			Debug.LogError ("Failed to open telemtry file for reading");
 		}
+		gZipInStream = new ICSharpCode.SharpZipLib.GZip.GZipInputStream(fileStream, 65536);
+		useStream = gZipInStream;
+		
+		
 	}
 	
 	void RecordHeader(BinaryWriter bw){
@@ -348,7 +371,7 @@ public class Telemetry : MonoBehaviour {
 	}
 	
 	void ReadAndProcessTelemetryEvent(){
-		BinaryReader br = new BinaryReader(ioStream);
+		BinaryReader br = new BinaryReader(useStream);
 		bool finish = false;
 		while (!finish && playbackTime < GameModeManager.singleton.GetGameTime()){
 			switch (readState){
@@ -384,7 +407,7 @@ public class Telemetry : MonoBehaviour {
 		
 		switch(e){
 			case TelemetryEvent.kCircuitChanged:{
-				LevelManager.singleton.DeserializeLevel(ioStream);
+				LevelManager.singleton.DeserializeLevel(useStream);
 				break;
 			}
 			case TelemetryEvent.kGameFinished:{
@@ -404,7 +427,7 @@ public class Telemetry : MonoBehaviour {
 				}
 				
 				// Serialise out the level too (as it includes the all-important circuit GUID)
-				LevelManager.singleton.DeserializeLevel(ioStream);
+				LevelManager.singleton.DeserializeLevel(useStream);
 				break;
 			}
 			case TelemetryEvent.kLevelCompleteWait:{

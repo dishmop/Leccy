@@ -19,13 +19,13 @@ public class AmmeterEffect : MonoBehaviour {
 		
 		// Get larger
 		Vector3 scale = fractionTransform.localScale;
-		scale.x *= 1.01f;
-		scale.y *= 1.01f;
+		scale.x *= Mathf.Pow (1.01f, 50 * Time.deltaTime);
+		scale.y *= Mathf.Pow (1.01f, 50 * Time.deltaTime);
 		fractionTransform.localScale = scale;
 		
 		// Alpha out
 		Color thisCol = fractionTransform.gameObject.GetComponent<FractionCalc>().color;
-		thisCol.a -= 0.004f;
+		thisCol.a -= 0.004f * 50 * Time.deltaTime;
 		
 		fractionTransform.gameObject.GetComponent<FractionCalc>().color = thisCol;
 		

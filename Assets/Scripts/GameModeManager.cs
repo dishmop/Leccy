@@ -145,6 +145,7 @@ public class GameModeManager : MonoBehaviour {
 	}	
 	
 	void HandleLevelInfo(){
+
 		if (gameMode != GameMode.kTitleScreen){
 			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-1);
 			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + triggersTriggered + " / " + numLevelTriggers;
@@ -157,6 +158,7 @@ public class GameModeManager : MonoBehaviour {
 		Vector2 offsetMin = levelInfo.transform.FindChild("CurrentLevel").GetComponent<RectTransform>().offsetMin;
 		offsetMin.x = sidePanel.GetComponent<RectTransform>().offsetMin.x;
 		levelInfo.transform.FindChild("CurrentLevel").GetComponent<RectTransform>().offsetMin= offsetMin;
+		
 		
 		
 	}
