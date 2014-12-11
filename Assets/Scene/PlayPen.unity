@@ -1372,7 +1372,7 @@ MonoBehaviour:
   levelStartMessageDlg: {fileID: 1296393459}
   ammeterEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
   voltMeterEffect: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
-  enableEditor: 1
+  enableEditor: 0
   restartLevel: 0
   nextLevel: 0
   quitGame: 0
@@ -4556,9 +4556,9 @@ MonoBehaviour:
   m_Color: {r: .755065084, g: .779411793, b: .338127166, a: 1}
   m_FontData:
     m_Font: {fileID: 12800000, guid: 08399f981912f46feb2edee40e9a7995, type: 3}
-    m_FontSize: 14
+    m_FontSize: 16
     m_FontStyle: 0
-    m_BestFit: 1
+    m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 4
@@ -4566,7 +4566,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 00:00:00
+  m_Text: 00:00:00:000
 --- !u!222 &1251184474
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4754,6 +4754,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: enableTelemetry
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
+      propertyPath: playbackSpeed
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5823,9 +5827,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3be47047794f44faabc01f6793489ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableTelemetry: 1
+  enableTelemetry: 0
   gameName: Leccy
   playbackFilename: Leccy_00-01_20141211_150716_0358fb1c-94f2-4156-8c1a-61467582f9a2_37fffb8d-a954-4eca-91ee-489eb5a8fc83.telemetry
+  playbackSpeed: 1
   gameVersion: 00-01
   mode: 1
 --- !u!4 &1498330769
@@ -5881,7 +5886,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: sidePanel

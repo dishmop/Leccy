@@ -15,6 +15,7 @@ public class Telemetry : MonoBehaviour {
 	public string gameName;
 	
 	public string playbackFilename;
+	public float playbackSpeed;
 
 
 	public string gameVersion = null;
@@ -285,7 +286,8 @@ public class Telemetry : MonoBehaviour {
 			GameModeManager.singleton.ResetGameTime();
 			playbackTime = 0;
 			playbackState = PlaybackState.kPlaying;
-			Time.timeScale = 10;
+			Time.timeScale = playbackSpeed;
+			readState = ReadState.kReadTime;
 		}
 		// Is telemetr is disabled - then do nothing		
 		if (!enableTelemetry){

@@ -209,11 +209,13 @@ public class CircuitElementAmmeter : CircuitElement {
 			}
 		}		
 		
-		// Let the UI know if we have been succesfully acitavted
-		if (IsOnTarget() && buttonActivated){
+		// Let the UI know if we have been succesfully acitavted and fire the effect
+		if (!hasTriggered && IsOnTarget() && buttonActivated){
+			TriggerTargetEffect();
 			GameModeManager.singleton.TriggerComplete();
 			hasTriggered = true;
 		}
+		
 		
 		if (!IsOnTarget()){
 			hasTriggered = false;
@@ -276,8 +278,7 @@ public class CircuitElementAmmeter : CircuitElement {
 			
 	
 	public override void OnMouseDown() {
-		if (IsOnTarget() & !hasTriggered){
-			TriggerTargetEffect();
+		if (IsOnTarget() && !hasTriggered){
 			buttonActivated = true;
 		}
 		

@@ -23,7 +23,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	// So we can see if it gets changed (esp via the inspector)
 	bool 	prevHasTarget = false;
 	
-	const int		kLoadSaveVersion = 1;	
+	const int		kLoadSaveVersion = 2;	
 	
 	public void Start(){
 //		Debug.Log ("CircuitElementAmpMeter:Start()");
@@ -39,6 +39,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 		bw.Write (kLoadSaveVersion);
 		bw.Write (targetVolts);
 		bw.Write (hasTarget);
+		bw.Write (buttonActivated);
 		
 	}
 	
@@ -48,8 +49,14 @@ public class CircuitElementVoltmeter : CircuitElement {
 		int version = br.ReadInt32();
 		switch (version){
 			case kLoadSaveVersion:{
-			SerializationUtils.UpdateIfChanged(ref targetVolts, br.ReadSingle (), ref loadChangedSomething);
-			SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref targetVolts, br.ReadSingle (), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref buttonActivated, br.ReadBoolean(), ref loadChangedSomething);
+				break;
+			}			
+			case 1:{
+				SerializationUtils.UpdateIfChanged(ref targetVolts, br.ReadSingle (), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref hasTarget, br.ReadBoolean(), ref loadChangedSomething);
 				break;
 			}
 		}
@@ -77,60 +84,6 @@ public class CircuitElementVoltmeter : CircuitElement {
 		return 0f;
 	}
 
-	
-//	// Analyse current connections and ensure they are valid for this object
-//	// If not, then change them
-//	// It is then up to the caller to bring them into line with the neighbouring connections
-//	public override void ValidateConnections(){
-//	
-//		// No connections
-//		int numConnections = CountNumConnections();
-//		switch (numConnections)
-//		{
-//			case 0:
-//				isConnected[0] = true;
-//				isConnected[2] = true;
-//				break;
-//			case 1:
-//				// enabled the opposing one
-//				for (int i = 0; i < 4; ++i){
-//					if (isConnected[i]) isConnected[CalcInvDir(i)] = true;
-//				}
-//				break;
-//			case 2: 
-//				// Find the first one and set the opposing one
-//				for (int i = 0; i < 4; ++i){
-//					if (isConnected[i]){
-//						ClearConnections();
-//						isConnected[i] = true;
-//						isConnected[CalcInvDir(i)] = true;
-//						break;
-//					}
-//				}
-//				break;
-//			case 3:
-//				// Fine the one without the opposing side and remove it
-//				for (int i = 0; i < 4; ++i){
-//					if (!isConnected[i]){
-//						isConnected[CalcInvDir(i)] = false;
-//						break;
-//					}
-//				}	
-//				break;
-//			case 4:
-//				ClearConnections();
-//				isConnected[0] = true;
-//				isConnected[2] = true;
-//				break;					
-//		}
-//	}
-	
-//	// Return true if it is ok to set this connection on this element
-//	// For resistors, it is only ok if this is what has been set already
-//	public override bool CanSetConnection(int dir, bool value){
-//		return isConnected[dir] == value;
-//	}	
-	
 	public override void RebuildMesh(){
 		base.RebuildMesh ();
 		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
@@ -234,8 +187,9 @@ public class CircuitElementVoltmeter : CircuitElement {
 		
 		
 		
-		// Let the UI know if we have been succesfully acitavted
-		if (IsOnTarget() && buttonActivated){
+		// Let the UI know if we have been succesfully acitavted and fire the effect
+		if (!hasTriggered && IsOnTarget() && buttonActivated){
+			TriggerTargetEffect();
 			GameModeManager.singleton.TriggerComplete();
 			hasTriggered = true;
 		}
@@ -298,9 +252,10 @@ public class CircuitElementVoltmeter : CircuitElement {
 	}	
 	
 	public override void OnMouseDown() {
-		if (IsOnTarget() & !hasTriggered){
-			TriggerTargetEffect();
+		if (IsOnTarget() && !hasTriggered){
 			buttonActivated = true;
+			Circuit.singleton.OnCircutChange();
+			
 		}
 		
 	}		
