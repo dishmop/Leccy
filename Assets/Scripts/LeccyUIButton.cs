@@ -16,6 +16,8 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	public AudioSource okPress;
 	public AudioSource notOkPress;
 	
+
+	
 	void Awake(){
 		PrefabManager.AddListener(this);
 	}
@@ -76,6 +78,8 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 			// we only enable the stock inc and doc buttons in editor mode
 			transform.FindChild("ButtonFrame").FindChild("StockAdjust").gameObject.SetActive(GameModeManager.singleton.enableEditor && (element.uiType != CircuitElement.UIType.kModify));
 			
+			// We should now be able to destroy our Display mehs as the UIMesh object will have made a UI copy of it
+			Destroy (mainMeshPrefab);
 		}
 	}
 	

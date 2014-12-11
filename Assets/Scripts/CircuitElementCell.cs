@@ -17,7 +17,7 @@ public class CircuitElementCell : CircuitElement {
 	const int		kLoadSaveVersion = 1;		
 	
 	public void Start(){
-		Debug.Log ("CircuitElementCell:Start()");
+//		Debug.Log ("CircuitElementCell:Start()");
 	}
 	
 	public void Awake(){

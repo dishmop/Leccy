@@ -12,7 +12,7 @@ public class CircuitElementResistor : CircuitElement {
 	const int		kLoadSaveVersion = 1;	
 	
 	public void Start(){
-		Debug.Log ("CircuitElementResistor:Start()");
+//		Debug.Log ("CircuitElementResistor:Start()");
 	}
 	
 	public void Awake(){

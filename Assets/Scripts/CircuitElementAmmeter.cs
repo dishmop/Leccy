@@ -27,7 +27,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 
 	public void Start(){
-		Debug.Log ("CircuitElementAmpMeter:Start()");
+//		Debug.Log ("CircuitElementAmpMeter:Start()");
 	}
 	
 	public void Awake(){

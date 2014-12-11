@@ -25,7 +25,7 @@ public class CircuitElementAnchor : CircuitElement {
 		
 	
 	public void Start(){
-		Debug.Log ("CircuitElementAnchor:Start()");
+//		Debug.Log ("CircuitElementAnchor:Start()");
 	}
 	
 	public void Awake(){

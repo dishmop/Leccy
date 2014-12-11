@@ -15,7 +15,7 @@ public class CircuitElementEraser : CircuitElement {
 	
 
 	public void Start(){
-		Debug.Log ("CircuitElementEraser:Start()");
+//		Debug.Log ("CircuitElementEraser:Start()");
 	}
 	
 	public void Awake(){

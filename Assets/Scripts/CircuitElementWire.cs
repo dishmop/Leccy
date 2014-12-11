@@ -19,7 +19,7 @@ public class CircuitElementWire : CircuitElement {
 
 	
 	public void Start(){
-		Debug.Log ("CircuitElementWire:Start()");
+//		Debug.Log ("CircuitElementWire:Start()");
 		
 	}
 	
@@ -317,7 +317,7 @@ public class CircuitElementWire : CircuitElement {
 	
 	void OnDestroy() {
 		// When the object is destoryed, we must make sure to dispose of any meshes we may have
-		Debug.Log ("OnDestroy");
+//		Debug.Log ("OnDestroy");
 		
 		
 	}	

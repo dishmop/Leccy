@@ -154,28 +154,26 @@ public class ElementFactory : MonoBehaviour {
 		int version = br.ReadInt32();
 		switch (version){
 			case kLoadSaveVersion:{
-				for (int i = 0; i < stock.GetLength(0); ++i){
-					stock[i].stockRemaining = initialStock[i].initialStockCount;
-				}
+
 
 				// We don't attmept to remake the stock list
-				// we ust assign the stock remaining values to the appropriate prefab
+				// we just assign the stock remaining values to the appropriate prefab
 				int numStock = br.ReadInt32 ();
 				for (int i = 0; i < numStock; ++i){
+					bool hasChanged = false;
 					string id = br.ReadString();
 					FactoryData data = FindStockData(id);
 					if (data != null){
-						data.stockRemaining = br.ReadInt32 ();
+						SerializationUtils.UpdateIfChanged(ref data.stockRemaining, br.ReadInt32 (), ref hasChanged);
+						if (hasChanged){
+							PrefabManager.OnChangePrefab(stock[i].factoryPrefab);
+						}
 					}
 					else{
 						Debug.Log ("Failed to lookup an element in the factory when loading  a new level");
 						br.ReadInt32 ();
 					}
 				}
-				
-				for (int i = 0; i < stock.GetLength(0); ++i){
-					PrefabManager.OnChangePrefab(stock[i].factoryPrefab);
-				}	
 				break;
 			}
 		}

@@ -26,7 +26,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	const int		kLoadSaveVersion = 1;	
 	
 	public void Start(){
-		Debug.Log ("CircuitElementAmpMeter:Start()");
+//		Debug.Log ("CircuitElementAmpMeter:Start()");
 	}
 	
 	public void Awake(){

@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PlaybackTime.cs" />
      <Compile Include="Assets\Scripts\AmmeterEffect.cs" />
      <Compile Include="Assets\Scripts\CamControl.cs" />
      <Compile Include="Assets\Scripts\Circuit.cs" />
@@ -74,6 +75,7 @@
      <Compile Include="Assets\Scripts\ObjectTracker.cs" />
      <Compile Include="Assets\Scripts\OldUI.cs" />
      <Compile Include="Assets\Scripts\PanelController.cs" />
+     <Compile Include="Assets\Scripts\PlaybackButton.cs" />
      <Compile Include="Assets\Scripts\PrefabListener.cs" />
      <Compile Include="Assets\Scripts\PrefabManager.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
