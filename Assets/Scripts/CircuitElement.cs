@@ -535,9 +535,11 @@ public class CircuitElement : MonoBehaviour {
 	protected void ImplementAlpha(GameObject obj, float alpha){
 		Renderer rend = obj.renderer;
 		if (rend){
-			Color col = rend.materials[0].GetColor("_Color");
-			col.a = alpha;
-			rend.materials[0].SetColor("_Color", col);
+			if (rend.materials[0].HasProperty("_Color")){
+				Color col = rend.materials[0].GetColor("_Color");
+				col.a = alpha;
+				rend.materials[0].SetColor("_Color", col);
+			}
 		}
 		
 		// Now do the same to all the children
@@ -549,7 +551,9 @@ public class CircuitElement : MonoBehaviour {
 	protected void ImplementColor(GameObject obj, Color col){
 		Renderer rend = obj.renderer;
 		if (rend){
-			rend.materials[0].SetColor("_Color", col);
+			if (rend.materials[0].HasProperty("_Color")){
+				rend.materials[0].SetColor("_Color", col);
+			}
 		}
 		
 		// Now do the same to all the children

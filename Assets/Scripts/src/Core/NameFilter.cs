@@ -254,16 +254,16 @@ namespace ICSharpCode.SharpZipLib.Core
 			for ( int i = 0; i < items.Length; ++i ) {
 				if ( (items[i] != null) && (items[i].Length > 0) ) {
 					bool include = (items[i][0] != '-');
-					string toCompile;
+					//string toCompile;
 
 					if ( items[i][0] == '+' ) {
-						toCompile = items[i].Substring(1, items[i].Length - 1);
+						//toCompile = items[i].Substring(1, items[i].Length - 1);
 					}
 					else if ( items[i][0] == '-' ) {
-						toCompile = items[i].Substring(1, items[i].Length - 1);
+						//toCompile = items[i].Substring(1, items[i].Length - 1);
 					}
 					else {
-						toCompile = items[i];
+						//toCompile = items[i];
 					}
 
 					// NOTE: Regular expressions can fail to compile here for a number of reasons that cause an exception

@@ -13,3 +13,5 @@ function DestroyNow ()
 	}
 	DestroyObject (gameObject);
 }
+
+//private class ShushES {var q:Queue; var h:Help; var g:GUI;}

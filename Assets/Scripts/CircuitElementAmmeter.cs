@@ -194,7 +194,7 @@ public class CircuitElementAmmeter : CircuitElement {
 		// The audio should be playing all the time and we should start it on a whole number of seconds
 		if (shouldPlay != GetComponent<AudioSource>().isPlaying){
 			if (shouldPlay){
-				float time = Time.realtimeSinceStartup;
+				float time = Time.fixedTime;
 				int lastWhole = Mathf.FloorToInt(time);
 				float timeToNextWhole = lastWhole + 1 - time;
 				GetComponent<AudioSource>().PlayDelayed(timeToNextWhole);
@@ -237,7 +237,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	
 	void SetupColorsAndText(){
-		float pulse = 0.5f + 0.5f *  Mathf.Cos (2 * 3.14159265f * (Time.realtimeSinceStartup - 0.2f));
+		float pulse = 0.5f + 0.5f *  Mathf.Cos (2 * 3.14159265f * (Time.fixedTime - 0.2f));
 		
 		foreach (Transform child in GetDisplayMesh().transform){
 			if (child.name == "TargetText"){

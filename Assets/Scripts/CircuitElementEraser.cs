@@ -12,7 +12,7 @@ public class CircuitElementEraser : CircuitElement {
 	GridPoint			otherPoint;
 	GridPoint			lastOtherPoint;
 
-	
+	const int kLoadSaveVersion = 1;
 
 	public void Start(){
 //		Debug.Log ("CircuitElementEraser:Start()");
@@ -49,7 +49,49 @@ public class CircuitElementEraser : CircuitElement {
 			RebuildMesh();
 		}
 	}	
-
+	
+	// Only need these for serialising the ghost for telemetry
+	override public void Save(BinaryWriter bw){
+		base.Save (bw);	
+		
+		bw.Write (kLoadSaveVersion);
+		bool hasOtherPoint = (otherPoint != null);
+		bw.Write (hasOtherPoint);
+		if (hasOtherPoint){
+			bw.Write(otherPoint.x);
+			bw.Write(otherPoint.y);
+		}
+	}
+	
+	
+	override public void Load(BinaryReader br){
+		base.Load (br);	
+		bool rebuild = false;
+		int version = br.ReadInt32();
+		switch (version){
+			case kLoadSaveVersion:{
+				bool hasOtherPoint = br.ReadBoolean();
+				if (hasOtherPoint){
+					if (otherPoint == null){
+						otherPoint = new GridPoint();
+						rebuild = true;
+					}
+					otherPoint.x = br.ReadInt32 ();
+					otherPoint.y = br.ReadInt32 ();
+				}
+				else{
+					if (otherPoint!= null){
+						otherPoint = null;
+						rebuild = true;
+					}
+				}
+				break;
+			}
+		}
+		if (rebuild) RebuildMesh();
+	}	
+	
+	
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());

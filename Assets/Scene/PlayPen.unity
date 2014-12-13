@@ -1377,7 +1377,6 @@ MonoBehaviour:
   nextLevel: 0
   quitGame: 0
   startGame: 0
-  gameMode: 0
 --- !u!4 &353371179
 Transform:
   m_ObjectHideFlags: 0
@@ -2259,7 +2258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 21300042, guid: 5cc4bd580fb79451ebcc069f702ff748, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e0a0a977cf284114b3cfd1371dc3808, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2837,10 +2836,10 @@ RectTransform:
   - {fileID: 1028282777}
   m_Father: {fileID: 1450224159}
   m_RootOrder: 0
-  m_AnchorMin: {x: .200000003, y: .856820881}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -77.1199951, y: -44.473999}
-  m_SizeDelta: {x: 154.23999, y: 88.9479828}
+  m_AnchoredPosition: {x: -6.10351562e-05, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &841211703
 MonoBehaviour:
@@ -4371,6 +4370,11 @@ Prefab:
       propertyPath: desiredState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: ac902c034963644a491291fc67e1369b, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8e0a0a977cf284114b3cfd1371dc3808,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ac902c034963644a491291fc67e1369b, type: 2}
   m_RootGameObject: {fileID: 1549764528}
@@ -4746,7 +4750,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackFilename
-      value: Leccy_00-01_20141211_225841_0358fb1c-94f2-4156-8c1a-61467582f9a2_61433beb-9500-4c54-81a8-83b34308bdf9.telemetry
+      value: Leccy_00-01_20141213_000843_0358fb1c-94f2-4156-8c1a-61467582f9a2_2211745e-97fd-498a-b87c-2f1be81ff73e.telemetry
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: mode
@@ -4758,7 +4762,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackSpeed
-      value: 10
+      value: .5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
@@ -5829,8 +5833,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTelemetry: 1
   gameName: Leccy
-  playbackFilename: Leccy_00-01_20141211_225841_0358fb1c-94f2-4156-8c1a-61467582f9a2_61433beb-9500-4c54-81a8-83b34308bdf9.telemetry
-  playbackSpeed: 10
+  playbackFilename: Leccy_00-01_20141213_000843_0358fb1c-94f2-4156-8c1a-61467582f9a2_2211745e-97fd-498a-b87c-2f1be81ff73e.telemetry
+  playbackSpeed: .5
   gameVersion: 00-01
   mode: 1
 --- !u!4 &1498330769

@@ -25,6 +25,16 @@ namespace MathUtils
 		public static bool Feq(double a, double b){return Math.Abs(a - b) < 0.0001D;}
 		public static bool Feq(float a, float b, float epsilon){return Math.Abs(a - b) < epsilon;}
 		public static bool Feq(double a, double b, double epsilon){return Math.Abs(a - b) < epsilon;}
+		
+		public static bool Fleq(float a, float b){return Feq(a,b) || a < b;}
+		public static bool Fleq(double a, double b){return Feq(a,b) || a < b;}
+		public static bool Fleq(float a, float b, float epsilon){return Feq(a,b, epsilon) || a < b;}
+		public static bool Fleq(double a, double b, double epsilon){return Feq(a,b, epsilon) || a < b;}
+		
+		public static bool Fgeq(float a, float b){return Feq(a,b) || a > b;}
+		public static bool Fgeq(double a, double b){return Feq(a,b) || a > b;}
+		public static bool Fgeq(float a, float b, float epsilon){return Feq(a,b, epsilon) || a > b;}
+		public static bool Fgeq(double a, double b, double epsilon){return Feq(a,b, epsilon) || a > b;}
 	}	
 	
 	#endregion

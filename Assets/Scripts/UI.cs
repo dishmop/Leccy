@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.IO;
+
 
 public class UI : MonoBehaviour {
 
@@ -11,9 +13,6 @@ public class UI : MonoBehaviour {
 	public AudioSource buttonClickSound;
 	public AudioSource failSound;
 	public GameObject  elementSelectPanel;
-	
-
-	
 	
 	
 	public bool	honourAnchors = false;
@@ -32,7 +31,9 @@ public class UI : MonoBehaviour {
 	bool cacheMousePressed = false;
 	bool hideMouse = false;
 	
+	const int ghostGridPoitDepth = -3;
 
+	const int		kLoadSaveVersion = 1;	
 	
 	
 	bool		isInUI;
@@ -51,6 +52,8 @@ public class UI : MonoBehaviour {
 		ghostElement.transform.parent = transform;
 		ghostElement.GetComponent<CircuitElement>().SetAlpha(0.5f);
 		ghostElement.SetActive(true);	
+		ghostElement.GetComponent<CircuitElement>().SetGridPoint(new GridPoint(0, 0));
+		ghostElement.GetComponent<CircuitElement>().RebuildMesh();
 	}
 	
 	public void OnEnterUI(){
@@ -107,9 +110,14 @@ public class UI : MonoBehaviour {
 		Vector3 mousePos = Input.mousePosition;
 		mousePos.z = transform.position.z - Camera.main.transform.position.z;
 		worldPos = Camera.main.ScreenToWorldPoint( mousePos);
-		thisPoint = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
-		if (!Grid.singleton.IsPointInGrid(thisPoint) || isInUI){
-			thisPoint = null;
+		if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
+			thisPoint = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
+			if (!Grid.singleton.IsPointInGrid(thisPoint) || isInUI){
+				thisPoint = null;
+			}
+		}
+		else{
+			thisPoint = ghostElement.GetComponent<CircuitElement>().GetGridPoint();
 		}
 		if (thisPoint == null) return;		
 		
@@ -144,7 +152,7 @@ public class UI : MonoBehaviour {
 	
 	// Used to cache mouse results
 	void Update(){
-		if (isInUI || hideMouse){
+		if ((isInUI || hideMouse) && (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord)){
 			ghostElement.SetActive(false);
 		}
 		else{
@@ -183,7 +191,7 @@ public class UI : MonoBehaviour {
 		// Deal with the ghost element
 		ghostElement.SetActive(thisPoint != null);
 		CircuitElement ghostElementComp = ghostElement.GetComponent<CircuitElement>();
-		ghostElementComp.SetGridPoint(thisPoint, -3);
+		if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) ghostElementComp.SetGridPoint(thisPoint, ghostGridPoitDepth);
 		ghostElementComp.RebuildMesh();
 		ghostElementComp.SetOtherGridPoint(otherPoint);		
 		
@@ -207,9 +215,74 @@ public class UI : MonoBehaviour {
 		
 		cacheMousePressed = false;
 		
+		
+		// As far as the telemetry goes, ust assume tha the ghost element is changing every frame
+		Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kGhostChange);
+		
 	}
 	
+	public void SerializeGhostElement(Stream stream){
+		BinaryWriter bw = new BinaryWriter(stream);
+		bw.Write(kLoadSaveVersion);
+		
+		// Write out whether we have a valid ghost element
+		bool haveGhost = (ghostElement != null && ghostElement.GetComponent<CircuitElement>().GetGridPoint() != null && ghostElement.activeSelf);
+		bw.Write (haveGhost);
+		if (haveGhost){
+			CircuitElement element = ghostElement.GetComponent<CircuitElement>();
+			GridPoint point = element.GetGridPoint();
+			bw.Write(point.x);
+			bw.Write(point.y);
+			bw.Write (ghostElement.GetComponent<SerializationID>().id);
+			element.Save (bw);
+		}
+		
 	
+	}
+
+	public void DeserializeGhostElement(Stream stream){
+		BinaryReader br = new BinaryReader(stream);
+		int version = br.ReadInt32 ();
+		
+		switch(version){
+		 	case kLoadSaveVersion:{
+				// Write out whether we have a valid ghost element
+				bool haveGhost = br.ReadBoolean();
+				if (haveGhost){
+					GridPoint point = new GridPoint();
+					point.x = br.ReadInt32();
+					point.y = br.ReadInt32 ();
+					string id = br.ReadString ();
+					
+					// If our current one is inactive in any way, just set a new one
+					if (ghostElement == null || !ghostElement.activeSelf || ghostElement.GetComponent<SerializationID>().id != id || ghostElement.GetComponent<CircuitElement>().GetGridPoint() == null){
+						SetSelectedPrefabId(id);
+					}
+					// If our gridPoint is not correct, then set that too
+					CircuitElement element = ghostElement.GetComponent<CircuitElement>();
+					GridPoint currentGrid = element.GetGridPoint();
+					if (currentGrid == null || !currentGrid.IsEqual(point)){
+						ghostElement.GetComponent<CircuitElement>().SetGridPoint(point, ghostGridPoitDepth);
+						
+					}
+					element.Load (br);
+					ghostElement.SetActive(true);
+				}
+				else{
+					if (ghostElement){
+						ghostElement.SetActive(false);
+					} 
+					
+					
+				}
+			}
+			break;
+		}
+		
+	}
+	
+
+		
 	CircuitElement.ConnectionBehaviour[] SaveOldConnections(CircuitElement existingElement){
 		CircuitElement.ConnectionBehaviour[] oldConnections = new CircuitElement.ConnectionBehaviour[4];
 		Array.Copy(existingElement.connectionBehaviour, oldConnections, 4);

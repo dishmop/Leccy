@@ -11,6 +11,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 82: {fileID: 8200000}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: AmmeterElement
   m_TagString: Untagged
@@ -129,6 +130,17 @@ MonoBehaviour:
   textColorTarget: {r: 1, g: 1, b: 1, a: 1}
   signColorNorm: {r: 0, g: .152310953, b: .426470578, a: 1}
   signColorTarget: {r: .5, g: .60689652, b: 1, a: 1}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99c2686bd9694c0b856c8b39fd12153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

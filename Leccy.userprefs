@@ -1,63 +1,50 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Telemetry.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI.cs">
     <Files>
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/FlashingButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PanelController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GridPoint.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/LitSign.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/UVAnim.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UIMesh.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/Outline.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/SolidColor_FG.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/OldUI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementGridHider.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/SerializationUtils.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PrefabManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PrefabListener.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/SpringValue.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tuple4.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/MouseDown.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Telemetry.cs" Line="605" Column="4" />
+      <File FileName="Assets/Scripts/src/GZip/GzipInputStream.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/AssemblyInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/Core/NameFilter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/Zip/Compression/DeflaterHuffman.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/Zip/ZipEntry.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/Zip/ZipFile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Standard Assets/Particles/Legacy Particles/TimedObjectDestructor.js" Line="17" Column="26" />
       <File FileName="Assets/Scripts/AmmeterEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Telemetry.cs" Line="10" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="235" Column="38" />
       <File FileName="Assets/Scripts/PlaybackButton.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="70" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/AudioTimeScalar.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementResistor.cs" Line="40" Column="1" />
+      <File FileName="Assets/Scripts/PlaybackTime.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="190" Column="55" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="164" Column="24" />
       <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
-      <File FileName="Assets/Standard Assets/Particles/Legacy Particles/TimedObjectDestructor.js" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/Zip/Compression/Streams/OutputWindow.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementFactory.cs" Line="59" Column="4" />
+      <File FileName="Assets/Scripts/src/Zip/Compression/Streams/InflaterInputStream.cs" Line="454" Column="1" />
+      <File FileName="Assets/Scripts/src/GZip/GzipOutputStream.cs" Line="123" Column="18" />
+      <File FileName="Assets/Scripts/src/Zip/Compression/Streams/DeflaterOutputStream.cs" Line="533" Column="23" />
+      <File FileName="Assets/Scripts/UI.cs" Line="148" Column="124" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="210" Column="9" />
+      <File FileName="Assets/Scripts/GridPoint.cs" Line="7" Column="23" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>ioStream</Value>
-          <Value>desState</Value>
-          <Value>Time.fixedTime - gameStartTime</Value>
+          <Value>useStream.writeCount</Value>
+          <Value>playbackTime</Value>
+          <Value>point</Value>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="385" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="395" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="2068" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/ElementSelectButton.cs" line="7" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="135" />

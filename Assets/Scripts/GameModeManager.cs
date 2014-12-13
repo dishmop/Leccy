@@ -23,6 +23,7 @@ public class GameModeManager : MonoBehaviour {
 	
 	
 	public enum GameMode{
+		kNone,
 		kStart,
 		kStartEditor,
 		kTitleScreen,
@@ -40,7 +41,8 @@ public class GameModeManager : MonoBehaviour {
 	public bool quitGame;
 	public bool startGame;		
 	
-	public GameMode gameMode = GameMode.kStart;
+	GameMode gameMode = GameMode.kNone;
+	GameMode lastGameMode = GameMode.kNone;
 	
 	int 	triggersTriggered = 0;
 	int 	numLevelTriggers = 0;
@@ -73,7 +75,6 @@ public class GameModeManager : MonoBehaviour {
 	
 	public void StartGame(){
 		startGame = true;
-		
 	}
 	
 	public void TriggerComplete(){
@@ -98,6 +99,13 @@ public class GameModeManager : MonoBehaviour {
 	public void ResetGameTime(){
 		gameStartTime = Time.fixedTime;
 	}
+	
+	// For the game to be at a specific time
+	public void ForceSetGameTime(float nowTime){
+		gameStartTime = Time.fixedTime - nowTime;
+		
+	}	
+	
 
 		
 	void OnDestroy(){
@@ -177,15 +185,18 @@ public class GameModeManager : MonoBehaviour {
 		BulkGameUpdate ();
 	
 		switch (gameMode){
+			case GameMode.kNone:
+				gameMode = GameMode.kStart;
+				break;
 			case GameMode.kStart:
-				sidePanel.GetComponent<PanelController>().ForceDeactivate();
+				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				startGameDlg.SetActive(true);
 				levelCompleteDlg.SetActive(false);
 				gameCompleteDlg.SetActive(false);
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
-				LevelManager.singleton.LoadLevel(0);
+				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) LevelManager.singleton.LoadLevel(0);
 				gameMode =GameMode.kTitleScreen;
 				break;
 			case GameMode.kStartEditor:
@@ -209,12 +220,10 @@ public class GameModeManager : MonoBehaviour {
 				break;
 			case GameMode.kPlayLevelInit:
 				gameMode = GameMode.kPlayLevel;
-				levelCompleteDlg.SetActive(false);
-				gameCompleteDlg.SetActive(false);
 				sidePanel.GetComponent<PanelController>().Activate();
 				levelStartMessageDlg.SetActive(true);	
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);					
-				if (!enableEditor) LevelManager.singleton.LoadLevel();
+				if ((!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) && !enableEditor) LevelManager.singleton.LoadLevel();
 				Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kLevelStarted);
 				
 				ResetSidePanel();
@@ -222,6 +231,8 @@ public class GameModeManager : MonoBehaviour {
 			
 				break;	
 			case GameMode.kPlayLevel:
+				levelCompleteDlg.SetActive(false);
+				gameCompleteDlg.SetActive(false);
 				if (IsLevelComplete() && !enableEditor){
 					levelCompletewWaitStartTime = Time.fixedTime;
 					gameMode = GameMode.kLevelCompleteWait;
@@ -234,7 +245,7 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kLevelCompleteWait:				
 				if (Time.fixedTime > levelCompletewWaitStartTime + levelCompletewWaitDuration){
 					Camera.main.transform.FindChild("Quad").gameObject.SetActive(true);			
-					sidePanel.GetComponent<PanelController>().Deactivate();
+					if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) sidePanel.GetComponent<PanelController>().Deactivate();
 					if (LevelManager.singleton.IsOnLastLevel()){
 						gameCompleteDlg.SetActive(true);
 						TriggerEndOfGameEffects();
@@ -297,14 +308,21 @@ public class GameModeManager : MonoBehaviour {
 		startGame = false;
 		restartLevel = false;
 		nextLevel = false;
-		quitGame = false;		
-			
-
+		quitGame = false;	
 		
+		// Register any state change events
+		Telemetry.singleton.RegisterEvent((Telemetry.TelemetryEvent)((int)Telemetry.TelemetryEvent.kUIStateNone + (int)gameMode));
+		if (lastGameMode != gameMode){
+		}
+		lastGameMode = gameMode;	
+	}
+	
+	public void SetUIState(int state){
+		gameMode = (GameMode)state;
 	}
 	
 	bool ShouldPlayEndOfGameEffects(){
-		return Time.realtimeSinceStartup < endOfGameTime + endOfGameLifeTime;
+		return Time.fixedTime < endOfGameTime + endOfGameLifeTime;
 	}
 	
 	
@@ -326,10 +344,11 @@ public class GameModeManager : MonoBehaviour {
 		}
 	}
 	
+
 	
 	void TriggerEndOfGameEffects(){
 		Camera.main.GetComponent<CamControl>().CentreCamera();
-		endOfGameTime = Time.realtimeSinceStartup;
+		endOfGameTime = Time.fixedTime;
 		
 		
 	}

@@ -102,6 +102,7 @@ MonoBehaviour:
   orient: 0
   anchorCentralPrefab: {fileID: 100000, guid: 08c1230f63ca64fda80309379fb7a549, type: 2}
   anchorBranchPrefab: {fileID: 100000, guid: 2312667634ecf4b19a3728699fb17816, type: 2}
+  anchorEmptyBranchPrefab: {fileID: 0}
   capPrefab: {fileID: 100000, guid: 07e53378c12c44c299acf421959f5ed7, type: 2}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}

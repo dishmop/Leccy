@@ -128,6 +128,16 @@ public class CircuitElementCell : CircuitElement {
 		
 		VisualiseTemperature();
 		
+		// Set up the audio
+		float currentFlow = GetAbsCurrentFlow();
+		
+		AudioSource source = gameObject.GetComponent<AudioSource>();
+
+		source.pitch = currentFlow * 0.1f * Time.timeScale;
+		// Mute if the pitch is zero
+		source.mute = MathUtils.FP.Feq (source.pitch , 0);
+		
+		
 	}
 	
 	
@@ -152,9 +162,6 @@ public class CircuitElementCell : CircuitElement {
 			DestorySelf();
 		}
 
-		// Set up the audio
-		AudioSource source = gameObject.GetComponent<AudioSource>();
-		source.pitch = currentFlow * 0.1f;
 		
 	}
 }

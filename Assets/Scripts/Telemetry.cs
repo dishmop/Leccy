@@ -5,8 +5,30 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Generic;
-//using System.IO.Compression;
 
+
+// Stream includes
+using System.Threading;
+
+public class DCOutputStream : ICSharpCode.SharpZipLib.GZip.GZipOutputStream{
+
+	public long writeCount = 0;
+
+	public DCOutputStream(Stream other, int size): base(other, size){
+	
+	}
+	
+	public override void Write(
+		byte[] buffer,
+		int offset,
+		int count){
+		base.Write (buffer, offset, count);
+		writeCount += count;
+		
+	}
+
+
+}
 
 public class Telemetry : MonoBehaviour {
 
@@ -42,6 +64,17 @@ public class Telemetry : MonoBehaviour {
 		kApplicationQuit,
 		kFrameInc,
 		kMouseMove,
+		kGhostChange,
+		kUIStateNone,
+		kUIStateStart,
+		kUIStateStartEditor,
+		kUIStateTitleScreen,
+		kUIStatePlayLevelInit,
+		kUIStatePlayLevel,
+		kUIStateLevelCompleteWait,
+		kUIStateLevelComplete,
+		kUIStateGameComplete,
+		kUIStateQuitGame,
 		kNumEvents
 		
 	};
@@ -78,6 +111,12 @@ public class Telemetry : MonoBehaviour {
 	List<TelemetryEvent> frameEvents = new List<TelemetryEvent>();
 	Dictionary<string, TelemetryEvent> eventLookup = new Dictionary<string, TelemetryEvent> ();
 	
+	long streamPos;
+	long lastStreamPos;
+	// This is only valid after we have reached the end of the file
+	long finalStreamPos;
+	long finalLastStreamPos;
+	
 	// Additional Header info
 	int    thisLoadSaveVersion;
 	string yyyymmdd;
@@ -92,7 +131,7 @@ public class Telemetry : MonoBehaviour {
 	FileStream	fileStream = null;
 	// The compressed stream
 	ICSharpCode.SharpZipLib.GZip.GZipInputStream  gZipInStream = null;
-	ICSharpCode.SharpZipLib.GZip.GZipOutputStream  gZipOutStream = null;
+	DCOutputStream  gZipOutStream = null;
 	// The one we use
 	Stream		useStream = null;
 	
@@ -121,10 +160,8 @@ public class Telemetry : MonoBehaviour {
 		}
 	}
 	
-	public string GetPlaybackTime(){
-		TimeSpan timeSpan = TimeSpan.FromSeconds(playbackTime);
-		string timeText = string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-		return timeText;
+	public float GetPlaybackTime(){
+		return playbackTime;
 		
 	}
 	
@@ -137,8 +174,41 @@ public class Telemetry : MonoBehaviour {
 	
 	
 	public bool CanEnterPlaybackState(PlaybackState desState){
-		return (mode == Mode.kPlayback && playbackStateMatrix[(int)playbackState, (int)desState]);
+	
+		// there are some special cases that override the default behaviour
+		switch (desState){
+			case PlaybackState.kStepBackwards:{
+				if (lastStreamPos < 0) return false;
+				break;
+			}
+			case PlaybackState.kRewind:{
+				if (lastStreamPos < 0) return false;
+				break;
+			}
+			case PlaybackState.kWindForwards:{
+				if (finalStreamPos < 0) return false;
+				if (streamPos == finalStreamPos) return false;
+				break;
+			}
+			case PlaybackState.kStepForward:{
+				if (streamPos == finalStreamPos) return false;
+				break;
+			}
+			case PlaybackState.kPlaying:{
+				if (streamPos == finalStreamPos) return false;
+				break;
+			}
+		}
+		// There is some specialised logic for certainstates
+		return RawCanEnterPlaybackState(desState);
+		
 	}
+	
+	 bool RawCanEnterPlaybackState(PlaybackState desState){
+		// There is some specialised logic for certainstates
+		
+		return (mode == Mode.kPlayback && playbackStateMatrix[(int)playbackState, (int)desState]);
+	}	
 	
 	
 	public void StartPlayback(){
@@ -154,29 +224,40 @@ public class Telemetry : MonoBehaviour {
 			frameEvents.Clear();
 			return;
 		}
+		
+		
+		// If we don't have a file, go through the events looking for a newgame event
+		if (useStream == null){
+			while (frameEvents.Count != 0){
+				if (frameEvents[0] == TelemetryEvent.kNewGameStarted){
+					OpenFileForWriting();
+					break;
+				}
+				frameEvents.RemoveAt(0);
+			}
+		}
 		// If no events then do nothing
 		if (frameEvents.Count == 0){
-			return;
-		}
-		
-		// If starting a new game - special case - create a file
-		if (frameEvents[0] == TelemetryEvent.kNewGameStarted){
-			OpenFileForWriting();
-		}
-		
-		// If we don't have a file, then just ignore any events we may be getting because we cannot be recording them
-		if (useStream == null){
-			frameEvents.Clear();
 			return;
 		}
 		
 		BinaryWriter bw = new BinaryWriter(useStream);
 		// Always write the time of the event (from game start time).
 		float gameTime = GameModeManager.singleton.GetGameTime();
+		
+		// In the file, we record the position of the last event - since this is where
+		// we want to jump back to when we say step backwards
+		lastStreamPos = streamPos;
+		streamPos = gZipOutStream.writeCount;
+		
 		bw.Write (gameTime);
-		Debug.Log ("Write game time = " + gameTime);
+//		Debug.Log ("Write game time = " + gameTime);
+		bw.Write (lastStreamPos);
+//		Debug.Log ("Write lastSteamPos = " + lastStreamPos);
+		bw.Write (streamPos);
+//		Debug.Log ("Write streamPos = " + streamPos);
 		bw.Write ((int)frameEvents.Count);
-		Debug.Log ("Number of frameevents = " + (int)frameEvents.Count);
+//		Debug.Log ("Number of frameevents = " + (int)frameEvents.Count);
 		
 		while (frameEvents.Count != 0){
 			TelemetryEvent e = frameEvents[0];
@@ -190,7 +271,7 @@ public class Telemetry : MonoBehaviour {
 	
 	void WriteTelemetryEvent(BinaryWriter bw, TelemetryEvent e){
 		bw.Write (e.ToString());
-		Debug.Log ("Write event = " + e.ToString());
+//		Debug.Log ("Write event = " + e.ToString());
 		
 		
 		switch(e){
@@ -218,24 +299,12 @@ public class Telemetry : MonoBehaviour {
 				
 				break;
 			}
-			case TelemetryEvent.kLevelCompleteWait:{
+			
+			case TelemetryEvent.kGhostChange:{
+				UI.singleton.SerializeGhostElement(useStream);
 				break;
 			}
-			case TelemetryEvent.kLevelComplete:{
-				break;
-			}
-			case TelemetryEvent.kGameComplete:{
-				break;
-			}
-			case TelemetryEvent.kApplicationQuit:{
-				break;
-			}
-			case TelemetryEvent.kFrameInc:{
-				break;
-			}				
-			case TelemetryEvent.kMouseMove:{
-				break;
-			}			
+
 		}
 	}		
 	
@@ -249,14 +318,19 @@ public class Telemetry : MonoBehaviour {
 		
 		fileStream = File.Create(fullFilename);
 		// The compressed stream
-		gZipOutStream = new ICSharpCode.SharpZipLib.GZip.GZipOutputStream(fileStream, 65536);
+		gZipOutStream = new DCOutputStream(fileStream, 65536);
 		// The one we use
 		useStream = gZipOutStream;
+		
+		// Set up positions
+		streamPos = -1;
+		lastStreamPos = -2;		
+		
 	}
 	
 	void CloseFile(){
 		if (gZipOutStream != null) gZipOutStream.Close ();
-		if (gZipInStream != null) gZipOutStream.Close ();
+		if (gZipInStream != null) gZipInStream.Close ();
 		if (fileStream != null) fileStream.Close();
 		fileStream  = null;
 		gZipOutStream  = null;
@@ -273,6 +347,11 @@ public class Telemetry : MonoBehaviour {
 		gZipInStream = new ICSharpCode.SharpZipLib.GZip.GZipInputStream(fileStream, 65536);
 		useStream = gZipInStream;
 		
+		playbackTime = 0;
+		readState = ReadState.kReadTime;
+		streamPos = -1;
+		lastStreamPos = -2;	
+		
 		
 	}
 	
@@ -283,10 +362,15 @@ public class Telemetry : MonoBehaviour {
 		bw.Write (yyyymmdd);
 		bw.Write (hhmmss);
 		bw.Write (machineGUID);
-		bw.Write (fileGuid);			
+		bw.Write (fileGuid);	
+
+		
+		Debug.Log ("Write Header");
+		
 	}
 	
-	void ReadHeader(BinaryReader br){
+	void ReadHeader(){
+		BinaryReader br = new BinaryReader(useStream);
 		thisLoadSaveVersion = br.ReadInt32();
 		switch (thisLoadSaveVersion){
 			case kLoadSaveVersion:{
@@ -299,6 +383,33 @@ public class Telemetry : MonoBehaviour {
 				break;
 			}
 		}
+				
+		Debug.Log ("Read Header");
+		
+
+
+	}
+	
+	// If we are reading we can use this to seek to a point in the file
+	// This is a slow operation as it means reading from the beginning of the file till we read the point we want
+	void ReadSeek(long pos){
+	
+		// Close and then reopen the file
+		CloseFile();
+		OpenFileForReading();
+
+
+		// NOw seek forward a byte at a time until we reach the posiiton we are after
+		BinaryReader br = new BinaryReader(useStream);
+		
+//		br.ReadSingle();		// 0 + 4 = 4
+//		br.ReadInt64();			// 4 + 8 = 12
+//		br.ReadInt32();			// 12 + 4 = 16
+//		br.ReadString ();		// 16 + 16 = 32
+		
+		
+		br.ReadBytes((int)pos);
+		
 	}
 
 	void PlaybackUpdate(){
@@ -306,11 +417,10 @@ public class Telemetry : MonoBehaviour {
 		if (playbackState == PlaybackState.kLoadFile){
 			// open the File for reading
 			OpenFileForReading();
+			finalStreamPos = -3;
+			
 			GameModeManager.singleton.ResetGameTime();
-			playbackTime = 0;
-			playbackState = PlaybackState.kPlaying;
-			Time.timeScale = playbackSpeed;
-			readState = ReadState.kReadTime;
+			playbackState = PlaybackState.kStepForward;
 		}
 		// Is telemetr is disabled - then do nothing		
 		if (!enableTelemetry){
@@ -318,17 +428,14 @@ public class Telemetry : MonoBehaviour {
 		}
 		// If we are simply in Stopped mode, then nothing to do
 		if (playbackState == PlaybackState.kStopped){
-			Time.timeScale = 1;
 			return;
 		}
 		
 		// If we are paused then do nothing also
 		if (playbackState == PlaybackState.kPaused){
-			return;
+				return;
 		}		
-	
-		
-	
+
 		switch (playbackState){
 			case PlaybackState.kStopped:{
 				break;
@@ -337,27 +444,41 @@ public class Telemetry : MonoBehaviour {
 				ReadAndProcessTelemetryEvent();			
 				break;
 			}			
-			case PlaybackState.kPaused:{
-				break;
-			}
+
 			case PlaybackState.kStepForward:{
-				// Step forward
+				GameModeManager.singleton.ForceSetGameTime(playbackTime);
+				ReadAndProcessTelemetryEvent();		
+				
 				playbackState = PlaybackState.kPaused;
 				break;
 			}
 			case PlaybackState.kStepBackwards:{
-				// Step backward
+				ReadSeek(lastStreamPos);
+			    // Note that this is ok to do as it will set the read state to ensure that data is read next
+				ReadEventTime(true);
+				ReadAndProcessTelemetryEvent();	
 				playbackState = PlaybackState.kPaused;
 				break;
 			}
 			case PlaybackState.kRewind:{
 				// Rewind
+				ReadSeek(0);
+				// Note that this is ok to do as it will set the read state to ensure that data is read next
+				ReadEventTime(true);
+				ReadAndProcessTelemetryEvent();	
 				playbackState = PlaybackState.kPaused;
 				break;
 			}
 			case PlaybackState.kWindForwards:{
-				// Wind forward to the last frame
-				playbackState = PlaybackState.kPaused;
+				if (finalStreamPos < 0){	
+					Debug.LogError("Do not have value of finalStreamPos");
+				}
+				// Wind forward to one before the last frame (which is when the circuit would have last been changed)
+				// And then stop forward one to get us to the end
+				ReadSeek(finalLastStreamPos);
+				ReadEventTime(true);
+				ReadAndProcessTelemetryEvent();	
+				playbackState = PlaybackState.kStepForward;
 				break;
 			}
 			case PlaybackState.kCloseFile:{
@@ -370,22 +491,40 @@ public class Telemetry : MonoBehaviour {
 		}
 	}
 	
-	void ReadAndProcessTelemetryEvent(){
+	// use forceGameToMatch=true if we want the game to set itself to this new time
+	void ReadEventTime(bool forceGameToMatch){
 		BinaryReader br = new BinaryReader(useStream);
+
+				// Read the time of this event and set the gameitme to be that
+		playbackTime = br.ReadSingle();
+//		Debug.Log ("Read game time = " + playbackTime);
+		readState = ReadState.kReadData;
+		
+		
+		if (forceGameToMatch)
+			GameModeManager.singleton.ForceSetGameTime(playbackTime);
+	}
+	
+	void ReadAndProcessTelemetryEvent(){
 		bool finish = false;
-		while (!finish && playbackTime < GameModeManager.singleton.GetGameTime()){
+		while (!finish && MathUtils.FP.Fleq (playbackTime, GameModeManager.singleton.GetGameTime())){
 			switch (readState){
 				case ReadState.kReadTime:{
-					playbackTime = br.ReadSingle();
-					Debug.Log ("Read game time = " + playbackTime);
-					readState = ReadState.kReadData;
+					ReadEventTime(false);
 					break;
 				}
 				case ReadState.kReadData:{
+					BinaryReader br = new BinaryReader(useStream);
+					// Read the position of the event before this one (so we can jump back to it if necessary
+					lastStreamPos = br.ReadInt64();
+//					Debug.Log("Read lastSteamPos = " + lastStreamPos);
+					streamPos = br.ReadInt64();
+//					Debug.Log("Read streamPos = " + streamPos);
+					
 					int numEvents = br.ReadInt32 ();
 					for (int i = 0; i < numEvents; ++i){
 						// Hopefully any "finishing" events should be the last event that frame!
-						finish = ReadData(br);
+						finish = ReadData();
 					}
 					readState = ReadState.kReadTime;
 					break;
@@ -395,9 +534,11 @@ public class Telemetry : MonoBehaviour {
 		}
 	}
 	
-	bool ReadData(BinaryReader br){
+	bool ReadData(){
+		BinaryReader br = new BinaryReader(useStream);
+		
 		string eventString = br.ReadString();
-		Debug.Log ("Read event = " + eventString);
+//		Debug.Log ("Read event = " + eventString);
 		
 		TelemetryEvent e;
 		bool ok = eventLookup.TryGetValue(eventString, out e);
@@ -412,11 +553,15 @@ public class Telemetry : MonoBehaviour {
 			}
 			case TelemetryEvent.kGameFinished:{
 				playbackState = PlaybackState.kPaused;
-				// We need to finish now as we are not expecting any more events
+				// Record the last posiiton in the file
+				finalStreamPos = streamPos;
+				finalLastStreamPos = lastStreamPos;
 				return true;
 			}
 			case TelemetryEvent.kNewGameStarted:{
-				ReadHeader(br);
+				GameModeManager.singleton.StartGame();
+				Circuit.singleton.CreateBlankCircuit();
+				ReadHeader();
 				break;
 			}
 			case TelemetryEvent.kLevelStarted:{
@@ -447,9 +592,19 @@ public class Telemetry : MonoBehaviour {
 			}				
 			case TelemetryEvent.kMouseMove:{
 				break;
-			}			
+			}
+			case TelemetryEvent.kGhostChange:{
+				UI.singleton.DeserializeGhostElement(useStream);
+				break;
+			}
 		}
-		// Don't/t finish
+		if (e > TelemetryEvent.kUIStateNone){
+			// don't do this if it is a quit game message
+			if (e != TelemetryEvent.kUIStateQuitGame){
+				GameModeManager.singleton.SetUIState((int)e - (int)TelemetryEvent.kUIStateNone);
+			}
+		}
+			
 		return false;
 			
 	}	
@@ -534,6 +689,28 @@ public class Telemetry : MonoBehaviour {
 		// and enter a paused state)
 		
 		// When in a closed file state we will automatically leave it and enter a stopped state
+	}
+	
+	
+	void Update(){
+		// Sort out our time scale (need to do it in the render update because when paused, the fixed update doesn't get called
+		if (mode == Mode.kPlayback)
+		{
+			switch (playbackState){
+				case PlaybackState.kPlaying:{
+					Time.timeScale = playbackSpeed;
+					break;				
+				}
+				case PlaybackState.kPaused:{
+					Time.timeScale = 0;
+					break;				
+				}
+				default:{
+					Time.timeScale = 1;
+					break;				
+				}
+			}
+		}
 	}
 	
 	

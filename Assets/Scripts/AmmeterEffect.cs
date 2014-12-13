@@ -14,7 +14,7 @@ public class AmmeterEffect : MonoBehaviour {
 		Transform fractionTransform = transform.FindChild ("FractionTextBox");
 		// Rise up
 		Vector3 pos = fractionTransform.position;
-		pos.y += 0.01f;
+		pos.y += 0.01f * 50 * Time.deltaTime;
 		fractionTransform.position = pos;
 		
 		// Get larger
