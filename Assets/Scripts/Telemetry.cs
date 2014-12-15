@@ -13,6 +13,7 @@ using System.Threading;
 public class DCOutputStream : ICSharpCode.SharpZipLib.GZip.GZipOutputStream{
 
 	public long writeCount = 0;
+	
 
 	public DCOutputStream(Stream other, int size): base(other, size){
 	
@@ -49,6 +50,8 @@ public class Telemetry : MonoBehaviour {
 	};
 	public Mode mode = Mode.kRecord;
 	
+	public static string errorPathName = "err/";
+	public static string uploadedPathName = "uploaded/";
 	
 
 	// Flags about what has happened in this frame. try not to delete these as they may be needed to 
@@ -306,6 +309,8 @@ public class Telemetry : MonoBehaviour {
 			}
 
 		}
+		// We do this in case the player quits the application in an unexpeted way.
+		useStream.Flush();
 	}		
 	
 	void OpenFileForWriting(){
@@ -340,10 +345,21 @@ public class Telemetry : MonoBehaviour {
 	
 
 	void OpenFileForReading(){
-		fileStream = File.Open(BuildPathName() + playbackFilename, FileMode.Open);
-		if (fileStream == null){
-			Debug.LogError ("Failed to open telemtry file for reading");
+		string usePath = BuildPathName() + playbackFilename;
+		// If it's not where we left it, it might have been moved to to the uploaded folder
+		if (!File.Exists(usePath)){
+			usePath = BuildPathName() + uploadedPathName + playbackFilename;
 		}
+		// If not there then it might be in the error folder
+		if (!File.Exists(usePath)){
+			usePath = BuildPathName() + errorPathName + playbackFilename;
+		}	
+		if (!File.Exists(usePath)){
+			Debug.LogError ("Failed to open telemtry file for reading");
+			return;
+		}		
+		fileStream = File.Open(usePath, FileMode.Open);
+
 		gZipInStream = new ICSharpCode.SharpZipLib.GZip.GZipInputStream(fileStream, 65536);
 		useStream = gZipInStream;
 		
@@ -610,8 +626,12 @@ public class Telemetry : MonoBehaviour {
 	}	
 	
 	
-	string BuildPathName(){
+	public static string BuildPathName(){
 		return Application.persistentDataPath + "/LeccyTelemetry/";
+	}
+	
+	public static string BuildExtension(){
+		return ".telemetry";
 	}
 	
 	// format is GAMEVERSION_YYYYMMDD_HHMMSS_MACHINEGUID_FILEGUID
@@ -622,7 +642,7 @@ public class Telemetry : MonoBehaviour {
 		hhmmss = dt.Hour.ToString("00.##") + dt.Minute.ToString("00.##") + dt.Second.ToString("00.##");
 		machineGUID = GetMachineGUID();
 		fileGuid = Guid.NewGuid().ToString();
-		return gameName + "_" + gameVersion + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + ".telemetry";
+		return gameName + "_" + gameVersion + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + BuildExtension();
 	}
 	
 

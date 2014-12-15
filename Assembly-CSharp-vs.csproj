@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
+     <Compile Include="Assets\Scripts\ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\FlashingButton.cs" />
      <Compile Include="Assets\Scripts\FractionCalc.cs" />
      <Compile Include="Assets\Scripts\GUITextDisplay.cs" />
@@ -82,6 +83,7 @@
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />
      <Compile Include="Assets\Scripts\SerializationUtils.cs" />
+     <Compile Include="Assets\Scripts\ServerUpload.cs" />
      <Compile Include="Assets\Scripts\Simulator.cs" />
      <Compile Include="Assets\Scripts\SpringValue.cs" />
      <Compile Include="Assets\Scripts\Telemetry.cs" />
