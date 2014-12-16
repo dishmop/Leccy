@@ -9,6 +9,8 @@ public class ServerUpload : MonoBehaviour {
 	public static ServerUpload singleton = null;
 
 	public float waitDuration = 1f;
+	
+	public bool enableUpload;
 
 	FileInfo[] fileList;
 	
@@ -28,6 +30,8 @@ public class ServerUpload : MonoBehaviour {
 
 	// Use this for initialization
 	public void GameUpdate () {
+		if (!enableUpload) return;
+		
 		switch (state){
 			case State.kStartup:{
 				waitStartTime = Time.realtimeSinceStartup;
@@ -110,13 +114,13 @@ public class ServerUpload : MonoBehaviour {
 	}
 	
 	void MoveToSubFolder(string filename, string subFolder){
-		string fullDestPath = Telemetry.BuildPathName() + subFolder;
+		string fullDestPath = Telemetry.GetPathName() + subFolder;
 		// If the directory doesn't existTelemetry.BuildPathName() + errorPathName, make it exist
 		if (!Directory.Exists(fullDestPath)){
 			Directory.CreateDirectory(fullDestPath);
 		}		
 		
-		string srcPath = Telemetry.BuildPathName() + filename;
+		string srcPath = Telemetry.GetPathName() + filename;
 		string desPath = fullDestPath + filename;
 		try
 		{
@@ -136,8 +140,18 @@ public class ServerUpload : MonoBehaviour {
 	
 	void FillFileList(){
 		// Fil the file list
-		DirectoryInfo dir = new DirectoryInfo(Telemetry.BuildPathName());
-		fileList = dir.GetFiles("*" + Telemetry.BuildExtension());
+		DirectoryInfo dir = new DirectoryInfo(Telemetry.GetPathName());
+		FileInfo[] fileListFinal = dir.GetFiles("*" + Telemetry.BuildExtension());
+		
+		FileInfo[] fileListInt = dir.GetFiles("*" + Telemetry.BuildFinalExtension());
+		
+		fileList = new FileInfo[fileListFinal.Length + fileListInt.Length];
+		for (int i = 0; i < fileListFinal.Length; ++i){
+			fileList[i] = fileListFinal[i];
+		}
+		for (int i = 0; i < fileListInt.Length; ++i){
+			fileList[fileListFinal.Length + i] = fileListInt[i];
+		}		
 		
 	}
 	

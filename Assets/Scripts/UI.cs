@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.IO;
@@ -165,9 +165,11 @@ public class UI : MonoBehaviour {
 			
 		}
 		else{
-			cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
-			if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
-				cacheMousePressed = true;
+			if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
+				cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+				if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
+					cacheMousePressed = true;
+				}
 			}
 		}	
 	}
@@ -217,7 +219,7 @@ public class UI : MonoBehaviour {
 		
 		
 		// As far as the telemetry goes, ust assume tha the ghost element is changing every frame
-		Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kGhostChange);
+		Telemetry.singleton.RegisterEvent(Telemetry.Event.kGhostChange);
 		
 	}
 	

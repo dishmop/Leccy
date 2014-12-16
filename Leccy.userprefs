@@ -1,9 +1,23 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ExtensionMethods.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/ServerUpload.cs" Line="29" Column="28" />
-      <File FileName="Assets/Scripts/ExtensionMethods.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ExtensionMethods.cs" Line="10" Column="18" />
+      <File FileName="Assets/Scripts/ServerUpload.cs" Line="35" Column="18" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="221" Column="5" />
+      <File FileName="Assets/Scripts/Telemetry.cs" Line="793" Column="27" />
+      <File FileName="Assets/Scripts/src/Zip/Compression/Streams/InflaterInputStream.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/src/SharpZipBaseException.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="7" Column="26" />
+      <File FileName="Assets/Scripts/TelemtryListener.cs" Line="7" Column="2" />
+      <File FileName="Assets/Scripts/CommentLog.cs" Line="87" Column="3" />
+      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SendButtonScript.cs" Line="2" Column="22" />
+      <File FileName="Assets/Scripts/PlaybackTime.cs" Line="12" Column="2" />
+      <File FileName="Assets/Scripts/CamControl.cs" Line="65" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="18" Column="31" />
+      <File FileName="Assets/Scripts/PanelController.cs" Line="38" Column="3" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="128" Column="4" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
@@ -11,6 +25,9 @@
           <Value>useStream.writeCount</Value>
           <Value>playbackTime</Value>
           <Value>point</Value>
+          <Value>fileList</Value>
+          <Value>file</Value>
+          <Value>eventTypes[(int)e]</Value>
         </State>
       </Pad>
     </Pads>

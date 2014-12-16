@@ -114,14 +114,14 @@ public class GameModeManager : MonoBehaviour {
 	
 	public void BulkGameUpdate(){
 		UI.singleton.GameUpdate();
-		if (Telemetry.singleton.enableTelemetry && Telemetry.singleton.mode == Telemetry.Mode.kPlayback){
+		if (Telemetry.singleton.mode == Telemetry.Mode.kPlayback){
 			Telemetry.singleton.GameUpdate();
 		}
 		Circuit.singleton.GameUpdate();
 		UI.singleton.LateGameUpdate();
 		// Only rerun the simulation if the circuit has changed since last time
 		if (Circuit.singleton.IsDirty()){
-			Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kCircuitChanged);
+			Telemetry.singleton.RegisterEvent(Telemetry.Event.kCircuitChanged);
 			Simulator.singleton.GameUpdate();
 			Circuit.singleton.ResetDirty();
 		}
@@ -139,8 +139,10 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	void HandleTelemetryUI(){
-		telemetryPanel.transform.FindChild ("TelemetryFrame").gameObject.SetActive(Telemetry.singleton.enableTelemetry && Telemetry.singleton.mode == Telemetry.Mode.kPlayback);
-
+		telemetryPanel.SetActive(Telemetry.singleton.enableTelemetry);
+		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryPlayback").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kPlayback);
+		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryRecord").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kRecord && Telemetry.singleton.HasFile());
+		
 		
 	}	
 	
@@ -156,7 +158,7 @@ public class GameModeManager : MonoBehaviour {
 	void HandleLevelInfo(){
 
 		if (gameMode != GameMode.kTitleScreen){
-			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-1);
+			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-1) + ": " + LevelManager.singleton.GetCurrentLevelName()	;
 			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + triggersTriggered + " / " + numLevelTriggers;
 		}
 		else{
@@ -184,14 +186,17 @@ public class GameModeManager : MonoBehaviour {
 	public void FixedUpdate () {
 	
 		BulkGameUpdate ();
+
+		HandleTelemetryUI();
+		
 	
 		switch (gameMode){
 			case GameMode.kNone:
 				gameMode = GameMode.kStart;
 				break;
 			case GameMode.kStart:
-				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) sidePanel.GetComponent<PanelController>().ForceDeactivate();
-				startGameDlg.SetActive(true);
+				sidePanel.GetComponent<PanelController>().ForceDeactivate();
+				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) startGameDlg.SetActive(true);
 				levelCompleteDlg.SetActive(false);
 				gameCompleteDlg.SetActive(false);
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
@@ -212,10 +217,11 @@ public class GameModeManager : MonoBehaviour {
 				break;				
 			case GameMode.kTitleScreen:
 				UI.singleton.HideMousePointer();
+				ResetGameTime ();
 				if (startGame){		
 					startGameDlg.SetActive(false);
 					ResetGameTime ();
-					Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kNewGameStarted);
+					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
 					gameMode = GameMode.kPlayLevelInit;
 				}
 				// When in the title screen do regular uploads of files to the server (if there are any to upload)
@@ -226,7 +232,7 @@ public class GameModeManager : MonoBehaviour {
 				sidePanel.GetComponent<PanelController>().Activate();
 				levelStartMessageDlg.SetActive(true);	
 				if ((!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) && !enableEditor) LevelManager.singleton.LoadLevel();
-				Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kLevelStarted);
+				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
 				
 				ResetSidePanel();
 				AudioListener.volume = 1f;
@@ -239,7 +245,7 @@ public class GameModeManager : MonoBehaviour {
 				if (IsLevelComplete() && !enableEditor){
 					levelCompletewWaitStartTime = Time.fixedTime;
 					gameMode = GameMode.kLevelCompleteWait;
-					Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kLevelCompleteWait);
+					Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelCompleteWait);
 				}
 				if (quitGame){
 					gameMode = GameMode.kQuitGame;
@@ -248,14 +254,14 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kLevelCompleteWait:				
 				if (Time.fixedTime > levelCompletewWaitStartTime + levelCompletewWaitDuration){
 					Camera.main.transform.FindChild("Quad").gameObject.SetActive(true);			
-					if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) sidePanel.GetComponent<PanelController>().Deactivate();
+					sidePanel.GetComponent<PanelController>().Deactivate();
 					if (LevelManager.singleton.IsOnLastLevel()){
 						gameCompleteDlg.SetActive(true);
 						TriggerEndOfGameEffects();
-						Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kGameComplete);
+						Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameComplete);
 					}
 					else{
-						Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kLevelComplete);
+						Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelComplete);
 						levelCompleteDlg.SetActive(true);
 					}
 					gameMode =  GameMode.kLevelComplete;
@@ -281,7 +287,7 @@ public class GameModeManager : MonoBehaviour {
 				}
 				break;	
 			case GameMode.kQuitGame:
-				Telemetry.singleton.RegisterEvent(Telemetry.TelemetryEvent.kGameFinished);	
+				Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameFinished);	
 				LevelManager.singleton.currentLevelIndex = 1;
 				if (enableEditor)
 					gameMode = GameMode.kStartEditor;
@@ -292,12 +298,11 @@ public class GameModeManager : MonoBehaviour {
 		}
 		
 		// Do telemetry recording
-		if (Telemetry.singleton.enableTelemetry && Telemetry.singleton.mode == Telemetry.Mode.kRecord){
+		if (Telemetry.singleton.mode == Telemetry.Mode.kRecord){
 			Telemetry.singleton.GameUpdate();
 		}
 		
 		HandleSideButtons();
-		HandleTelemetryUI();
 		HandleLevelInfo();
 		UpdateEndOfGameEffects();
 		
@@ -314,7 +319,7 @@ public class GameModeManager : MonoBehaviour {
 		quitGame = false;	
 		
 		// Register any state change events
-		Telemetry.singleton.RegisterEvent((Telemetry.TelemetryEvent)((int)Telemetry.TelemetryEvent.kUIStateNone + (int)gameMode));
+		Telemetry.singleton.RegisterEvent((Telemetry.Event)((int)Telemetry.Event.kUIStateNone + (int)gameMode));
 		if (lastGameMode != gameMode){
 		}
 		lastGameMode = gameMode;	
