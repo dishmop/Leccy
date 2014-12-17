@@ -800,7 +800,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
     m_FontStyle: 2
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 3
@@ -7542,7 +7542,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackFilename
-      value: Leccy_00-03_This is a test_20141217_133643_0358fb1c-94f2-4156-8c1a-61467582f9a2_48c76a4f-19c3-462e-b7fb-f65d78b687e8.telemetry
+      value: Leccy_00-03_Diarmid_20141217_134838_dbbb41fd-3d8a-49f5-8330-7c686ec56b88_3ee622a1-2ff0-4428-a80e-2429bd6d1012.telemetry
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: mode
@@ -9106,7 +9106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTelemetry: 1
   gameName: Leccy
-  playbackFilename: Leccy_00-03_This is a test_20141217_133643_0358fb1c-94f2-4156-8c1a-61467582f9a2_48c76a4f-19c3-462e-b7fb-f65d78b687e8.telemetry
+  playbackFilename: Leccy_00-03_Diarmid_20141217_134838_dbbb41fd-3d8a-49f5-8330-7c686ec56b88_3ee622a1-2ff0-4428-a80e-2429bd6d1012.telemetry
   playbackSpeed: 1
   gameVersion: 00-03
   mode: 0
@@ -9176,7 +9176,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
