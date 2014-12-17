@@ -46,8 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EventFilterButton.cs" />
      <Compile Include="Assets\Scripts\AmmeterEffect.cs" />
+     <Compile Include="Assets\Scripts\AppHelper.cs" />
      <Compile Include="Assets\Scripts\AudioTimeScalar.cs" />
      <Compile Include="Assets\Scripts\CamControl.cs" />
      <Compile Include="Assets\Scripts\Circuit.cs" />
@@ -63,6 +63,7 @@
      <Compile Include="Assets\Scripts\CommentLog.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
+     <Compile Include="Assets\Scripts\EventFilterButton.cs" />
      <Compile Include="Assets\Scripts\ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\FlashingButton.cs" />
      <Compile Include="Assets\Scripts\FractionCalc.cs" />

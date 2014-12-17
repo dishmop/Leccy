@@ -70,6 +70,7 @@ public class Telemetry : MonoBehaviour {
 		kGhostChange,
 		kUserComment,
 		kUIStateNone,
+		kUIStateSplash,
 		kUIStateStart,
 		kUIStateStartEditor,
 		kUIStateTitleScreen,
@@ -79,6 +80,7 @@ public class Telemetry : MonoBehaviour {
 		kUIStateLevelComplete,
 		kUIStateGameComplete,
 		kUIStateQuitGame,
+		kUIStateReallyQuitGame,	
 		kNumEvents
 		
 	};
@@ -145,8 +147,9 @@ public class Telemetry : MonoBehaviour {
 	string hhmmss;
 	string machineGUID;
 	string fileGuid;
+	string playerName;
 	
-	const int		kLoadSaveVersion = 1;		
+	const int		kLoadSaveVersion = 2;		
 	
 	string writeFilename;
 	string writeFilenameFinal;
@@ -361,7 +364,11 @@ public class Telemetry : MonoBehaviour {
 				break;
 			}
 			case Event.kNewGameStarted:{
-				RecordHeader (bw);
+				WriteHeader (bw);
+				foreach(TelemetryListener listener in listeners){
+					listener.OnNewGame();
+				}
+			
 				
 				break;
 			}
@@ -459,7 +466,7 @@ public class Telemetry : MonoBehaviour {
 		
 	}
 	
-	void RecordHeader(BinaryWriter bw){
+	void WriteHeader(BinaryWriter bw){
 		bw.Write (kLoadSaveVersion);
 		bw.Write (gameName);
 		bw.Write (gameVersion);
@@ -467,6 +474,7 @@ public class Telemetry : MonoBehaviour {
 		bw.Write (hhmmss);
 		bw.Write (machineGUID);
 		bw.Write (fileGuid);	
+		bw.Write (playerName);
 
 		
 		Debug.Log ("Write Header");
@@ -478,6 +486,16 @@ public class Telemetry : MonoBehaviour {
 		thisLoadSaveVersion = br.ReadInt32();
 		switch (thisLoadSaveVersion){
 			case kLoadSaveVersion:{
+				gameName = 		br.ReadString ();
+				gameVersion = 	br.ReadString ();
+				yyyymmdd = 		br.ReadString ();
+				hhmmss = 		br.ReadString ();
+				machineGUID = 	br.ReadString ();
+				fileGuid = 		br.ReadString ();
+				playerName =	br.ReadString ();
+				break;
+			}
+			case 1:{
 				gameName = 		br.ReadString ();
 				gameVersion = 	br.ReadString ();
 				yyyymmdd = 		br.ReadString ();
@@ -706,6 +724,9 @@ public class Telemetry : MonoBehaviour {
 			case Event.kNewGameStarted:{
 				GameModeManager.singleton.StartGame();
 				Circuit.singleton.CreateBlankCircuit();
+				foreach(TelemetryListener listener in listeners){
+					listener.OnNewGame();
+				}
 				ReadHeader();
 				break;
 			}
@@ -728,7 +749,7 @@ public class Telemetry : MonoBehaviour {
 		}
 		if (e > Event.kUIStateNone){
 			// don't do this if it is a quit game message
-			if (e != Event.kUIStateQuitGame){
+			if (e != Event.kUIStateQuitGame || e != Event.kUIStateReallyQuitGame ){
 				GameModeManager.singleton.SetUIState((int)e - (int)Event.kUIStateNone);
 			}
 		}
@@ -762,16 +783,27 @@ public class Telemetry : MonoBehaviour {
 		hhmmss = dt.Hour.ToString("00.##") + dt.Minute.ToString("00.##") + dt.Second.ToString("00.##");
 		machineGUID = GetMachineGUID();
 		fileGuid = Guid.NewGuid().ToString();
-		writeFilename =  gameName + "_" + gameVersion + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + BuildExtension();
-		writeFilenameFinal =  gameName + "_" + gameVersion + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + BuildFinalExtension();
+		playerName = PlayerPrefs.GetString(GameModeManager.playerNameKey);
+		if (playerName == "") playerName = "NONE-GIVEN";
+		writeFilename =  gameName + "_" + gameVersion + "_" + playerName + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + BuildExtension();
+		writeFilenameFinal =  gameName + "_" + gameVersion + "_" + playerName + "_" + yyyymmdd + "_" + hhmmss + "_" + machineGUID + "_" + fileGuid + BuildFinalExtension();
 	}
 	
 	void RenameFiletoFinal(){
 		string oldFilename = GetPathName() + writeFilename;
 		string newFilename = GetPathName() + writeFilenameFinal;
 		
-		File.Copy(oldFilename, newFilename);
-		File.Delete(oldFilename);
+		try
+		{
+			// Move didn't seem to work - trying copy (and allowing overwrites) instead
+			File.Copy(oldFilename, newFilename);
+			File.Delete(oldFilename);
+		}
+		catch (IOException exception)
+		{
+			Debug.Log("Failed to rename file: " + exception.Message);
+		}
+		
 		
 	}
 	
@@ -858,6 +890,7 @@ public class Telemetry : MonoBehaviour {
 		eventTypes[(int)Event.kUserComment] = EventType.kUserComments;
 		eventTypes[(int)Event.kUIStateNone] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStateStart] = EventType.kUIState;
+		eventTypes[(int)Event.kUIStateSplash] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStateStartEditor] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStateTitleScreen] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStatePlayLevelInit] = EventType.kUIState;
@@ -866,6 +899,7 @@ public class Telemetry : MonoBehaviour {
 		eventTypes[(int)Event.kUIStateLevelComplete] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStateGameComplete] = EventType.kUIState;
 		eventTypes[(int)Event.kUIStateQuitGame] = EventType.kUIState;
+		eventTypes[(int)Event.kUIStateReallyQuitGame] = EventType.kUIState;
 	}
 	
 	

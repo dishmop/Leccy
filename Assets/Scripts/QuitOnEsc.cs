@@ -12,7 +12,7 @@ public class QuitOnEsc : MonoBehaviour {
 	void Update () {
 		// Test for exit
 		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.Quit();
+			GameModeManager.singleton.ReallyQuitGame();
 		}
 	
 	}

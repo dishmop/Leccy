@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: GameModeManager
+  m_Name: ServerUpload
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,25 +36,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1deaac41dc790476ba16dabd3acc7d77, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad9463f5532d4894aaf9c6c6df40bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sidePanel: {fileID: 0}
-  levelInfo: {fileID: 0}
-  telemetryPanel: {fileID: 0}
-  startGameDlg: {fileID: 0}
-  splashScreenDlg: {fileID: 0}
-  levelCompleteDlg: {fileID: 0}
-  gameCompleteDlg: {fileID: 0}
-  levelStartMessageDlg: {fileID: 0}
-  ammeterEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
-  voltMeterEffect: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
-  enableEditor: 0
-  restartLevel: 0
-  nextLevel: 0
-  quitGame: 0
-  reallyQuitGame: 0
-  startGame: 0
+  waitDuration: 1
+  enableUpload: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

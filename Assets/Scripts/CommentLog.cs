@@ -100,6 +100,9 @@ public class CommentLog : MonoBehaviour, TelemetryListener {
 		UpdateText();
 	}
 	
+	public void OnNewGame(){
+		displayStrings.Clear();
+	}
 	void UpdateText(){
 		int maxLines = CalcMaxLinesAllowed();
 		while (displayStrings.Count > maxLines){

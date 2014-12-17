@@ -11,14 +11,18 @@ public class ServerUpload : MonoBehaviour {
 	public float waitDuration = 1f;
 	
 	public bool enableUpload;
+	
 
 	FileInfo[] fileList;
+	WWW uploadWWW;
 	
 	
 	enum State{
 		kStartup,
 		kWaiting,
-		kUploadFile
+		kUploadFile,
+		kWaitForUpload,
+		kDealWithOutcome
 	};
 	
 	State state = State.kStartup;
@@ -27,7 +31,18 @@ public class ServerUpload : MonoBehaviour {
 	string uploadURL = "http://toby.eng.cam.ac.uk/leccy/upload.php";
 	
 
+	// Call to check if it is OK to quit the application
+	public bool CanQuit(){
+		return 	state == State.kWaiting;
+	}
 
+	// Call if we want to esnure that everything we can gets uploaded
+	public void ForceUpload(){
+		if (state == State.kWaiting){
+			FillFileList();
+			state = State.kUploadFile;
+		}
+	}
 	// Use this for initialization
 	public void GameUpdate () {
 		if (!enableUpload) return;
@@ -50,15 +65,25 @@ public class ServerUpload : MonoBehaviour {
 			case State.kUploadFile:{
 				if (fileList.Length > 0) {
 					UploadFile ();
-					// Whatever happens we have dealt with the file - so remove it from the list
-					// NOte this is a bespoke function we are calling
-					fileList = fileList.RemoveAt(0);
+					state = State.kWaitForUpload;
 				}
 				else{
 					state = State.kWaiting;
-				}
+				}				
 				break;
 			}
+			case State.kWaitForUpload:{
+				if (WaitForUploadToComplete()){
+					state = State.kDealWithOutcome;
+				}
+				break;
+			} 
+			case State.kDealWithOutcome:{
+				DealWithUploadOutcome();
+				fileList = fileList.RemoveAt(0);
+				state = State.kUploadFile;
+				break;
+			} 		
 		}
 	
 	}
@@ -90,17 +115,25 @@ public class ServerUpload : MonoBehaviour {
 
 				
 		// Try to upload the file
-		WWW uploadWWW = new WWW(uploadURL, form);
-		
+		uploadWWW = new WWW(uploadURL, form);
+	}
+	
+	bool WaitForUploadToComplete(){
+		return uploadWWW.isDone;
+	}
+	
+	void DealWithUploadOutcome(){
+	
 		// Block and wait for data transfer completion - there was an error (hmm script doesn't seem ot raise an error)
-//		if (!string.IsNullOrEmpty(uploadWWW.error)){
-//			Debug.Log ("UploadError: Failed to upload data to server - " + uploadWWW.error);
-//			MoveToSubFolder(fileList[0].Name, errorPathName);	
-//			return;	
-//		}
+		if (!string.IsNullOrEmpty(uploadWWW.error)){
+			Debug.Log ("UploadError: Failed to upload data to server - " + uploadWWW.error);
+			// Add more seconds onto the wait time
+			waitStartTime += 5;
+			// Don't move to to the error folder - since we are probably just not connected to the internet	
+//			MoveToSubFolder(fileList[0].Name, Telemetry.errorPathName);	
+			return;	
+		}
 		
-		// Wait until we are done
-		while (!uploadWWW.isDone){}
 		
 		// Test  if we got an errro (the uploaded file will be 
 		if (uploadWWW.text.Substring(0, 5) == "Sorry"){

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public class GameModeManager : MonoBehaviour {
 	public static GameModeManager singleton = null;
@@ -10,6 +11,7 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject levelInfo;
 	public GameObject telemetryPanel;
 	public GameObject startGameDlg;
+	public GameObject splashScreenDlg;
 	public GameObject levelCompleteDlg;
 	public GameObject gameCompleteDlg;
 	public GameObject levelStartMessageDlg;
@@ -21,9 +23,12 @@ public class GameModeManager : MonoBehaviour {
 	
 	float gameStartTime = 0;
 	
+	public static string playerNameKey = "PlayerName";
+	
 	
 	public enum GameMode{
 		kNone,
+		kSplash,
 		kStart,
 		kStartEditor,
 		kTitleScreen,
@@ -32,13 +37,15 @@ public class GameModeManager : MonoBehaviour {
 		kLevelCompleteWait,
 		kLevelComplete,
 		kGameComplete,
-		kQuitGame
+		kQuitGame,
+		kReallyQuitGame,
 	};
 	
 	public bool	enableEditor;
 	public bool restartLevel;
 	public bool nextLevel;
 	public bool quitGame;
+	public bool reallyQuitGame;
 	public bool startGame;		
 	
 	GameMode gameMode = GameMode.kNone;
@@ -57,7 +64,7 @@ public class GameModeManager : MonoBehaviour {
 		if (singleton != null) Debug.LogError ("Error assigning singleton");
 		singleton = this;
 		
-		gameMode = enableEditor ? GameMode.kStartEditor : GameMode.kStart;
+		gameMode = enableEditor ? GameMode.kStartEditor : GameMode.kNone;
 	}	
 	
 	public void RestartLevel(){
@@ -71,6 +78,10 @@ public class GameModeManager : MonoBehaviour {
 	public void QuitGame(){
 		quitGame = true;
 	}
+	
+	public void ReallyQuitGame(){
+		reallyQuitGame = true;
+	}	
 	
 	
 	public void StartGame(){
@@ -180,6 +191,19 @@ public class GameModeManager : MonoBehaviour {
 
 	}
 	
+	void OnActivateTitle(){
+		if (PlayerPrefs.HasKey(playerNameKey)){
+			string name = PlayerPrefs.GetString(playerNameKey);
+			startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text = name;
+		}
+		if (startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text != ""){
+			startGameDlg.transform.FindChild("InputField").FindChild("Placeholder").GetComponent<Text>().enabled = false;
+		}
+		
+		
+		
+	}
+	
 	
 
 	// FixedUpdate is called once per frame
@@ -189,28 +213,60 @@ public class GameModeManager : MonoBehaviour {
 
 		HandleTelemetryUI();
 		
+		// Handle quitting the application - if we are no in the quit game state - then go there first
+		// which shuts the level down properly
+		// Then go to the really quite game state which actually closes the application
+		if (reallyQuitGame){
+			if (gameMode != GameMode.kQuitGame && gameMode != GameMode.kStart && gameMode != GameMode.kStartEditor && gameMode != GameMode.kReallyQuitGame){
+				gameMode = GameMode.kQuitGame;
+			}
+		}
+		
 	
 		switch (gameMode){
 			case GameMode.kNone:
-				gameMode = GameMode.kStart;
+				gameMode = GameMode.kSplash;
 				break;
-			case GameMode.kStart:
+			case GameMode.kSplash:
+				splashScreenDlg.SetActive(true);
+				UI.singleton.HideMousePointer();
+				if (startGame || (Telemetry.singleton.enableTelemetry && Telemetry.singleton.mode == Telemetry.Mode.kPlayback)){	
+					gameMode = GameMode.kStart;
+					splashScreenDlg.SetActive(false);
+				}
+				break;
+		case GameMode.kStart:
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
-				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) startGameDlg.SetActive(true);
+				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
+					startGameDlg.SetActive(true);
+					OnActivateTitle();	
+				}
 				levelCompleteDlg.SetActive(false);
 				gameCompleteDlg.SetActive(false);
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) LevelManager.singleton.LoadLevel(0);
-				gameMode =GameMode.kTitleScreen;
+				if (reallyQuitGame){
+					gameMode =GameMode.kReallyQuitGame;
+				}
+				else{
+					gameMode = GameMode.kTitleScreen;
+				}
+				
 				break;
 			case GameMode.kStartEditor:
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				sidePanel.GetComponent<PanelController>().Activate();
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
 				levelCompleteDlg.SetActive(false);
-				gameMode =GameMode.kPlayLevelInit;
+				if (reallyQuitGame){
+					gameMode =GameMode.kReallyQuitGame;
+				}
+				else{
+					gameMode = GameMode.kPlayLevelInit;
+				}				
+
 				gameCompleteDlg.SetActive(false);
 				levelStartMessageDlg.SetActive(false);
 				ResetGameTime ();
@@ -222,6 +278,11 @@ public class GameModeManager : MonoBehaviour {
 					startGameDlg.SetActive(false);
 					ResetGameTime ();
 					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
+					string name = startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text;
+					string safeName = Regex.Replace(name, "[^A-Za-z0-9] ","-");	
+					PlayerPrefs.SetString(playerNameKey, safeName);
+					string nameString = "My name is " + (name == "" ? "NONE-GIVEN" : safeName);
+					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, nameString);
 					gameMode = GameMode.kPlayLevelInit;
 				}
 				// When in the title screen do regular uploads of files to the server (if there are any to upload)
@@ -294,6 +355,17 @@ public class GameModeManager : MonoBehaviour {
 				else
 					gameMode = GameMode.kStart;
 				break;
+			case GameMode.kReallyQuitGame:
+				// Need to wait for any server uploads to finish trying
+				ServerUpload.singleton.ForceUpload();
+				while (!ServerUpload.singleton.CanQuit()){
+					ServerUpload.singleton.GameUpdate();
+				}
+				AppHelper.Quit();
+				gameMode = GameMode.kStart;
+				reallyQuitGame = false;
+				break;
+				
 				
 		}
 		
