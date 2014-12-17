@@ -4735,7 +4735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &879478951
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7530,7 +7530,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: gameVersion
-      value: 00-01
+      value: 00-03
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: enable
@@ -7542,7 +7542,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackFilename
-      value: Leccy_00-01_20141213_000843_0358fb1c-94f2-4156-8c1a-61467582f9a2_2211745e-97fd-498a-b87c-2f1be81ff73e.telemetry
+      value: Leccy_00-03_This is a test_20141217_133643_0358fb1c-94f2-4156-8c1a-61467582f9a2_48c76a4f-19c3-462e-b7fb-f65d78b687e8.telemetry
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: mode
@@ -9106,9 +9106,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTelemetry: 1
   gameName: Leccy
-  playbackFilename: Leccy_00-01_20141213_000843_0358fb1c-94f2-4156-8c1a-61467582f9a2_2211745e-97fd-498a-b87c-2f1be81ff73e.telemetry
+  playbackFilename: Leccy_00-03_This is a test_20141217_133643_0358fb1c-94f2-4156-8c1a-61467582f9a2_48c76a4f-19c3-462e-b7fb-f65d78b687e8.telemetry
   playbackSpeed: 1
-  gameVersion: 00-01
+  gameVersion: 00-03
   mode: 0
 --- !u!4 &1498330769
 Transform:
@@ -9501,8 +9501,8 @@ RectTransform:
   m_Father: {fileID: 1605888954}
   m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .355157524}
-  m_AnchorMax: {x: .992110193, y: .417494535}
-  m_AnchoredPosition: {x: 8.50001526, y: -1.00000763}
+  m_AnchorMax: {x: .966259837, y: .417494535}
+  m_AnchoredPosition: {x: 8.49993896, y: -1.00000763}
   m_SizeDelta: {x: -17, y: -4}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1621641460

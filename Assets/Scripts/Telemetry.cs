@@ -52,7 +52,7 @@ public class Telemetry : MonoBehaviour {
 	
 	public static string errorPathName = "err/";
 	public static string uploadedPathName = "uploaded/";
-	
+	public static string downloadedPathName = "downloaded/";
 
 	// Flags about what has happened in this frame. try not to delete these as they may be needed to 
 	// parse older files (event enums are stored as strings)
@@ -443,8 +443,11 @@ public class Telemetry : MonoBehaviour {
 		string usePath = GetPathName() + playbackFilename;
 		// If it's not where we left it, it might have been moved to to the uploaded folder
 		if (!File.Exists(usePath)){
-			usePath = GetPathName() + uploadedPathName + playbackFilename;
+			usePath = GetPathName() + downloadedPathName + playbackFilename;
 		}
+		if (!File.Exists(usePath)){
+			usePath = GetPathName() + uploadedPathName + playbackFilename;
+		}		
 		// If not there then it might be in the error folder
 		if (!File.Exists(usePath)){
 			usePath = GetPathName() + errorPathName + playbackFilename;
