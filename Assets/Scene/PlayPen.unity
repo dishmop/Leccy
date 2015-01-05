@@ -2070,7 +2070,7 @@ MonoBehaviour:
   levelStartMessageDlg: {fileID: 1296393459}
   ammeterEffect: {fileID: 100012, guid: 68460f9950f1e416baec3f8522332d4c, type: 2}
   voltMeterEffect: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
-  enableEditor: 1
+  enableEditor: 0
   restartLevel: 0
   nextLevel: 0
   quitGame: 0
@@ -7288,7 +7288,7 @@ Prefab:
       objectReference: {fileID: 1296393459}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: enableEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
@@ -7534,7 +7534,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: gameVersion
-      value: 00-04
+      value: 00-05
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: enable
@@ -7546,7 +7546,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackFilename
-      value: Leccy_00-03_Ian_20141218_162848_fea6e2e0-77d5-4f08-905b-51a22462739d_c17d26b3-b4c8-4bec-8d4e-f7790db03851.telemetry
+      value: Leccy_00-05_Standalone_20150105_104433_0358fb1c-94f2-4156-8c1a-61467582f9a2_6c95dae0-2745-4e7c-b4c1-67bf1989929e.telemetry
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: mode
@@ -7554,7 +7554,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: enableTelemetry
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: c005dfba63691493db1c07105d2a824c, type: 2}
       propertyPath: playbackSpeed
@@ -9108,11 +9108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3be47047794f44faabc01f6793489ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableTelemetry: 1
+  enableTelemetry: 0
   gameName: Leccy
-  playbackFilename: Leccy_00-03_Ian_20141218_162848_fea6e2e0-77d5-4f08-905b-51a22462739d_c17d26b3-b4c8-4bec-8d4e-f7790db03851.telemetry
+  playbackFilename: Leccy_00-05_Standalone_20150105_104433_0358fb1c-94f2-4156-8c1a-61467582f9a2_6c95dae0-2745-4e7c-b4c1-67bf1989929e.telemetry
   playbackSpeed: 1
-  gameVersion: 00-04
+  gameVersion: 00-05
   mode: 0
 --- !u!4 &1498330769
 Transform:
