@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Standard Assets\Particles\Legacy Particles\TimedObjectDestructor.js" />
+     <None Include="Assets\Shaders\PlasmaBalls_new.shader" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Tutorial_1\Combiner.shader" />
@@ -58,6 +59,7 @@
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Tutorial_1\Black.shader" />
      <None Include="Assets\Shaders\noise-simplex_v02.shader" />
+     <None Include="Assets\Shaders\PlasmaBalls_old.shader" />
      <None Include="Assets\Tutorial_2\1_FlatColour.shader" />
      <None Include="Assets\Fonts\scifi2k2.txt" />
      <None Include="Assets\Shaders\UVAnim.shader" />

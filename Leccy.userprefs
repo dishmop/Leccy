@@ -1,10 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Telemetry.cs" Line="459" Column="1" />
+      <File FileName="Assets/Scripts/ServerUpload.cs" Line="126" Column="2" />
       <File FileName="Assets/Scripts/ExtensionMethods.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ServerUpload.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/src/Zip/Compression/Streams/InflaterInputStream.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/src/SharpZipBaseException.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
@@ -20,7 +19,16 @@
       <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/QuitOnEsc.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/AppHelper.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="8" Column="49" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="7" Column="1" />
+      <File FileName="Assets/Shaders/PlasmaBalls_new.shader" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="360" Column="48" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Telemetry.cs" Line="766" Column="1" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
@@ -38,7 +46,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="395" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="2068" />
+      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="2070" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/ElementSelectButton.cs" line="7" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="135" />
       <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="9" />

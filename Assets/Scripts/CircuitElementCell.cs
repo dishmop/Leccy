@@ -16,6 +16,8 @@ public class CircuitElementCell : CircuitElement {
 
 	const int		kLoadSaveVersion = 1;		
 	
+	
+	
 	public void Start(){
 //		Debug.Log ("CircuitElementCell:Start()");
 	}
@@ -39,8 +41,8 @@ public class CircuitElementCell : CircuitElement {
 		int version = br.ReadInt32();
 		switch (version){
 			case kLoadSaveVersion:{
-			SerializationUtils.UpdateIfChanged(ref voltage, br.ReadSingle(), ref loadChangedSomething);
-			SerializationUtils.UpdateIfChanged(ref isInEmergency, br.ReadBoolean(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref voltage, br.ReadSingle(), ref loadChangedSomething);
+				SerializationUtils.UpdateIfChanged(ref isInEmergency, br.ReadBoolean(), ref loadChangedSomething);
 				break;
 			}
 		}
@@ -159,10 +161,11 @@ public class CircuitElementCell : CircuitElement {
 		}
 		// If we reach our maximum temperature then we should remove the component
 		if (temperature == maxTemp){
-			DestorySelf();
 		}
 
 		
 	}
+	
+	
 }
 	

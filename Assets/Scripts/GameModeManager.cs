@@ -230,7 +230,7 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kSplash:
 				splashScreenDlg.SetActive(true);
 				UI.singleton.HideMousePointer();
-				if (startGame || (Telemetry.singleton.enableTelemetry && Telemetry.singleton.mode == Telemetry.Mode.kPlayback)){	
+				if (startGame || !Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kPlayback){	
 					gameMode = GameMode.kStart;
 					splashScreenDlg.SetActive(false);
 				}

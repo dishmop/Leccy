@@ -1837,7 +1837,9 @@ public class Simulator : MonoBehaviour {
 								thisCurrent = 0;
 							}
 							// Now set up the material to visualise thse numbers
-							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), -currentMulVis * thisCurrent);
+							float speed = -currentMulVis * thisCurrent;
+							float cappedSpeed = Mathf.Min (15f, Mathf.Abs(speed)) *( (speed < 0) ? -1f : 1f);
+							mesh.materials[0].SetFloat ("_Speed" + ((i+ orient) % 4), cappedSpeed);
 							mesh.materials[0].SetFloat ("_Voltage" + ((i+ orient) % 4),  thisVoltage);
 							
 							// For testing 3D visualisation

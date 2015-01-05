@@ -12,11 +12,14 @@ public class CircuitElementWire : CircuitElement {
 	public GameObject wireDeadEndDownPrefab;
 	public GameObject wireCrossPrefab;
 	public GameObject wireTJuncFromTopPrefab;
+	
+	const float	maxCurrent = 100f;	
 		
 	GameObject 	currentPrefab;
 	
-	const int		kLoadSaveVersion = 1;	
-
+	const int			kLoadSaveVersion = 2;	
+	bool				isInEmergency = false;
+	
 	
 	public void Start(){
 //		Debug.Log ("CircuitElementWire:Start()");
@@ -78,7 +81,9 @@ public class CircuitElementWire : CircuitElement {
 	override public void Save(BinaryWriter bw){
 		base.Save (bw);	
 		bw.Write (kLoadSaveVersion);
+		bw.Write(isInEmergency);
 	}
+	
 	
 	
 	override public void Load(BinaryReader br){
@@ -86,11 +91,19 @@ public class CircuitElementWire : CircuitElement {
 		int version = br.ReadInt32();
 		switch (version){
 			case kLoadSaveVersion:{
+					SerializationUtils.UpdateIfChanged(ref isInEmergency, br.ReadBoolean(), ref loadChangedSomething);
+				break;
+			}
+			case 1:{
 				// nothing to dp
 				break;
 			}
 		}
 	}
+	public override void TriggerEmergency(){
+		isInEmergency = true;
+		Circuit.singleton.OnCircutChange();
+	}	
 		
 	public override void RebuildMesh(){
 		base.RebuildMesh();
@@ -318,6 +331,46 @@ public class CircuitElementWire : CircuitElement {
 	void OnDestroy() {
 		// When the object is destoryed, we must make sure to dispose of any meshes we may have
 //		Debug.Log ("OnDestroy");
+		
+		
+	}	
+	
+	
+	
+	float GetAbsCurrentFlow(){
+		if (!IsOnCircuit()) return 0f;
+		return  Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 0)) + 
+				Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 1)) + 
+				Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 2)) + 
+				Mathf.Abs (Simulator.singleton.GetCurrent(thisPoint.x, thisPoint.y, 3));
+	}
+	
+	
+	public override void GameUpdate(){
+		
+		// If our current is not huge then we are probably in a zero resistance loop
+		// and we should stay in out state of emergency. However, if we are not, then the player 
+		// has got in quickly enough so can reset our emegency flag
+		float currentFlow = GetAbsCurrentFlow();
+		if (isInEmergency && currentFlow < maxCurrent){
+			Debug.Log ("Resetting emergency state");
+			isInEmergency = false;
+		}
+		if (GetAbsCurrentFlow() > maxCurrent && temperature < maxTemp){
+			temperature += UnityEngine.Random.Range(0, 200) * 0.01f;
+		}
+		else{
+			if (temperature > 0){
+				temperature -= 1;
+			}
+			else{
+				temperature = 0;
+			}
+		}
+		// If we reach our maximum temperature then we should remove the component
+		if (temperature > maxTemp){
+			DestorySelf();
+		}
 		
 		
 	}	

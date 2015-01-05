@@ -96,7 +96,7 @@ public class ServerUpload : MonoBehaviour {
 		long fileLength = file.Length;
 		if (fileLength > int.MaxValue){
 			Debug.Log ("UploadError: File to long for Int length");
-			MoveToSubFolder(fileList[0].Name, Telemetry.errorPathName);
+		//	MoveFile(fileList[0].FullName, Telemetry.GetPathName() + Telemetry.errorPathName + fileList[0].Name);
 			return;
 		}
 		// Try and read the data into a byte array
@@ -104,7 +104,7 @@ public class ServerUpload : MonoBehaviour {
 		int numBytesRead = file.Read(data, 0, (int)fileLength);
 		if (numBytesRead < (int)fileLength){
 			Debug.Log ("UploadError: Failed to read all the bytes in the file");
-			MoveToSubFolder(fileList[0].Name, Telemetry.errorPathName);
+		//	MoveFile(fileList[0].FullName, Telemetry.GetPathName() + Telemetry.errorPathName + fileList[0].Name);
 			return;
 		}
 		
@@ -138,23 +138,22 @@ public class ServerUpload : MonoBehaviour {
 		// Test  if we got an errro (the uploaded file will be 
 		if (uploadWWW.text.Substring(0, 5) == "Sorry"){
 			Debug.Log("Failed to upload file: " + fileList[0].Name + " Error message: " + uploadWWW.text);
-			MoveToSubFolder(fileList[0].Name, Telemetry.errorPathName);
+//			MoveFile(fileList[0].FullName, Telemetry.GetPathName() + Telemetry.errorPathName + fileList[0].Name);
 		}
 		else{
 			Debug.Log("Telemetry file upolad successful: " + uploadWWW.text);
-			MoveToSubFolder(fileList[0].Name, Telemetry.uploadedPathName);
+			MoveFile(fileList[0].FullName, Telemetry.GetPathName() + Telemetry.uploadedPathName + fileList[0].Name);
 		}	
 	}
 	
-	void MoveToSubFolder(string filename, string subFolder){
-		string fullDestPath = Telemetry.GetPathName() + subFolder;
+	void MoveFile(string srcPath, string desPath){
+	
+		string destDir = Path.GetDirectoryName(desPath);
 		// If the directory doesn't existTelemetry.BuildPathName() + errorPathName, make it exist
-		if (!Directory.Exists(fullDestPath)){
-			Directory.CreateDirectory(fullDestPath);
+		if (!Directory.Exists(destDir)){
+			Directory.CreateDirectory(destDir);
 		}		
 		
-		string srcPath = Telemetry.GetPathName() + filename;
-		string desPath = fullDestPath + filename;
 		try
 		{
 		// Move didn't seem to work - trying copy (and allowing overwrites) instead
@@ -174,17 +173,29 @@ public class ServerUpload : MonoBehaviour {
 	void FillFileList(){
 		// Fil the file list
 		DirectoryInfo dir = new DirectoryInfo(Telemetry.GetPathName());
-		FileInfo[] fileListFinal = dir.GetFiles("*" + Telemetry.BuildExtension());
-		
+		FileInfo[] fileListFinal = dir.GetFiles("*" + Telemetry.BuildExtension());	
 		FileInfo[] fileListInt = dir.GetFiles("*" + Telemetry.BuildFinalExtension());
 		
-		fileList = new FileInfo[fileListFinal.Length + fileListInt.Length];
+		DirectoryInfo errDir = new DirectoryInfo(Telemetry.GetPathName() + Telemetry.errorPathName);
+		FileInfo[] fileListFinalErr = errDir.GetFiles("*" + Telemetry.BuildExtension());	
+		FileInfo[] fileListIntErr = errDir.GetFiles("*" + Telemetry.BuildFinalExtension());
+		
+		fileList = new FileInfo[fileListFinal.Length + fileListInt.Length + fileListFinalErr.Length + fileListIntErr.Length];
+		
+		// Normal list
 		for (int i = 0; i < fileListFinal.Length; ++i){
 			fileList[i] = fileListFinal[i];
 		}
 		for (int i = 0; i < fileListInt.Length; ++i){
 			fileList[fileListFinal.Length + i] = fileListInt[i];
 		}		
+		
+		for (int i = 0; i < fileListFinalErr.Length; ++i){
+			fileList[fileListInt.Length + fileListFinal.Length + i] = fileListFinalErr[i];
+		}
+		for (int i = 0; i < fileListIntErr.Length; ++i){
+			fileList[fileListFinalErr.Length + fileListInt.Length + fileListFinal.Length + i] = fileListIntErr[i];
+		}			
 		
 	}
 	
