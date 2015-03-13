@@ -148,7 +148,7 @@ public class Circuit : MonoBehaviour {
 			}
 			// Go through each position on the grid in the same oreder which which we wrote them
 			int index = 0;
-			ElementSerializationData nextData = dataList[index];
+			ElementSerializationData nextData = numElements != 0 ? dataList[index] : null;
 			for (int x = 0; x < elements.GetLength(0); ++x){
 				for (int y = 0; y < elements.GetLength(1); ++y){
 					GridPoint thisPoint = new GridPoint(x, y);

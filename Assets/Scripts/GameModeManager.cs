@@ -18,6 +18,8 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject ammeterEffect;
 	public GameObject voltMeterEffect;
 	
+	
+	
 	float endOfGameTime = -100f;
 	float endOfGameLifeTime = 3f;
 	
@@ -46,7 +48,10 @@ public class GameModeManager : MonoBehaviour {
 	public bool nextLevel;
 	public bool quitGame;
 	public bool reallyQuitGame;
-	public bool startGame;		
+	public bool startGame;
+	
+	// True is this is a released version of the game (rather than an internal version)		
+	public bool isInternal;
 	
 	GameMode gameMode = GameMode.kNone;
 	GameMode lastGameMode = GameMode.kNone;
@@ -76,6 +81,7 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	public void QuitGame(){
+		enableEditor = false;
 		quitGame = true;
 	}
 	
@@ -85,6 +91,12 @@ public class GameModeManager : MonoBehaviour {
 	
 	
 	public void StartGame(){
+		startGame = true;
+	}
+	
+	
+	public void StartEditor(){
+		enableEditor = true;
 		startGame = true;
 	}
 	
@@ -143,10 +155,12 @@ public class GameModeManager : MonoBehaviour {
 	void HandleSideButtons(){
 		Transform panelTranform = sidePanel.transform.FindChild("BottomPanel");
 		panelTranform.FindChild ("PreviousLevelButton").GetComponent<Button>().interactable = (LevelManager.singleton.currentLevelIndex > 1);
-		panelTranform.FindChild ("SaveLevelButton").gameObject.SetActive(enableEditor);
+		panelTranform.FindChild ("SaveLevelButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("ClearLevelButton").gameObject.SetActive(enableEditor);
-		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor);
-		panelTranform.FindChild ("RefreshAllButton").gameObject.SetActive(enableEditor);
+		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor && isInternal);
+		panelTranform.FindChild ("RefreshAllButton").gameObject.SetActive(enableEditor && isInternal);
+		panelTranform.FindChild ("PreviousLevelButton").gameObject.SetActive(!enableEditor);
+		panelTranform.FindChild ("ReloadLevelButton").gameObject.SetActive(!enableEditor);
 	}
 	
 	void HandleTelemetryUI(){
@@ -235,7 +249,7 @@ public class GameModeManager : MonoBehaviour {
 					splashScreenDlg.SetActive(false);
 				}
 				break;
-		case GameMode.kStart:
+			case GameMode.kStart:
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
 				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
 					startGameDlg.SetActive(true);
@@ -274,16 +288,24 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kTitleScreen:
 				UI.singleton.HideMousePointer();
 				ResetGameTime ();
-				if (startGame){		
-					startGameDlg.SetActive(false);
-					ResetGameTime ();
+				if (startGame){	
 					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
+					startGameDlg.SetActive(false);
 					string name = startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text;
 					string safeName = Regex.Replace(name, "[^A-Za-z0-9] ","-");	
 					PlayerPrefs.SetString(playerNameKey, safeName);
 					string nameString = "My name is " + (name == "" ? "NONE-GIVEN" : safeName);
 					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, nameString);
-					gameMode = GameMode.kPlayLevelInit;
+					
+					ResetGameTime ();
+					if (enableEditor){
+						gameMode = GameMode.kStartEditor;
+						LevelManager.singleton.ClearLevel();
+					}
+					else	
+					{
+						gameMode = GameMode.kPlayLevelInit;
+					}
 				}
 				// When in the title screen do regular uploads of files to the server (if there are any to upload)
 				ServerUpload.singleton.GameUpdate();
