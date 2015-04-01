@@ -172,6 +172,14 @@ public class ServerUpload : MonoBehaviour {
 	
 	void FillFileList(){
 		// Fil the file list
+		if (!Directory.Exists(Telemetry.GetPathName())){
+			Directory.CreateDirectory(Telemetry.GetPathName());
+		}
+		if (!Directory.Exists(Telemetry.GetPathName() + Telemetry.errorPathName)){
+			Directory.CreateDirectory(Telemetry.GetPathName() + Telemetry.errorPathName);
+		}
+		
+		// Fil the file list
 		DirectoryInfo dir = new DirectoryInfo(Telemetry.GetPathName());
 		FileInfo[] fileListFinal = dir.GetFiles("*" + Telemetry.BuildExtension());	
 		FileInfo[] fileListInt = dir.GetFiles("*" + Telemetry.BuildFinalExtension());
