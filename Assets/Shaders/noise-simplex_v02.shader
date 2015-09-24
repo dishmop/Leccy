@@ -134,24 +134,23 @@ SubShader {
 			float2 i2uv = i.uv.xy;
 			float speedParam = 0;
 			float staticSpeedParam = 0;
-			switch(intValX){
-			 case 0:
+			if (intValX == 0){
 			 	speedParam = _Speed0;
 			 	staticSpeedParam = _StaticSpeed0;
-			 	break;
-			 case 1:
+			}
+			else if (intValX == 1){
 			 	speedParam = _Speed1;
 			 	staticSpeedParam = _StaticSpeed1;
-			 	break;
-			 case 2:
+			}
+			else if (intValX == 2){
 			 	speedParam = _Speed2;
 			 	staticSpeedParam = _StaticSpeed2;
-			 	break;
-			 case 3:
+			}
+			else if (intValX == 3){
 			 	speedParam = _Speed3;
 			 	staticSpeedParam = _StaticSpeed3;
-			 	break;
-			 case 4:
+			}
+			else if (intValX == 4){
 			 	speedParam = 1;
 			 	staticSpeedParam = 0.5;
 			 	
@@ -281,9 +280,6 @@ SubShader {
 			 	// From left to right
 			 	i2uv.x += left2Right * i.uv.y;
 			 	i2uv.y += left2Right * i.uv.x;
-			 	
-
-			 	break;
 			}
 			
 			float scaledY = (_Time.y * speedParam + i2uv.y) * 4 * pi;

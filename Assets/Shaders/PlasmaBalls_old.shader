@@ -266,30 +266,25 @@
 			float voltage = 0;
 			
 			int intValX = floor(i.uv.x * 5);
-			switch(intValX){
-			 case 0:
+			if (intValX == 0){
 			 	speedParam = _Speed0;
 			 	seperationParam = _Seperation0;
 			 	voltage = _Voltage0;
-			 	break;
-			 case 1:
+			}
+			else if (intValX == 1){
 			 	speedParam = _Speed1;
 			 	seperationParam = _Seperation1;
 			 	voltage = _Voltage1;
-			 	break;
-			 case 2:
+			}
+			else if (intValX == 2){
 			 	speedParam = _Speed2;
 			 	seperationParam = _Seperation2;
 			 	voltage = _Voltage2;
-			 	break;
-			 case 3:
+			}
+			else if (intValX == 3){
 			 	speedParam = _Speed3;
 			 	seperationParam = _Seperation3;
 			 	voltage = _Voltage3;
-			 	break;
-			 case 4:
-			 	// do nothing
-			 	break;
 			}	
 			// Maximum blue value
 			if (abs(speedParam) > 15) speedParam = 15 * speedParam / abs(speedParam);

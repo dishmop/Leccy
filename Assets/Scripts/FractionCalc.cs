@@ -64,9 +64,9 @@ public class FractionCalc : MonoBehaviour {
 			}
 		}
 		// Recentre
-		Bounds integerBounds = recentreT.FindChild("Integer").GetComponent<TextMesh>().renderer.bounds;
-		Bounds numeratorBounds = recentreT.FindChild("Numerator").GetComponent<TextMesh>().renderer.bounds;
-		Bounds denominatorBounds = recentreT.FindChild("Denominator").GetComponent<TextMesh>().renderer.bounds;
+		Bounds integerBounds = recentreT.FindChild("Integer").GetComponent<TextMesh>().GetComponent<Renderer>().bounds;
+		Bounds numeratorBounds = recentreT.FindChild("Numerator").GetComponent<TextMesh>().GetComponent<Renderer>().bounds;
+		Bounds denominatorBounds = recentreT.FindChild("Denominator").GetComponent<TextMesh>().GetComponent<Renderer>().bounds;
 		
 		float minX = Mathf.Min (Mathf.Min (integerBounds.min.x, numeratorBounds.min.x), denominatorBounds.min.x);
 		float maxX= Mathf.Max (Mathf.Max (integerBounds.max.x, numeratorBounds.max.x), denominatorBounds.max.x);

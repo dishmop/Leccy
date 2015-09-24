@@ -64,7 +64,7 @@ public class UIMesh : MonoBehaviour {
 				if (meshFilter.mesh.normals.Length  == numVerts) 	newVerts[i].normal = 	meshFilter.mesh.normals[vertIndex];
 				if (meshFilter.mesh.colors.Length  == numVerts) 	newVerts[i].color = 	meshFilter.mesh.colors[vertIndex];
 				if (meshFilter.mesh.uv.Length  == numVerts) 		newVerts[i].uv0 = 		meshFilter.mesh.uv[vertIndex];		// same as uv1 apparently
-				if (meshFilter.mesh.uv1.Length  == numVerts) 		newVerts[i].uv1 = 		meshFilter.mesh.uv2[vertIndex];
+				if (meshFilter.mesh.uv2.Length  == numVerts) 		newVerts[i].uv1 = 		meshFilter.mesh.uv2[vertIndex];
 				if (meshFilter.mesh.tangents.Length  == numVerts) 	newVerts[i].tangent = 	meshFilter.mesh.tangents[vertIndex];
 				
 				// Transform the point to where it will be and then add it to thebounds
