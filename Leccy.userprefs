@@ -1,61 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModeManager.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Circuit.cs">
     <Files>
-      <File FileName="Assets/Scripts/ServerUpload.cs" Line="126" Column="2" />
-      <File FileName="Assets/Scripts/ExtensionMethods.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/src/Zip/Compression/Streams/InflaterInputStream.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/src/SharpZipBaseException.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/TelemtryListener.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CommentLog.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/SendButtonScript.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlaybackTime.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PanelController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/QuitOnEsc.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/AppHelper.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="7" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls_new.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementEraser.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="360" Column="48" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Telemetry.cs" Line="766" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="168" Column="27" />
     </Files>
-    <Pads>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>useStream.writeCount</Value>
-          <Value>playbackTime</Value>
-          <Value>point</Value>
-          <Value>fileList</Value>
-          <Value>file</Value>
-          <Value>eventTypes[(int)e]</Value>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/MathUtils.cs" line="395" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="2070" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/ElementSelectButton.cs" line="7" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/Simulator.cs" line="135" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="9" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/ObjectTracker.cs" line="13" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="7" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/GameModeManager.cs" line="10" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/OnMouseDown.cs" line="16" />
-      <Breakpoint file="/Users/dac70/Dropbox/CUED_IWTSE/Game prototyping/Unity Demos/Leccy/Assets/Scripts/LevelManager.cs" line="9" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
