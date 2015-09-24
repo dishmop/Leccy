@@ -129,6 +129,11 @@ public class GameModeManager : MonoBehaviour {
 		
 	}	
 	
+	public void LoadCurrentLevel(){
+		LevelManager.singleton.LoadLevel();
+		ResetSidePanel();
+	}
+	
 
 		
 	void OnDestroy(){
@@ -160,7 +165,7 @@ public class GameModeManager : MonoBehaviour {
 		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("RefreshAllButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("PreviousLevelButton").gameObject.SetActive(!enableEditor);
-		panelTranform.FindChild ("ReloadLevelButton").gameObject.SetActive(!enableEditor);
+		panelTranform.FindChild ("ReloadLevelButton").gameObject.SetActive(true);
 	}
 	
 	void HandleTelemetryUI(){
@@ -206,13 +211,13 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	void OnActivateTitle(){
-		if (PlayerPrefs.HasKey(playerNameKey)){
-			string name = PlayerPrefs.GetString(playerNameKey);
-			startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text = name;
-		}
-		if (startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text != ""){
-			startGameDlg.transform.FindChild("InputField").FindChild("Placeholder").GetComponent<Text>().enabled = false;
-		}
+//		if (PlayerPrefs.HasKey(playerNameKey)){
+//			string name = PlayerPrefs.GetString(playerNameKey);
+//			startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text = name;
+//		}
+//		if (startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text != ""){
+//			startGameDlg.transform.FindChild("InputField").FindChild("Placeholder").GetComponent<Text>().enabled = false;
+//		}
 		
 		
 		
@@ -291,11 +296,11 @@ public class GameModeManager : MonoBehaviour {
 				if (startGame){	
 					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
 					startGameDlg.SetActive(false);
-					string name = startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text;
-					string safeName = Regex.Replace(name, "[^A-Za-z0-9] ","-");	
-					PlayerPrefs.SetString(playerNameKey, safeName);
-					string nameString = "My name is " + (name == "" ? "NONE-GIVEN" : safeName);
-					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, nameString);
+//					string name = startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text;
+//					string safeName = Regex.Replace(name, "[^A-Za-z0-9] ","-");	
+//					PlayerPrefs.SetString(playerNameKey, safeName);
+//					string nameString = "My name is " + (name == "" ? "NONE-GIVEN" : safeName);
+					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, "No_name");
 					
 					ResetGameTime ();
 					if (enableEditor){

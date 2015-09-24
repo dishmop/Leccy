@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class Grid : MonoBehaviour {
 
 	public static Grid singleton = null;
+	
 
 	public int gridWidth;
 	public int gridHeight;
@@ -123,11 +124,11 @@ public class Grid : MonoBehaviour {
 			}
 		}
 		
-		// We we had anything to render, then make a centre
-		if (numSpokes > 0){
+		// We we had anything to render, then make a centre (Actually make a centre anyway)
+		//if (numSpokes > 0){
 			GameObject newCentre = Instantiate(gridCentrePrefab, new Vector3((float)point.x, (float) point.y, 0f), Quaternion.identity) as GameObject;
 			newCentre.transform.parent = bespokeGridObj.transform;
-		}
+		//}
 		bespokeGridObj.name = "BespokeGridObj";
 		return bespokeGridObj;
 	}

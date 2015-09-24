@@ -27,6 +27,8 @@ public class ElementSelectPanel : MonoBehaviour {
 		int numElements = factory.GetNumElements(uiTypeFilter);
 		int xPos = 0;
 		int yPos = 0;
+		int count = 0;
+		GameObject lastButton = null;
 		for (int i = 0; i < numElements; ++i){
 			GameObject prefab = factory.GetPrefab(uiTypeFilter, i);
 			
@@ -36,6 +38,7 @@ public class ElementSelectPanel : MonoBehaviour {
 			// If non to pick from, then don;t show it (unless in editor mode)
 			if (factory.GetStockRemaining(prefab.GetComponent<SerializationID>().id) == 0 && !GameModeManager.singleton.enableEditor) continue;
 			
+			count++;
 			GameObject newButton = Instantiate(leccyButtonPrefab) as GameObject;
 			newButton.transform.SetParent(transform, false);
 			
@@ -45,6 +48,7 @@ public class ElementSelectPanel : MonoBehaviour {
 				newButton.GetComponent<LeccyUIButton>().isSelected = true;
 				defaultSelectionButton = newButton;
 			}
+			lastButton = newButton;
 			
 			// Set the transform
 			RectTransform rectTransform = newButton.GetComponent<RectTransform>();
@@ -59,11 +63,18 @@ public class ElementSelectPanel : MonoBehaviour {
 			rectTransform.offsetMax = new Vector2(0, 0);
 			rectTransform.offsetMin = new Vector2(0, 0);
 		}
+		// If we only have one element visible - then it is the eraser - and we don't want to show it on its own
+		if (count == 1){
+			GameObject.Destroy (lastButton);
+			defaultSelectionButton = null;
+		}
 	}
 	
 	public void OnLoadLevel(){
 		// Make the button which is our default select, selected again
-		defaultSelectionButton.GetComponent<LeccyUIButton>().SetSelected();
+		if (defaultSelectionButton != null){
+			defaultSelectionButton.GetComponent<LeccyUIButton>().SetSelected();
+		}
 	
 	
 	}

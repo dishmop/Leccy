@@ -480,6 +480,9 @@ public class Circuit : MonoBehaviour {
 	}
 	
 	public AnchorData GetAnchors(GridPoint point){
+		if (anchors == null){
+			return new AnchorData();
+		}
 		return anchors[point.x, point.y];
 	}
 	
@@ -554,12 +557,9 @@ public class Circuit : MonoBehaviour {
 				GridPoint thisPoint = new GridPoint(x, y);
 				bool isAnchored = false;
 				AnchorData data = GetAnchors(thisPoint);
+				
+				// We just go on where the grid is
 				if (!data.disableGrid){
-					for (int i = 0; i < 5; ++i){
-						if (data.isAnchored[i]) isAnchored = true;
-					}
-				}
-				if (ElementExists(thisPoint) || isAnchored){
 					bounds.xMin = Mathf.Min (bounds.xMin, x);
 					bounds.yMin = Mathf.Min (bounds.yMin, y);
 					bounds.xMax = Mathf.Max (bounds.xMax, x);
