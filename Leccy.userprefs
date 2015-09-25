@@ -1,27 +1,29 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut1IntroTargetVolts.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LeccyUIButton.cs">
     <Files>
       <File FileName="Assets/Scripts/Tutorial.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="140" Column="36" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="345" Column="5" />
       <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ClickToContinue.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="56" Column="59" />
+      <File FileName="Assets/Scripts/ClickToContinue.cs" Line="9" Column="25" />
       <File FileName="Assets/Scripts/TutorialObject.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/TutTriggerBase.cs" Line="5" Column="28" />
       <File FileName="Assets/Scripts/Tut1IntroAddCells.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tut1IntroAmpTest.cs" Line="19" Column="18" />
-      <File FileName="Assets/Scripts/Tut1IntroRotateCell.cs" Line="25" Column="1" />
+      <File FileName="Assets/Scripts/Tut1IntroRotateCell.cs" Line="24" Column="1" />
       <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="38" Column="2" />
-      <File FileName="Assets/Scripts/Tut1IntroTargetVolts.cs" Line="40" Column="91" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut1IntroTargetVolts.cs" Line="40" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="10" Column="31" />
+      <File FileName="Assets/Scripts/LeccyUIButton.cs" Line="103" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="Tut1IntroTargetVolts.cs" selected="True" />
+              <Node name="LeccyUIButton.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -34,6 +36,7 @@
           <Value>gameMode</Value>
           <Value>selectedPrefabId</Value>
           <Value>this</Value>
+          <Value>isSelected</Value>
         </State>
       </Pad>
     </Pads>

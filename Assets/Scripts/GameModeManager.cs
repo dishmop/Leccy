@@ -340,14 +340,15 @@ public class GameModeManager : MonoBehaviour {
 				if ((!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) && !enableEditor) LevelManager.singleton.LoadLevel();
 				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
 				
+				
+				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing) ResetSidePanel();
 				// See if there is some tutorial text associated with this
 				string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
 				if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
 					Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
 				}
 				
-				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing) ResetSidePanel();
-				AudioListener.volume = 1f;
+			AudioListener.volume = 1f;
 			
 				break;	
 			case GameMode.kPlayLevel:

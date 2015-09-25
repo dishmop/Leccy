@@ -17,14 +17,15 @@ public class ElementSelectPanel : MonoBehaviour {
 	
 	public void ClearSelection(){
 		foreach (Transform child in transform){
-			child.GetComponent<LeccyUIButton>().isSelected = false;
+			child.GetComponent<LeccyUIButton>().Unselect();
 		}
 	}
 	
 	public void SetSelection(string prefabID){
 		foreach (Transform child in transform){
-			bool isSelected = (child.GetComponent<LeccyUIButton>().circuitElementPrefab.GetComponent<SerializationID>().id == prefabID);
-			child.GetComponent<LeccyUIButton>().isSelected = isSelected;
+			if (child.GetComponent<LeccyUIButton>().circuitElementPrefab.GetComponent<SerializationID>().id == prefabID){
+				child.GetComponent<LeccyUIButton>().SetSelected();
+			}
 		}
 	}
 	
@@ -52,7 +53,7 @@ public class ElementSelectPanel : MonoBehaviour {
 			// Set which circuit element we are referencing
 			newButton.GetComponent<LeccyUIButton>().circuitElementPrefab = prefab;
 			if (prefab.GetComponent<SerializationID>().id == defaultSelectionId) {
-				newButton.GetComponent<LeccyUIButton>().isSelected = true;
+				newButton.GetComponent<LeccyUIButton>().SetSelected();
 				defaultSelectionButton = newButton;
 			}
 			lastButton = newButton;

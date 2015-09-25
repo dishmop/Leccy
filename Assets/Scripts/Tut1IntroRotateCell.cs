@@ -21,7 +21,6 @@ public class Tut1IntroRotateCell : TutTriggerBase {
 	// Use this for initialization
 	protected override void OnEnable(){
 		base.OnEnable();
-		UI.singleton.SetSelectedPrefabId("Cell");
 		UI.singleton.elementSelectPanel.GetComponent<ElementSelectPanel>().SetSelection("Cell");
 		rotCount = 0;
 		hasFoundTwo = false;

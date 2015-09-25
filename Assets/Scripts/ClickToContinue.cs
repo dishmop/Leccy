@@ -6,7 +6,7 @@ public class ClickToContinue : TutTriggerBase {
 	public bool clearPreviousTextBoxes = false;
 	
 	float startTime = 0;
-	float waitDuration = 0;//2;
+	float waitDuration = 2;
 	float pulsesPerSec = 5f;
 	
 	// Use this for initialization

@@ -6,7 +6,7 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 
 	public GameObject circuitElementPrefab;
 	public GameObject wireMeshPrefab;
-	public bool	isSelected = false;
+	 bool	isSelected = false;
 	public Color selectColor;
 	public Color normalColor;
 	public Color selectHighlightColor;
@@ -16,6 +16,9 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	public AudioSource okPress;
 	public AudioSource notOkPress;
 	
+	public void Unselect(){
+		isSelected = false;
+	}
 
 	
 	void Awake(){
