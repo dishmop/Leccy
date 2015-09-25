@@ -12,6 +12,15 @@ public class Tutorial : MonoBehaviour {
 			go.SetActive(false);
 		}
 	}
+	
+	public void Deactivate(GameObject exception){
+		foreach (GameObject go in tutorialObjects.Values){
+			if (go == exception) continue;
+			go.SetActive(false);
+		}
+	}
+	
+	
 	// Use this for initialization
 	void Awake () {
 		if (singleton != null) Debug.LogError ("Error assigning singleton");

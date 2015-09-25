@@ -1,21 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ClickToContinue.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tutorial.cs">
     <Files>
-      <File FileName="Assets/Scripts/Tutorial.cs" Line="10" Column="24" />
-      <File FileName="Assets/TutorialObject.cs" Line="9" Column="15" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="58" Column="3" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="391" Column="37" />
-      <File FileName="Assets/Scripts/UI.cs" Line="81" Column="84" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="15" Column="9" />
-      <File FileName="Assets/Scripts/ClickToContinue.cs" Line="11" Column="6" />
+      <File FileName="Assets/Scripts/Tutorial.cs" Line="18" Column="34" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="71" Column="2" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ClickToContinue.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="129" Column="31" />
+      <File FileName="Assets/Scripts/IntroAmpTest.cs" Line="38" Column="1" />
+      <File FileName="Assets/Scripts/TutorialObject.cs" Line="10" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="ClickToContinue.cs" selected="True" />
+              <Node name="Tutorial.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -27,6 +29,7 @@
           <Value>y</Value>
           <Value>gameMode</Value>
           <Value>selectedPrefabId</Value>
+          <Value>this</Value>
         </State>
       </Pad>
     </Pads>
