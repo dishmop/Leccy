@@ -17,7 +17,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	
 	
 
-	bool				buttonActivated = false;
+	public bool			buttonActivated = false;
 	bool 				hasTriggered = false;		
 	
 	// So we can see if it gets changed (esp via the inspector)
@@ -104,7 +104,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 		if (hasTarget && GameModeManager.singleton != null && IsOnCircuit()) GameModeManager.singleton.UnregisterLevelTrigger();
 	}
 	
-	bool IsOnTarget(){
+	public bool IsOnTarget(){
 		// our epsilon should be the same as the display epsilon
 		return hasTarget && MathUtils.FP.Feq(GetVoltageDiff(), targetVolts, FractionCalc.epsilon);
 	}

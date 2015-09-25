@@ -17,6 +17,7 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject levelStartMessageDlg;
 	public GameObject ammeterEffect;
 	public GameObject voltMeterEffect;
+	public bool disableLevelCompletion = false;
 	
 	
 	bool isQuietStart = false;
@@ -136,6 +137,12 @@ public class GameModeManager : MonoBehaviour {
 		}
 		else{
 			LevelManager.singleton.ReloadFromCache();
+			Tutorial.singleton.Deactivate();
+			string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
+			if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
+				Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
+			}
+			
 		}
 	}
 	
@@ -182,6 +189,8 @@ public class GameModeManager : MonoBehaviour {
 	}	
 	
 	bool IsLevelComplete(){
+		if (disableLevelCompletion) return false;
+		
 		return (numLevelTriggers != 0 && triggersTriggered == numLevelTriggers);
 	}
 	

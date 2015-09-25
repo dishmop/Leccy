@@ -103,6 +103,7 @@
      <Compile Include="Assets\Scripts\Tut1IntroAddCells.cs" />
      <Compile Include="Assets\Scripts\Tut1IntroAmpTest.cs" />
      <Compile Include="Assets\Scripts\Tut1IntroRotateCell.cs" />
+     <Compile Include="Assets\Scripts\Tut1IntroTargetVolts.cs" />
      <Compile Include="Assets\Scripts\TutTriggerBase.cs" />
      <Compile Include="Assets\Scripts\Tutorial.cs" />
      <Compile Include="Assets\Scripts\TutorialObject.cs" />

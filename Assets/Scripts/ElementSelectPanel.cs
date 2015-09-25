@@ -20,7 +20,14 @@ public class ElementSelectPanel : MonoBehaviour {
 			child.GetComponent<LeccyUIButton>().isSelected = false;
 		}
 	}
-
+	
+	public void SetSelection(string prefabID){
+		foreach (Transform child in transform){
+			bool isSelected = (child.GetComponent<LeccyUIButton>().circuitElementPrefab.GetComponent<SerializationID>().id == prefabID);
+			child.GetComponent<LeccyUIButton>().isSelected = isSelected;
+		}
+	}
+	
 	// Use this for initialization
 	public void Start () {
 		ElementFactory factory = ElementFactory.singleton;

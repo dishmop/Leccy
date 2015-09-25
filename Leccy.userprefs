@@ -1,28 +1,27 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut1IntroAddCells.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut1IntroTargetVolts.cs">
     <Files>
-      <File FileName="Assets/Tut1IntroRotateCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tutorial.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="140" Column="36" />
       <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ClickToContinue.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/TutorialObject.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TutTriggerBase.cs" Line="5" Column="28" />
+      <File FileName="Assets/Scripts/Tut1IntroAddCells.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut1IntroAmpTest.cs" Line="19" Column="18" />
+      <File FileName="Assets/Scripts/Tut1IntroRotateCell.cs" Line="25" Column="1" />
       <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/TutTriggerBase.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut1IntroAddCells.cs" Line="7" Column="2" />
-      <File FileName="Assets/Scripts/Tut1IntroAmpTest.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="38" Column="2" />
+      <File FileName="Assets/Scripts/Tut1IntroTargetVolts.cs" Line="40" Column="91" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="Tut1IntroAddCells.cs" selected="True" />
+              <Node name="Tut1IntroTargetVolts.cs" selected="True" />
             </Node>
           </Node>
         </State>

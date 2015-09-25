@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class TutTriggerBase : MonoBehaviour {
 	public UnityEvent triggerHandle;
+	
 	bool  isActive;
 	
 	protected virtual void OnEnable(){

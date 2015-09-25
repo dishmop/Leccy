@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class Simulator : MonoBehaviour {
@@ -32,6 +33,10 @@ public class Simulator : MonoBehaviour {
 
 	public bool solveVoltges = false;
 	
+	// for returning instructionation
+	public int 	lastNumLoops = -1;
+	
+	
 
 	
 	double epsilon = 0.0001;
@@ -59,6 +64,7 @@ public class Simulator : MonoBehaviour {
 	
 	// The order in which we should traverse the loops in order to calculate the voltages
 	int[]						voltageLoopOrder;
+	
 	
 	// GUI layout
 //	GUITextDisplay				guiTextDisplay;     
@@ -215,6 +221,7 @@ public class Simulator : MonoBehaviour {
 	bool FindLoops(){
 		if (!Circuit.singleton.Validate()){
 			Debug.Log("Circuit is invalid and cannot be simulated");
+			lastNumLoops = 0;
 			return false;
 		}
 		int groupId = 0;		
@@ -264,6 +271,7 @@ public class Simulator : MonoBehaviour {
 			}
 		}
 //		numGroups = groupId;
+		lastNumLoops = loops.Count();
 		
 		
 		return true;

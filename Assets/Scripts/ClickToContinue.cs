@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Events;
 
 public class ClickToContinue : TutTriggerBase {
-	public UnityEvent triggerHandler;
+	public bool clearPreviousTextBoxes = false;
 	
 	float startTime = 0;
 	float waitDuration = 0;//2;
@@ -32,7 +32,10 @@ public class ClickToContinue : TutTriggerBase {
 				visibility = 0.8f - 0.2f * Mathf.Cos(age * pulsesPerSec / 2 * Mathf.PI);
 				UI.singleton.HideMousePointer();
 				if (Input.GetMouseButtonDown(0)){
-					triggerHandler.Invoke();
+					if (clearPreviousTextBoxes){
+						Tutorial.singleton.Deactivate();
+					}
+					triggerHandle.Invoke();
 					Deactivate();
 				}
 			}

@@ -17,7 +17,7 @@ public class UI : MonoBehaviour {
 	
 	public bool	honourAnchors = false;
 
-	string 		selectedPrefabId;
+	public string 		selectedPrefabId;
 	GameObject	ghostElement;
 	GridPoint	thisPoint;
 	GridPoint	otherPoint;
