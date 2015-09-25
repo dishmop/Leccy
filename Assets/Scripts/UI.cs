@@ -77,6 +77,17 @@ public class UI : MonoBehaviour {
 		
 	// GameUpdate is called once per frame in a specific order
 	public void LateGameUpdate () {
+		if (ghostElement != null){
+			if (elementSelectPanel.GetComponent<ElementSelectPanel>().defaultSelectionButton == null){
+				hideMouse = true;
+			}
+			if ((isInUI || hideMouse) && (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord)){
+				ghostElement.SetActive(false);
+			}
+			else{
+				ghostElement.SetActive(true);
+			}
+		}
 		// A bit wired that this just cals a function on Circuit - but we need to pass in whether 
 		// anchors are being honored
 		Circuit.singleton.TidyUpConnectionBehaviours(honourAnchors);
@@ -152,12 +163,7 @@ public class UI : MonoBehaviour {
 	
 	// Used to cache mouse results
 	void Update(){
-		if ((isInUI || hideMouse) && (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord)){
-			ghostElement.SetActive(false);
-		}
-		else{
-			ghostElement.SetActive(true);
-		}
+
 		// if there is no gohst element then we should not register mous einputs
 		if (hideMouse){
 			cacheMouseHeld = false;

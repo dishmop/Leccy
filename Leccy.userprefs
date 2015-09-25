@@ -1,40 +1,31 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CamControl.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tutorial.cs">
     <Files>
-      <File FileName="Assets/Shaders/noise-simplex_v02.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls.shader" Line="1" Column="1" />
-      <File FileName="Assets/Shaders/PlasmaBalls_old.shader" Line="288" Column="1" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="65" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="573" Column="1" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="12" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="124" Column="1" />
+      <File FileName="Assets/Scripts/Tutorial.cs" Line="8" Column="55" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="CamControl.cs" selected="True" />
+              <Node name="Tutorial.cs" selected="True" />
             </Node>
-            <Node name="Shaders" expanded="True" />
           </Node>
         </State>
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>loops[1].Count</Value>
-          <Value>thisAddress</Value>
-          <Value>branchData[address.x, address.y, address.dir]</Value>
+          <Value>bounds</Value>
+          <Value>x</Value>
+          <Value>y</Value>
+          <Value>gameMode</Value>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/CamControl.cs" line="108" />
-      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/CamControl.cs" line="65" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

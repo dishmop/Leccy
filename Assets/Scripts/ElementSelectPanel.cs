@@ -12,7 +12,7 @@ public class ElementSelectPanel : MonoBehaviour {
 	
 	public AudioSource				pressSound;
 	
-	GameObject						defaultSelectionButton = null;
+	public GameObject						defaultSelectionButton = null;
 	
 	
 	public void ClearSelection(){

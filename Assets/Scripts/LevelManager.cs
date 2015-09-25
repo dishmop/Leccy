@@ -54,7 +54,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public string GetCurrentLevelName(){
-		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
+		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(2);
+	}
+	
+	public string GetRawLevelName(){
+		return LevelManager.singleton.levelsToLoad[currentLevelIndex].name;
+	
 	}
 	
 	

@@ -555,7 +555,6 @@ public class Circuit : MonoBehaviour {
 		for (int x = 0; x < elements.GetLength (0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				GridPoint thisPoint = new GridPoint(x, y);
-				bool isAnchored = false;
 				AnchorData data = GetAnchors(thisPoint);
 				
 				// We just go on where the grid is

@@ -19,7 +19,7 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject voltMeterEffect;
 	
 	
-	
+	bool isQuietStart = false;
 	float endOfGameTime = -100f;
 	float endOfGameLifeTime = 3f;
 	
@@ -83,6 +83,7 @@ public class GameModeManager : MonoBehaviour {
 	public void QuitGame(){
 		enableEditor = false;
 		quitGame = true;
+
 	}
 	
 	public void ReallyQuitGame(){
@@ -293,6 +294,7 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kTitleScreen:
 				UI.singleton.HideMousePointer();
 				ResetGameTime ();
+				
 				if (startGame){	
 					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
 					startGameDlg.SetActive(false);
@@ -318,9 +320,18 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kPlayLevelInit:
 				gameMode = GameMode.kPlayLevel;
 				sidePanel.GetComponent<PanelController>().Activate();
-				levelStartMessageDlg.SetActive(true);	
+				if (!isQuietStart){
+					levelStartMessageDlg.SetActive(true);
+				}
+				isQuietStart = false;	
 				if ((!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) && !enableEditor) LevelManager.singleton.LoadLevel();
 				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
+				
+				// See if there is some tutorial text associated with this
+				string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
+				if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
+					Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
+				}
 				
 				ResetSidePanel();
 				AudioListener.volume = 1f;
@@ -377,6 +388,7 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kQuitGame:
 				Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameFinished);	
 				LevelManager.singleton.currentLevelIndex = 1;
+				Tutorial.singleton.Deactivate();
 				if (enableEditor)
 					gameMode = GameMode.kStartEditor;
 				else
@@ -430,6 +442,12 @@ public class GameModeManager : MonoBehaviour {
 	
 	bool ShouldPlayEndOfGameEffects(){
 		return Time.fixedTime < endOfGameTime + endOfGameLifeTime;
+	}
+	
+	public void NextLevelQuiet(){
+		LevelManager.singleton.currentLevelIndex++;
+		gameMode = GameMode.kPlayLevelInit;
+		isQuietStart = true;
 	}
 	
 	

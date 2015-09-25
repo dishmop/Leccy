@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\CircuitElementResistor.cs" />
      <Compile Include="Assets\Scripts\CircuitElementVoltmeter.cs" />
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
+     <Compile Include="Assets\Scripts\ClickToContinue.cs" />
      <Compile Include="Assets\Scripts\CommentLog.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
@@ -99,6 +100,7 @@
      <Compile Include="Assets\Scripts\Tuple2.cs" />
      <Compile Include="Assets\Scripts\Tuple3.cs" />
      <Compile Include="Assets\Scripts\Tuple4.cs" />
+     <Compile Include="Assets\Scripts\Tutorial.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Scripts\UIMesh.cs" />
      <Compile Include="Assets\Scripts\alglib\src\alglibinternal.cs" />
@@ -177,6 +179,7 @@
      <Compile Include="Assets\Scripts\src\Zip\ZipInputStream.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipNameTransform.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipOutputStream.cs" />
+     <Compile Include="Assets\TutorialObject.cs" />
      <None Include="Assets\Shaders\PlasmaBalls_new.shader" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />
