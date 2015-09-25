@@ -121,8 +121,10 @@ public class LevelManager : MonoBehaviour {
 		
 		bw.Write (kLoadSaveVersion);	
 		bw.Write ((int)saveMode);				
-		Grid.singleton.Save(bw);
-		Circuit.singleton.Save(bw);
+		if (saveMode == SaveMode.kSaveAll){
+			Grid.singleton.Save(bw);
+			Circuit.singleton.Save(bw);
+		}
 		ElementFactory.singleton.Save(bw);
 	}
 
@@ -133,8 +135,10 @@ public class LevelManager : MonoBehaviour {
 		switch (version){
 			case kLoadSaveVersion:{
 				saveMode = (SaveMode)br.ReadInt32 ();
-				Grid.singleton.Load(br);
-				Circuit.singleton.Load(br);
+				if (saveMode == SaveMode.kSaveAll){
+				    Grid.singleton.Load(br);
+					Circuit.singleton.Load(br);
+				}
 				ElementFactory.singleton.Load(br);
 				
 				// Ensure the meshes and all rebuilt to reflect the new level state

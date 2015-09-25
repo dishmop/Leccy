@@ -105,26 +105,28 @@ public class Circuit : MonoBehaviour {
 		bw.Write (currentGuid);
 		bw.Write ((int)saveMode);
 	
-		List<ElementSerializationData> dataList = new List<ElementSerializationData>();
-		for (int x = 0; x < elements.GetLength(0); ++x){
-			for (int y = 0; y < elements.GetLength(1); ++y){
-				if (elements[x,y] != null){
-					dataList.Add ( new ElementSerializationData(x, y, elements[x,y].GetComponent<SerializationID>().id));					 
+		if (saveMode == SaveMode.kSaveAll){
+			List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+			for (int x = 0; x < elements.GetLength(0); ++x){
+				for (int y = 0; y < elements.GetLength(1); ++y){
+					if (elements[x,y] != null){
+						dataList.Add ( new ElementSerializationData(x, y, elements[x,y].GetComponent<SerializationID>().id));					 
+					}
 				}
-			}
-
-		}	
-
-		bw.Write (dataList.Count);
 	
-		for (int i = 0; i < dataList.Count; ++i){
-			bw.Write (dataList[i].x);
-			bw.Write (dataList[i].y);
-			bw.Write (dataList[i].id);
+			}	
+	
+			bw.Write (dataList.Count);
+		
+			for (int i = 0; i < dataList.Count; ++i){
+				bw.Write (dataList[i].x);
+				bw.Write (dataList[i].y);
+				bw.Write (dataList[i].id);
+			}
+			for (int i = 0; i < dataList.Count; ++i){
+				GetElement (new GridPoint(dataList[i].x, dataList[i].y)).Save(bw);
+			}			
 		}
-		for (int i = 0; i < dataList.Count; ++i){
-			GetElement (new GridPoint(dataList[i].x, dataList[i].y)).Save(bw);
-		}			
 		for (int x = 0; x < elements.GetLength (0); ++x){
 			for (int y = 0; y < elements.GetLength(1); ++y){
 				for (int i = 0 ; i < 5; ++i){
@@ -142,61 +144,63 @@ public class Circuit : MonoBehaviour {
 		case kLoadSaveVersion:{
 			currentGuid = br.ReadString();
 			saveMode = (SaveMode)br.ReadInt32();
-			
-			// Get the list of objects
-			List<ElementSerializationData> dataList = new List<ElementSerializationData>();
-			int numElements = br.ReadInt32();
-			
-			
-			for (int i = 0; i < numElements; ++i){
-				ElementSerializationData data = new ElementSerializationData();
-				data.x = br.ReadInt32 ();
-				data.y = br.ReadInt32 ();
-				data.id = br.ReadString ();
-				dataList.Add (data);
-			}
-			// Go through each position on the grid in the same oreder which which we wrote them
-			int index = 0;
-			ElementSerializationData nextData = numElements != 0 ? dataList[index] : null;
-			for (int x = 0; x < elements.GetLength(0); ++x){
-				for (int y = 0; y < elements.GetLength(1); ++y){
-					GridPoint thisPoint = new GridPoint(x, y);
-					// If this element position is the next one in our list, then compare it
-					if (nextData != null && nextData.x == x && nextData.y == y){
-						// If it is a different ID, then we destroy it and make an element of the correct type
-						GameObject thisObj = GetGameObject(thisPoint);
-						string thisId = thisObj != null ? thisObj.GetComponent<SerializationID>().id : "NULL";
-						if (thisObj == null || nextData.id != thisId){
-							Destroy(thisObj);
-							RemoveElement(thisPoint);
-							PlaceElement(ElementFactory.singleton.InstantiateElement(nextData.id), thisPoint);
-						}
-						
-						// Get a pointer to the CircuitElement bit of the component which is there
-						CircuitElement newElement = GetElement (thisPoint);
-						newElement.Load(br);
-						newElement.PostLoad();
-						
-						// Advance our list element
-						index++;
-						if (index < dataList.Count){
-							nextData = dataList[index];
-						}
-						else{
-							nextData = null;
-						}
-					}
-					// otherwise, this should be null
-					else if (elements[x,y] != null){
-						Destroy(elements[x,y]);
-						RemoveElement(thisPoint);
-					}
-					// otherwise it should be null and it is null 
-					else{
-						//- so do nothing
-					}
-				}
+			if (saveMode == SaveMode.kSaveAll){
+					
+				// Get the list of objects
+				List<ElementSerializationData> dataList = new List<ElementSerializationData>();
+				int numElements = br.ReadInt32();
 				
+				
+				for (int i = 0; i < numElements; ++i){
+					ElementSerializationData data = new ElementSerializationData();
+					data.x = br.ReadInt32 ();
+					data.y = br.ReadInt32 ();
+					data.id = br.ReadString ();
+					dataList.Add (data);
+				}
+				// Go through each position on the grid in the same oreder which which we wrote them
+				int index = 0;
+				ElementSerializationData nextData = numElements != 0 ? dataList[index] : null;
+				for (int x = 0; x < elements.GetLength(0); ++x){
+					for (int y = 0; y < elements.GetLength(1); ++y){
+						GridPoint thisPoint = new GridPoint(x, y);
+						// If this element position is the next one in our list, then compare it
+						if (nextData != null && nextData.x == x && nextData.y == y){
+							// If it is a different ID, then we destroy it and make an element of the correct type
+							GameObject thisObj = GetGameObject(thisPoint);
+							string thisId = thisObj != null ? thisObj.GetComponent<SerializationID>().id : "NULL";
+							if (thisObj == null || nextData.id != thisId){
+								Destroy(thisObj);
+								RemoveElement(thisPoint);
+								PlaceElement(ElementFactory.singleton.InstantiateElement(nextData.id), thisPoint);
+							}
+							
+							// Get a pointer to the CircuitElement bit of the component which is there
+							CircuitElement newElement = GetElement (thisPoint);
+							newElement.Load(br);
+							newElement.PostLoad();
+							
+							// Advance our list element
+							index++;
+							if (index < dataList.Count){
+								nextData = dataList[index];
+							}
+							else{
+								nextData = null;
+							}
+						}
+						// otherwise, this should be null
+						else if (elements[x,y] != null){
+							Destroy(elements[x,y]);
+							RemoveElement(thisPoint);
+						}
+						// otherwise it should be null and it is null 
+						else{
+							//- so do nothing
+						}
+					}
+					
+				}
 			}					
 			
 			for (int x = 0; x < elements.GetLength (0); ++x){
