@@ -2,28 +2,26 @@
 using System.Collections;
 using UnityEngine.Events;
 
-public class ClickToContinue : MonoBehaviour {
+public class ClickToContinue : TutTriggerBase {
 	public UnityEvent triggerHandler;
 	
 	float startTime = 0;
-	float waitDuration = 2;
+	float waitDuration = 0;//2;
 	float pulsesPerSec = 5f;
-	bool isActive = false;
 	
 	// Use this for initialization
-	void OnEnable () {
+	protected override void OnEnable(){
+		base.OnEnable();
 		startTime = Time.time;
 		GetComponent<Renderer>().enabled = false;
-		isActive = true;
-	
-	}
+	}	
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		float age = Time.time - (startTime + waitDuration);
 		
 		float visibility = 0;
-		if (age >= 0 && isActive){
+		if (age >= 0 && IsActive()){
 			GetComponent<Renderer>().enabled = true;
 			visibility = 0.25f - 0.2f * Mathf.Cos(age * pulsesPerSec / 2 * Mathf.PI);
 		
@@ -35,8 +33,7 @@ public class ClickToContinue : MonoBehaviour {
 				UI.singleton.HideMousePointer();
 				if (Input.GetMouseButtonDown(0)){
 					triggerHandler.Invoke();
-					isActive = false;
-					SetObjectAlpha(0.5f);
+					Deactivate();
 				}
 			}
 		}
@@ -46,15 +43,5 @@ public class ClickToContinue : MonoBehaviour {
 		
 	}
 	
-	void SetObjectAlpha(float a){
-		// Find the tutorial object
-		Transform trans = transform;
-		while (trans != null && trans.GetComponent<TutorialObject>() == null){
-			trans = trans.parent;
-		}
-		if (trans.GetComponent<TutorialObject>() != null){
-			trans.GetComponent<TutorialObject>().SetAlpha(a);
-		}
-		
-	}
+
 }

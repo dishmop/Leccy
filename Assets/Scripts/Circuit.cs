@@ -46,7 +46,7 @@ public class Circuit : MonoBehaviour {
 		kSaveAnchors
 	}
 	
-	SaveMode saveMode = SaveMode.kSaveAll;
+	public SaveMode saveMode = SaveMode.kSaveAll;
 		
 		
 	int[,] 					elementHash;

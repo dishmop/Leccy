@@ -72,7 +72,6 @@
      <Compile Include="Assets\Scripts\GameModeManager.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\GridPoint.cs" />
-     <Compile Include="Assets\Scripts\IntroAmpTest.cs" />
      <Compile Include="Assets\Scripts\LeccyUIButton.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\LevelStartMessage.cs" />
@@ -101,6 +100,10 @@
      <Compile Include="Assets\Scripts\Tuple2.cs" />
      <Compile Include="Assets\Scripts\Tuple3.cs" />
      <Compile Include="Assets\Scripts\Tuple4.cs" />
+     <Compile Include="Assets\Scripts\Tut1IntroAddCells.cs" />
+     <Compile Include="Assets\Scripts\Tut1IntroAmpTest.cs" />
+     <Compile Include="Assets\Scripts\Tut1IntroRotateCell.cs" />
+     <Compile Include="Assets\Scripts\TutTriggerBase.cs" />
      <Compile Include="Assets\Scripts\Tutorial.cs" />
      <Compile Include="Assets\Scripts\TutorialObject.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />

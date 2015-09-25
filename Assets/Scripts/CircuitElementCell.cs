@@ -69,7 +69,7 @@ public class CircuitElementCell : CircuitElement {
 		
 		// Ony return a value if we are being asked about the spoke that the voltage drop is on
 		if (dir == ModelDir2WorldDir(Circuit.kUp)){
-			return fwd ? voltage : -voltage;
+			return fwd ? -voltage : voltage;
 		}
 		return 0f;
 	}	
@@ -78,7 +78,7 @@ public class CircuitElementCell : CircuitElement {
 	public override float GetUnconnectedVoltage(int dir){
 		// Ony return a value if we are being asked about the spoke that the voltage drop is on
 		if (dir == ModelDir2WorldDir(Circuit.kUp)){
-			return voltage;
+			return -voltage;
 		}
 		return 0f;
 	}
@@ -88,7 +88,7 @@ public class CircuitElementCell : CircuitElement {
 
 	public override void RebuildMesh(){
 		base.RebuildMesh();
-		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, orient * 90);
+		GetDisplayMesh().transform.rotation = Quaternion.Euler(0, 0, (orient+2) * 90);
 
 		SetupStraightConnectionBehaviour(true);
 		SetColor (isInErrorState ? errorColor : normalColor);		
@@ -107,7 +107,7 @@ public class CircuitElementCell : CircuitElement {
 	
 	void CreateDisplayMesh(){
 		Destroy(GetDisplayMesh ());
-		displayMesh = Instantiate(cellPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, orient * 90)) as GameObject;
+		displayMesh = Instantiate(cellPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, (orient+2) * 90)) as GameObject;
 		displayMesh.name = displayMeshName;
 		displayMesh.transform.parent = transform;
 		

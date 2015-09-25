@@ -131,8 +131,12 @@ public class GameModeManager : MonoBehaviour {
 	}	
 	
 	public void LoadCurrentLevel(){
-		LevelManager.singleton.LoadLevel();
-		ResetSidePanel();
+		if (enableEditor){
+			LevelManager.singleton.LoadLevel();
+		}
+		else{
+			LevelManager.singleton.ReloadFromCache();
+		}
 	}
 	
 
@@ -333,7 +337,7 @@ public class GameModeManager : MonoBehaviour {
 					Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
 				}
 				
-				ResetSidePanel();
+				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing) ResetSidePanel();
 				AudioListener.volume = 1f;
 			
 				break;	

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TutorialObject : MonoBehaviour {
 	float startTime;
-	float delay = 1;
+	public float delay = 1;
 	bool visible = true;
 
 	void OnEnable(){

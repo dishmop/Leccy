@@ -10,11 +10,16 @@ public class LevelManager : MonoBehaviour {
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 1;
+	byte[]				cachedLevel = new byte[100 * 1024];	// 100K
 	
 	 public enum SaveMode{
 		kSaveAll,
-		kSaveFactory
+		kSaveFactory,
+		kSaveNothing,
+		kSaveAnchors,
+		kSaveAnchorsAndFactory
 	};
+	
 	public SaveMode saveMode = SaveMode.kSaveAll;
 	
 	const int		kLoadSaveVersion = 2;	
@@ -70,8 +75,19 @@ public class LevelManager : MonoBehaviour {
 	
 	
 	public void PreviousLevel(){
-		currentLevelIndex--;
-		LoadLevel();
+		
+		saveMode = SaveMode.kSaveNothing;
+		while (saveMode != SaveMode.kSaveAll && currentLevelIndex > 0){
+			currentLevelIndex--;
+			LoadLevel();
+		}
+		
+		// See if there is some tutorial text associated with this
+		Tutorial.singleton.Deactivate();
+		string textBoxName = GetRawLevelName() + "_TextBox";
+		if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
+			Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
+		}
 		
 	}
 	
@@ -93,6 +109,9 @@ public class LevelManager : MonoBehaviour {
 			
 			// After loading a level, call an update to ensure we don't get a frame rendered befroe the simulation has calculated
 			GameModeManager.singleton.BulkGameUpdate();
+			
+			// We have succesfully loaded in a new level - so save this one to the cache
+			CacheLevel();
 		}	
 		else{
 			Debug.Log ("Failed to load asset");
@@ -100,6 +119,28 @@ public class LevelManager : MonoBehaviour {
 		}
 		return true;
 	}
+	
+	// Stores the current level to memory 
+	public void CacheLevel(){
+		SaveMode oldMode = saveMode;
+		saveMode = SaveMode.kSaveAll;
+		Stream s = new MemoryStream(cachedLevel);
+		
+		SerializeLevel(s);
+		saveMode = oldMode;
+		
+	}	
+	
+	
+	// Does the actual serialising
+	public void ReloadFromCache(){
+		Debug.Log ("Loading asset");
+		Stream s = new MemoryStream(cachedLevel);
+		DeserializeLevel(s);
+		
+		// After loading a level, call an update to ensure we don't get a frame rendered befroe the simulation has calculated
+		GameModeManager.singleton.BulkGameUpdate();
+	}		
 	
 	// Does the actual serialising
 	public void SaveLevel(string filename){
@@ -121,11 +162,19 @@ public class LevelManager : MonoBehaviour {
 		
 		bw.Write (kLoadSaveVersion);	
 		bw.Write ((int)saveMode);				
-		if (saveMode == SaveMode.kSaveAll){
+		if (saveMode == SaveMode.kSaveAll || saveMode == SaveMode.kSaveAnchors || saveMode == SaveMode.kSaveAnchorsAndFactory){
 			Grid.singleton.Save(bw);
+			if (saveMode == SaveMode.kSaveAnchors || saveMode == SaveMode.kSaveAnchorsAndFactory){
+				Circuit.singleton.saveMode = Circuit.SaveMode.kSaveAnchors;
+			}
+			else{
+				Circuit.singleton.saveMode = Circuit.SaveMode.kSaveAll;
+			}
 			Circuit.singleton.Save(bw);
 		}
-		ElementFactory.singleton.Save(bw);
+		if (saveMode == SaveMode.kSaveAll || saveMode == SaveMode.kSaveFactory || saveMode == SaveMode.kSaveAnchorsAndFactory){
+			ElementFactory.singleton.Save(bw);
+		}
 	}
 
 	public void DeserializeLevel(Stream stream){
@@ -135,11 +184,13 @@ public class LevelManager : MonoBehaviour {
 		switch (version){
 			case kLoadSaveVersion:{
 				saveMode = (SaveMode)br.ReadInt32 ();
-				if (saveMode == SaveMode.kSaveAll){
+				if(saveMode == SaveMode.kSaveAll || saveMode == SaveMode.kSaveAnchors || saveMode == SaveMode.kSaveAnchorsAndFactory){
 				    Grid.singleton.Load(br);
 					Circuit.singleton.Load(br);
 				}
-				ElementFactory.singleton.Load(br);
+				if (saveMode == SaveMode.kSaveAll || saveMode == SaveMode.kSaveFactory || saveMode == SaveMode.kSaveAnchorsAndFactory){
+					ElementFactory.singleton.Load(br);
+				}
 				
 				// Ensure the meshes and all rebuilt to reflect the new level state
 				Camera.main.GetComponent<CamControl>().CentreCamera();
