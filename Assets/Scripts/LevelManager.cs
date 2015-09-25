@@ -9,9 +9,15 @@ public class LevelManager : MonoBehaviour {
 	
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
-	public int			currentLevelIndex = 0;
+	public int			currentLevelIndex = 1;
 	
-	const int		kLoadSaveVersion = 1;	
+	 public enum SaveMode{
+		kSaveAll,
+		kSaveFactory
+	};
+	public SaveMode saveMode = SaveMode.kSaveAll;
+	
+	const int		kLoadSaveVersion = 2;	
 		
 	// Manage which level to load and then pass the file name to the loading function that does the work
 	public void LoadLevel(){
@@ -113,7 +119,8 @@ public class LevelManager : MonoBehaviour {
 	public void SerializeLevel(Stream stream){
 		BinaryWriter bw = new BinaryWriter(stream);
 		
-		bw.Write (kLoadSaveVersion);					
+		bw.Write (kLoadSaveVersion);	
+		bw.Write ((int)saveMode);				
 		Grid.singleton.Save(bw);
 		Circuit.singleton.Save(bw);
 		ElementFactory.singleton.Save(bw);
@@ -124,19 +131,30 @@ public class LevelManager : MonoBehaviour {
 		
 		int version = br.ReadInt32();
 		switch (version){
-		case kLoadSaveVersion:{
-			Grid.singleton.Load(br);
-			Circuit.singleton.Load(br);
-			ElementFactory.singleton.Load(br);
-			
-			// Ensure the meshes and all rebuilt to reflect the new level state
-			Camera.main.GetComponent<CamControl>().CentreCamera();
-			UI.singleton.OnLoadLevel();
-			break;
+			case kLoadSaveVersion:{
+				saveMode = (SaveMode)br.ReadInt32 ();
+				Grid.singleton.Load(br);
+				Circuit.singleton.Load(br);
+				ElementFactory.singleton.Load(br);
+				
+				// Ensure the meshes and all rebuilt to reflect the new level state
+				Camera.main.GetComponent<CamControl>().CentreCamera();
+				UI.singleton.OnLoadLevel();
+				break;
+			}		
+			case 1:{
+				Grid.singleton.Load(br);
+				Circuit.singleton.Load(br);
+				ElementFactory.singleton.Load(br);
+				
+				// Ensure the meshes and all rebuilt to reflect the new level state
+				Camera.main.GetComponent<CamControl>().CentreCamera();
+				UI.singleton.OnLoadLevel();
+				break;
+			}
 		}
 	}
 		
-	}
 	
 	
 	public bool IsOnLastLevel(){

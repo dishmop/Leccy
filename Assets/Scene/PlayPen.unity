@@ -9327,7 +9327,7 @@ Prefab:
       objectReference: {fileID: 4900000, guid: 37fa132cbc40d4020b0c05ea3b67048d, type: 3}
     - target: {fileID: 11400000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
       propertyPath: currentLevelIndex
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 93f832443d2b14926a6bbd50095a4b7a, type: 2}
       propertyPath: levelsToLoad.Array.data[4]
