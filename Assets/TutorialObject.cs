@@ -20,6 +20,10 @@ public class TutorialObject : MonoBehaviour {
 		}
 	}
 	
+	public void SetAlpha(float a){
+		SetChildrenAlpha(transform, a);
+	}
+	
 	void SetChildrenVisible(Transform trans, bool visible){
 		foreach (Transform child in trans){
 			Renderer renderer = child.GetComponent<Renderer>();
@@ -27,6 +31,25 @@ public class TutorialObject : MonoBehaviour {
 				renderer.enabled = visible;
 			}
 			SetChildrenVisible(child, visible);
+			
+		}
+	}
+	
+	void SetChildrenAlpha(Transform trans, float a){
+		foreach (Transform child in trans){
+			TextMesh textMesh = child.GetComponent<TextMesh>();
+			if (textMesh != null){
+				Color col = textMesh.color;
+				col.a = a;
+				textMesh.color = col;
+			}
+			SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+			if (spriteRenderer != null){
+				Color col = spriteRenderer.color;
+				col.a = a;
+				spriteRenderer.color = col;
+			}
+			SetChildrenAlpha(child, a);
 			
 		}
 	}

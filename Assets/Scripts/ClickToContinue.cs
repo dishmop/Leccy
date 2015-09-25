@@ -28,20 +28,33 @@ public class ClickToContinue : MonoBehaviour {
 			visibility = 0.25f - 0.2f * Mathf.Cos(age * pulsesPerSec / 2 * Mathf.PI);
 		
 			Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			mouseWorldPos.z = 0;
 			Bounds bounds = GetComponent<Renderer>().bounds;
+			mouseWorldPos.z = bounds.min.z;
 			if (bounds.Contains(mouseWorldPos)){
 				visibility = 0.8f - 0.2f * Mathf.Cos(age * pulsesPerSec / 2 * Mathf.PI);
 				UI.singleton.HideMousePointer();
 				if (Input.GetMouseButtonDown(0)){
 					triggerHandler.Invoke();
 					isActive = false;
+					SetObjectAlpha(0.5f);
 				}
 			}
 		}
 		Color col = GetComponent<TextMesh>().color;
 		col.a = visibility;
 		GetComponent<TextMesh>().color = col;
+		
+	}
+	
+	void SetObjectAlpha(float a){
+		// Find the tutorial object
+		Transform trans = transform;
+		while (trans != null && trans.GetComponent<TutorialObject>() == null){
+			trans = trans.parent;
+		}
+		if (trans.GetComponent<TutorialObject>() != null){
+			trans.GetComponent<TutorialObject>().SetAlpha(a);
+		}
 		
 	}
 }
