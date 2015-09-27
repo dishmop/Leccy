@@ -9,6 +9,8 @@ public class CamControl : MonoBehaviour {
 	public float 			zoomSpeed;
 	public bool				ignoreSide = false;
 	Vector3					prevMousePos = new Vector3();
+
+	float lerpProp = 0.05f;
 	
 	// Use this for initialization
 	void Start () {
@@ -56,12 +58,18 @@ public class CamControl : MonoBehaviour {
 		
 		}
 		prevMousePos = mousePos;
+		CentreCamera();
 			
 		
 	}
 	
 	public void CentreCamera(){
-		Rect bounds = Circuit.singleton.bounds;
+		Bounds allBounds = Tutorial.singleton.bounds;
+		allBounds.Encapsulate(Circuit.singleton.bounds.min);
+		allBounds.Encapsulate(Circuit.singleton.bounds.max);
+		
+		Rect bounds = new Rect(allBounds.min,allBounds.max - allBounds.min);
+		
 		if (bounds.width >= 1 || bounds.height >= 1){
 		
 			// What proportion of the screen is taken up with the side panel
@@ -87,8 +95,10 @@ public class CamControl : MonoBehaviour {
 				topY = topPanel.GetComponent<RectTransform>().anchorMin.y;
 			}
 			Rect camRect = GetComponent<Camera>().rect;
+			
 			camRect.x = sideX;
-			camRect.height = topY;		
+			camRect.height = topY;	
+				
 			GetComponent<Camera>().rect = camRect;			
 			
 			
@@ -98,15 +108,17 @@ public class CamControl : MonoBehaviour {
 			// Get range and work out orthographic size			
 			float border = 1;
 			float vRange = Mathf.Max (bounds.height + 2 * border, (bounds.width + 2 * border) / adjustedAspect);
-			transform.GetComponent<Camera>().orthographicSize = vRange * 0.5f;
+			float currentSize = transform.GetComponent<Camera>().orthographicSize;
+			float desSize = vRange * 0.5f;
+			transform.GetComponent<Camera>().orthographicSize = Mathf.Lerp(currentSize, desSize, lerpProp);
 			
 			// calc how much extra of the scene to add on to the left to ensure we are looking in the middle
-			float extraX = (bounds.width + 2 * border) *(1f/propHScreen - 1);
-			float extraY = (bounds.height + 2 * border) *(1f/propVScreen - 1);
+			float extraX = (bounds.width + 2 * border) * (1f/propHScreen - 1);
+			float extraY = (bounds.height + 2 * border) * (1f/propVScreen - 1);
 			
 			Vector2 centre = new Vector2(((bounds.xMin - extraX) + bounds.xMax) / 2f, (bounds.yMin + extraY + bounds.yMax) / 2f);
 			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
-			transform.position = newCamPos;
+			transform.position = Vector3.Lerp(transform.position , newCamPos, lerpProp);
 			
 		}
 	}

@@ -1067,7 +1067,7 @@ GameObject:
   - 114: {fileID: 283086096}
   - 114: {fileID: 283086097}
   m_Layer: 0
-  m_Name: 1_Intro_RotateCell_TextBox
+  m_Name: 01_Intro_RotateCell_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1460,6 +1460,60 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!1 &333711066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 333711067}
+  - 212: {fileID: 333711068}
+  m_Layer: 0
+  m_Name: 01_Frame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &333711067
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 333711066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.05000019, y: 10.0799999, z: 0}
+  m_LocalScale: {x: 1.89216363, y: 1.14865685, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1094061290}
+  m_RootOrder: 8
+--- !u!212 &333711068
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 333711066}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 414567ce1db6b4bfd8c53ee7b7e13b78, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &336518753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1471,7 +1525,7 @@ GameObject:
   - 114: {fileID: 336518755}
   - 114: {fileID: 336518756}
   m_Layer: 0
-  m_Name: 1_Intro_TargetVolts_TextBox
+  m_Name: 01_Intro_TargetVolts_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2614,7 +2668,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 143816, guid: 0ccb6ca767c834525a14b646e2109f2c, type: 2}
       propertyPath: m_Name
-      value: 1_Intro_TextBox
+      value: 01_Intro_TextBox
       objectReference: {fileID: 0}
     - target: {fileID: 11480022, guid: 0ccb6ca767c834525a14b646e2109f2c, type: 2}
       propertyPath: triggerHandle.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -3152,7 +3206,7 @@ GameObject:
   - 4: {fileID: 693308727}
   - 114: {fileID: 693308728}
   m_Layer: 0
-  m_Name: 1_Intro_Cell_VM_TextBox
+  m_Name: 01_Intro_Cell_VM_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3826,7 +3880,7 @@ GameObject:
   - 114: {fileID: 853981817}
   - 114: {fileID: 853981816}
   m_Layer: 0
-  m_Name: 1_Intro_AddCells_TextBox
+  m_Name: 01_Intro_AddCells_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5263,7 +5317,7 @@ GameObject:
   - 114: {fileID: 1084253739}
   - 114: {fileID: 1084253738}
   m_Layer: 0
-  m_Name: 1_Intro_ReadyToDraw_TextBox
+  m_Name: 01_Intro_ReadyToDraw_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5358,6 +5412,7 @@ Transform:
   - {fileID: 853981815}
   - {fileID: 283086095}
   - {fileID: 336518754}
+  - {fileID: 333711067}
   m_Father: {fileID: 0}
   m_RootOrder: 5
 --- !u!114 &1094061291
@@ -5371,6 +5426,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce3d13cb1545499690e25471b097840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &1101068960
 GameObject:
   m_ObjectHideFlags: 0
@@ -9491,7 +9549,7 @@ GameObject:
   - 4: {fileID: 1853964624}
   - 114: {fileID: 1853964625}
   m_Layer: 0
-  m_Name: 1_Intro_With_Brown_TextBox
+  m_Name: 01_Intro_With_Brown_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9776,7 +9834,7 @@ GameObject:
   - 4: {fileID: 2005117602}
   - 114: {fileID: 2005117603}
   m_Layer: 0
-  m_Name: 1_Intro_Cell_TextBox
+  m_Name: 01_Intro_Cell_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

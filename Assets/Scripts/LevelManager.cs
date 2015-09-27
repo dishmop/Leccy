@@ -84,10 +84,7 @@ public class LevelManager : MonoBehaviour {
 		
 		// See if there is some tutorial text associated with this
 		Tutorial.singleton.Deactivate();
-		string textBoxName = GetRawLevelName() + "_TextBox";
-		if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
-			Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
-		}
+		GameModeManager.singleton.ActivateTutorialText();
 		
 	}
 	

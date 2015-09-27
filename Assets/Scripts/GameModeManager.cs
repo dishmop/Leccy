@@ -138,11 +138,7 @@ public class GameModeManager : MonoBehaviour {
 		else{
 			LevelManager.singleton.ReloadFromCache();
 			Tutorial.singleton.Deactivate();
-			string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
-			if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
-				Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
-			}
-			
+			ActivateTutorialText();			
 		}
 	}
 	
@@ -342,13 +338,9 @@ public class GameModeManager : MonoBehaviour {
 				
 				
 				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing) ResetSidePanel();
-				// See if there is some tutorial text associated with this
-				string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
-				if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
-					Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
-				}
+				ActivateTutorialText();
 				
-			AudioListener.volume = 1f;
+				AudioListener.volume = 1f;
 			
 				break;	
 			case GameMode.kPlayLevel:
@@ -448,6 +440,21 @@ public class GameModeManager : MonoBehaviour {
 		if (lastGameMode != gameMode){
 		}
 		lastGameMode = gameMode;	
+	}
+	
+	public void ActivateTutorialText(){
+		// See if there is some tutorial text associated with this
+		string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
+		if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
+			Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
+		}
+		//  construct frame string
+		string frameName = textBoxName.Substring(0, 3) + "Frame";
+		if (Tutorial.singleton.tutorialObjects.ContainsKey(frameName)){
+			Tutorial.singleton.tutorialObjects[frameName].SetActive(true);	
+		}
+		
+		
 	}
 	
 	public void SetUIState(int state){
