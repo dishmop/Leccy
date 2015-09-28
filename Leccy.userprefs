@@ -1,25 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitResistor.cs">
-    <Files>
-      <File FileName="Assets/Scripts/Tutorial.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut1IntroTargetVolts.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitExplode.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitFlow.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/TutTriggerBase.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitResistor.cs" Line="9" Column="3" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
-        <State />
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="Scripts" expanded="True">
+              <Node name="UI.cs" selected="True" />
+            </Node>
+            <Node name="Shaders" expanded="True" />
+          </Node>
+        </State>
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
@@ -32,13 +23,19 @@
           <Value>isSelected</Value>
           <Value>child.gameObject.name</Value>
           <Value>renderer.bounds</Value>
+          <Value>child.gameObject.name</Value>
+          <Value>Tutorial.singleton.tutorialObjects</Value>
+          <Value>"02_Circuit_Flow_TextBox"</Value>
+          <Value>textBoxName</Value>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/Tut2CircuitFlow.cs" line="7" />
+      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/Simulator.cs" line="445" />
+      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/Simulator.cs" line="539" />
+      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/Simulator.cs" line="401" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

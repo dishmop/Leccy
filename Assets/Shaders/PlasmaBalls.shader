@@ -265,9 +265,10 @@
 
 			float voltage = 0;
 			
+			// We add a bit because ammeters take a bit out
 			int intValX = floor(i.uv.x * 5);
 			if (intValX == 0){
-			 	speedParam = _Speed0;
+			 	speedParam = _Speed0; 
 			 	seperationParam = _Seperation0;
 			 	voltage = _Voltage0;
 			}
@@ -372,7 +373,8 @@
 			// Voltage 0 ->1
 			float epsilon = 0.0001;
 			float4 retCol;
-			if (voltage < 1-epsilon){
+			voltage = voltage + epsilon;
+			if (voltage < 1){
 				float xOffset = 0.1;
 				
 				val0 = -1.6 + 0.9 * (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
@@ -384,7 +386,7 @@
 				retCol =  col1+ col0;
 			}
 			// Voltage 1 -> 2
-			else if (voltage < 2-epsilon){
+			else if (voltage < 2){
 			 
 				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x , lastScaledUV.y, power))/ distDelta;
 				val3 = -0.5 + 0.5* (TriangleFunc(scaledUV.x) + (TriangleFuncIntg(scaledUV.y) - TriangleFuncIntg(lastScaledUV.y))/ distDelta);
@@ -400,7 +402,7 @@
 				
 				retCol =  col0 + col1 + col2;
 			}
-			else if (voltage < 3-epsilon){
+			else if (voltage < 3){
 			
 				float xOffset = lerp(0.15, 0.2, frac(voltage));		
 				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset , lastScaledUV.y, power))/ distDelta;
@@ -415,7 +417,7 @@
 				
 				retCol =  col0 + col1 + col2;
 			}
-			else if (voltage < 4-epsilon){
+			else if (voltage < 4){
 				float xOffset1 = 0.2;		
 				float xOffset2 = 0.1;							
 				val0 = -sub0 + mul0 * 1.4 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset1 , lastScaledUV.y, power))/ distDelta;
@@ -434,7 +436,7 @@
 				
 				retCol =  col0 + col1 + col2 + col3 + col4;
 			}
-			else if (voltage < 5-epsilon){
+			else if (voltage < 5){
 				float xOffset0 = 0.1;		
 				float xOffset1 = 0.2;		
 				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , lastScaledUV.y, power))/ distDelta;
@@ -450,7 +452,7 @@
 				retCol =  col0 + col1 + col2 + col3;
 				
 			}
-			else {//if (voltage < 6-epsilon){
+			else {//if (voltage < 6){
 				float xOffset0 = 0.1;		
 				float xOffset1 = 0.2;		
 				val0 = -sub0 + mul0 * (TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , scaledUV.y, power) - TriangleFuncNXYIntgY(scaledUV.x + xOffset0 , lastScaledUV.y, power))/ distDelta;

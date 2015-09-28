@@ -61,7 +61,6 @@ public class Tutorial : MonoBehaviour {
 			if (child.gameObject.activeSelf){
 				Renderer renderer = child.GetComponent<Renderer>();
 				if (renderer != null){
-					Vector3 width = renderer.bounds.extents;
 					bounds.Encapsulate(renderer.bounds);
 				}
 				AddToBounds (child);

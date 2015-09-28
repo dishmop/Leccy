@@ -57,6 +57,7 @@ public class CircuitElement : MonoBehaviour {
 	const int		kLoadSaveVersion = 2;	
 
 
+
 	public void SetAlpha(float a){
 		dirtyAlpha = true;
 		alpha = a;
@@ -391,7 +392,7 @@ public class CircuitElement : MonoBehaviour {
 //	}
 	
 	public void Rotate(int stepsCW){
-		orient = (4 + orient + stepsCW) % 4;
+		orient = (4 + orient - stepsCW) % 4;
 		RebuildMesh();
 		
 	}
@@ -465,7 +466,7 @@ public class CircuitElement : MonoBehaviour {
 	}
 	
 
-		protected void VisualiseTemperature(){
+	protected void VisualiseTemperature(){
 		foreach (Transform child in transform.GetChild(0)){
 			MeshRenderer mesh = child.gameObject.transform.GetComponent<MeshRenderer>();
 			if (mesh != null) mesh.materials[0].SetFloat ("_Temperature", temperature / maxTemp );

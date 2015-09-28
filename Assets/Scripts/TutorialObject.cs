@@ -2,14 +2,20 @@
 using System.Collections;
 
 public class TutorialObject : MonoBehaviour {
-	float startTime;
 	public float delay = 1;
+	public string overrideDefaultSelection = "";
+	
+	float startTime;
 	bool visible = true;
 
 	void OnEnable(){
 		startTime = Time.time;
 		SetChildrenVisible(transform, false);
 		visible = false;
+		if (overrideDefaultSelection != ""){
+			UI.singleton.elementSelectPanel.GetComponent<ElementSelectPanel>().SetSelection(overrideDefaultSelection);
+			
+		}
 	}
 	
 	void Update(){

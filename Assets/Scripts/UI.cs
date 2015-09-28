@@ -39,7 +39,7 @@ public class UI : MonoBehaviour {
 	bool		isInUI;
 	
 	// Temporary debug thing
-//	GUITextDisplay	guiTextDisplay;
+	GUITextDisplay	guiTextDisplay;
 	
 	
 	public void SetSelectedPrefabId(string id){
@@ -107,7 +107,7 @@ public class UI : MonoBehaviour {
 	
 	
 	void Start(){
-//			guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
+			guiTextDisplay = new GUITextDisplay(400f, 200f, 500f, 20f);
 	}
 	
 	void OnDestroy () {
@@ -678,18 +678,18 @@ public class UI : MonoBehaviour {
 	
 	// Temprary debug stuff
 	void OnGUI(){
-//		guiTextDisplay.GUIResetTextLayout();
-//		if (thisPoint != null){
-//			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);
-//			float selVolt = 0f;
-//			float selAmp = 0f;
-//			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
-//			if (thisElement){
-//				selVolt = thisElement.GetMaxVoltage();
-//				selAmp = thisElement.GetMaxCurrent();
-//					
-//			}
-//			guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
-//		}
+		guiTextDisplay.GUIResetTextLayout();
+		if (thisPoint != null){
+			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);
+			float selVolt = 0f;
+			float selAmp = 0f;
+			CircuitElement thisElement = Circuit.singleton.GetElement(thisPoint);
+			if (thisElement){
+				selVolt = thisElement.GetMaxVoltage();
+				selAmp = thisElement.GetMaxCurrent();
+					
+			}
+			guiTextDisplay.GUIPrintText( "Selection max stats: " + selVolt.ToString("0.000") + "V, " + selAmp.ToString("0.000") + "A", Color.yellow);
+		}
 	}
 }

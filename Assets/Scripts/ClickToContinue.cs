@@ -14,6 +14,7 @@ public class ClickToContinue : TutTriggerBase {
 		base.OnEnable();
 		startTime = Time.time;
 		GetComponent<Renderer>().enabled = false;
+		GetComponent<TextMesh>().text = "Click here to continue...";
 	}	
 	
 	// Update is called once per frame

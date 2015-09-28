@@ -133,7 +133,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	public override float GetResistance(int dir){
 		if (!IsConnected(dir)) Debug.LogError("Being asked about a nonexistanct connection");
-		return 0.000001f;
+		return 0.00001f;
 	}	
 	
 	void CreateDisplayMesh(){

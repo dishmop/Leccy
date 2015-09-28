@@ -65,7 +65,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public string GetCurrentLevelName(){
-		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(2);
+		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
 	}
 	
 	public string GetRawLevelName(){
@@ -119,9 +119,16 @@ public class LevelManager : MonoBehaviour {
 	
 	// Stores the current level to memory 
 	public void CacheLevel(){
+		CacheLevel(cachedLevel);
+		
+		
+	}	
+	
+	// Stores the current level to memory 
+	public void CacheLevel(byte[] storage){
 		SaveMode oldMode = saveMode;
 		saveMode = SaveMode.kSaveAll;
-		Stream s = new MemoryStream(cachedLevel);
+		Stream s = new MemoryStream(storage);
 		
 		SerializeLevel(s);
 		saveMode = oldMode;
@@ -131,8 +138,13 @@ public class LevelManager : MonoBehaviour {
 	
 	// Does the actual serialising
 	public void ReloadFromCache(){
-		Debug.Log ("Loading asset");
-		Stream s = new MemoryStream(cachedLevel);
+		ReloadFromCache(cachedLevel);
+	}	
+	
+	// Does the actual serialising
+	public void ReloadFromCache(byte[] storage){
+		Debug.Log ("Loading from cache");
+		Stream s = new MemoryStream(storage);
 		DeserializeLevel(s);
 		
 		// After loading a level, call an update to ensure we don't get a frame rendered befroe the simulation has calculated
