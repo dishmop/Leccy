@@ -152,6 +152,7 @@ public class CircuitElementCell : CircuitElement {
 		if (isInEmergency && currentFlow < maxCurrent){
 			Debug.Log ("Resetting emergency state");
 			isInEmergency = false;
+			Circuit.singleton.ForceDirty();
 		}
 		if (GetAbsCurrentFlow() > maxCurrent && temperature < maxTemp){
 			temperature += 1f;

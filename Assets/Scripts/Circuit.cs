@@ -95,6 +95,10 @@ public class Circuit : MonoBehaviour {
 		return isDirty;
 	}
 	
+	public void ForceDirty(){
+		isDirty = true;
+	}
+	
 	
 	public void ResetDirty(){
 		isDirty = false;
@@ -533,6 +537,7 @@ public class Circuit : MonoBehaviour {
 			as GameObject;
 		newElement.transform.parent = transform;
 		newElement.GetComponent<ParticleEmitter>().Emit();
+		Tutorial.singleton.OnExplosion();
 		
 	}
 	

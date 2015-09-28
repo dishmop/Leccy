@@ -7,6 +7,9 @@ public class Tutorial : MonoBehaviour {
 	public static Tutorial singleton = null;
 	public Dictionary<string, GameObject> tutorialObjects = new Dictionary<string, GameObject>();
 	public Bounds bounds = new Bounds();
+	public bool hasBeenExplosion = false;
+	
+	bool hasBeenExplosionInt;
 	
 	public void Deactivate(){
 		foreach (GameObject go in tutorialObjects.Values){
@@ -19,6 +22,11 @@ public class Tutorial : MonoBehaviour {
 			if (go == exception) continue;
 			go.SetActive(false);
 		}
+	}
+	
+	public void OnExplosion(){
+		hasBeenExplosionInt = true;
+	
 	}
 	
 	
@@ -42,6 +50,9 @@ public class Tutorial : MonoBehaviour {
 	void FixedUpdate(){	
 		bounds = new Bounds();
 		AddToBounds(transform);
+		
+		hasBeenExplosion = hasBeenExplosionInt;
+		hasBeenExplosionInt = false;
 		
 	}
 	

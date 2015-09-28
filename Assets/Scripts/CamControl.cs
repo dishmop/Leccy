@@ -30,34 +30,35 @@ public class CamControl : MonoBehaviour {
 		Vector3 mousePos = Input.mousePosition;
 		mousePos.z = transform.position.z - Camera.main.transform.position.z;
 		
-		
-		if (wheelVal != 0){
-			mousePos.z = transform.position.z - Camera.main.transform.position.z;
-			Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( mousePos);
-
-			camera.orthographicSize *= Mathf.Pow (zoomSpeed, -wheelVal);
-		
-			Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
+		if (GameModeManager.singleton.enableEditor){
+			if (wheelVal != 0){
+				mousePos.z = transform.position.z - Camera.main.transform.position.z;
+				Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( mousePos);
+	
+				camera.orthographicSize *= Mathf.Pow (zoomSpeed, -wheelVal);
 			
-			// Offset the camera so that the mouse is pointing at the same world position
-			Vector3 camPos = gameObject.transform.position;
-			camPos += (mouseOldWorldPos - mouseNewWorldPos);
-			gameObject.transform.position = camPos;
+				Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
+				
+				// Offset the camera so that the mouse is pointing at the same world position
+				Vector3 camPos = gameObject.transform.position;
+				camPos += (mouseOldWorldPos - mouseNewWorldPos);
+				gameObject.transform.position = camPos;
+			}
+			
+			
+			if (Input.GetMouseButton(1) || (Input.GetMouseButton(0) && Input.GetKey (KeyCode.LeftControl))){
+				Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( prevMousePos);
+				Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
+				
+				// Offset the camera so that the mouse is pointing at the same world position
+				Vector3 camPos = gameObject.transform.position;
+				camPos += (mouseOldWorldPos - mouseNewWorldPos);
+				gameObject.transform.position = camPos;
+				
+			
+			}
+			prevMousePos = mousePos;
 		}
-		
-		
-		if (Input.GetMouseButton(1) || (Input.GetMouseButton(0) && Input.GetKey (KeyCode.LeftControl))){
-			Vector3 mouseOldWorldPos = camera.ScreenToWorldPoint( prevMousePos);
-			Vector3 mouseNewWorldPos = camera.ScreenToWorldPoint( mousePos);
-			
-			// Offset the camera so that the mouse is pointing at the same world position
-			Vector3 camPos = gameObject.transform.position;
-			camPos += (mouseOldWorldPos - mouseNewWorldPos);
-			gameObject.transform.position = camPos;
-			
-		
-		}
-		prevMousePos = mousePos;
 		CentreCamera();
 			
 		

@@ -369,7 +369,20 @@ public class CircuitElementWire : CircuitElement {
 		}
 		// If we reach our maximum temperature then we should remove the component
 		if (temperature > maxTemp){
-			DestorySelf();
+			Circuit.AnchorData data = Circuit.singleton.GetAnchors(GetGridPoint());
+			
+			// Only destroy if not anchored on the connections
+			bool hasAnchor =false;
+			for (int i = 0; i < 4; ++i){
+				if (isConnected[i]){
+					if (data.isAnchored[i]){
+						hasAnchor = true;
+					}
+				}
+			}
+			if (!hasAnchor){
+				DestorySelf();
+			}
 		}
 		
 		

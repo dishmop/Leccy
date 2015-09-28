@@ -1,16 +1,25 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CamControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitResistor.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="445" Column="31" />
-      <File FileName="Assets/Scripts/CamControl.cs" Line="121" Column="80" />
       <File FileName="Assets/Scripts/Tutorial.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CamControl.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Tut1IntroTargetVolts.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelManager.cs" Line="86" Column="11" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementCell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Simulator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitExplode.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitFlow.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TutTriggerBase.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementWire.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitResistor.cs" Line="9" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State selected="True" />
+        <State />
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
@@ -28,7 +37,9 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/dac70/ownCloud/CUED_IWTSE/Game prototyping/ProtoRelease/Leccy/Assets/Scripts/Tut2CircuitFlow.cs" line="7" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
