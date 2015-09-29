@@ -684,7 +684,7 @@ public class UI : MonoBehaviour {
 	
 	
 	// Temprary debug stuff
-	void OnGUI(){
+	void OnGUI_Not(){
 		guiTextDisplay.GUIResetTextLayout();
 		if (thisPoint != null){
 			guiTextDisplay.GUIPrintText( "Selected Grid Position: " + thisPoint.x + ", " + thisPoint.y, Color.yellow);

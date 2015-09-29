@@ -35,8 +35,10 @@ public class Tut2CircuitSingleLoopFlow : TutTriggerBase {
 				
 		StringBuilder sb = new StringBuilder();
 		
-		sb.Append("The speed of the blobs indicates the size of the current. If the current flows\n");
-		sb.Append("around a single loop, it will be the same everwhere; " + ampText + " in our case.\n");
+		sb.Append("The speed of the blobs indicates the size\n");
+		sb.Append("of the current. If the current flows around\n");
+		sb.Append("a single loop, it will be the same everwhere; \n");
+		sb.Append(ampText + " in our case.\n");
 
 		transform.FindChild("MainText").GetComponent<TextMesh>().text = sb.ToString();
 	}

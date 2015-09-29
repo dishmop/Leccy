@@ -108,6 +108,8 @@
      <Compile Include="Assets\Scripts\Tut2CircuitFlowMeasure.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewCurrent.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentParallelFirst.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentParallelFirstMeasure.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentSeriesFirst.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentSeriesFirstMeasure.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentSeriesFirstMeasureAchieved.cs" />

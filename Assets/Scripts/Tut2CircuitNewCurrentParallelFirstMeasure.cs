@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Text;
 
-public class Tut2CircuitNewCurrentSeriesFirstMeasure : TutTriggerBase {
+public class Tut2CircuitNewCurrentParallelFirstMeasure : TutTriggerBase {
 
 
 	// Use this for initialization
@@ -28,12 +28,12 @@ public class Tut2CircuitNewCurrentSeriesFirstMeasure : TutTriggerBase {
 		if (!IsActive()) return;
 		
 		
-		// To be sure we have suuceeded, the "anchored" voltmeter should read 1
-		// The anchored  ammeter should read 0.5
-		// The "new" voltemeter should read 0.5
+		// To be sure we have suuceeded, the "anchored" (and only) voltmeter should read 1
+		// The anchored ammeter should read 2
+		// The "new" voltemeter should read 1
 		CircuitElementAmmeter anchoredAmmeter = null;
+		CircuitElementAmmeter newAmmeter = null;
 		CircuitElementVoltmeter anchoredVoltMeter = null;
-		CircuitElementVoltmeter newVoltMeter = null;
 		
 		
 		foreach (GameObject go in Circuit.singleton.elements){
@@ -46,27 +46,27 @@ public class Tut2CircuitNewCurrentSeriesFirstMeasure : TutTriggerBase {
 				if (data.isAnchored[Circuit.kCentre]){
 					anchoredVoltMeter = voltmeter;
 				}
-				else{
-					newVoltMeter = voltmeter;
-				}
 			}
 			CircuitElementAmmeter ammeter = go.GetComponent<CircuitElementAmmeter>();
 			if (ammeter != null){
 				GridPoint point = ammeter.GetGridPoint();
 				Circuit.AnchorData data = Circuit.singleton.GetAnchors(point);
-				
 				if (data.isAnchored[Circuit.kCentre]){
 					anchoredAmmeter = ammeter;
+				}
+				else{
+					newAmmeter = ammeter;
 				}
 			}
 		}
 		
-		if (anchoredVoltMeter != null && anchoredAmmeter != null && newVoltMeter != null){
+		if (anchoredVoltMeter != null && anchoredAmmeter != null && newAmmeter != null){
+			Debug.Log ("anchoredVoltMeter = " + anchoredVoltMeter.GetVoltageDiff() + ", newAmmeter =" + newAmmeter.GetMaxCurrent() + ", anchoredAmmeter = " + anchoredAmmeter.GetMaxCurrent()); 
 			if (MathUtils.FP.Feq(anchoredVoltMeter.GetVoltageDiff(), 1f, 0.01f) &&
-			    MathUtils.FP.Feq(newVoltMeter.GetVoltageDiff(), 0.5f, 0.01f) &&
-			    MathUtils.FP.Feq(anchoredAmmeter.GetMaxCurrent(), 0.5f, 0.01f)){
+			    MathUtils.FP.Feq(newAmmeter.GetMaxCurrent(), 1f, 0.01f) &&
+			    MathUtils.FP.Feq(anchoredAmmeter.GetMaxCurrent(), 2f, 0.01f)){
 				triggerHandle.Invoke();
-				newVoltMeter.TriggerTargetEffect();
+				newAmmeter.TriggerTargetEffect();
 				Deactivate();
 				
 			}

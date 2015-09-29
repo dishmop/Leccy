@@ -1,39 +1,19 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitNewCurrentSeriesFirstMeasure.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs">
     <Files>
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirst.cs" Line="79" Column="5" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewVoltages.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ClickToContinue.cs" Line="39" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElement.cs" Line="513" Column="21" />
-      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI.cs" Line="695" Column="27" />
-      <File FileName="Assets/Scripts/Tut2CircuitWideAnchors.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModeManager.cs" Line="218" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="157" Column="33" />
-      <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitFlowMeasure.cs" Line="34" Column="18" />
-      <File FileName="Assets/Scripts/FractionCalc.cs" Line="29" Column="3" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentSeriesFirst.cs" Line="32" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrent.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/LevelStartMessage.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tutorial.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CircuitElementVoltmeter.cs" Line="122" Column="29" />
-      <File FileName="Assets/Scripts/MathUtils.cs" Line="24" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentSeriesFirstMeasureAchieved.cs" Line="36" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitOhmsLaw.cs" Line="29" Column="32" />
-      <File FileName="Assets/Scripts/Tut2CircuitSingleLoopFlow.cs" Line="27" Column="33" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentSeriesFirstMeasure.cs" Line="7" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs" Line="5" Column="43" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasure.cs" Line="5" Column="43" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="Tut2CircuitNewCurrentSeriesFirstMeasure.cs" selected="True" />
+              <Node name="Tut2CircuitNewCurrentSeriesFirstMeasureAchieved.cs" selected="True" />
             </Node>
           </Node>
         </State>
