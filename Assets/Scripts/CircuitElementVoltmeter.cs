@@ -110,7 +110,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	}
 	
 	
-	void TriggerTargetEffect(){
+	public void TriggerTargetEffect(){
 		Transform actualText = GetDisplayMesh().transform.FindChild ("TargetText");
 		GameObject effect = GameObject.Instantiate(triggerEffect, actualText.position, actualText.rotation) as GameObject;
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetVoltageDiff();
@@ -242,7 +242,7 @@ public class CircuitElementVoltmeter : CircuitElement {
 	
 	// return true if this component is only available in the editor
 	public override bool IsEditorOnly(){
-		return true;
+		return false;
 	}	
 	
 	

@@ -26,7 +26,7 @@ public class Tut2CircuitOhmsLaw : TutTriggerBase {
 			if (go == null) continue;
 			CircuitElementVoltmeter vm = go.GetComponent<CircuitElementVoltmeter>();
 			if (vm != null){	
-				voltage = vm.GetMaxVoltage();
+				voltage = vm.GetVoltageDiff();
 			}
 			CircuitElementResistor resistor = go.GetComponent<CircuitElementResistor>();
 			if (resistor == null) continue;

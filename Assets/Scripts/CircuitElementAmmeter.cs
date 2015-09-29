@@ -154,7 +154,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	
-	void TriggerTargetEffect(){
+	public void TriggerTargetEffect(){
 		Transform targetText = GetDisplayMesh().transform.FindChild ("TargetText");
 		GameObject effect = GameObject.Instantiate(triggerEffect, targetText.position, targetText.rotation) as GameObject;
 		effect.transform.FindChild("FractionTextBox").GetComponent<FractionCalc>().value = GetMaxCurrent();
@@ -274,7 +274,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	
 	// return true if this component is only available in the editor
 	public override bool IsEditorOnly(){
-		return true;
+		return false;
 	}
 	
 	public override   void OnMouseOver() {

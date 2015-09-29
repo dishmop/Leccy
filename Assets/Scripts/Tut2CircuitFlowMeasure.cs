@@ -31,7 +31,7 @@ public class Tut2CircuitFlowMeasure : TutTriggerBase {
 			if (go == null) continue;
 			CircuitElementVoltmeter vm = go.GetComponent<CircuitElementVoltmeter>();
 			if (vm != null){	
-				voltage = vm.GetMaxVoltage();
+				voltage = vm.GetVoltageDiff();
 				break;
 			}
 		}

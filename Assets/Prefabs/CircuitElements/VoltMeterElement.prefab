@@ -38,7 +38,8 @@ AudioSource:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 11729b5ba46cd40a8a4c8115eead5a6a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: .5
@@ -84,6 +85,16 @@ AudioSource:
     m_Curve:
     - time: 0
       value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -136,20 +147,24 @@ MonoBehaviour:
   voltmeterPrefab: {fileID: 100000, guid: 4fdd6d9777ce64a6eb87a9873f1a9908, type: 2}
   triggerEffect: {fileID: 100012, guid: 8253ff8fd69d84efbb12be75302557ec, type: 2}
   targetVolts: 1
-  hasTarget: 1
+  hasTarget: 0
   textColorNorm: {r: 0, g: .941176474, b: 0, a: 1}
   textColorTarget: {r: 1, g: 1, b: 1, a: 1}
   signColorNorm: {r: 0, g: .529411793, b: 0, a: 1}
   signColorTarget: {r: .297160238, g: 1, b: .272058845, a: 1}
+  buttonActivated: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: hasTarget
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
