@@ -195,6 +195,7 @@
      <Compile Include="Assets\Scripts\src\Zip\ZipInputStream.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipNameTransform.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipOutputStream.cs" />
+     <Compile Include="Assets\Tut2CircuitNewCurrentSeriesFirstMeasure.cs" />
      <None Include="Assets\Shaders\PlasmaBalls_new.shader" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />

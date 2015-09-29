@@ -10,10 +10,13 @@ public class Tutorial : MonoBehaviour {
 	public bool hasBeenExplosion = false;
 	
 	bool hasBeenExplosionInt;
+	public bool hasDoneOneResistorTut;
 	
 	public void Deactivate(){
 		foreach (GameObject go in tutorialObjects.Values){
-			go.SetActive(false);
+			if (go.name != "The_Rules"){
+				go.SetActive(false);
+			}
 		}
 	}
 	

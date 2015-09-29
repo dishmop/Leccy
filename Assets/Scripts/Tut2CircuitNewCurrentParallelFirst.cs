@@ -8,14 +8,19 @@ public class Tut2CircuitNewCurrentParallelFirst : TutTriggerBase {
 	protected override void OnEnable () {
 		base.OnEnable();
 		
-		
+		HandleContinueButton();
 		
 		
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (!IsActive()) return;
+		if (!IsActive()){
+			transform.FindChild("White square").gameObject.SetActive(false);
+			return;
+		}
+		
+		HandleContinueButton();
 		
 		bool haveFound = false;
 		Vector2 rectMin = Vector2.zero;
@@ -68,8 +73,16 @@ public class Tut2CircuitNewCurrentParallelFirst : TutTriggerBase {
 			
 		
 		
-		
-		
-		
+	}
+	
+	void HandleContinueButton(){
+//		if (Tutorial.singleton.hasDoneOneResistorTut){
+//			transform.FindChild("ContinueButton_Next").gameObject.SetActive(false);
+//			transform.FindChild("ContinueButton_Finish").gameObject.SetActive(true);
+//		}
+//		else{
+//			transform.FindChild("ContinueButton_Next").gameObject.SetActive(true);
+//			transform.FindChild("ContinueButton_Finish").gameObject.SetActive(false);
+//		}
 	}
 }

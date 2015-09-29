@@ -7,6 +7,7 @@ public class Tut2CircuitNewCurrentSeriesFirst : TutTriggerBase {
 	// Use this for initialization
 	protected override void OnEnable () {
 		base.OnEnable();
+		HandleContinueButton();
 		
 		
 		
@@ -15,7 +16,12 @@ public class Tut2CircuitNewCurrentSeriesFirst : TutTriggerBase {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (!IsActive()) return;
+		
+		if (!IsActive()){
+			transform.FindChild("White square").gameObject.SetActive(false);
+			return;
+		}
+		HandleContinueButton();
 	
 
 		bool haveFound = false;
@@ -65,12 +71,16 @@ public class Tut2CircuitNewCurrentSeriesFirst : TutTriggerBase {
 		else{
 			transform.FindChild("White square").gameObject.SetActive(false);
 		}
-		
-		
-		
-		
-		
-		
-		
+	}
+	
+	void HandleContinueButton(){
+//		if (Tutorial.singleton.hasDoneOneResistorTut){
+//			transform.FindChild("ContinueButton_Next").gameObject.SetActive(false);
+//			transform.FindChild("ContinueButton_Finish").gameObject.SetActive(true);
+//		}
+//		else{
+//			transform.FindChild("ContinueButton_Next").gameObject.SetActive(true);
+//			transform.FindChild("ContinueButton_Finish").gameObject.SetActive(false);
+//		}
 	}
 }

@@ -5,6 +5,7 @@ public class Tut2CircuitNewCurrent : TutTriggerBase {
 
 	public string seriesFirstName;
 	public string parallelFirstName;
+	public string finalName;
 	
 	
 	// Use this for initialization
@@ -39,12 +40,20 @@ public class Tut2CircuitNewCurrent : TutTriggerBase {
 		
 		if (ammeter == null) return;
 		
-		if (MathUtils.FP.Feq(ammeter.GetMaxCurrent(), 0.5f)){
+		if (seriesFirstName != "" && parallelFirstName != ""){
+			Tutorial.singleton.hasDoneOneResistorTut = false;
+		}
+		else{
+			Tutorial.singleton.hasDoneOneResistorTut = true;
+		}
+		
+		
+		if (seriesFirstName != "" && MathUtils.FP.Feq(ammeter.GetMaxCurrent(), 0.5f)){
 			Tutorial.singleton.Deactivate();
 			GameModeManager.singleton.LoadLevelByNameQuiet(seriesFirstName);
 			
 		}
-		if (MathUtils.FP.Feq(ammeter.GetMaxCurrent(), 2f)){
+		if (parallelFirstName != "" && MathUtils.FP.Feq(ammeter.GetMaxCurrent(), 2f)){
 			Tutorial.singleton.Deactivate();
 			GameModeManager.singleton.LoadLevelByNameQuiet(parallelFirstName);
 		}
