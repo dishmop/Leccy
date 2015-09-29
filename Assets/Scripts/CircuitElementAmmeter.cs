@@ -16,7 +16,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	public Color 		signColorTarget;
 	
 	
-	bool				buttonActivated = false;
+	public bool			buttonActivated = false;
 	bool 				hasTriggered = false;
 	
 	
@@ -149,7 +149,7 @@ public class CircuitElementAmmeter : CircuitElement {
 	}
 	
 	
-	bool IsOnTarget(){
+	public bool IsOnTarget(){
 		return hasTarget && MathUtils.FP.Feq(GetMaxCurrent(), targetAmp, FractionCalc.epsilon);
 	}
 	

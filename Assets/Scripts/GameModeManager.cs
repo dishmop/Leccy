@@ -214,7 +214,7 @@ public class GameModeManager : MonoBehaviour {
 		
 	}
 	
-	void ResetSidePanel(){
+	public void ResetSidePanel(){
 		sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>().Cleanup();
 		sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>().Start();
 
@@ -337,7 +337,7 @@ public class GameModeManager : MonoBehaviour {
 				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
 				
 				
-				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing) ResetSidePanel();
+				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing && LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveAnchors) ResetSidePanel();
 				ActivateTutorialText();
 				
 				AudioListener.volume = 1f;
@@ -467,6 +467,13 @@ public class GameModeManager : MonoBehaviour {
 	
 	public void NextLevelQuiet(){
 		LevelManager.singleton.currentLevelIndex++;
+		gameMode = GameMode.kPlayLevelInit;
+		isQuietStart = true;
+	}
+	
+	public void LoadLevelByNameQuiet(string name){
+		int index = LevelManager.singleton.GetIndexOfLevel(name);
+		LevelManager.singleton.currentLevelIndex = index;
 		gameMode = GameMode.kPlayLevelInit;
 		isQuietStart = true;
 	}

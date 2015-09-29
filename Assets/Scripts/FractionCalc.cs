@@ -63,6 +63,13 @@ public class FractionCalc : MonoBehaviour {
 				recentreT.FindChild("Seperator").GetComponent<TextMesh>().text = "";
 			}
 		}
+		if (Mathf.Abs(value) > 100){
+			recentreT.FindChild("Integer").GetComponent<TextMesh>().text = "∞";
+			recentreT.FindChild("Numerator").GetComponent<TextMesh>().text = "";
+			recentreT.FindChild("Denominator").GetComponent<TextMesh>().text = "";
+			recentreT.FindChild("Seperator").GetComponent<TextMesh>().text = "";
+			
+		}
 		// Recentre
 		Bounds integerBounds = recentreT.FindChild("Integer").GetComponent<TextMesh>().GetComponent<Renderer>().bounds;
 		Bounds numeratorBounds = recentreT.FindChild("Numerator").GetComponent<TextMesh>().GetComponent<Renderer>().bounds;

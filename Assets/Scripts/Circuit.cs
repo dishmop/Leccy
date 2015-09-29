@@ -577,6 +577,7 @@ public class Circuit : MonoBehaviour {
 		if (anchors == null){
 			return new AnchorData();
 		}
+		if (point.x < 0 || point.x >= anchors.GetLength(0) || point.y < 0 || point.y >= anchors.GetLength(1)) return new AnchorData();
 		return anchors[point.x, point.y];
 	}
 	

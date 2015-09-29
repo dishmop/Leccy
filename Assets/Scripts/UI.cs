@@ -81,6 +81,13 @@ public class UI : MonoBehaviour {
 			if (elementSelectPanel.GetComponent<ElementSelectPanel>().defaultSelectionButton == null){
 				hideMouse = true;
 			}
+			GridPoint mousePoint = ghostElement.GetComponent<CircuitElement>().GetGridPoint();
+			if (mousePoint != null){
+				Circuit.AnchorData data = Circuit.singleton.GetAnchors(mousePoint);
+				if (data != null && data.disableGrid == true){
+					hideMouse = true;
+				}
+			}
 			if ((isInUI || hideMouse) && (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord)){
 				ghostElement.SetActive(false);
 			}

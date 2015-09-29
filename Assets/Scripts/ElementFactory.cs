@@ -81,6 +81,13 @@ public class ElementFactory : MonoBehaviour {
 		PrefabManager.OnChangePrefab(data.factoryPrefab);
 	}
 	
+	public void SetStock(string id, int quantity){
+		FactoryData data = FindStockData(id);
+		data.stockRemaining = quantity;
+		PrefabManager.OnChangePrefab(data.factoryPrefab);
+	}
+	
+	
 
 	//----------------------------------------------
 	// Create a new circuit element

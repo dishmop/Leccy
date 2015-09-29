@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 
 public class LevelManager : MonoBehaviour {
 	public static LevelManager singleton = null;
@@ -65,12 +66,23 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public string GetCurrentLevelName(){
+		if (currentLevelIndex >= LevelManager.singleton.levelsToLoad.Count()) return "Out of range";
 		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
 	}
 	
 	public string GetRawLevelName(){
 		return LevelManager.singleton.levelsToLoad[currentLevelIndex].name;
 	
+	}
+	
+	public int GetIndexOfLevel(string name){
+		
+		for (int i = 0; i < LevelManager.singleton.levelsToLoad.Count(); ++i){
+			if (LevelManager.singleton.levelsToLoad[i].name == name){
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	
@@ -81,6 +93,7 @@ public class LevelManager : MonoBehaviour {
 			currentLevelIndex--;
 			LoadLevel();
 		}
+		GameModeManager.singleton.ResetSidePanel();
 		
 		// See if there is some tutorial text associated with this
 		Tutorial.singleton.Deactivate();

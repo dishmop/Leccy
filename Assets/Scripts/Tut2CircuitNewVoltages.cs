@@ -5,8 +5,8 @@ public class Tut2CircuitNewVoltages : TutTriggerBase {
 
 	GameObject voltMeter = null;
 	float timeStart;
-	float duration = 3;
-	byte[] storage = new byte[100 * 1024];
+	float duration = 2;
+	byte[] storage = new byte[100*1024];
 	
 	enum State{
 		kTarget1,
@@ -43,32 +43,32 @@ public class Tut2CircuitNewVoltages : TutTriggerBase {
 		LevelManager.singleton.CacheLevel(storage);
 		
 		// Change the anchors
-		
-		// Add anchors to everyhing we've made so far
-		for (int x = 0; x < Circuit.singleton.elements.GetLength(0); ++x){
-			for (int y = 0; y < Circuit.singleton.elements.GetLength(1); ++y){
-				if (Circuit.singleton.elements[x,y] != null && (Circuit.singleton.elements[x,y].GetComponent<CircuitElement>() != null)){
-					for (int i = 0; i < 5; ++i){
-						Circuit.singleton.anchors[x,y].isAnchored[i] = true;
-						
-					}
-					Circuit.singleton.anchors[x,y].isDirty = true;
-				}
-			}
-			
-		}
-		
-		
-		// Remove anchors from ther left hand edge
-		int xx = 4;
-		for (int y = 0; y < Circuit.singleton.elements.GetLength(1); ++y){
-			if (Circuit.singleton.elements[xx,y] != null && (Circuit.singleton.elements[xx,y].GetComponent<CircuitElementWire>() != null)){
-				for (int i = 0; i < 5; ++i){
-					Circuit.singleton.anchors[xx,y].isAnchored[i] = false;
-				}
-			}
-			
-		}
+//		
+//		// Add anchors to everyhing we've made so far
+//		for (int x = 0; x < Circuit.singleton.elements.GetLength(0); ++x){
+//			for (int y = 0; y < Circuit.singleton.elements.GetLength(1); ++y){
+//				if (Circuit.singleton.elements[x,y] != null && (Circuit.singleton.elements[x,y].GetComponent<CircuitElement>() != null)){
+//					for (int i = 0; i < 5; ++i){
+//						Circuit.singleton.anchors[x,y].isAnchored[i] = true;
+//						
+//					}
+//					Circuit.singleton.anchors[x,y].isDirty = true;
+//				}
+//			}
+//			
+//		}
+//		
+//		
+//		// Remove anchors from ther left hand edge
+//		int xx = 4;
+//		for (int y = 0; y < Circuit.singleton.elements.GetLength(1); ++y){
+//			if (Circuit.singleton.elements[xx,y] != null && (Circuit.singleton.elements[xx,y].GetComponent<CircuitElementWire>() != null)){
+//				for (int i = 0; i < 5; ++i){
+//					Circuit.singleton.anchors[xx,y].isAnchored[i] = false;
+//				}
+//			}
+//			
+//		}
 		
 		Circuit.singleton.ForceDirty();
 	}

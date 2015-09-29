@@ -106,8 +106,14 @@
      <Compile Include="Assets\Scripts\Tut1IntroTargetVolts.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitExplode.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitFlowMeasure.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitNewCurrent.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentParallelFirst.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitNewCurrentSeriesFirst.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitNewVoltages.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitOhmsLaw.cs" />
      <Compile Include="Assets\Scripts\Tut2CircuitResistor.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitSingleLoopFlow.cs" />
+     <Compile Include="Assets\Scripts\Tut2CircuitWideAnchors.cs" />
      <Compile Include="Assets\Scripts\TutTriggerBase.cs" />
      <Compile Include="Assets\Scripts\Tutorial.cs" />
      <Compile Include="Assets\Scripts\TutorialObject.cs" />
@@ -189,7 +195,6 @@
      <Compile Include="Assets\Scripts\src\Zip\ZipInputStream.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipNameTransform.cs" />
      <Compile Include="Assets\Scripts\src\Zip\ZipOutputStream.cs" />
-     <Compile Include="Assets\Tut2CircuitOhmsLaw.cs" />
      <None Include="Assets\Shaders\PlasmaBalls_new.shader" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />

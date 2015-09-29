@@ -1,16 +1,26 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitNewCurrentParallelFirst.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirst.cs" Line="25" Column="13" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewVoltages.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAnchor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Circuit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitWideAnchors.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementSelectPanel.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CircuitElementAmmeter.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ElementFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitFlowMeasure.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/FractionCalc.cs" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
-            <Node name="Scripts" expanded="True">
-              <Node name="UI.cs" selected="True" />
-            </Node>
-            <Node name="Shaders" expanded="True" />
-          </Node>
-        </State>
+        <State expanded="True" />
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
@@ -27,6 +37,8 @@
           <Value>Tutorial.singleton.tutorialObjects</Value>
           <Value>"02_Circuit_Flow_TextBox"</Value>
           <Value>textBoxName</Value>
+          <Value>Circuit.singleton.anchors</Value>
+          <Value>Circuit.singleton.elements[x,y]</Value>
         </State>
       </Pad>
     </Pads>
