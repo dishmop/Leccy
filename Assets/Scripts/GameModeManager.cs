@@ -124,6 +124,12 @@ public class GameModeManager : MonoBehaviour {
 		numLevelTriggers--;
 	}		
 	
+	public void ShowCredits(){
+	}
+	
+	public void HideCreditsCredits(){
+	}
+	
 	public float GetGameTime(){
 		return Time.fixedTime - gameStartTime;
 	}
@@ -175,7 +181,9 @@ public class GameModeManager : MonoBehaviour {
 	
 	void HandleSideButtons(){
 		Transform panelTranform = sidePanel.transform.FindChild("BottomPanel");
-		panelTranform.FindChild ("PreviousLevelButton").GetComponent<Button>().interactable = (LevelManager.singleton.currentLevelIndex > 1);
+		panelTranform.FindChild ("PreviousLevelButton").GetComponent<Button>().interactable = 
+			!(LevelManager.singleton.currentLevelIndex == 1 || 
+			  LevelManager.singleton.currentLevelIndex == LevelManager.singleton.tutorialIndex);
 		panelTranform.FindChild ("SaveLevelButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("ClearLevelButton").gameObject.SetActive(enableEditor);
 		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor && isInternal);
@@ -347,7 +355,7 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kPlayLevelInit:
 				gameMode = GameMode.kPlayLevel;
 				sidePanel.GetComponent<PanelController>().Activate();
-				if (!isQuietStart){
+				if (!isQuietStart && !enableEditor){
 					levelStartMessageDlg.SetActive(true);
 				}
 				isQuietStart = false;	
@@ -463,6 +471,7 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	public void ActivateTutorialText(){
+		if (enableEditor) return ;
 		// See if there is some tutorial text associated with this
 		string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
 	//	Debug.Log ("ActivateTutorialText: " + textBoxName);

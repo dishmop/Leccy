@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour {
 	public string 		levelToSave = "DefaultLevel";
 	public TextAsset[]	levelsToLoad = new TextAsset[10];
 	public int			currentLevelIndex = 1;
+	public int			tutorialIndex;
+	
 	byte[]				cachedLevel = new byte[100 * 1024];	// 100K
 	
 	
@@ -33,7 +35,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public bool IsTutorial(){
-		return currentLevelIndex < 30;
+		return currentLevelIndex < tutorialIndex;
 	}
 	
 	public bool LoadLevel(int index){
