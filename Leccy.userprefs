@@ -1,19 +1,24 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tutorial.cs">
     <Files>
       <File FileName="Assets/Scripts/ClickToContinue.cs" Line="39" Column="1" />
       <File FileName="Assets/Scripts/GameModeManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs" Line="5" Column="43" />
-      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasure.cs" Line="5" Column="43" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasureAchieved.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewCurrentParallelFirstMeasure.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/UI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MathUtils.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitSingleLoopFlow.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tut2CircuitNewVoltages.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tutorial.cs" Line="53" Column="78" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Scripts" expanded="True">
-              <Node name="Tut2CircuitNewCurrentSeriesFirstMeasureAchieved.cs" selected="True" />
+              <Node name="Tutorial.cs" selected="True" />
             </Node>
           </Node>
         </State>

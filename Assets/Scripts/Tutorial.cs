@@ -8,6 +8,7 @@ public class Tutorial : MonoBehaviour {
 	public Dictionary<string, GameObject> tutorialObjects = new Dictionary<string, GameObject>();
 	public Bounds bounds = new Bounds();
 	public bool hasBeenExplosion = false;
+	public GameObject theRulesGO;
 	
 	bool hasBeenExplosionInt;
 	public bool hasDoneOneResistorTut;
@@ -48,6 +49,8 @@ public class Tutorial : MonoBehaviour {
 		foreach (Transform child in transform){
 			tutorialObjects.Add(child.gameObject.name, child.gameObject);
 		}
+		theRulesGO.SetActive(true);
+		theRulesGO.GetComponent<TheRules>().DisableRule(TheRules.Rules.kAll);
 	}
 	
 	void FixedUpdate(){	

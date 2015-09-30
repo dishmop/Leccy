@@ -94,6 +94,7 @@
      <Compile Include="Assets\Scripts\Telemetry.cs" />
      <Compile Include="Assets\Scripts\TelemtryListener.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
+     <Compile Include="Assets\Scripts\TheRules.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
      <Compile Include="Assets\Scripts\TrailTest_2.cs" />
      <Compile Include="Assets\Scripts\Tuple.cs" />
