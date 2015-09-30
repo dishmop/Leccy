@@ -32,6 +32,10 @@ public class LevelManager : MonoBehaviour {
 		LoadLevel (currentLevelIndex);
 	}
 	
+	public bool IsTutorial(){
+		return currentLevelIndex < 30;
+	}
+	
 	public bool LoadLevel(int index){
 		if (index >=0 && index < levelsToLoad.Length && levelsToLoad[index] != null){
 //			Debug.Log ("LoadLevel (): levelsToLoad[" + index + "].name = " + levelsToLoad[index].name);
@@ -70,6 +74,7 @@ public class LevelManager : MonoBehaviour {
 	
 	public string GetCurrentLevelName(){
 		if (currentLevelIndex >= LevelManager.singleton.levelsToLoad.Count()) return "Out of range";
+		if (IsTutorial()) return "Tutorial";
 		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
 	}
 	

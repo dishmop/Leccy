@@ -349,6 +349,8 @@ public class GameModeManager : MonoBehaviour {
 				ActivateTutorialText();
 				
 				AudioListener.volume = 1f;
+				
+				if (!LevelManager.singleton.IsTutorial()) Tutorial.singleton.theRulesGO.GetComponent<TheRules>().EnableRule(TheRules.Rules.kAll);
 			
 				break;	
 			case GameMode.kPlayLevel:
