@@ -5,10 +5,10 @@ public class CamControl : MonoBehaviour {
 
 
 	public GameObject		sidePanel;
-	public GameObject		topPanel;
 	public float 			zoomSpeed;
 	public bool				ignoreSide = false;
 	Vector3					prevMousePos = new Vector3();
+	public float			border = 1;
 
 	float lerpProp = 0.05f;
 	
@@ -65,7 +65,12 @@ public class CamControl : MonoBehaviour {
 	}
 	
 	public void CentreCamera(){
+//		Debug.DrawLine(Tutorial.singleton.bounds.min, Tutorial.singleton.bounds.max, Color.red);
+//		Debug.DrawLine(Circuit.singleton.bounds.min, Circuit.singleton.bounds.max, Color.green);
+		
+		
 		Bounds allBounds = Tutorial.singleton.bounds;
+		
 		allBounds.Encapsulate(Circuit.singleton.bounds.min);
 		allBounds.Encapsulate(Circuit.singleton.bounds.max);
 		
@@ -90,34 +95,26 @@ public class CamControl : MonoBehaviour {
 			float propVScreen = 1;
 			float propHScreen = 1;
 			
-			float sideX = sidePanel.GetComponent<RectTransform>().anchorMax.x;
-			float topY = 1;
-			if (topPanel.activeSelf){
-				topY = topPanel.GetComponent<RectTransform>().anchorMin.y;
-			}
-			Rect camRect = GetComponent<Camera>().rect;
+
+//			Rect camRect = GetComponent<Camera>().rect;
 			
-			camRect.x = sideX;
-			camRect.height = topY;	
-				
-			GetComponent<Camera>().rect = camRect;			
+//			camRect.x = sideX;
+//			camRect.height = topY;	
+//				
+//			GetComponent<Camera>().rect = camRect;			
 			
 			
 			// This means that the screen's width is actuall 1-that
 			float adjustedAspect = propHScreen * Camera.main.aspect /  propVScreen;
 		
 			// Get range and work out orthographic size			
-			float border = 1;
 			float vRange = Mathf.Max (bounds.height + 2 * border, (bounds.width + 2 * border) / adjustedAspect);
 			float currentSize = transform.GetComponent<Camera>().orthographicSize;
 			float desSize = vRange * 0.5f;
 			transform.GetComponent<Camera>().orthographicSize = Mathf.Lerp(currentSize, desSize, lerpProp);
 			
-			// calc how much extra of the scene to add on to the left to ensure we are looking in the middle
-			float extraX = (bounds.width + 2 * border) * (1f/propHScreen - 1);
-			float extraY = (bounds.height + 2 * border) * (1f/propVScreen - 1);
 			
-			Vector2 centre = new Vector2(((bounds.xMin - extraX) + bounds.xMax) / 2f, (bounds.yMin + extraY + bounds.yMax) / 2f);
+			Vector2 centre = (bounds.min + bounds.max) * 0.5f;
 			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
 			transform.position = Vector3.Lerp(transform.position , newCamPos, lerpProp);
 			

@@ -88,7 +88,7 @@ public class UI : MonoBehaviour {
 					hideMouse = true;
 				}
 			}
-			if ((isInUI || hideMouse) && (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord)){
+			if (isInUI || hideMouse){
 				ghostElement.SetActive(false);
 			}
 			else{
@@ -128,14 +128,9 @@ public class UI : MonoBehaviour {
 		Vector3 mousePos = Input.mousePosition;
 		mousePos.z = transform.position.z - Camera.main.transform.position.z;
 		worldPos = Camera.main.ScreenToWorldPoint( mousePos);
-		if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
-			thisPoint = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
-			if (!Grid.singleton.IsPointInGrid(thisPoint) || isInUI){
-				thisPoint = null;
-			}
-		}
-		else{
-			thisPoint = ghostElement.GetComponent<CircuitElement>().GetGridPoint();
+		thisPoint = new GridPoint((int)(worldPos.x + 0.5f), (int)(worldPos.y + 0.5f));
+		if (!Grid.singleton.IsPointInGrid(thisPoint) || isInUI){
+			thisPoint = null;
 		}
 		if (thisPoint == null) return;		
 		
@@ -178,11 +173,9 @@ public class UI : MonoBehaviour {
 			
 		}
 		else{
-			if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
-				cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
-				if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
-					cacheMousePressed = true;
-				}
+			cacheMouseHeld = (Input.GetMouseButton(0) && !Input.GetKey (KeyCode.LeftControl));
+			if ((Input.GetMouseButtonDown(0) && !Input.GetKey (KeyCode.LeftControl))){
+				cacheMousePressed = true;
 			}
 		}	
 	}
@@ -206,7 +199,7 @@ public class UI : MonoBehaviour {
 		// Deal with the ghost element
 		ghostElement.SetActive(thisPoint != null);
 		CircuitElement ghostElementComp = ghostElement.GetComponent<CircuitElement>();
-		if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) ghostElementComp.SetGridPoint(thisPoint, ghostGridPoitDepth);
+		ghostElementComp.SetGridPoint(thisPoint, ghostGridPoitDepth);
 		ghostElementComp.RebuildMesh();
 		ghostElementComp.SetOtherGridPoint(otherPoint);		
 		
@@ -232,7 +225,7 @@ public class UI : MonoBehaviour {
 		
 		
 		// As far as the telemetry goes, ust assume tha the ghost element is changing every frame
-		Telemetry.singleton.RegisterEvent(Telemetry.Event.kGhostChange);
+//		Telemetry.singleton.RegisterEvent(Telemetry.Event.kGhostChange);
 		
 	}
 	

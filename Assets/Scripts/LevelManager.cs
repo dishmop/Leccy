@@ -13,6 +13,8 @@ public class LevelManager : MonoBehaviour {
 	public int			currentLevelIndex = 1;
 	byte[]				cachedLevel = new byte[100 * 1024];	// 100K
 	
+	
+	
 	 public enum SaveMode{
 		kSaveAll,
 		kSaveFactory,
@@ -32,6 +34,7 @@ public class LevelManager : MonoBehaviour {
 	
 	public bool LoadLevel(int index){
 		if (index >=0 && index < levelsToLoad.Length && levelsToLoad[index] != null){
+//			Debug.Log ("LoadLevel (): levelsToLoad[" + index + "].name = " + levelsToLoad[index].name);
 			return LoadLevel(levelsToLoad[index].name);
 		}
 		return false;
@@ -71,7 +74,10 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public string GetRawLevelName(){
-		return LevelManager.singleton.levelsToLoad[currentLevelIndex].name;
+//		Debug.Log("GetRawLevelName. Count() = " + levelsToLoad.Count () + " currentLevelIndex = " + currentLevelIndex);
+//		Debug.Log ("GetRawLevelName (): levelsToLoad[" + currentLevelIndex + "].name = " + levelsToLoad[currentLevelIndex].name);
+		
+		return levelsToLoad[currentLevelIndex].name;
 	
 	}
 	
@@ -112,10 +118,10 @@ public class LevelManager : MonoBehaviour {
 		Debug.Log("LoadLevel: " + path);
 		TextAsset asset = Resources.Load(path) as TextAsset;
 		if (asset != null){
-			Debug.Log ("Loading asset");
+			Debug.Log ("Loading asset: " + filename);
 			Stream s = new MemoryStream(asset.bytes);
 			DeserializeLevel(s);
-			Resources.UnloadAsset(asset);
+//			Resources.UnloadAsset(asset);
 			
 			// After loading a level, call an update to ensure we don't get a frame rendered befroe the simulation has calculated
 			GameModeManager.singleton.BulkGameUpdate();

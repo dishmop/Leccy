@@ -150,14 +150,14 @@ public class GameModeManager : MonoBehaviour {
 	
 	public void BulkGameUpdate(){
 		UI.singleton.GameUpdate();
-		if (Telemetry.singleton.mode == Telemetry.Mode.kPlayback){
-			Telemetry.singleton.GameUpdate();
-		}
+//		if (Telemetry.singleton.mode == Telemetry.Mode.kPlayback){
+//			Telemetry.singleton.GameUpdate();
+//		}
 		Circuit.singleton.GameUpdate();
 		UI.singleton.LateGameUpdate();
 		// Only rerun the simulation if the circuit has changed since last time
 		if (Circuit.singleton.IsDirty()){
-			Telemetry.singleton.RegisterEvent(Telemetry.Event.kCircuitChanged);
+//			Telemetry.singleton.RegisterEvent(Telemetry.Event.kCircuitChanged);
 			Simulator.singleton.GameUpdate();
 			Circuit.singleton.ResetDirty();
 		}
@@ -177,9 +177,9 @@ public class GameModeManager : MonoBehaviour {
 	}
 	
 	void HandleTelemetryUI(){
-		telemetryPanel.SetActive(Telemetry.singleton.enableTelemetry);
-		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryPlayback").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kPlayback);
-		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryRecord").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kRecord && Telemetry.singleton.HasFile());
+//		telemetryPanel.SetActive(Telemetry.singleton.enableTelemetry);
+//		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryPlayback").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kPlayback);
+//		telemetryPanel.transform.FindChild ("TelemetryFrame").FindChild("TelemetryRecord").gameObject.SetActive(Telemetry.singleton.mode == Telemetry.Mode.kRecord && Telemetry.singleton.HasFile());
 		
 		
 	}	
@@ -251,6 +251,16 @@ public class GameModeManager : MonoBehaviour {
 			}
 		}
 		
+		ElementSelectPanel panel = sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>();
+		if (!enableEditor && gameMode != GameMode.kStart){
+			panel.xCount = 1;
+			panel.yCount = 4;
+		}
+		else{
+			panel.xCount = 2;
+			panel.yCount = 4;
+		}
+		
 	
 		switch (gameMode){
 			case GameMode.kNone:
@@ -259,28 +269,26 @@ public class GameModeManager : MonoBehaviour {
 			case GameMode.kSplash:
 				splashScreenDlg.SetActive(true);
 				UI.singleton.HideMousePointer();
-				if (startGame || !Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kPlayback){	
-					gameMode = GameMode.kStart;
-					splashScreenDlg.SetActive(false);
-				}
+				gameMode = GameMode.kStart;
+				splashScreenDlg.SetActive(false);
 				break;
 			case GameMode.kStart:
 				sidePanel.GetComponent<PanelController>().ForceDeactivate();
-				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord){
-					startGameDlg.SetActive(true);
-					OnActivateTitle();	
-				}
+				startGameDlg.SetActive(true);
+				OnActivateTitle();	
+
 				levelCompleteDlg.SetActive(false);
 				gameCompleteDlg.SetActive(false);
 				EventSystem.current.SetSelectedGameObject(startGameDlg);
 				levelStartMessageDlg.SetActive(false);
 				Camera.main.transform.FindChild("Quad").gameObject.SetActive(false);
-				if (!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) LevelManager.singleton.LoadLevel(0);
+				LevelManager.singleton.LoadLevel(0);
 				if (reallyQuitGame){
 					gameMode =GameMode.kReallyQuitGame;
 				}
 				else{
 					gameMode = GameMode.kTitleScreen;
+					ResetSidePanel();
 				}
 				
 				break;
@@ -305,13 +313,13 @@ public class GameModeManager : MonoBehaviour {
 				ResetGameTime ();
 				
 				if (startGame){	
-					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
+//					Telemetry.singleton.RegisterEvent(Telemetry.Event.kNewGameStarted);
 					startGameDlg.SetActive(false);
 //					string name = startGameDlg.transform.FindChild("InputField").FindChild("Text").GetComponent<Text>().text;
 //					string safeName = Regex.Replace(name, "[^A-Za-z0-9] ","-");	
 //					PlayerPrefs.SetString(playerNameKey, safeName);
 //					string nameString = "My name is " + (name == "" ? "NONE-GIVEN" : safeName);
-					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, "No_name");
+//					Telemetry.singleton.RegisterEvent(Telemetry.Event.kUserComment, "No_name");
 					
 					ResetGameTime ();
 					if (enableEditor){
@@ -324,7 +332,7 @@ public class GameModeManager : MonoBehaviour {
 					}
 				}
 				// When in the title screen do regular uploads of files to the server (if there are any to upload)
-				ServerUpload.singleton.GameUpdate();
+//				ServerUpload.singleton.GameUpdate();
 				break;
 			case GameMode.kPlayLevelInit:
 				gameMode = GameMode.kPlayLevel;
@@ -333,8 +341,8 @@ public class GameModeManager : MonoBehaviour {
 					levelStartMessageDlg.SetActive(true);
 				}
 				isQuietStart = false;	
-				if ((!Telemetry.singleton.enableTelemetry || Telemetry.singleton.mode == Telemetry.Mode.kRecord) && !enableEditor) LevelManager.singleton.LoadLevel();
-				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
+				if (!enableEditor) LevelManager.singleton.LoadLevel();
+//				Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelStarted);
 				
 				
 				if (LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveNothing && LevelManager.singleton.saveMode != LevelManager.SaveMode.kSaveAnchors) ResetSidePanel();
@@ -350,7 +358,7 @@ public class GameModeManager : MonoBehaviour {
 				if (IsLevelComplete() && !enableEditor){
 					levelCompletewWaitStartTime = Time.fixedTime;
 					gameMode = GameMode.kLevelCompleteWait;
-					Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelCompleteWait);
+//					Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelCompleteWait);
 				}
 				if (quitGame){
 					gameMode = GameMode.kQuitGame;
@@ -363,10 +371,10 @@ public class GameModeManager : MonoBehaviour {
 					if (LevelManager.singleton.IsOnLastLevel()){
 						gameCompleteDlg.SetActive(true);
 						TriggerEndOfGameEffects();
-						Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameComplete);
+//						Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameComplete);
 					}
 					else{
-						Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelComplete);
+//						Telemetry.singleton.RegisterEvent(Telemetry.Event.kLevelComplete);
 						levelCompleteDlg.SetActive(true);
 					}
 					gameMode =  GameMode.kLevelComplete;
@@ -392,7 +400,7 @@ public class GameModeManager : MonoBehaviour {
 				}
 				break;	
 			case GameMode.kQuitGame:
-				Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameFinished);	
+//				Telemetry.singleton.RegisterEvent(Telemetry.Event.kGameFinished);	
 				LevelManager.singleton.currentLevelIndex = 1;
 				Tutorial.singleton.Deactivate();
 				if (enableEditor)
@@ -402,10 +410,10 @@ public class GameModeManager : MonoBehaviour {
 				break;
 			case GameMode.kReallyQuitGame:
 				// Need to wait for any server uploads to finish trying
-				ServerUpload.singleton.ForceUpload();
-				while (!ServerUpload.singleton.CanQuit()){
-					ServerUpload.singleton.GameUpdate();
-				}
+//				ServerUpload.singleton.ForceUpload();
+//				while (!ServerUpload.singleton.CanQuit()){
+//					ServerUpload.singleton.GameUpdate();
+//				}
 				AppHelper.Quit();
 				gameMode = GameMode.kStart;
 				reallyQuitGame = false;
@@ -415,9 +423,9 @@ public class GameModeManager : MonoBehaviour {
 		}
 		
 		// Do telemetry recording
-		if (Telemetry.singleton.mode == Telemetry.Mode.kRecord){
-			Telemetry.singleton.GameUpdate();
-		}
+//		if (Telemetry.singleton.mode == Telemetry.Mode.kRecord){
+//			Telemetry.singleton.GameUpdate();
+//		}
 		
 		HandleSideButtons();
 		HandleLevelInfo();
@@ -436,7 +444,7 @@ public class GameModeManager : MonoBehaviour {
 		quitGame = false;	
 		
 		// Register any state change events
-		Telemetry.singleton.RegisterEvent((Telemetry.Event)((int)Telemetry.Event.kUIStateNone + (int)gameMode));
+//		Telemetry.singleton.RegisterEvent((Telemetry.Event)((int)Telemetry.Event.kUIStateNone + (int)gameMode));
 		if (lastGameMode != gameMode){
 		}
 		lastGameMode = gameMode;	
@@ -445,6 +453,7 @@ public class GameModeManager : MonoBehaviour {
 	public void ActivateTutorialText(){
 		// See if there is some tutorial text associated with this
 		string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
+		Debug.Log ("ActivateTutorialText: " + textBoxName);
 		if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
 			Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
 		}

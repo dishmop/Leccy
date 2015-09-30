@@ -7,8 +7,11 @@ public class Tutorial : MonoBehaviour {
 	public static Tutorial singleton = null;
 	public Dictionary<string, GameObject> tutorialObjects = new Dictionary<string, GameObject>();
 	public Bounds bounds = new Bounds();
+	
 	public bool hasBeenExplosion = false;
 	public GameObject theRulesGO;
+	
+	bool hasBounds;
 	
 	bool hasBeenExplosionInt;
 	public bool hasDoneOneResistorTut;
@@ -46,15 +49,20 @@ public class Tutorial : MonoBehaviour {
 	}
 	
 	void Start(){
+//		Debug.Log ("Tutorial start");
 		foreach (Transform child in transform){
+//			Debug.Log (child.gameObject.name);
 			tutorialObjects.Add(child.gameObject.name, child.gameObject);
 		}
 		theRulesGO.SetActive(true);
 		theRulesGO.GetComponent<TheRules>().DisableRule(TheRules.Rules.kAll);
+		
+		RescaleFont(transform, 2, 2);
 	}
 	
 	void FixedUpdate(){	
 		bounds = new Bounds();
+		hasBounds = false;
 		AddToBounds(transform);
 		
 		hasBeenExplosion = hasBeenExplosionInt;
@@ -67,11 +75,34 @@ public class Tutorial : MonoBehaviour {
 			if (child.gameObject.activeSelf){
 				Renderer renderer = child.GetComponent<Renderer>();
 				if (renderer != null){
-					bounds.Encapsulate(renderer.bounds);
+					if (!hasBounds){
+						bounds = renderer.bounds;
+						hasBounds = true;
+					}
+					else{
+						bounds.Encapsulate(renderer.bounds);
+					}
 				}
 				AddToBounds (child);
 			}
 		}
+	}
+	
+	void RescaleFont(Transform trans, float fontScale, float scaleScale){
+		foreach (Transform child in trans){
+			TextMesh textMesh = child.GetComponent<TextMesh>();
+			if (textMesh != null){
+				if (textMesh.fontSize == 50) textMesh.fontSize = 55;
+				textMesh.fontSize = Mathf.RoundToInt(textMesh.fontSize / fontScale);
+				child.localScale = child.localScale * scaleScale;
+				RescaleFont(child, fontScale, 1);
+			}
+			else{
+				RescaleFont(child, fontScale, scaleScale);
+			}
+			
+		}
+		
 	}
 /*
 	void AddChildrenToBounds(Transform trans){		

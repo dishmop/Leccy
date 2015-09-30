@@ -20,7 +20,7 @@ public class TheRules : MonoBehaviour {
 		ruleNames[(int)Rules.kConstantVoltage] = 	"Constant Voltage";
 		ruleNames[(int)Rules.kCurrentJunction] = 	"Current Junction";
 		ruleNames[(int)Rules.kOhmsLaw] = 			"Ohms Law";
-		ruleNames[(int)Rules.kSeriesResistors] =		"Series Resistors";
+		ruleNames[(int)Rules.kSeriesResistors] =	"Series Resistors";
 		ruleNames[(int)Rules.kParallelResistors] = 	"Parallel Resistors";
 	}
 	
@@ -58,7 +58,22 @@ public class TheRules : MonoBehaviour {
 				isSomethingVisible = true;
 			}
 		}
-		transform.FindChild("Title").gameObject.SetActive(isSomethingVisible);
+		if (isSomethingVisible){
+			bool isSomethingOnRightVisible = transform.FindChild(ruleNames[(int)Rules.kSeriesResistors]).gameObject.activeSelf || transform.FindChild(ruleNames[(int)Rules.kParallelResistors]).gameObject.activeSelf;
+			if (isSomethingOnRightVisible){
+				transform.FindChild("Title_Centre").gameObject.SetActive(true);
+				transform.FindChild("Title_Left").gameObject.SetActive(false);
+			}
+			else{
+				transform.FindChild("Title_Centre").gameObject.SetActive(false);
+				transform.FindChild("Title_Left").gameObject.SetActive(true);
+			}
+			
+		}
+		else{
+			transform.FindChild("Title_Centre").gameObject.SetActive(false);
+			transform.FindChild("Title_Left").gameObject.SetActive(false);
+		}
 	}
 	
 	// Update is called once per frame

@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_5_1_1;UNITY_5_1;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PHYSICS_PHYSX3;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_LICENSE;ENABLE_AUDIOMIXER_SUSPEND;ENABLE_EDITOR_METRICS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_GAMECENTER;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_5_1_1;UNITY_5_1;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PHYSICS_PHYSX3;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_LICENSE;ENABLE_AUDIOMIXER_SUSPEND;ENABLE_EDITOR_METRICS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;UNITY_WEBPLAYER;ENABLE_SUBSTANCE;WEBPLUG;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -61,10 +61,8 @@
      <Compile Include="Assets\Scripts\CircuitElementVoltmeter.cs" />
      <Compile Include="Assets\Scripts\CircuitElementWire.cs" />
      <Compile Include="Assets\Scripts\ClickToContinue.cs" />
-     <Compile Include="Assets\Scripts\CommentLog.cs" />
      <Compile Include="Assets\Scripts\ElementFactory.cs" />
      <Compile Include="Assets\Scripts\ElementSelectPanel.cs" />
-     <Compile Include="Assets\Scripts\EventFilterButton.cs" />
      <Compile Include="Assets\Scripts\ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\FlashingButton.cs" />
      <Compile Include="Assets\Scripts\FractionCalc.cs" />
@@ -80,19 +78,14 @@
      <Compile Include="Assets\Scripts\ObjectTracker.cs" />
      <Compile Include="Assets\Scripts\OldUI.cs" />
      <Compile Include="Assets\Scripts\PanelController.cs" />
-     <Compile Include="Assets\Scripts\PlaybackButton.cs" />
      <Compile Include="Assets\Scripts\PlaybackTime.cs" />
      <Compile Include="Assets\Scripts\PrefabListener.cs" />
      <Compile Include="Assets\Scripts\PrefabManager.cs" />
      <Compile Include="Assets\Scripts\QuitOnEsc.cs" />
-     <Compile Include="Assets\Scripts\SendButtonScript.cs" />
      <Compile Include="Assets\Scripts\SerializationID.cs" />
      <Compile Include="Assets\Scripts\SerializationUtils.cs" />
-     <Compile Include="Assets\Scripts\ServerUpload.cs" />
      <Compile Include="Assets\Scripts\Simulator.cs" />
      <Compile Include="Assets\Scripts\SpringValue.cs" />
-     <Compile Include="Assets\Scripts\Telemetry.cs" />
-     <Compile Include="Assets\Scripts\TelemtryListener.cs" />
      <Compile Include="Assets\Scripts\TestFig8.cs" />
      <Compile Include="Assets\Scripts\TheRules.cs" />
      <Compile Include="Assets\Scripts\TrailTest.cs" />
@@ -137,69 +130,6 @@
      <Compile Include="Assets\Scripts\alglib\src\solvers.cs" />
      <Compile Include="Assets\Scripts\alglib\src\specialfunctions.cs" />
      <Compile Include="Assets\Scripts\alglib\src\statistics.cs" />
-     <Compile Include="Assets\Scripts\src\AssemblyInfo.cs" />
-     <Compile Include="Assets\Scripts\src\BZip2\BZip2.cs" />
-     <Compile Include="Assets\Scripts\src\BZip2\BZip2Constants.cs" />
-     <Compile Include="Assets\Scripts\src\BZip2\BZip2Exception.cs" />
-     <Compile Include="Assets\Scripts\src\BZip2\BZip2InputStream.cs" />
-     <Compile Include="Assets\Scripts\src\BZip2\BZip2OutputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Checksums\Adler32.cs" />
-     <Compile Include="Assets\Scripts\src\Checksums\CRC32.cs" />
-     <Compile Include="Assets\Scripts\src\Checksums\IChecksum.cs" />
-     <Compile Include="Assets\Scripts\src\Checksums\StrangeCRC.cs" />
-     <Compile Include="Assets\Scripts\src\Core\FileSystemScanner.cs" />
-     <Compile Include="Assets\Scripts\src\Core\INameTransform.cs" />
-     <Compile Include="Assets\Scripts\src\Core\IScanFilter.cs" />
-     <Compile Include="Assets\Scripts\src\Core\NameFilter.cs" />
-     <Compile Include="Assets\Scripts\src\Core\PathFilter.cs" />
-     <Compile Include="Assets\Scripts\src\Core\StreamUtils.cs" />
-     <Compile Include="Assets\Scripts\src\Core\WindowsPathUtils.cs" />
-     <Compile Include="Assets\Scripts\src\Encryption\PkzipClassic.cs" />
-     <Compile Include="Assets\Scripts\src\Encryption\ZipAESStream.cs" />
-     <Compile Include="Assets\Scripts\src\Encryption\ZipAESTransform.cs" />
-     <Compile Include="Assets\Scripts\src\GZip\GZIPConstants.cs" />
-     <Compile Include="Assets\Scripts\src\GZip\GZipException.cs" />
-     <Compile Include="Assets\Scripts\src\GZip\GzipInputStream.cs" />
-     <Compile Include="Assets\Scripts\src\GZip\GzipOutputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Lzw\LzwConstants.cs" />
-     <Compile Include="Assets\Scripts\src\Lzw\LzwException.cs" />
-     <Compile Include="Assets\Scripts\src\Lzw\LzwInputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Main.cs" />
-     <Compile Include="Assets\Scripts\src\SharpZipBaseException.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\InvalidHeaderException.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarArchive.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarBuffer.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarEntry.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarException.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarHeader.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarInputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Tar\TarOutputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Deflater.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\DeflaterConstants.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\DeflaterEngine.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\DeflaterHuffman.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\DeflaterPending.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Inflater.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\InflaterDynHeader.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\InflaterHuffmanTree.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\PendingBuffer.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Streams\DeflaterOutputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Streams\InflaterInputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Streams\OutputWindow.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\Compression\Streams\StreamManipulator.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\FastZip.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\IEntryFactory.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\WindowsNameTransform.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipConstants.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipEntry.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipEntryFactory.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipException.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipExtraData.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipFile.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipHelperStream.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipInputStream.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipNameTransform.cs" />
-     <Compile Include="Assets\Scripts\src\Zip\ZipOutputStream.cs" />
      <None Include="Assets\Shaders\PlasmaBalls_new.shader" />
      <None Include="Assets\Shaders\SolidColor.shader" />
      <None Include="Assets\Shaders\Outline.shader" />
