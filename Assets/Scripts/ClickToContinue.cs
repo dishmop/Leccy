@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class ClickToContinue : TutTriggerBase {
 	public bool clearPreviousTextBoxes = false;
+	public bool lastOne;
 	
 	float startTime = 0;
 	float waitDuration = 2;
@@ -14,7 +15,7 @@ public class ClickToContinue : TutTriggerBase {
 		base.OnEnable();
 		startTime = Time.time;
 		GetComponent<Renderer>().enabled = false;
-		GetComponent<TextMesh>().text = "Click here to continue...";
+		GetComponent<TextMesh>().text = lastOne ? "Click here to return to main menu..." : "Click here to continue...";
 	}	
 	
 	// Update is called once per frame

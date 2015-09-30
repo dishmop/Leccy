@@ -84,6 +84,7 @@ public class GameModeManager : MonoBehaviour {
 	public void QuitGame(){
 		enableEditor = false;
 		quitGame = true;
+		Camera.main.GetComponent<CamControl>().TriggerJumpView();
 
 	}
 	
@@ -94,6 +95,13 @@ public class GameModeManager : MonoBehaviour {
 	
 	public void StartGame(){
 		startGame = true;
+		Camera.main.GetComponent<CamControl>().TriggerJumpView();
+	}
+	
+	public void StartGame(int levelIndex){
+		LevelManager.singleton.currentLevelIndex = levelIndex;
+		startGame = true;
+		Camera.main.GetComponent<CamControl>().TriggerJumpView();
 	}
 	
 	
@@ -204,6 +212,8 @@ public class GameModeManager : MonoBehaviour {
 		else{
 			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "";
 			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "";
+			Tutorial.singleton.theRulesGO.GetComponent<TheRules>().DisableRule(TheRules.Rules.kAll);
+			disableLevelCompletion = false;
 		}
 		
 		Vector2 offsetMin = levelInfo.transform.FindChild("CurrentLevel").GetComponent<RectTransform>().offsetMin;
@@ -455,7 +465,7 @@ public class GameModeManager : MonoBehaviour {
 	public void ActivateTutorialText(){
 		// See if there is some tutorial text associated with this
 		string textBoxName = LevelManager.singleton.GetRawLevelName() + "_TextBox";
-		Debug.Log ("ActivateTutorialText: " + textBoxName);
+	//	Debug.Log ("ActivateTutorialText: " + textBoxName);
 		if (Tutorial.singleton.tutorialObjects.ContainsKey(textBoxName)){
 			Tutorial.singleton.tutorialObjects[textBoxName].SetActive(true);	
 		}
@@ -465,6 +475,7 @@ public class GameModeManager : MonoBehaviour {
 			Tutorial.singleton.tutorialObjects[frameName].SetActive(true);	
 		}
 		
+		Tutorial.singleton.tutorialObjects["GameFrame"].SetActive(!LevelManager.singleton.IsTutorial());
 		
 	}
 	

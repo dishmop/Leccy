@@ -61,7 +61,7 @@ public class Tut2CircuitNewCurrentParallelFirstMeasure : TutTriggerBase {
 		}
 		
 		if (anchoredVoltMeter != null && anchoredAmmeter != null && newAmmeter != null){
-			Debug.Log ("anchoredVoltMeter = " + anchoredVoltMeter.GetVoltageDiff() + ", newAmmeter =" + newAmmeter.GetMaxCurrent() + ", anchoredAmmeter = " + anchoredAmmeter.GetMaxCurrent()); 
+//			Debug.Log ("anchoredVoltMeter = " + anchoredVoltMeter.GetVoltageDiff() + ", newAmmeter =" + newAmmeter.GetMaxCurrent() + ", anchoredAmmeter = " + anchoredAmmeter.GetMaxCurrent()); 
 			if (MathUtils.FP.Feq(anchoredVoltMeter.GetVoltageDiff(), 1f, 0.01f) &&
 			    MathUtils.FP.Feq(newAmmeter.GetMaxCurrent(), 1f, 0.01f) &&
 			    MathUtils.FP.Feq(anchoredAmmeter.GetMaxCurrent(), 2f, 0.01f)){

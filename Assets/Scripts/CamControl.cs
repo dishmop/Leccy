@@ -3,19 +3,22 @@ using System.Collections;
 
 public class CamControl : MonoBehaviour {
 
-
 	public GameObject		sidePanel;
 	public float 			zoomSpeed;
 	public bool				ignoreSide = false;
 	Vector3					prevMousePos = new Vector3();
 	public float			border = 1;
+	
+	int jumpCountdown = 0;
 
 	float lerpProp = 0.05f;
 	
+	public void TriggerJumpView(){
+		jumpCountdown = 10;
+	}
+	
 	// Use this for initialization
 	void Start () {
-	
-
 	
 	}
 	
@@ -111,12 +114,23 @@ public class CamControl : MonoBehaviour {
 			float vRange = Mathf.Max (bounds.height + 2 * border, (bounds.width + 2 * border) / adjustedAspect);
 			float currentSize = transform.GetComponent<Camera>().orthographicSize;
 			float desSize = vRange * 0.5f;
-			transform.GetComponent<Camera>().orthographicSize = Mathf.Lerp(currentSize, desSize, lerpProp);
+			if (jumpCountdown <= 0){
+				transform.GetComponent<Camera>().orthographicSize = Mathf.Lerp(currentSize, desSize, lerpProp);
+			}
+			else{
+				transform.GetComponent<Camera>().orthographicSize = desSize;
+			}
 			
 			
 			Vector2 centre = (bounds.min + bounds.max) * 0.5f;
 			Vector3 newCamPos = new Vector3(centre.x, centre.y, -10);
-			transform.position = Vector3.Lerp(transform.position , newCamPos, lerpProp);
+			if (jumpCountdown <= 0){
+				transform.position = Vector3.Lerp(transform.position , newCamPos, lerpProp);
+			}
+			else{
+				transform.position = newCamPos;
+			}
+			if (jumpCountdown > 0) jumpCountdown--;
 			
 		}
 	}
