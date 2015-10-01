@@ -17,6 +17,7 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject levelStartMessageDlg;
 	public GameObject ammeterEffect;
 	public GameObject voltMeterEffect;
+	public GameObject creditDlg;
 	public bool disableLevelCompletion = false;
 	
 	
@@ -54,7 +55,7 @@ public class GameModeManager : MonoBehaviour {
 	// True is this is a released version of the game (rather than an internal version)		
 	public bool isInternal;
 	
-	GameMode gameMode = GameMode.kNone;
+	public GameMode gameMode = GameMode.kNone;
 	GameMode lastGameMode = GameMode.kNone;
 	
 	int 	triggersTriggered = 0;
@@ -125,9 +126,11 @@ public class GameModeManager : MonoBehaviour {
 	}		
 	
 	public void ShowCredits(){
+		creditDlg.SetActive(true);
 	}
 	
 	public void HideCreditsCredits(){
+		creditDlg.SetActive(false);
 	}
 	
 	public float GetGameTime(){
@@ -214,8 +217,14 @@ public class GameModeManager : MonoBehaviour {
 	void HandleLevelInfo(){
 
 		if (gameMode != GameMode.kTitleScreen){
-			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + LevelManager.singleton.currentLevelIndex + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-1) + ": " + LevelManager.singleton.GetCurrentLevelName()	;
-			levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + triggersTriggered + " / " + numLevelTriggers;
+			if (LevelManager.singleton.IsTutorial()){
+				levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: Tutorial";
+				levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "";
+			}
+			else{
+				levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: " + (LevelManager.singleton.currentLevelIndex - LevelManager.singleton.tutorialIndex + 1) + " / " + (LevelManager.singleton.levelsToLoad.GetLength(0)-LevelManager.singleton.tutorialIndex) + ": " + LevelManager.singleton.GetCurrentLevelName()	;
+				levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "Triggers Activated: " + triggersTriggered + " / " + numLevelTriggers;
+			}
 		}
 		else{
 			levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "";

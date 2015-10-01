@@ -77,7 +77,7 @@ public class LevelManager : MonoBehaviour {
 	public string GetCurrentLevelName(){
 		if (currentLevelIndex >= LevelManager.singleton.levelsToLoad.Count()) return "Out of range";
 		if (IsTutorial()) return "Tutorial";
-		return	"Level: " + currentLevelIndex  + " - " + LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
+		return	LevelManager.singleton.levelsToLoad[currentLevelIndex].name.Substring(3);
 	}
 	
 	public string GetRawLevelName(){

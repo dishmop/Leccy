@@ -26,7 +26,7 @@ public class FlashingButton : MonoBehaviour {
 		if (isPointerInside)
 			col.a = 1f;
 		else
-			col.a = 0.75f + 0.25f * Mathf.Sin (10 * Time.realtimeSinceStartup);
+			col.a = 0.75f + 0.15f * Mathf.Sin (5 * Time.realtimeSinceStartup);
 		
 		GetComponent<Text>().color = col;
 		
