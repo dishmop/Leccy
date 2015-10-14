@@ -289,7 +289,7 @@ public class GameModeManager : MonoBehaviour {
 		}
 		else{
 			panel.xCount = 2;
-			panel.yCount = 4;
+			panel.yCount = 5;
 		}
 		
 	
