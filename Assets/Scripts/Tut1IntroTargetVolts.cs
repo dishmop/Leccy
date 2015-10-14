@@ -70,7 +70,7 @@ public class Tut1IntroTargetVolts : TutTriggerBase {
 			case State.kTarget2:{
 				if (voltMeter.GetComponent<CircuitElementVoltmeter>().IsOnTarget()){
 					if (!voltMeter.GetComponent<CircuitElementVoltmeter>().buttonActivated){
-						transform.FindChild("MainText").GetComponent<TextMesh>().text = "Acheived!\nNow click in\nthe target circle";
+						transform.FindChild("MainText").GetComponent<TextMesh>().text = "Achieved!\nNow click in\nthe target circle";
 					}
 					else{
 						transform.FindChild("MainText").GetComponent<TextMesh>().text = "Thanks";

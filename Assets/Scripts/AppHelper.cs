@@ -4,9 +4,9 @@ using System.Collections;
 //C#
 public static class AppHelper
 {
-	public static string webplayerQuitURL = "http://google.com";
-
-		public static void Quit()
+	public static string webplayerQuitURL = "http://i-want-to-study-engineering.org/game/rating/leccy/";
+	
+	public static void Quit()
 	{
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;

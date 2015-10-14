@@ -48,6 +48,7 @@ public class Tut2CircuitWideAnchors : TutTriggerBase {
 		}
 		
 		ElementFactory.singleton.SetStock("Wire", 50);
+		state = State.kTesting;
 
 	
 	}

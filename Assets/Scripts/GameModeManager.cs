@@ -192,7 +192,7 @@ public class GameModeManager : MonoBehaviour {
 		panelTranform.FindChild ("ResaveAllButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("RefreshAllButton").gameObject.SetActive(enableEditor && isInternal);
 		panelTranform.FindChild ("PreviousLevelButton").gameObject.SetActive(!enableEditor);
-		panelTranform.FindChild ("ReloadLevelButton").gameObject.SetActive(true);
+		panelTranform.FindChild ("ReloadLevelButton").gameObject.SetActive(!enableEditor || isInternal);
 	}
 	
 	void HandleTelemetryUI(){
@@ -217,7 +217,11 @@ public class GameModeManager : MonoBehaviour {
 	void HandleLevelInfo(){
 
 		if (gameMode != GameMode.kTitleScreen){
-			if (LevelManager.singleton.IsTutorial()){
+			if (enableEditor){
+				levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: Free Play";
+				levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "";
+			}
+			else if (LevelManager.singleton.IsTutorial()){
 				levelInfo.transform.FindChild("CurrentLevel").GetComponent<Text>().text = "Current Level: Tutorial";
 				levelInfo.transform.FindChild("TriggersActivated").GetComponent<Text>().text = "";
 			}
@@ -281,7 +285,7 @@ public class GameModeManager : MonoBehaviour {
 		ElementSelectPanel panel = sidePanel.transform.FindChild("ElementSelectPanel").GetComponent<ElementSelectPanel>();
 		if (!enableEditor && gameMode != GameMode.kStart){
 			panel.xCount = 1;
-			panel.yCount = 4;
+			panel.yCount = 5;
 		}
 		else{
 			panel.xCount = 2;
@@ -352,6 +356,13 @@ public class GameModeManager : MonoBehaviour {
 					if (enableEditor){
 						gameMode = GameMode.kStartEditor;
 						LevelManager.singleton.ClearLevel();
+						ElementFactory.singleton.SetStock("Cell", 1);
+						ElementFactory.singleton.SetStock("Resistor", 1);
+						ElementFactory.singleton.SetStock("Wire", 1);
+						ElementFactory.singleton.SetStock("Voltmeter", 1);
+						ElementFactory.singleton.SetStock("Ammeter", 1);
+						
+						
 					}
 					else	
 					{

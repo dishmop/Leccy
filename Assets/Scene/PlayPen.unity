@@ -3955,7 +3955,7 @@ MonoBehaviour:
   leccyButtonPrefab: {fileID: 100014, guid: bfa33c85d28044ef090b1397b87aeffc, type: 2}
   uiTypeFilter: 0
   xCount: 1
-  yCount: 6
+  yCount: 8
   defaultSelectionId: Wire
   pressSound: {fileID: 330700652}
   defaultSelectionButton: {fileID: 0}
@@ -12671,6 +12671,41 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!1 &1231742439 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
+  m_PrefabInternal: {fileID: 1655684103}
+--- !u!114 &1231742442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1231742439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fe9fbf04ca84ab3b454d3048de552f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAcceptableFramerate: 60
+  currentQuality: 
+  currentFramerate: 0
+  forceBestQualityOnStart: 0
+  disableAfterManualQualityChange: 1
+  disabled: 0
+  verbose: 0
+  updateRate: 1
+  threshold: 5
+--- !u!114 &1231742443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1231742439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232cc394c96fe47b89b05f0c661be2a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1247610589
 Prefab:
   m_ObjectHideFlags: 0
@@ -12748,7 +12783,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: isInternal
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: dcb87c76b55bd4baf8cc127208efb724, type: 2}
       propertyPath: restartLevel
@@ -18116,7 +18151,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Quit Game
+  m_Text: Main menu
 --- !u!222 &1841610268
 CanvasRenderer:
   m_ObjectHideFlags: 0
