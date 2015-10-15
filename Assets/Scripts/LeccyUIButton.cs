@@ -6,7 +6,6 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 
 	public GameObject circuitElementPrefab;
 	public GameObject wireMeshPrefab;
-	 bool	isSelected = false;
 	public Color selectColor;
 	public Color normalColor;
 	public Color selectHighlightColor;
@@ -15,6 +14,12 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	
 	public AudioSource okPress;
 	public AudioSource notOkPress;
+	
+	int lastWidth;
+	int lastHeight;
+	
+	bool	isSelected = false;
+	
 	
 	public void Unselect(){
 		isSelected = false;
@@ -48,6 +53,8 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 	
 	void ConfigureButton(){
 		if (circuitElementPrefab){
+			lastWidth = Screen.width;
+			lastHeight = Screen.height;
 			CircuitElement element = circuitElementPrefab.GetComponent<CircuitElement>();
 			transform.FindChild ("TextFrame").FindChild("Text").GetComponent<Text>().text = element.GetUIString();
 			
@@ -120,7 +127,16 @@ public class LeccyUIButton : MonoBehaviour, PrefabListener {
 		cols.pressedColor = pressColor;
 		buttonT.GetComponent<Button>().colors = cols;
 		
+		if (lastWidth != Screen.width || lastHeight != Screen.height){
+			ConfigureButton();
+		}
+		
 	}
+//	
+//	void OnGUI(){
+//		GUI.Label(new Rect(20, 20, 500, 50), "lastRes = " + Screen.width + " x " + Screen.height);
+//	}
+	
 
 	
 
