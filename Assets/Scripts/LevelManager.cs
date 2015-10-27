@@ -4,6 +4,8 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 public class LevelManager : MonoBehaviour {
 	public static LevelManager singleton = null;
@@ -121,11 +123,18 @@ public class LevelManager : MonoBehaviour {
 			Debug.Log ("Attempting to load null level");
 			return false;
 		}
+//		Debug.Log("loadLevel - levelName: " + filename + ", gameTime: " + GameModeManager.singleton.GetGameTime());
+		Analytics.CustomEvent("loadLevel", new Dictionary<string, object>
+		{
+			{ "levelName", filename },
+			{ "gameTime", GameModeManager.singleton.GetGameTime()},
+		});
+				
 		String path = BuildResourcePath(filename);
-		Debug.Log("LoadLevel: " + path);
+		// Debug.Log("LoadLevel: " + path);
 		TextAsset asset = Resources.Load(path) as TextAsset;
 		if (asset != null){
-			Debug.Log ("Loading asset: " + filename);
+//			Debug.Log ("Loading asset: " + filename);
 			Stream s = new MemoryStream(asset.bytes);
 			DeserializeLevel(s);
 //			Resources.UnloadAsset(asset);

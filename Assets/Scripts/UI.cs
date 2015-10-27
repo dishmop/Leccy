@@ -57,12 +57,12 @@ public class UI : MonoBehaviour {
 	}
 	
 	public void OnEnterUI(){
-		Debug.Log("OnEnterUI()");
+//		Debug.Log("OnEnterUI()");
 		isInUI = true;
 	}
 	
 	public void OnExitUI(){
-		Debug.Log("OnExitUI()");
+//		Debug.Log("OnExitUI()");
 		isInUI = false;
 	}
 	
