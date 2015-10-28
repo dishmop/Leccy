@@ -12837,7 +12837,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 232cc394c96fe47b89b05f0c661be2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFPS: 60
 --- !u!1001 &1247610589
 Prefab:
   m_ObjectHideFlags: 0
@@ -14850,6 +14849,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1440434356}
   - 114: {fileID: 1440434357}
+  - 114: {fileID: 1440434358}
   m_Layer: 0
   m_Name: 02_Circuit_Flow_TextBox
   m_TagString: Untagged
@@ -14885,6 +14885,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 0
   overrideDefaultSelection: 
+--- !u!114 &1440434358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1440434355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 492fdf7c978154424aead2060aa6da43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerHandle:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1444432875
 GameObject:
   m_ObjectHideFlags: 0
