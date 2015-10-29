@@ -101,6 +101,10 @@ public class SetupResolution : MonoBehaviour {
 		return resIndex;
 	}
 	
+	float analLastTime = 10;
+	float analDuration = 5;
+	string analRet  = "Nothing done yet";
+	
 	void OnGUI(){
 		if (Time.time < triggerStartTime + triggerDuration){
 			GUI.skin.label.fontSize = 20;
@@ -109,7 +113,11 @@ public class SetupResolution : MonoBehaviour {
 			float widthRemaining = Screen.width - textSize.x;
 			GUI.Label(new Rect(widthRemaining * 0.5f, 20, textSize.x, 50), message);
 		}
-		//		GUI.Label(new Rect(10, 20, 200, 50), 1f/smoothedFrameDuration + " fps");
+		if (Time.time > analLastTime + analDuration){
+			analLastTime = Time.time;
+			analRet = Analytics.CustomEvent ("TestEvent", new Dictionary<string, object>{ {"firstObject", 10 } }).ToString();
+		}
+		GUI.Label(new Rect(20, 20, 400, 50), "Analytics return: " + analRet);
 	}
 	
 }

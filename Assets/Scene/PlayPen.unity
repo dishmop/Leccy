@@ -12806,6 +12806,19 @@ MeshRenderer:
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 18a4c2a886dab4013b1ccb9c4a66cf97, type: 2}
   m_PrefabInternal: {fileID: 1655684103}
+--- !u!114 &1231742440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1231742439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4ca31a89e3d4412a036b18f57ece69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowVersionInformation: 0
+  ShowVersionDuringTheFirst20Seconds: 1
 --- !u!114 &1231742442
 MonoBehaviour:
   m_ObjectHideFlags: 0
