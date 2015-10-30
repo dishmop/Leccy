@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 public class GameModeManager : MonoBehaviour {
 	public static GameModeManager singleton = null;
@@ -89,11 +89,12 @@ public class GameModeManager : MonoBehaviour {
 		quitGame = true;
 		Camera.main.GetComponent<CamControl>().TriggerJumpView();
 //		Debug.Log ("quitGame -  gameTime: " + GetGameTime() + ", levelName: " + LevelManager.singleton.GetCurrentLevelName());
-		Analytics.CustomEvent("quitGame", new Dictionary<string, object>
-		{
-			{ "levelName", LevelManager.singleton.GetCurrentLevelName() },
-			{ "gameTime", GameModeManager.singleton.GetGameTime()},
-		});		
+		GoogleAnalytics.Client.SendTimedEventHit("gamePlay", "quitGame", LevelManager.singleton.GetCurrentLevelName(), GameModeManager.singleton.GetGameTime());
+//		Analytics.CustomEvent("quitGame", new Dictionary<string, object>
+//		{
+//			{ "levelName", LevelManager.singleton.GetCurrentLevelName() },
+//			{ "gameTime", GameModeManager.singleton.GetGameTime()},
+//		});		
 
 	}
 	
@@ -114,24 +115,27 @@ public class GameModeManager : MonoBehaviour {
 		
 		if (levelIndex == 1){
 //			Debug.Log("startGame");
-			Analytics.CustomEvent("startGame", new Dictionary<string, object>
-			{
-				{ "dummy", 0 },
-			});
+			GoogleAnalytics.Client.SendEventHit("gamePlay", "startGame");
+//			Analytics.CustomEvent("startGame", new Dictionary<string, object>
+//			{
+//				{ "dummy", 0 },
+//			});
 		}
 		else if (levelIndex == 30){
 //			Debug.Log("startTutorial");
-			Analytics.CustomEvent("startTutorial", new Dictionary<string, object>
-			{
-				{ "dummy", 0 },
-			});
+			GoogleAnalytics.Client.SendEventHit("gamePlay", "startTutorial");
+//			Analytics.CustomEvent("startTutorial", new Dictionary<string, object>
+//			{
+//				{ "dummy", 0 },
+//			});
 		}
 		else{
 //			Debug.Log("startUnknown");
-			Analytics.CustomEvent("startUnknown", new Dictionary<string, object>
-			 {
-				{ "dummy", 0 },
-			});			
+			GoogleAnalytics.Client.SendEventHit("gamePlay", "startUnknown");
+//			Analytics.CustomEvent("startUnknown", new Dictionary<string, object>
+//			 {
+//				{ "dummy", 0 },
+//			});			
 		}
 	}
 	
@@ -140,10 +144,11 @@ public class GameModeManager : MonoBehaviour {
 		enableEditor = true;
 		startGame = true;
 //			Debug.Log("startFreePlay");
-		Analytics.CustomEvent("startFreePlay", new Dictionary<string, object>
-		                      {
-			{ "dummy", 0 },
-		});			
+		GoogleAnalytics.Client.SendEventHit("gamePlay", "startFreePlay");
+//		Analytics.CustomEvent("startFreePlay", new Dictionary<string, object>
+//		                      {
+//			{ "dummy", 0 },
+//		});			
 	}
 	
 	public void TriggerComplete(){

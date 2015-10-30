@@ -4,8 +4,8 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 public class LevelManager : MonoBehaviour {
 	public static LevelManager singleton = null;
@@ -124,11 +124,12 @@ public class LevelManager : MonoBehaviour {
 			return false;
 		}
 //		Debug.Log("loadLevel - levelName: " + filename + ", gameTime: " + GameModeManager.singleton.GetGameTime());
-		Analytics.CustomEvent("loadLevel", new Dictionary<string, object>
-		{
-			{ "levelName", filename },
-			{ "gameTime", GameModeManager.singleton.GetGameTime()},
-		});
+		GoogleAnalytics.Client.SendTimedEventHit("gamePlay", "loadLevel", filename, GameModeManager.singleton.GetGameTime());
+//		Analytics.CustomEvent("loadLevel", new Dictionary<string, object>
+//		{
+//			{ "levelName", filename },
+//			{ "gameTime", GameModeManager.singleton.GetGameTime()},
+//		});
 				
 		String path = BuildResourcePath(filename);
 		// Debug.Log("LoadLevel: " + path);
