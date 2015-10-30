@@ -89,7 +89,7 @@ public class GameModeManager : MonoBehaviour {
 		quitGame = true;
 		Camera.main.GetComponent<CamControl>().TriggerJumpView();
 //		Debug.Log ("quitGame -  gameTime: " + GetGameTime() + ", levelName: " + LevelManager.singleton.GetCurrentLevelName());
-		GoogleAnalytics.Client.SendTimedEventHit("gamePlay", "quitGame", LevelManager.singleton.GetCurrentLevelName(), GameModeManager.singleton.GetGameTime());
+		GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "quitGame", LevelManager.singleton.GetCurrentLevelName(), GameModeManager.singleton.GetGameTime());
 //		Analytics.CustomEvent("quitGame", new Dictionary<string, object>
 //		{
 //			{ "levelName", LevelManager.singleton.GetCurrentLevelName() },
@@ -115,7 +115,7 @@ public class GameModeManager : MonoBehaviour {
 		
 		if (levelIndex == 1){
 //			Debug.Log("startGame");
-			GoogleAnalytics.Client.SendEventHit("gamePlay", "startGame");
+			GoogleAnalytics.Client.SendEventHit("gameFlow", "startGame");
 //			Analytics.CustomEvent("startGame", new Dictionary<string, object>
 //			{
 //				{ "dummy", 0 },
@@ -123,7 +123,7 @@ public class GameModeManager : MonoBehaviour {
 		}
 		else if (levelIndex == 30){
 //			Debug.Log("startTutorial");
-			GoogleAnalytics.Client.SendEventHit("gamePlay", "startTutorial");
+			GoogleAnalytics.Client.SendEventHit("gameFlow", "startTutorial");
 //			Analytics.CustomEvent("startTutorial", new Dictionary<string, object>
 //			{
 //				{ "dummy", 0 },
@@ -131,7 +131,7 @@ public class GameModeManager : MonoBehaviour {
 		}
 		else{
 //			Debug.Log("startUnknown");
-			GoogleAnalytics.Client.SendEventHit("gamePlay", "startUnknown");
+			GoogleAnalytics.Client.SendEventHit("gameFlow", "startUnknown");
 //			Analytics.CustomEvent("startUnknown", new Dictionary<string, object>
 //			 {
 //				{ "dummy", 0 },
@@ -144,7 +144,7 @@ public class GameModeManager : MonoBehaviour {
 		enableEditor = true;
 		startGame = true;
 //			Debug.Log("startFreePlay");
-		GoogleAnalytics.Client.SendEventHit("gamePlay", "startFreePlay");
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "startFreePlay");
 //		Analytics.CustomEvent("startFreePlay", new Dictionary<string, object>
 //		                      {
 //			{ "dummy", 0 },
