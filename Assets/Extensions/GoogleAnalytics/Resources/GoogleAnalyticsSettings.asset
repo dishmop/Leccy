@@ -19,7 +19,7 @@ MonoBehaviour:
   - platfrom: 0
     profileIndex: 0
     profileIndexTestMode: 0
-  showAdditionalParams: 0
+  showAdditionalParams: 1
   showAdvancedParams: 0
   showCParams: 0
   showAccounts: 1
@@ -35,7 +35,7 @@ MonoBehaviour:
   TestingModeAccIndex: 0
   IsRequetsCachingEnabled: 1
   IsQueueTimeEnabled: 1
-  AutoLevelTracking: 1
+  AutoLevelTracking: 0
   LevelPrefix: Level_
   LevelPostfix: 
   AutoAppQuitTracking: 1
