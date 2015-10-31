@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: GoogleAnalyticsSettings
   m_EditorClassIdentifier: 
   accounts:
-  - Name: leccy
-    TrackingID: UA-69482205-1
+  - Name: materialist
+    TrackingID: UA-69482205-7
     IsOpen: 1
   platfromBounds:
   - platfrom: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   showAccounts: 1
   showPlatfroms: 0
   showTestingMode: 0
-  AppName: Leccy
+  AppName: Materialist
   AppVersion: 1.0
   UseHTTPS: 0
   StringEscaping: 1
