@@ -591,6 +591,10 @@ public class GameModeManager : MonoBehaviour {
 
 	
 	void TriggerEndOfGameEffects(){
+		GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "gameComplete", "", GameModeManager.singleton.GetGameTime());
+		GoogleAnalytics.Client.SendScreenHit("gameComplete");
+
+		//Debug.Log ("gameComplete: " + GameModeManager.singleton.GetGameTime());
 		Camera.main.GetComponent<CamControl>().CentreCamera();
 		endOfGameTime = Time.fixedTime;
 		
