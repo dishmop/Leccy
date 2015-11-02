@@ -125,7 +125,7 @@ public class LevelManager : MonoBehaviour {
 		}
 //		Debug.Log("loadLevel - levelName: " + filename + ", gameTime: " + GameModeManager.singleton.GetGameTime());
 		GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "loadLevel", filename, GameModeManager.singleton.GetGameTime());
-		GoogleAnalytics.Client.SendScreenHit("loadLevel_" + name);
+		GoogleAnalytics.Client.SendScreenHit("loadLevel_" + filename);
 //		Analytics.CustomEvent("loadLevel", new Dictionary<string, object>
 //		{
 //			{ "levelName", filename },
